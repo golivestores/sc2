@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talamus Staggered Card Grid · sc2 effect</title>
+<style>
+/* --- Self-contained reproduction of Talamus's .home-plateforme card grid ---
+   Original: https://talamus.pro/  (the "formations" thumb grid)
+   Behavior copied 1:1:
+     - desktop staggered offsets via :nth-child(8n+k) translateY/translateX
+     - per-card scroll reveal: scale 0.8 -> 1, opacity 0 -> 1, cubic-bezier(0.86,0,0.07,1)
+     - continuous scroll-driven drift via simpleparallax-js (lib/simpleParallax.min.js)
+   Font: Adobe Typekit "halyard-display" is account-bound on the original site;
+   we list it first so users with that license still get it, then fall back. */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: #ffffff;
+  color: #000000;
+  font-family: "halyard-display", "Inter", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.home-plateforme { background-color: #ffffff; padding: 100px 0; }
+
+.home-plateforme__container {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+.home-plateforme__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 10px;
+  column-gap: 10px;
+}
+@media only screen and (min-width: 600px) {
+  .home-plateforme__grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media only screen and (min-width: 1024px) {
+  .home-plateforme__grid {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 80px;
+    max-width: 1500px;
+    margin: 100px auto 150px auto;
+  }
+}
+
+/* parallax wrapper hosts the staggered final position at desktop, plus the
+   opacity gated by the parent grid's `--tadam` class. Same as original site. */
+.home-plateforme__grid-item-parallax {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.86, 0, 0.07, 1);
+}
+.home-plateforme__grid--tadam .home-plateforme__grid-item-parallax { opacity: 1; }
+
+@media only screen and (min-width: 1024px) {
+  .home-plateforme__grid-item-parallax:nth-child(8n+1) { transform: translateY(-150px) translateX( 20px); }
+  .home-plateforme__grid-item-parallax:nth-child(8n+2) { transform: translateY(  50px) translateX( 30px); }
+  .home-plateforme__grid-item-parallax:nth-child(8n+3) { transform: translateY( -70px) translateX( 90px); }
+  .home-plateforme__grid-item-parallax:nth-child(8n+4) { transform: translateY(-220px) translateX(-10px); }
+  .home-plateforme__grid-item-parallax:nth-child(8n+5) { transform: translateY(-100px) translateX(120px); }
+  .home-plateforme__grid-item-parallax:nth-child(8n+6) { transform: translateY( 100px) translateX(115px); }
+  .home-plateforme__grid-item-parallax:nth-child(8n+7) { transform: translateY(-100px) translateX( 30px); }
+  .home-plateforme__grid-item-parallax:nth-child(8n+8) { transform: translateY(-200px) translateX( 70px); }
+}
+
+/* per-card scale + opacity reveal. The inner scale element starts at 0.8 / 0
+   and animates to 1 / 1 when its --tadam modifier is added by the IO. */
+.home-plateforme__grid-item-scale {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: 1.2s cubic-bezier(0.86, 0, 0.07, 1);
+}
+.home-plateforme__grid-item-scale--tadam {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.home-plateforme__grid-item {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 37px 5px rgba(216, 216, 216, 0.56);
+  border-radius: 10px;
+}
+@media only screen and (min-width: 1024px) {
+  .home-plateforme__grid-item {
+    box-shadow: 0px 0px 37px 16px rgba(216, 216, 216, 0.56);
+    width: 300px;
+    height: 300px;
+  }
+}
+
+.home-plateforme__grid-icon { width: 50px; margin-bottom: 20px; }
+@media only screen and (min-width: 600px)  { .home-plateforme__grid-icon { width: 65px; } }
+@media only screen and (min-width: 1024px) { .home-plateforme__grid-icon { width: 85px; } }
+
+.home-plateforme__grid-title {
+  color: #fe4100;
+  text-align: center;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+@media only screen and (min-width: 1024px) { .home-plateforme__grid-title { font-size: 25px; } }
+</style>
+</head>
+<body>
+
+<section class="home-plateforme">
+  <div class="home-plateforme__container">
+    <div class="home-plateforme__grid" data-tadam-scroll="0">
+      <div class="home-plateforme__grid-item-parallax">
+        <div class="home-plateforme__grid-item-scale" data-tadam-scroll="300">
+          <div class="home-plateforme__grid-item" data-parallax-card>
+            <img class="home-plateforme__grid-icon" src="assets/Formation-Leadership.svg" alt="">
+            <p class="home-plateforme__grid-title">Leadership</p>
+          </div>
+        </div>
+      </div>
+      <div class="home-plateforme__grid-item-parallax">
+        <div class="home-plateforme__grid-item-scale" data-tadam-scroll="300">
+          <div class="home-plateforme__grid-item" data-parallax-card>
+            <img class="home-plateforme__grid-icon" src="assets/Formation-Collaboration.svg" alt="">
+            <p class="home-plateforme__grid-title">Collaboration</p>
+          </div>
+        </div>
+      </div>
+      <div class="home-plateforme__grid-item-parallax">
+        <div class="home-plateforme__grid-item-scale" data-tadam-scroll="300">
+          <div class="home-plateforme__grid-item" data-parallax-card>
+            <img class="home-plateforme__grid-icon" src="assets/Formation-Efficacite.svg" alt="">
+            <p class="home-plateforme__grid-title">Efficacité</p>
+          </div>
+        </div>
+      </div>
+      <div class="home-plateforme__grid-item-parallax">
+        <div class="home-plateforme__grid-item-scale" data-tadam-scroll="300">
+          <div class="home-plateforme__grid-item" data-parallax-card>
+            <img class="home-plateforme__grid-icon" src="assets/Formation-GestionTemps.svg" alt="">
+            <p class="home-plateforme__grid-title">Gestion du temps</p>
+          </div>
+        </div>
+      </div>
+      <div class="home-plateforme__grid-item-parallax">
+        <div class="home-plateforme__grid-item-scale" data-tadam-scroll="300">
+          <div class="home-plateforme__grid-item" data-parallax-card>
+            <img class="home-plateforme__grid-icon" src="assets/Formation-GestionProjet.svg" alt="">
+            <p class="home-plateforme__grid-title">Gestion de projet</p>
+          </div>
+        </div>
+      </div>
+      <div class="home-plateforme__grid-item-parallax">
+        <div class="home-plateforme__grid-item-scale" data-tadam-scroll="300">
+          <div class="home-plateforme__grid-item" data-parallax-card>
+            <img class="home-plateforme__grid-icon" src="assets/Formation-Communication.svg" alt="">
+            <p class="home-plateforme__grid-title">Communication</p>
+          </div>
+        </div>
+      </div>
+      <div class="home-plateforme__grid-item-parallax">
+        <div class="home-plateforme__grid-item-scale" data-tadam-scroll="300">
+          <div class="home-plateforme__grid-item" data-parallax-card>
+            <img class="home-plateforme__grid-icon" src="assets/Formation-GestionProcessus.svg" alt="">
+            <p class="home-plateforme__grid-title">Gestion de processus</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- simpleparallax-js (MIT) — bundled locally for A.2 self-containment.
+     Source: https://github.com/geosigno/simpleParallax (5.6.2) -->
+<script src="lib/simpleParallax.min.js"></script>
+
+<script>
+/* --- 1:1 reproduction of the original site's TadamScroll + Parallax wiring ---
+   Verbatim translation of the source class _tadam-scroll.js. Triggers when
+     scrollY + innerHeight > elementAbsoluteTop + parseInt(data-tadam-scroll)
+   For data-tadam-scroll="300" on a 300px-tall card, this means the card must be
+   FULLY past the viewport bottom (its top crossed by 300px) before reveal —
+   that's why the cards cascade visibly one at a time on the original site.
+   The class added is `<firstClassName>--tadam`.
+
+   Preview-mode override: when this page is loaded with `?demo=preview` (used
+   by the sc2 effects gallery thumbnail iframe), we hide the demo intro and
+   fake the cascade with setTimeout so the visual still reads as "chain reveal"
+   without requiring user scroll. Standalone / direct-open / viewer is 100%
+   faithful to the original — no params, no fake cascade. */
+(function () {
+  const params = new URLSearchParams(location.search);
+  const previewMode = params.get('demo') === 'preview';
+
+  function initTadamScroll() {
+    const list = document.querySelectorAll('[data-tadam-scroll]');
+    if (!list.length) return;
+
+    if (previewMode) {
+      // Fake cascade — fire each [data-tadam-scroll] with a small stagger delay.
+      // Ordered by document position so the grid wrapper lights up first, then
+      // each grid-item-scale in markup order.
+      Array.from(list).forEach((el, i) => {
+        setTimeout(() => {
+          el.classList.add(el.classList[0] + '--tadam');
+        }, 200 + i * 130);
+      });
+      return;
+    }
+
+    // 1:1 path — verbatim of the original _tadam-scroll.js, plus one safe
+    // augmentation: an initial check after offsets are built. The original
+    // site placed this section deep into a long page, so on load it was below
+    // the fold and the scroll listener fired naturally. Standalone (no demo
+    // intro), the section is at the top of the viewport so a user who never
+    // scrolls would never see the cascade — initial check fires `--tadam`
+    // right away when the element is already in view. For pages where the
+    // section is below the fold (the original use case), behavior is unchanged.
+    const offsets = [];
+    for (let i = 0; i < list.length; i++) {
+      offsets.push(
+        list[i].getBoundingClientRect().y +
+        window.scrollY +
+        parseInt(list[i].getAttribute('data-tadam-scroll'), 10)
+      );
+    }
+    function check() {
+      const pos = window.scrollY + window.innerHeight;
+      for (let i = 0; i < list.length; i++) {
+        if (pos > offsets[i]) {
+          list[i].classList.add(list[i].classList[0] + '--tadam');
+        }
+      }
+    }
+    window.addEventListener('scroll', check);
+    check();  // augmentation: trigger immediately if already in viewport
+  }
+  if (document.readyState === 'complete') initTadamScroll();
+  else window.addEventListener('load', initTadamScroll);
+
+  // Continuous scroll-driven drift on each card — verbatim options from the
+  // original Parallax module: orientation 'up', scale = 1.0 + index*0.2,
+  // cubic-bezier transition, overflow allowed, maxTransition 99.
+  // Skipped in preview mode — no scroll inside the small iframe to drive it.
+  function initParallax() {
+    if (previewMode) return;
+    if (typeof simpleParallax === 'undefined') return;
+    if (!window.matchMedia('(min-width: 600px)').matches) return;
+    const cards = document.querySelectorAll('[data-parallax-card]');
+    cards.forEach((el, index) => {
+      new simpleParallax(el, {
+        orientation: 'up',
+        scale: 1.0 + index * 0.2,
+        transition: 'cubic-bezier(0,0,0,1)',
+        overflow: true,
+        maxTransition: 99,
+      });
+    });
+  }
+  if (document.readyState === 'complete') initParallax();
+  else window.addEventListener('load', initParallax);
+})();
+</script>
+
+</body>
+</html>

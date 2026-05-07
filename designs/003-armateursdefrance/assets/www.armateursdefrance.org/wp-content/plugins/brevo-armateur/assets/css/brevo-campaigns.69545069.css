@@ -1,0 +1,287 @@
+/* Styles généraux pour Brevo Campaigns */
+
+.brevo-campaigns-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.brevo-campaign-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.brevo-campaign-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.brevo-campaign-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.brevo-campaign-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.brevo-campaign-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.brevo-campaign-status.draft {
+    background-color: #f0f0f0;
+    color: #666;
+}
+
+.brevo-campaign-status.sent {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.brevo-campaign-status.scheduled {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.brevo-campaign-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.brevo-meta-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.brevo-meta-label {
+    font-weight: bold;
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.brevo-meta-value {
+    color: #333;
+    word-break: break-word;
+}
+
+.brevo-campaign-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.brevo-action-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.brevo-action-btn.primary {
+    background-color: #0073aa;
+    color: white;
+}
+
+.brevo-action-btn.primary:hover {
+    background-color: #005a87;
+}
+
+.brevo-action-btn.secondary {
+    background-color: #f1f1f1;
+    color: #555;
+    border: 1px solid #ccc;
+}
+
+.brevo-action-btn.secondary:hover {
+    background-color: #e1e1e1;
+}
+
+.brevo-action-btn.danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.brevo-action-btn.danger:hover {
+    background-color: #c82333;
+}
+
+.brevo-action-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Styles pour les formulaires */
+.brevo-form-group {
+    margin-bottom: 20px;
+}
+
+.brevo-form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.brevo-form-input,
+.brevo-form-textarea,
+.brevo-form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.brevo-form-input:focus,
+.brevo-form-textarea:focus,
+.brevo-form-select:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.2);
+}
+
+.brevo-form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.brevo-form-help {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* Styles pour les messages */
+.brevo-message {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.brevo-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.brevo-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.brevo-message.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.brevo-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* Styles pour les tableaux */
+.brevo-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.brevo-table th,
+.brevo-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.brevo-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+}
+
+.brevo-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Styles responsifs */
+@media (max-width: 768px) {
+    .brevo-campaigns-container {
+        padding: 10px;
+    }
+    
+    .brevo-campaign-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .brevo-campaign-meta {
+        grid-template-columns: 1fr;
+    }
+    
+    .brevo-campaign-actions {
+        flex-direction: column;
+    }
+    
+    .brevo-action-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Animation de chargement */
+.brevo-loading {
+    position: relative;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.brevo-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: brevo-spin 1s linear infinite;
+}
+
+@keyframes brevo-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

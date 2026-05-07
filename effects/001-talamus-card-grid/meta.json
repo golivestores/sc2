@@ -1,0 +1,11 @@
+{
+  "title":       "Talamus 错位卡片网格",
+  "subtitle":    "staggered card grid",
+  "description": "7 张白色卡片用 grid + nth-child(8n+k) translateY/translateX 错位排布；每张卡的 scale + opacity 由独立 IntersectionObserver 触发，所以滚动到位会陆续出现而非一次全显；同时叠加 simpleparallax-js 的连续滚动 drift（每张卡 scale 1.0 + index*0.2，速率不同制造层次）。源自 Talamus 首页 \"formations\" section。",
+  "tech":        "CSS Grid + IO + simpleparallax-js",
+  "tags":        ["animation", "intro", "scroll"],
+  "previewHref": "",
+  "sourceUrl":   "https://talamus.pro/",
+  "localMirror": "../designs/001-talamus/index.html",
+  "order":       1
+}

@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>effect viewer · sc2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #fef7e6;
+    --panel: #ffffff;
+    --border: #e6e2d1;
+    --fg: #0e0e0e;
+    --fg-dim: #6b6b6b;
+    --code-bg: #1a1a1a;
+    --code-fg: #e8e8e8;
+    --accent: #2b3d73;
+    --warn-bg: #fff5db;
+    --warn-fg: #6f4e00;
+    --warn-border: #e0c97e;
+    --paste-bg: #fff8e1;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+               font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }
+  a { color: var(--accent); }
+
+  header.top {
+    padding: 28px 40px 22px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .crumbs { font-size: 12.5px; color: var(--fg-dim); margin-bottom: 10px; }
+  .crumbs a { color: var(--fg-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--fg); text-decoration: underline; }
+  h1.title { margin: 0; font-size: 22px; letter-spacing: -.01em; line-height: 1.25; }
+  .num { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--fg-dim); font-size: 11.5px;
+         letter-spacing: .08em; margin-bottom: 6px; display: block; }
+  .desc { margin: 8px 0 0; color: var(--fg-dim); font-size: 13.5px; line-height: 1.55; max-width: 760px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 14px; font-size: 12.5px; font-weight: 600; letter-spacing: .02em;
+    text-decoration: none; color: var(--fg);
+    background: transparent; border: 1px solid var(--border); border-radius: 8px;
+    cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+  }
+  .btn:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .btn--primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .btn--primary:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn[aria-disabled="true"] { pointer-events: none; opacity: .4; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag { font-size: 10.5px; padding: 3px 8px; border-radius: 3px;
+         background: #f3efd6; color: var(--fg-dim); letter-spacing: .02em; }
+  .tag--tech { background: #e8e4c7; color: #4a4725; }
+  .tag--category { background: #dde6ff; color: #2b3d73; font-weight: 600; }
+
+  main { padding: 28px 40px 60px; }
+  section + section { margin-top: 36px; }
+  h2.section-title {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--fg-dim); margin: 0 0 14px;
+  }
+  .section-hint { color: var(--fg-dim); font-size: 12.5px; margin: -6px 0 14px; line-height: 1.5; }
+
+  .demo-frame {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; aspect-ratio: 16/9; position: relative;
+  }
+  .demo-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  .paste {
+    background: var(--panel);
+    border: 1px solid #e0c97e;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .paste__head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid #e0c97e;
+    background: var(--paste-bg);
+  }
+  .paste__name {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px;
+    font-weight: 600; color: var(--fg);
+  }
+  .paste__hint { font-size: 11px; color: var(--fg-dim); margin-left: 8px; font-weight: 400; }
+  .paste__copy {
+    font-size: 11.5px; padding: 5px 10px; border-radius: 6px;
+    background: var(--fg); color: var(--bg); border: 0; cursor: pointer; font-weight: 600;
+    transition: background .15s;
+  }
+  .paste__copy:hover { background: var(--accent); }
+  .paste__copy.is-ok { background: #2d6a3e; }
+  .paste pre {
+    margin: 0; padding: 14px 16px;
+    background: var(--code-bg); color: var(--code-fg);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12.5px; line-height: 1.55;
+    overflow-x: auto;
+    white-space: pre;
+    max-height: 520px; overflow-y: auto;
+  }
+  .paste--all pre { max-height: 720px; }
+
+  .warn {
+    background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-fg);
+    padding: 12px 14px; border-radius: 8px; font-size: 13px; line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .warn code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 3px;
+               font-family: ui-monospace, monospace; font-size: 12px; }
+
+  .empty { padding: 60px 20px; text-align: center; color: var(--fg-dim); }
+
+  .ext-scripts {
+    background: #fff; border: 1px dashed var(--border); border-radius: 8px;
+    padding: 10px 14px; font-size: 12.5px; color: var(--fg-dim); margin-bottom: 14px;
+  }
+  .ext-scripts code { background: #f3efd6; padding: 1px 6px; border-radius: 3px;
+                      font-family: ui-monospace, monospace; font-size: 12px; color: var(--fg); }
+
+  @media (max-width: 720px) {
+    header.top, main { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="crumbs"><a href="index.html">← effects</a></div>
+  <span class="num" id="num"></span>
+  <h1 class="title" id="title">载入中…</h1>
+  <p class="desc" id="desc"></p>
+  <div class="actions" id="actions"></div>
+  <div class="tags" id="tags"></div>
+</header>
+
+<main>
+  <section>
+    <h2 class="section-title">Demo</h2>
+    <div class="demo-frame">
+      <iframe id="demo" loading="lazy" title="demo"></iframe>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">整合代码 · 一键复制到你的项目</h2>
+    <p class="section-hint">从 <code>index.html</code> 拆出来的可复制片段。<b>HTML</b> 是 body 主体（已自动剥掉 <code>&lt;style&gt;</code>/<code>&lt;script&gt;</code> 和标记为 <code>data-demo-only</code> 的脚手架）；<b>CSS</b> 是所有内联样式拼接；<b>JS</b> 是所有内联脚本拼接。复制到你自己的页面里即可复刻同款效果。<br><b>注意</b>：HTML 里如果有 <code>src="assets/..."</code> 或 <code>src="lib/..."</code>，记得连同对应文件夹一起复制；外部脚本（如有）会单独列出。下载完整 zip 是最稳的做法。</p>
+    <div id="warn-zip"></div>
+    <div id="snippets"></div>
+  </section>
+</main>
+
+<!-- effects.js (rebuild-generated metadata) loaded for fallback meta lookup -->
+<script src="effects.js"></script>
+
+<script>
+const escapeHTML = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function getEffectFolder() {
+  const u = new URLSearchParams(location.search);
+  return u.get('effect') || '';
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('load failed: ' + src));
+    document.head.appendChild(s);
+  });
+}
+
+function findMetaFromBundleOrEffects(folder, bundle) {
+  // 1) try meta.json from bundle.files (most authoritative — packager just read it)
+  if (bundle && Array.isArray(bundle.files)) {
+    const f = bundle.files.find(x => x.path === 'meta.json');
+    if (f && f.text) {
+      try {
+        const meta = JSON.parse(f.text);
+        return { folder, num: (folder.match(/^(\d+)/) || [, ''])[1], ...meta };
+      } catch {}
+    }
+  }
+  // 2) fall back to effects.js (rebuild-index.ps1 output)
+  if (Array.isArray(window.__EFFECTS__)) {
+    const m = window.__EFFECTS__.find(e => e.folder === folder);
+    if (m) return m;
+  }
+  return null;
+}
+
+function renderHeader(meta) {
+  document.getElementById('num').textContent = meta.num
+    ? `${meta.num}${meta.subtitle ? ' · ' + meta.subtitle : ''}`
+    : (meta.subtitle || '');
+  document.getElementById('title').textContent = meta.title || meta.folder;
+  document.getElementById('desc').textContent = meta.description || '';
+
+  const folder = encodeURIComponent(meta.folder);
+  const zipUrl = `${folder}/${folder}.zip`;
+  // "跳转原网页" goes to the LOCAL scraped mirror under designs/, NOT the live URL.
+  // meta.json must declare `localMirror` (relative path from effects/) for this to work.
+  const localLink = meta.localMirror
+    ? `<a class="btn" href="${escapeHTML(meta.localMirror)}" target="_blank" rel="noopener">跳转原网页 ↗</a>`
+    : `<a class="btn" aria-disabled="true" title="meta.json 中未填 localMirror（指向 designs/ 下的本地镜像）">跳转原网页 ↗</a>`;
+  document.getElementById('actions').innerHTML = `
+    <a class="btn btn--primary" id="btn-zip" href="${zipUrl}" download>下载 .zip</a>
+    ${localLink}
+  `;
+  // probe zip — under file:// HEAD often fails; that's OK, we don't show a warning then
+  if (location.protocol !== 'file:') {
+    fetch(zipUrl, { method: 'HEAD', cache: 'no-store' }).then(r => {
+      if (!r.ok) {
+        const btn = document.getElementById('btn-zip');
+        btn.setAttribute('aria-disabled', 'true');
+        btn.removeAttribute('href');
+        btn.textContent = '⚠ zip 未生成';
+        document.getElementById('warn-zip').innerHTML =
+          `<div class="warn">⚠ <b>下载包尚未生成</b>。在项目根目录运行 <code>python package-effects.py</code>，` +
+          `然后刷新本页即可下载 <code>${escapeHTML(meta.folder)}.zip</code>。当前仍可逐文件复制源码。</div>`;
+      }
+    }).catch(() => {});
+  }
+
+  // Localize chip-category tags to match the gallery's display. Keep this map
+  // in sync with the chips defined in effects/index.html .toolbar.
+  const CATEGORY_LABELS = {
+    animation: '动画', typography: '文字', interaction: '交互',
+    intro: '入场', scroll: '滚动', hero: '首屏',
+  };
+  const tags = document.getElementById('tags');
+  const techTag = meta.tech ? `<span class="tag tag--tech">${escapeHTML(meta.tech)}</span>` : '';
+  const ts = (meta.tags || []).map(t => {
+    if (CATEGORY_LABELS[t]) {
+      return `<span class="tag tag--category">${escapeHTML(CATEGORY_LABELS[t])}</span>`;
+    }
+    return `<span class="tag">${escapeHTML(t)}</span>`;
+  }).join('');
+  tags.innerHTML = techTag + ts;
+
+  document.getElementById('demo').src = `${folder}/index.html`;
+}
+
+function pasteBlock(label, hint, content, lang) {
+  if (!content || !content.trim()) return '';
+  const id = 'p-' + Math.random().toString(36).slice(2);
+  return `
+    <div class="paste">
+      <div class="paste__head">
+        <div>
+          <span class="paste__name">${escapeHTML(label)}</span>
+          ${hint ? `<span class="paste__hint">${escapeHTML(hint)}</span>` : ''}
+        </div>
+        <button class="paste__copy" data-target="${id}">复制</button>
+      </div>
+      <pre><code id="${id}">${escapeHTML(content)}</code></pre>
+    </div>`;
+}
+
+function pasteBlockAll(html, css, js, externalScripts) {
+  const id = 'p-all-' + Math.random().toString(36).slice(2);
+  const ext = (externalScripts || []).map(s =>
+    `<script src="${s}"><\/script>`
+  ).join('\n');
+  const combined =
+    (ext ? '<!-- external scripts (also load these) -->\n' + ext + '\n\n' : '') +
+    (css ? '<style>\n' + css + '\n</style>\n\n' : '') +
+    (html ? html + '\n\n' : '') +
+    (js ? '<script>\n' + js + '\n<\/script>\n' : '');
+  return `
+    <div class="paste paste--all">
+      <div class="paste__head">
+        <div>
+          <span class="paste__name">all-in-one</span>
+          <span class="paste__hint">HTML + CSS + JS + 外部脚本引用，按顺序拼好直接贴一段</span>
+        </div>
+        <button class="paste__copy" data-target="${id}">复制</button>
+      </div>
+      <pre><code id="${id}">${escapeHTML(combined.trim())}</code></pre>
+    </div>`;
+}
+
+function renderSnippets(snippets) {
+  const container = document.getElementById('snippets');
+  if (!snippets) {
+    container.innerHTML = '<div class="empty">没有 snippets 数据。请重新跑 <code>python package-effects.py</code>。</div>';
+    return;
+  }
+  const blocks = [];
+  blocks.push(pasteBlockAll(snippets.html, snippets.css, snippets.js, snippets.external_scripts));
+  blocks.push(pasteBlock('HTML', '主体结构（粘到 <body> 里）', snippets.html, 'html'));
+  blocks.push(pasteBlock('CSS', '内联样式（粘到 <style> 或 .css 文件）', snippets.css, 'css'));
+  blocks.push(pasteBlock('JS', '内联脚本（粘到 <script> 或 .js 文件）', snippets.js, 'js'));
+  if ((snippets.external_scripts || []).length) {
+    const list = snippets.external_scripts.map(s => `<li><code>${escapeHTML(s)}</code></li>`).join('');
+    blocks.unshift(`
+      <div class="ext-scripts">
+        <b>额外需要加载的脚本</b>（这个 effect 引用了外部 JS 文件，复制时记得也带上或用 CDN 等价物）：
+        <ul>${list}</ul>
+      </div>`);
+  }
+  container.innerHTML = blocks.join('');
+}
+
+function wireCopyButtons(scope) {
+  scope.querySelectorAll('.paste__copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const target = document.getElementById(btn.dataset.target);
+      if (!target) return;
+      const text = target.textContent;
+      const ok = () => {
+        const original = btn.textContent;
+        btn.textContent = '已复制 ✓';
+        btn.classList.add('is-ok');
+        setTimeout(() => { btn.textContent = original; btn.classList.remove('is-ok'); }, 1400);
+      };
+      try {
+        await navigator.clipboard.writeText(text);
+        ok();
+      } catch {
+        // fallback for non-https / file://
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); ok(); }
+        catch { btn.textContent = '复制失败'; setTimeout(() => btn.textContent = '复制', 1400); }
+        document.body.removeChild(ta);
+      }
+    });
+  });
+}
+
+function showFatal(title, html) {
+  document.getElementById('title').textContent = title;
+  document.getElementById('desc').innerHTML = html;
+  document.getElementById('snippets').innerHTML = '';
+}
+
+(async () => {
+  const folder = getEffectFolder();
+  if (!folder) {
+    showFatal('缺少 effect 参数',
+      '正确用法：<code>view.html?effect=NNN-名字</code>');
+    return;
+  }
+  // Load source-bundle.js (works under file:// because <script> tags can load
+  // sibling files where fetch() can't). If it fails, fall back to fetch under HTTP.
+  let bundle = null;
+  try {
+    await loadScript(`${encodeURIComponent(folder)}/source-bundle.js?_=${Date.now()}`);
+    bundle = window.__SC2_BUNDLE__;
+  } catch {}
+
+  if (!bundle || bundle.effect !== folder) {
+    showFatal(`找不到 ${folder} 的 source-bundle.js`,
+      '请在项目根目录运行 <code>python package-effects.py</code> 生成它，然后刷新本页。<br>' +
+      '（这个文件包含逐文件源码 + paste-ready snippets，由 <code>view.html</code> 使用。）');
+    return;
+  }
+
+  const meta = findMetaFromBundleOrEffects(folder, bundle);
+  if (!meta) {
+    showFatal(`${folder}: 没找到 meta.json`,
+      'effect 文件夹下应有 <code>meta.json</code>。');
+    return;
+  }
+  document.title = `${meta.title || meta.folder} · effect viewer`;
+  renderHeader(meta);
+  renderSnippets(bundle.snippets);
+  wireCopyButtons(document);
+})();
+</script>
+</body>
+</html>

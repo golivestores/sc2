@@ -1,0 +1,11 @@
+{
+  "title":       "Shift5 分类卡片 hover",
+  "subtitle":    "4-column slider with coral hover takeover",
+  "description": "Shift5 中段产品分类区：横向 4 卡片 grid，每卡 48rem 宽（~480px @1440px），细线边框由 4 个 absolute 定位的 ::line 元素拼出。鼠标 hover 时卡片整体变珊瑚红 #ff5841、Explore 按钮反相（黑底珊瑚字），0.2s ease 过渡。每张卡片有独特 SVG 图标（地球线框 / 半色调圆点 / 星芒 / 立方体）。顶部带左右 slider 箭头控件，点击 scrollBy 一格。",
+  "tech":        "CSS Grid + SVG sprite + scroll snap",
+  "tags":        ["interaction", "animation"],
+  "previewHref": "",
+  "sourceUrl":   "https://shift5.io/",
+  "localMirror": "../designs/002-shift5/index.html",
+  "order":       4
+}

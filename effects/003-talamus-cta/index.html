@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talamus CTA · sc2 effect</title>
+<!-- Inter (Google Fonts) as a heavy display fallback for Adobe Typekit
+     "halyard-display" (account-bound, can't be redistributed). Offline use
+     falls further to the system stack below. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* --- Self-contained reproduction of Talamus's .module-cta section --------
+   Original: https://talamus.pro/  (mid-page CTA over a black/red particle video)
+   Behavior copied 1:1:
+     - Background autoplay video (TALAMUS-OrangeNoir.mp4) — black + red particles.
+     - Two-column desktop grid: empty left half, title + CTA centered in right.
+     - Title char-by-char reveal: each char starts translateY(130%) hidden,
+       on parent's `--tadam` slides up to translateY(0) (original site's -8px
+       lift retuned to 0 to avoid clipping with fallback fonts; same lesson
+       applied to 002-talamus-hero).
+     - CTA wrapper opacity 0 → 1 with 0.5s reveal once `--tadam` fires.
+     - Reveal triggered by TadamScroll on the section itself (data-tadam-scroll="0")
+       — verbatim port of _tadam-scroll.js: when scrollY+innerHeight passes the
+       section's absolute top (+ 0px offset), `module-cta--tadam` is added and
+       cascades to title chars + CTA.
+     - Char split provided by splitting.js (lib/splitting.min.js, MIT, ~3.7 KB).
+
+   Demo affordance:
+     - A leading <header data-demo-only> gives scroll-room so the standalone
+       page actually has somewhere to scroll FROM. The packager strips
+       data-demo-only elements when generating the all-in-one snippet.
+     - When loaded with ?demo=preview (gallery thumbnail), the intro is hidden
+       and the cascade is faked via setTimeout — so the small thumbnail iframe
+       still shows the chain reveal even though it can't scroll. */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: #000000;
+  color: #ffffff;
+  font-family: "halyard-display", "Inter", -apple-system, "Segoe UI", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- module-cta section ------------------------------------------------ */
+.module-cta {
+  background-color: #000000;
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+@media only screen and (min-width: 600px)  { .module-cta { min-height: 800px;  } }
+@media only screen and (min-width: 1024px) { .module-cta { min-height: 1100px; } }
+
+.module-cta__container {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 2;
+}
+@media only screen and (min-width: 1024px) {
+  .module-cta__container {
+    min-height: 1100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .module-cta__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.module-cta__grid-right {
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 500px;
+}
+@media only screen and (min-width: 600px)  { .module-cta__grid-right { min-height: 800px; } }
+@media only screen and (min-width: 1024px) {
+  .module-cta__grid-right {
+    align-items: flex-start;
+    min-height: 1100px;
+  }
+}
+
+/* h3 / title-3 size + family — verbatim sizes from main.css; weight bumped
+   from original 500 to 800 so Inter / system fallback reads as a heavy display
+   sans (halyard-display 500 carries more visual weight than typical 500). */
+.module-cta__title {
+  text-align: center;
+  color: #ffffff;
+  margin: 0 0 20px;
+  font-size: 28px;
+  line-height: 1.1;
+  font-family: "halyard-display", "Inter", -apple-system, "Segoe UI", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+@media only screen and (min-width: 600px)  { .module-cta__title { font-size: 50px; } }
+@media only screen and (min-width: 1024px) { .module-cta__title { text-align: left; } }
+
+/* per-char reveal (same lesson as 002: translateY end → 0 + relaxed line-height
+   + .word top breathing room, so fallback-font chars don't get top-clipped) */
+.module-cta__title .word {
+  display: inline-flex;
+  position: relative;
+  overflow: hidden;
+  padding-top: 0.12em;
+  margin-top: -0.12em;
+}
+.module-cta__title .word .char {
+  display: inline-flex;
+  position: relative;
+  transform: translateY(130%);
+  transition: 0.7s cubic-bezier(0.86, 0, 0.07, 1);
+  transition-delay: calc(var(--char-index) * 10ms);
+}
+.module-cta--tadam .module-cta__title .word .char { transform: translateY(0); }
+
+/* --- CTA button (orange, white-block hover) ---------------------------- */
+.module-cta__container-link {
+  transition: 1s cubic-bezier(0.34, 0.7, 0.27, 1);
+  transition-delay: 0.5s;
+  opacity: 0;
+}
+.module-cta--tadam .module-cta__container-link { opacity: 1; }
+
+.module-cta__link {
+  width: fit-content;
+  pointer-events: all;
+  border: 4px solid #fe4100;
+  border-radius: 6px;
+  background-color: #fe4100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 11px 70px 11px 11px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000000;
+  position: relative;
+  transition: 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+.module-cta__link span { z-index: 2; position: relative; }
+.module-cta__link::before {
+  content: "";
+  position: absolute;
+  right: 0; top: 0;
+  height: 100%; width: 45px;
+  background-color: #000000;
+  border-radius: 6px;
+  transition: 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+.module-cta__link::after {
+  content: "";
+  position: absolute;
+  width: 23px; height: 30px;
+  right: 11px;
+  z-index: 3;
+  transform: rotate(-45deg);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14M13 6l6 6-6 6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% auto;
+  transition: 0.3s ease;
+  pointer-events: none;
+}
+@media only screen and (min-width: 1024px) {
+  .module-cta__link:hover { color: #ffffff; }
+  .module-cta__link:hover::after { transform: rotate(0); }
+  .module-cta__link:hover::before { width: 100%; }
+}
+
+/* --- background video -------------------------------------------------- */
+.module-cta__image {
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
+</head>
+<body>
+
+<section class="module-cta" data-tadam-scroll="0">
+  <div class="module-cta__container">
+    <div class="module-cta__grid">
+      <div class="module-cta__grid-left"></div>
+      <div class="module-cta__grid-right">
+        <h3 class="module-cta__title" data-split>Plongez dans l'ère<br>du changement</h3>
+        <div class="module-cta__container-link">
+          <a href="#" class="module-cta__link"><span>Découvrez gratuitement</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <video class="module-cta__image" autoplay muted loop playsinline src="assets/TALAMUS-OrangeNoir.mp4"></video>
+</section>
+
+<!-- splitting.js (MIT) — bundled locally for A.2 self-containment.
+     Source: https://github.com/andrewchaomeng/splitting (1.0.6) -->
+<script src="lib/splitting.min.js"></script>
+
+<script>
+/* --- 1:1 reproduction of the original site's TadamScroll + Split wiring ---
+   - Splitting library wraps each char of [data-split] elements in <span class="char">
+     with --char-index CSS variable. Run on init regardless of preview mode.
+   - TadamScroll (verbatim port of _tadam-scroll.js): on window load, build offset
+     list = elementY + scrollY + parseInt(data-tadam-scroll). On scroll, when
+     scrollY + innerHeight > offset, add `<firstClass>--tadam` to the element.
+   - Preview mode (?demo=preview): hide demo-only intro, fake the cascade with
+     setTimeout so the small gallery thumbnail iframe shows motion without scroll. */
+(function () {
+  const params = new URLSearchParams(location.search);
+  const previewMode = params.get('demo') === 'preview';
+
+  // Video safety net (same rationale as 002): explicit play() + fallback to
+  // native controls if autoplay is blocked or src 404s. The most common cause
+  // of a missing video in the unzipped block is the assets/ folder not being
+  // extracted alongside index.html — a console warning surfaces this.
+  document.querySelectorAll('video').forEach(v => {
+    v.muted = true;
+    v.playsInline = true;
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => { v.controls = true; });
+      }
+    };
+    if (v.readyState >= 2) tryPlay();
+    else v.addEventListener('loadeddata', tryPlay, { once: true });
+    v.addEventListener('error', () => {
+      v.controls = true;
+      console.warn('[sc2] video failed to load — check the file at:', v.currentSrc || v.src,
+        '\nIf you unzipped this file, make sure the assets/ folder was extracted alongside index.html.');
+    });
+  });
+
+  // Splitting first — must wrap chars before tadam can stagger them
+  if (typeof Splitting !== 'undefined') {
+    Splitting({ target: document.querySelectorAll('[data-split]'), by: 'chars' });
+  }
+
+  if (previewMode) {
+    // fake cascade — fire each [data-tadam-scroll] with a small stagger delay
+    const list = document.querySelectorAll('[data-tadam-scroll]');
+    Array.from(list).forEach((el, i) => {
+      setTimeout(() => {
+        el.classList.add(el.classList[0] + '--tadam');
+      }, 200 + i * 130);
+    });
+    return;
+  }
+
+  // 1:1 path — verbatim of _tadam-scroll.js, plus one safe augmentation:
+  // an initial check after offsets are built. The original site placed this
+  // section deep into a long page, so on load it was below the fold and the
+  // scroll listener fired naturally. Standalone, the section is at the top of
+  // the viewport so a user who never scrolls would never see the reveal —
+  // initial check fires `--tadam` right away when the section is already in
+  // view. For pages where the section is below the fold (the original use
+  // case), behavior is unchanged.
+  function initTadamScroll() {
+    const list = document.querySelectorAll('[data-tadam-scroll]');
+    if (!list.length) return;
+    const offsets = [];
+    for (let i = 0; i < list.length; i++) {
+      offsets.push(
+        list[i].getBoundingClientRect().y +
+        window.scrollY +
+        parseInt(list[i].getAttribute('data-tadam-scroll'), 10)
+      );
+    }
+    function check() {
+      const pos = window.scrollY + window.innerHeight;
+      for (let i = 0; i < list.length; i++) {
+        if (pos > offsets[i]) {
+          list[i].classList.add(list[i].classList[0] + '--tadam');
+        }
+      }
+    }
+    window.addEventListener('scroll', check);
+    check();  // augmentation: trigger immediately if section is already visible
+  }
+  if (document.readyState === 'complete') initTadamScroll();
+  else window.addEventListener('load', initTadamScroll);
+})();
+</script>
+
+</body>
+</html>

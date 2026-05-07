@@ -1,0 +1,38 @@
+[
+    {
+        "folder":  "001-talamus",
+        "title":  "Talamus",
+        "description":  "",
+        "sourceUrl":  "https://talamus.pro/",
+        "savedAt":  "2026-05-06",
+        "tags":  [
+
+                 ],
+        "href":  "designs/001-talamus/index.html",
+        "preview":  ""
+    },
+    {
+        "folder":  "002-shift5",
+        "title":  "Shift5",
+        "description":  "",
+        "sourceUrl":  "https://shift5.io/",
+        "savedAt":  "2026-05-06",
+        "tags":  [
+
+                 ],
+        "href":  "designs/002-shift5/index.html",
+        "preview":  ""
+    },
+    {
+        "folder":  "003-armateursdefrance",
+        "title":  "Armateurs de France",
+        "description":  "",
+        "sourceUrl":  "https://www.armateursdefrance.org/",
+        "savedAt":  "2026-05-06",
+        "tags":  [
+
+                 ],
+        "href":  "designs/003-armateursdefrance/index.html",
+        "preview":  ""
+    }
+]

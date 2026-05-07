@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talamus Hero · sc2 effect</title>
+<!-- Inter from Google Fonts as a heavy display fallback for Adobe Typekit
+     "halyard-display" (which is account-bound and not redistributable).
+     Offline use → falls back further to the system stack below. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* --- Self-contained reproduction of Talamus's .home-head hero section ---
+   Original: https://talamus.pro/  (top of the homepage)
+   Behavior copied 1:1:
+     - Background autoplay video (TALAMUS-BlancOrange.mp4) — orange + particles
+     - Title char-by-char reveal: each letter starts translateY(130%) hidden
+       below baseline, on `--tadam` slides up to translateY(-9px..-20px)
+       with cubic-bezier(0.86,0,0.07,1), per-char delay = char-index * 10ms.
+       Splits via splitting.js (lib/splitting.min.js, MIT, ~3.7 KB).
+     - CTA (.home-head__link): 0.5s reveal of the wrapper, then hover effect
+       with white block expanding from right edge + arrow rotation.
+     - Bottom-right description: vertical line grows 0%→100% height,
+       text slides in from translateX(-280px) with delays.
+     - Tadam class fires `--tadam` on each [data-tadam] element 10ms after
+       window 'load', no preloader involved. Verbatim port of _tadam.js.
+
+   Customizations vs. raw extract:
+     - Title text replaced with 阿祖AI建站 (was "Créons les possibles").
+     - Brand mark "Himax" added at top-left (occupies the Talamus logo slot).
+     - Font weight bumped to 800 + Inter loaded via Google Fonts so the title
+       reads as a heavy display sans rather than a thin system fallback. */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: #fe4100;
+  font-family: "halyard-display", "Inter", -apple-system, "Segoe UI", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Top-left brand mark (replaces the original Talamus logo slot). */
+.home-head__brand {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  z-index: 3;
+  font-size: 38px;
+  font-weight: 800;
+  color: #000;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  font-family: "halyard-display", "Inter", -apple-system, "Segoe UI", Arial, sans-serif;
+}
+@media only screen and (min-width: 1024px) {
+  .home-head__brand { top: 40px; left: 48px; font-size: 56px; }
+}
+
+/* h1 / .title-1 size + family — verbatim sizes from main.css; weight bumped
+   from the original 500 to 800 because the system fallback for halyard-display
+   reads thin compared to the original; halyard 500 carries more visual weight
+   than typical 500 fonts. line-height also relaxed (1.1 vs original ~0.95)
+   because Inter / Microsoft YaHei have taller cap-height + more ascender room
+   than halyard-display, so the original tight line-height clipped the top of
+   chars when combined with `.word { overflow: hidden }` and the translateY
+   lift. The relaxed line-height plus a small padding-top on `.word` gives
+   the char enough breathing room to fully display at its --tadam end state. */
+.home-head__title,
+h1.home-head__title {
+  font-size: 50px;
+  line-height: 1.1;
+  font-family: "halyard-display", "Inter", -apple-system, "Segoe UI", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-weight: 800;
+  color: #000000;
+  margin: 0 0 30px;
+  letter-spacing: -0.02em;
+}
+@media only screen and (min-width: 600px) {
+  .home-head__title { font-size: 100px; margin-bottom: 50px; }
+}
+@media only screen and (min-width: 1024px) {
+  .home-head__title { font-size: 130px; margin-bottom: 60px; }
+}
+
+.home-head { position: relative; overflow: hidden; }
+
+.home-head__container {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.home-head__grid {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+@media only screen and (min-width: 1024px) {
+  .home-head__grid {
+    margin: 0 8.33%;
+    min-height: 800px;
+  }
+}
+
+/* --- title char animation ----------------------------------------------
+   .word has overflow:hidden so chars in their initial translateY(130%) state
+   are clipped (hidden below baseline). When --tadam fires, chars slide up to
+   translateY(0) and become visible. Original site lifted further to -9..-20px
+   to compensate for halyard-display's specific descender alignment; with our
+   fallback fonts that lift CLIPS the tops of chars, so we settle at 0 instead. */
+.home-head__title .word {
+  display: inline-flex;
+  position: relative;
+  overflow: hidden;
+  /* small top padding gives the line-box vertical breathing room so any
+     accent / ascender (and CJK chars' full body) can render without being
+     trimmed by overflow:hidden. Negative margin-top compensates so layout
+     doesn't shift downward. */
+  padding-top: 0.12em;
+  margin-top: -0.12em;
+}
+.home-head__title .word .char {
+  display: inline-flex;
+  position: relative;
+  transform: translateY(130%);
+  transition: 0.7s cubic-bezier(0.86, 0, 0.07, 1);
+  transition-delay: calc(var(--char-index) * 10ms);
+}
+.home-head__title--tadam .word .char { transform: translateY(0); }
+
+/* --- CTA button -------------------------------------------------------- */
+.home-head__container-link {
+  transition: 1s cubic-bezier(0.34, 0.7, 0.27, 1);
+  transition-delay: 0.5s;
+  opacity: 0;
+}
+.home-head__container-link--tadam { opacity: 1; transform: translateY(0); }
+
+.home-head__link {
+  width: fit-content;
+  pointer-events: all;
+  border: 4px solid #000000;
+  border-radius: 6px;
+  background-color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 11px 70px 11px 11px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fe4100;
+  position: relative;
+  transition: 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+.home-head__link span { z-index: 2; position: relative; }
+.home-head__link::before {
+  content: "";
+  position: absolute;
+  right: 0; top: 0;
+  height: 100%; width: 45px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  transition: 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+.home-head__link::after {
+  content: "";
+  position: absolute;
+  width: 23px; height: 30px;
+  right: 11px;
+  z-index: 3;
+  transform: rotate(-45deg);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14M13 6l6 6-6 6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% auto;
+  transition: 0.3s ease;
+  pointer-events: none;
+}
+@media only screen and (min-width: 1024px) {
+  .home-head__link:hover { color: #000000; }
+  .home-head__link:hover::after { transform: rotate(0); }
+  .home-head__link:hover::before { width: 100%; }
+}
+
+/* --- bottom-right description ------------------------------------------ */
+.home-head__container-description-position {
+  height: 100px;
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
+}
+@media only screen and (min-width: 1024px) {
+  .home-head__container-description-position { right: 0; }
+}
+.home-head__container-description {
+  position: relative;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 100px;
+  overflow: hidden;
+}
+.home-head__container-description::after {
+  display: block;
+  content: "";
+  position: absolute;
+  left: 0; top: 0;
+  height: 0%;
+  width: 2px;
+  background-color: black;
+  transition: 0.6s cubic-bezier(0.86, 0, 0.07, 1);
+  transition-delay: 0.8s;
+}
+.home-head__container-description--tadam::after { height: 100%; }
+.home-head__container-description--tadam .home-head__description { transform: translateX(0); }
+
+.home-head__description {
+  font-size: 16px;
+  line-height: 20px;
+  font-family: "halyard-display", "Inter", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  color: #000000;
+  max-width: 250px;
+  margin: 0;
+  transform: translateX(-280px);
+  transition: 1s cubic-bezier(0.86, 0, 0.07, 1);
+  transition-delay: 1s;
+}
+@media only screen and (min-width: 1024px) {
+  .home-head__description { font-size: 20px; line-height: 25px; }
+}
+
+/* --- background video -------------------------------------------------- */
+.home-head__image {
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
+</head>
+<body>
+
+<section class="home-head">
+  <a class="home-head__brand" href="#">Himax</a>
+  <div class="home-head__container">
+    <div class="home-head__grid">
+      <h1 class="home-head__title" data-split data-tadam>阿祖AI建站</h1>
+      <div class="home-head__container-link" data-tadam>
+        <a href="#" class="home-head__link"><span>Découvrez notre approche</span></a>
+      </div>
+      <div class="home-head__container-description-position">
+        <div class="home-head__container-description" data-tadam>
+          <p class="home-head__description">Efficacité professionnelle.<br>Expertise humaine.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <video class="home-head__image" autoplay muted loop playsinline src="assets/TALAMUS-BlancOrange.mp4"></video>
+</section>
+
+<!-- splitting.js (MIT) — bundled locally for A.2 self-containment.
+     Source: https://github.com/andrewchaomeng/splitting (1.0.6) -->
+<script src="lib/splitting.min.js"></script>
+
+<script>
+/* --- 1:1 reproduction of the original site's Split + Tadam wiring ------
+   Verbatim translation of _splitting.js (calls Splitting library with
+   {target, by:'chars'}) and _tadam.js (on window load, add `<firstClass>--tadam`
+   to each [data-tadam] element after a 10ms delay; preloader path skipped
+   because no preloader exists in this standalone block). */
+(function () {
+  // Video safety net — file:// has stricter autoplay policy than https:// in
+  // some browsers, and unzip-without-extracting is a common user error that
+  // breaks the relative <video src="assets/x.mp4"> reference. Explicitly call
+  // play() once metadata loads; on error or autoplay-block, fall back to
+  // showing native controls so the user can click play instead of staring at
+  // a black box.
+  document.querySelectorAll('video').forEach(v => {
+    v.muted = true;
+    v.playsInline = true;
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => { v.controls = true; });
+      }
+    };
+    if (v.readyState >= 2) tryPlay();
+    else v.addEventListener('loadeddata', tryPlay, { once: true });
+    v.addEventListener('error', () => {
+      v.controls = true;
+      console.warn('[sc2] video failed to load — check the file at:', v.currentSrc || v.src,
+        '\nIf you unzipped this file, make sure the assets/ folder was extracted alongside index.html.');
+    });
+  });
+
+  // Splitting first — wraps each char of [data-split] elements in <span class="char">
+  // with --char-index CSS variable. CSS uses that index for staggered transitions.
+  if (typeof Splitting !== 'undefined') {
+    Splitting({ target: document.querySelectorAll('[data-split]'), by: 'chars' });
+  }
+
+  function initTadam() {
+    const list = document.querySelectorAll('[data-tadam]');
+    for (let i = 0; i < list.length; i++) {
+      // verbatim: setTimeout 10ms then classList.add(`${classList[0]}--tadam`)
+      // wrapping in a closure captures the index for the loop
+      (function (el) {
+        setTimeout(function () {
+          el.classList.add(el.classList[0] + '--tadam');
+        }, 10);
+      })(list[i]);
+    }
+  }
+  if (document.readyState === 'complete') initTadam();
+  else window.addEventListener('load', initTadam);
+})();
+</script>
+
+</body>
+</html>
