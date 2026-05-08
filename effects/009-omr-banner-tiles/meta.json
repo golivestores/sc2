@@ -1,0 +1,11 @@
+{
+  "title":       "OMR 4 列分类瓦片 hover reveal",
+  "subtitle":    "Shopify banners with grid-row 0fr → 1fr text reveal",
+  "description": "OMR Beauty 中段 4 个分类导航瓦片：Our Story / Home Fragrance / Eau de Parfum / Perfume Oils。每瓦 4:5 图片铺满 + 底部叠标题；hover 时正文用 grid-template-rows 0fr → 1fr 平滑展开（Shopify 用这个 trick 替代 max-height 动画，过渡更顺），同时一块黑色 ::after 面板 translateY(100%) → 0 从底部升上来做文字背景，标题转白。整段桌面 4 等分，移动端 75% scroll-snap 横滑。",
+  "tech":        "CSS Grid + grid-row 0fr trick + container queries",
+  "tags":        ["interaction", "animation"],
+  "previewHref": "",
+  "sourceUrl":   "https://omrbeauty.com/",
+  "localMirror": "../designs/004-omrbeauty/index.html",
+  "order":       9
+}

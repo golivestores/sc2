@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADF Domaines d'intervention · sc2 effect</title>
+<style>
+/* --- Self-contained reproduction of ADF's .block-organization section ------
+   Original: https://www.armateursdefrance.org/  (mid-page domains block)
+   Behavior copied 1:1:
+     - Dark-blue rounded container (#001060) with overflow:hidden.
+     - Background: large boat photo (parallax in original; static here).
+     - Big white headline at top: "Nos domaines d'intervention" (UPPERCASE,
+       PP Fraktion Sans → system fallback, ~7.5rem at desktop / 4rem mobile).
+     - 6 glassmorphism cards in a 2-row 12-col grid (each card span 2 → 6 cards
+       per row at lg). Cards: bg-white/10, backdrop-blur(5px), 20:23 aspect ratio.
+     - Each card has a small subtitle title at top + a circular arrow button at
+       bottom. Hover the card: it lifts (translateY(-1rem)) AND the arrow
+       button fills white with dark-blue arrow.
+     - Plus a hover-transition on the parent <article>: 0.3s ease-out.
+
+   Differences from original (documented):
+     - Tailwind utility classes resolved to explicit CSS using the actual
+       theme variables (color-dark-blue:#001060, color-white, font-display).
+     - <adf-reveal-text> / <adf-reveal-cards> / <adf-parallax-image> custom
+       web components NOT reproduced — those rely on ADF's bespoke entry-
+       animation JS. Static layout + the lift-on-hover micro-interaction is
+       fully preserved (the dominant interactive identity of the section). */
+
+* { box-sizing: border-box; }
+:root {
+  --color-dark-blue: #001060;
+  --color-white: #ffffff;
+  --color-cream: #fbf7eb;
+  --font-display: "PP Fraktion Sans", "Inter", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--color-cream);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 60px 24px;
+}
+@media (max-width: 1023px) {
+  body { padding: 40px 16px; }
+}
+
+.block-organization {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.organization-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--color-dark-blue);
+  color: var(--color-white);
+}
+
+.organization-content {
+  position: relative;
+  z-index: 2;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 270px;
+}
+@media (min-width: 1024px) {
+  .organization-content {
+    padding: 40px;
+    gap: 346px;
+  }
+}
+
+.organization-title {
+  display: block;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2.5rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+@media (min-width: 1024px) {
+  .organization-title { font-size: 7.5rem; line-height: calc(102/120); }
+}
+
+.organization-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+}
+@media (min-width: 1024px) {
+  .organization-grid {
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: 24px;
+    row-gap: 24px;
+  }
+}
+
+.organization-grid > article {
+  grid-column: 1 / -1;
+}
+@media (min-width: 1024px) {
+  .organization-grid > article { grid-column: span 2; }
+}
+
+.domain-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 86px;
+  padding: 28px 24px 24px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.10);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  transition: transform 0.3s ease-out;
+}
+@media (min-width: 1024px) {
+  .domain-card {
+    aspect-ratio: 208 / 230;
+    padding: 24px;
+    gap: 10px;
+  }
+}
+.domain-card:has(a:hover) { transform: translateY(-1rem); }
+
+.domain-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.domain-card .full-link {
+  position: absolute; inset: 0;
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.domain-card .arrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-white);
+  border-radius: 50%;
+  color: var(--color-white);
+  transition: color 0.3s ease-out, background 0.3s ease-out, border-color 0.3s ease-out;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+.domain-card .arrow-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* on hover (peer pattern in tailwind) — when full-link inside card is hovered */
+.domain-card:has(.full-link:hover) .arrow-btn,
+.domain-card:has(.full-link:focus) .arrow-btn {
+  color: var(--color-dark-blue);
+  background: var(--color-white);
+  border-color: var(--color-white);
+}
+
+/* Background image */
+.organization-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 10px;
+  pointer-events: none;
+}
+.organization-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform-origin: top center;
+  /* gentle scale so the boat sits in the middle band of the section */
+  transform: scale(1.05);
+}
+
+/* Inline SVG defs */
+svg.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+</style>
+</head>
+<body>
+
+<!-- ADF SVG sprite -->
+<svg class="defs" aria-hidden="true">
+  <symbol viewBox="0 0 20 20" xml:space="preserve" fill="currentColor" id="arrow-right">
+    <path d="M16.3 10.2c.1-.1.1-.3 0-.4 0-.1-.1-.1-.1-.2l-5.8-5.8c-.2-.2-.5-.2-.7 0s-.2.5 0 .7l5 5H4.2c-.3 0-.5.2-.5.5s.2.5.5.5h10.5l-5 5c-.2.2-.2.5 0 .7.1.1.2.1.4.1s.3 0 .4-.1l5.8-5.8c-.1-.1 0-.1 0-.2z"/>
+  </symbol>
+</svg>
+
+<div class="block-organization">
+  <div class="organization-card">
+
+    <!-- Background photo (static; original site uses parallax) -->
+    <div class="organization-bg">
+      <img src="assets/boat.jpg" alt="">
+    </div>
+
+    <!-- Foreground content -->
+    <div class="organization-content">
+
+      <h2 class="organization-title">Nos domaines<br>d'intervention</h2>
+
+      <div class="organization-grid">
+
+        <article class="domain-card">
+          <h3>Environnement</h3>
+          <a class="full-link" href="#" aria-label="Environnement"></a>
+          <span class="arrow-btn"><svg><use href="#arrow-right"></use></svg></span>
+        </article>
+
+        <article class="domain-card">
+          <h3>Économie &amp; Fiscalité</h3>
+          <a class="full-link" href="#" aria-label="Économie & Fiscalité"></a>
+          <span class="arrow-btn"><svg><use href="#arrow-right"></use></svg></span>
+        </article>
+
+        <article class="domain-card">
+          <h3>Social &amp; Formation</h3>
+          <a class="full-link" href="#" aria-label="Social & Formation"></a>
+          <span class="arrow-btn"><svg><use href="#arrow-right"></use></svg></span>
+        </article>
+
+        <article class="domain-card">
+          <h3>Juridique &amp; Assurance</h3>
+          <a class="full-link" href="#" aria-label="Juridique & Assurance"></a>
+          <span class="arrow-btn"><svg><use href="#arrow-right"></use></svg></span>
+        </article>
+
+        <article class="domain-card">
+          <h3>Sûreté &amp; Sécurité</h3>
+          <a class="full-link" href="#" aria-label="Sûreté & Sécurité"></a>
+          <span class="arrow-btn"><svg><use href="#arrow-right"></use></svg></span>
+        </article>
+
+        <article class="domain-card">
+          <h3>Communication &amp; Relations Institutionnelles</h3>
+          <a class="full-link" href="#" aria-label="Communication & Relations Institutionnelles"></a>
+          <span class="arrow-btn"><svg><use href="#arrow-right"></use></svg></span>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

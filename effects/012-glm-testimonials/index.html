@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Good Life · Trusted by · sc2 effect</title>
+<style>
+/* --- Self-contained reproduction of Good Life Meds' `testimonial-section`.
+   Original: https://www.goodlifemeds.com/  ("Trusted by thousands of
+   customers nationwide" block)
+
+   Layout (matches the original Webflow `testimonial-left` / `testimonial-right`
+   structure exactly — first attempt got this wrong by collapsing it to a
+   3-col grid):
+
+       desktop ≥ 64rem (the screenshot the user sent)
+       ┌──────────────┬─────────────────────────────────────┐
+       │              │  Trusted by                         │
+       │   tile A     │  [○○○ avatars]                       │
+       │  (portrait)  │  thousands of customers nationwide  │
+       │              │  ★★★★½ Trustpilot                    │
+       ├──────────────┼─────────────────┬───────────────────┤
+       │              │                 │                   │
+       │   tile B     │     tile C      │      tile D       │
+       │   (square)   │  (portrait)     │   (portrait)      │
+       │              │                 │                   │
+       └──────────────┴─────────────────┴───────────────────┘
+
+   The left column is a single column of 2 tiles (A on top, B below);
+   right column is the heading row on top, then 2 tiles side-by-side
+   below. On mobile everything stacks.
+
+   Behaviors copied 1:1:
+     - Title is broken into 6 separate heading lines so the inline 3-avatar
+       customer credit row sits between "Trusted by" and "thousands"
+       (the original splits each word into its own .heading-3 element).
+     - Trustpilot pill: green star block + "Excellent" + 4.5/5 stars +
+       "1,850 reviews on" + Trustpilot logo.
+     - Each video tile = a Bunny Stream lightbox trigger. Click → modal
+       opens with the customer video. Tile has poster image + circular dark
+       play button that scales on hover. Background has a subtle Ken-Burns
+       drift to suggest "live" tiles (the original auto-plays the looped
+       muted video here; we don't have the source HLS streams in the
+       local mirror so the drift is the standin).
+     - Lightbox open: scale + fade up from the clicked tile origin
+       (FLIP-style entry), close on overlay click / ✕ button / Escape.
+
+   Differences from original (documented):
+     - Bunny Stream HLS streams (vz-8c5e7da3-fd8.b-cdn.net/.../playlist.m3u8)
+       are NOT in the local mirror — only the .webp posters were saved.
+       So the lightbox shows the poster scaled up rather than playing the
+       actual customer video. The open transition itself is faithful.
+     - Trustpilot live widget replaced with a static visual replica
+       (Trustpilot's iframe widget needs their script + a real businessunit
+       ID; the visual is identical so the block reads correctly offline).
+     - PP Neue Montreal display + Geist Mono body (commercial fonts) →
+       Inter for both.
+*/
+
+* { box-sizing: border-box; }
+:root {
+  --color-bg: #efece4;
+  --color-text: #0a0a0a;
+  --color-grey-text: #6f6f6f;
+  --color-trustpilot: #00b67a;
+  --font-display: "Inter", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--font-display);
+}
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.testimonial-section {
+  padding: 80px 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+@media (min-width: 64rem) { .testimonial-section { padding: 144px 64px; } }
+
+/* --- top-level 2-col grid --------------------------------------------- */
+.global-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 64rem) {
+  /* desktop: left column ≈ 35%, right column ≈ 65% — matches the
+     screenshot's narrower left "small + big portrait" stack vs the wider
+     right "text + 7/5 split tile-row". */
+  .global-grid {
+    grid-template-columns: 4.2fr 7.8fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+}
+
+/* --- LEFT column ------------------------------------------------------- */
+.testimonial-left {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 64rem) {
+  .testimonial-left {
+    grid-template-rows: 0.55fr 1fr;         /* small portrait on top, bigger
+                                                portrait below — height ratio
+                                                matches the heights of the
+                                                right-col text-row (smaller)
+                                                and right-col tile-row (bigger). */
+    gap: 24px;
+  }
+}
+
+/* --- RIGHT column: heading + Trustpilot on top row, then a 7/5-split
+   tile-row on the bottom (big grey-haired tile + smaller brown-hoodie tile,
+   exactly as the original lays it out). -------------------------------- */
+.testimonial-right {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 64rem) {
+  .testimonial-right {
+    grid-template-rows: 0.55fr 1fr;         /* same rhythm as left col */
+    gap: 24px;
+  }
+}
+
+/* the bottom 2-tile sub-row inside testimonial-right */
+.testimonial-tiles-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 64rem) {
+  /* 7/5 split: big tile on the left, narrower small tile on the right */
+  .testimonial-tiles-row { grid-template-columns: 7fr 5fr; gap: 24px; }
+}
+
+.trustpilot-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 8px 0 8px;
+}
+
+/* --- video tile (quote-block) ----------------------------------------- */
+.quote-block {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #1a1a1a;
+  min-height: 280px;
+}
+.quote-block.is-portrait { aspect-ratio: 3 / 4; }
+.quote-block.is-square   { aspect-ratio: 1 / 1; }
+@media (max-width: 47.99rem) {
+  .quote-block, .quote-block.is-portrait, .quote-block.is-square { aspect-ratio: 4 / 5; }
+}
+@media (min-width: 64rem) {
+  /* once the parent grid drives heights via fr-tracks, the per-tile
+     aspect-ratio gets ignored — the tile fills its grid cell instead. */
+  .quote-block { aspect-ratio: auto; height: 100%; min-height: 0; }
+}
+
+.quote-block img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* very slow Ken-Burns drift suggests the tile is "alive" — stand-in for
+     the auto-playing looped video the original loads from Bunny Stream */
+  animation: kenburns 16s ease-in-out infinite alternate;
+  transition: transform 0.6s ease;
+}
+.quote-block:nth-child(odd) img { animation-direction: alternate; animation-duration: 18s; }
+.quote-block:nth-child(even) img { animation-direction: alternate-reverse; animation-duration: 21s; }
+.quote-block:hover img { animation-play-state: paused; transform: scale(1.05); }
+
+@keyframes kenburns {
+  from { transform: scale(1.04) translate(0, 0); }
+  to   { transform: scale(1.10) translate(-2%, -1.5%); }
+}
+
+.play-button {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px; height: 56px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  pointer-events: none;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+.quote-block:hover .play-button { transform: translate(-50%, -50%) scale(1.10); background: #fff; }
+.play-icon { width: 14px; height: 16px; color: #1a1a1a; margin-left: 2px; }
+
+/* --- middle text block ------------------------------------------------- */
+.heading-3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(40px, 5vw, 88px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.credit-flex {
+  display: inline-flex;
+  align-items: center;
+  margin: 4px 0;
+}
+.credit-img {
+  width: 56px; height: 56px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 4px solid var(--color-bg);
+  margin-left: -14px;
+}
+.credit-img:first-child { margin-left: 0; }
+.credit-img img { width: 100%; height: 100%; object-fit: cover; display: block; animation: none; transition: none; }
+.credit-img.is-1 { background: #c8e0c2; }
+.credit-img.is-2 { background: #f5d6c2; }
+.credit-img.is-3 { background: #e0d8cc; }
+
+/* --- Trustpilot pill replica ------------------------------------------ */
+.trustpilot {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text);
+  padding: 8px 0 0;
+  flex-wrap: wrap;
+}
+.trustpilot__excellent { font-weight: 500; }
+.trustpilot__stars { display: inline-flex; gap: 2px; }
+.trustpilot__star {
+  width: 18px; height: 18px;
+  background: var(--color-trustpilot);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 1px;
+}
+.trustpilot__star::before {
+  content: "";
+  width: 13px; height: 13px;
+  background: #fff;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.trustpilot__star.half::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 50%;
+  background: var(--color-trustpilot);
+  pointer-events: none;
+}
+.trustpilot__reviews {
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-trustpilot);
+  text-decoration: none;
+  padding-bottom: 1px;
+}
+.trustpilot__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: var(--color-trustpilot);
+}
+
+/* --- mobile/desktop visibility swaps (matches original) --------------- */
+.hide-mobile { display: none; }
+.hide-desktop { display: block; }
+@media (min-width: 48rem) {
+  .hide-mobile { display: block; }
+  .hide-desktop { display: none; }
+}
+
+/* --- video lightbox modal --------------------------------------------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  transition: background-color 0.3s ease;
+}
+.lightbox.is-open {
+  display: flex;
+  background: rgba(0,0,0,0.85);
+}
+.lightbox__inner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 80vh;
+  aspect-ratio: 9 / 16;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  /* FLIP-style entry: scale + fade up from the click origin (transform-origin
+     is set inline by the JS to the clicked tile's center coords). */
+  transform: scale(0.4);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(.18,.78,.30,1.0), opacity 0.3s ease;
+}
+.lightbox.is-open .lightbox__inner {
+  transform: scale(1);
+  opacity: 1;
+}
+.lightbox__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.lightbox__hint {
+  position: absolute;
+  left: 50%; bottom: 24px;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.lightbox__close {
+  position: absolute;
+  top: -48px; right: 0;
+  width: 40px; height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  font-size: 22px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+</head>
+<body>
+
+<section class="testimonial-section">
+  <div class="global-grid">
+
+    <!-- LEFT col: 2 stacked tiles. Source order:
+         testimonial-left > quote-small > quote-block (testimonial-1)
+                          > quote-block            (testimonial-2 / Screenshot 10.59 PM) -->
+    <div class="testimonial-left">
+      <div class="quote-block is-portrait" data-poster="assets/testimonial-1.webp" data-title="Customer story 1">
+        <img src="assets/testimonial-1.webp" alt="Customer testimonial 1" loading="lazy">
+        <span class="play-button" aria-hidden="true">
+          <svg class="play-icon" viewBox="0 0 8 9" fill="none"><path d="M6.75 3.16665C7.41667 3.55155 7.41667 4.5138 6.75 4.8987L1.5 7.92978C0.833334 8.31468 -3.74346e-07 7.83356 -3.40697e-07 7.06376L-7.57104e-08 1.00158C-4.20613e-08 0.231782 0.833333 -0.249344 1.5 0.135556L6.75 3.16665Z" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <div class="quote-block is-square" data-poster="assets/testimonial-2.webp" data-title="Customer story 2">
+        <img src="assets/testimonial-2.webp" alt="Customer testimonial 2" loading="lazy">
+        <span class="play-button" aria-hidden="true">
+          <svg class="play-icon" viewBox="0 0 8 9" fill="none"><path d="M6.75 3.16665C7.41667 3.55155 7.41667 4.5138 6.75 4.8987L1.5 7.92978C0.833334 8.31468 -3.74346e-07 7.83356 -3.40697e-07 7.06376L-7.57104e-08 1.00158C-4.20613e-08 0.231782 0.833333 -0.249344 1.5 0.135556L6.75 3.16665Z" fill="currentColor"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- RIGHT col: heading + Trustpilot sit top, then a wide tile
+         (testimonial-3) above a 2-tile sub-row (testimonial-cover +
+         testimonial-1 repeat) — exactly as the source HTML stacks them
+         under testimonial-right. -->
+    <div class="testimonial-right">
+
+      <div class="trustpilot-flex">
+        <div class="heading-3">Trusted by</div>
+        <div class="credit-flex">
+          <div class="credit-img is-1"><img src="assets/customer-2.avif" alt="" loading="lazy"></div>
+          <div class="credit-img is-2"><img src="assets/customer-3.avif" alt="" loading="lazy"></div>
+          <div class="credit-img is-3"><img src="assets/customer-1.avif" alt="" loading="lazy"></div>
+        </div>
+        <div class="heading-3">thousands</div>
+        <div class="heading-3">of customers</div>
+        <div class="heading-3">nationwide</div>
+
+        <div class="trustpilot" aria-label="Excellent — rated 4.5 of 5 on Trustpilot">
+          <span class="trustpilot__excellent">Excellent</span>
+          <span class="trustpilot__stars" aria-hidden="true">
+            <span class="trustpilot__star"></span>
+            <span class="trustpilot__star"></span>
+            <span class="trustpilot__star"></span>
+            <span class="trustpilot__star"></span>
+            <span class="trustpilot__star half"></span>
+          </span>
+          <a href="#" class="trustpilot__reviews">1,850 reviews on</a>
+          <span class="trustpilot__logo" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.939 6.328 6.961 1.012-5.034 4.911 1.187 6.929L12 17.94l-6.053 3.24 1.187-6.929L2.1 9.34l6.961-1.012L12 2z"/></svg>
+            Trustpilot
+          </span>
+        </div>
+      </div>
+
+      <!-- bottom row: 7/5 split — big tile (testimonial-3, grey-haired
+           woman) on the left, smaller tile (testimonial-cover / brown
+           hoodie woman) on the right. Mirrors the screenshot exactly. -->
+      <div class="testimonial-tiles-row">
+        <div class="quote-block" data-poster="assets/testimonial-3.webp" data-title="Customer story 3">
+          <img src="assets/testimonial-3.webp" alt="Customer testimonial 3" loading="lazy">
+          <span class="play-button" aria-hidden="true">
+            <svg class="play-icon" viewBox="0 0 8 9" fill="none"><path d="M6.75 3.16665C7.41667 3.55155 7.41667 4.5138 6.75 4.8987L1.5 7.92978C0.833334 8.31468 -3.74346e-07 7.83356 -3.40697e-07 7.06376L-7.57104e-08 1.00158C-4.20613e-08 0.231782 0.833333 -0.249344 1.5 0.135556L6.75 3.16665Z" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div class="quote-block" data-poster="assets/testimonial-cover.avif" data-title="Featured story">
+          <img src="assets/testimonial-cover.avif" alt="Featured customer story" loading="lazy">
+          <span class="play-button" aria-hidden="true">
+            <svg class="play-icon" viewBox="0 0 8 9" fill="none"><path d="M6.75 3.16665C7.41667 3.55155 7.41667 4.5138 6.75 4.8987L1.5 7.92978C0.833334 8.31468 -3.74346e-07 7.83356 -3.40697e-07 7.06376L-7.57104e-08 1.00158C-4.20613e-08 0.231782 0.833333 -0.249344 1.5 0.135556L6.75 3.16665Z" fill="currentColor"/></svg>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- shared lightbox modal -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="lightbox__inner">
+    <button type="button" class="lightbox__close" aria-label="Close">×</button>
+    <img class="lightbox__poster" alt="">
+    <div class="lightbox__hint">Source HLS stream not bundled — preview only</div>
+  </div>
+</div>
+
+<script>
+/* Lightbox open animation: FLIP-style scale up from the clicked tile's
+   origin. We grab the tile's bounding rect, set the modal's
+   transform-origin to that point relative to the viewport, then flip the
+   .is-open class which transitions transform: scale(0.4) → scale(1) and
+   opacity 0 → 1 along the cubic-bezier "bouncy easing" curve. The black
+   overlay also fades in over the same 0.3s for a coordinated open. */
+(function () {
+  const lightbox = document.getElementById('lightbox');
+  const lbInner = lightbox.querySelector('.lightbox__inner');
+  const lbPoster = lightbox.querySelector('.lightbox__poster');
+  const lbClose = lightbox.querySelector('.lightbox__close');
+
+  document.querySelectorAll('.quote-block').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const src = tile.dataset.poster;
+      lbPoster.src = src;
+
+      // origin = clicked tile center, expressed relative to lbInner's
+      // eventual centered position (vw/vh midpoint)
+      const r = tile.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const ox = (cx / window.innerWidth) * 100;
+      const oy = (cy / window.innerHeight) * 100;
+      lbInner.style.transformOrigin = `${ox}% ${oy}%`;
+
+      // open in next frame so the transition fires (transitions don't
+      // animate when the start state is set in the same tick as the end)
+      requestAnimationFrame(() => {
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+      });
+    });
+  });
+
+  function close() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    /* the CSS transition on .lightbox__inner reverses to its closed state
+       and the overlay color fades back out; we just defer hiding the
+       element until that's done */
+    setTimeout(() => {
+      if (!lightbox.classList.contains('is-open')) {
+        lightbox.style.display = '';
+      }
+    }, 320);
+  }
+  lbClose.addEventListener('click', close);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+})();
+</script>
+</body>
+</html>

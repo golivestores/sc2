@@ -34,5 +34,29 @@
                  ],
         "href":  "designs/003-armateursdefrance/index.html",
         "preview":  ""
+    },
+    {
+        "folder":  "004-omrbeauty",
+        "title":  "OMR Beauty",
+        "description":  "",
+        "sourceUrl":  "https://omrbeauty.com/",
+        "savedAt":  "2026-05-07",
+        "tags":  [
+
+                 ],
+        "href":  "designs/004-omrbeauty/index.html",
+        "preview":  ""
+    },
+    {
+        "folder":  "005-goodlifemeds",
+        "title":  "Good Life Meds",
+        "description":  "",
+        "sourceUrl":  "https://www.goodlifemeds.com/",
+        "savedAt":  "2026-05-07",
+        "tags":  [
+
+                 ],
+        "href":  "designs/005-goodlifemeds/index.html",
+        "preview":  ""
     }
 ]

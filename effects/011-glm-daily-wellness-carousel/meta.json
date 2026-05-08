@@ -1,0 +1,11 @@
+{
+  "title":       "Good Life Daily Wellness · 产品横滑（桃色）",
+  "subtitle":    "products carousel — peach accent, dark text variant",
+  "description": "Good Life Meds 首页「02 / Daily Wellness」产品区，与 010 同源同骨架但调色完全不同：桃色 #d2a382 替代沙绿做小标 + Get started 底色，标题 + 数字小标改为深色叠在朝阳 unsplash 照片上（原版从 is-light-text 切到 is-dark）；轨道里 8 张产品卡（NAD+ Injections / Microdose GLP-1 / MIC+B12 / Sermorelin / Glutathione / Slim Shot® / Vitamin B12 / NAD+ Nasal Spray）。底部箭头按钮翻转为深色描边、hover 反相填充。**8 张卡每一张 hover 时都触发药瓶/喷雾 mp4 旋转播放**（fade in 300ms，离开复位到首帧）。结尾 CTA 条多一条「Get started today」沙绿实心副按钮，由竖线 divider 分隔，原版交互完整保留。",
+  "tech":        "CSS Grid + scroll-snap + PointerEvent drag",
+  "tags":        ["interaction", "animation", "scroll"],
+  "previewHref": "",
+  "sourceUrl":   "https://www.goodlifemeds.com/",
+  "localMirror": "../designs/005-goodlifemeds/index.html",
+  "order":       11
+}

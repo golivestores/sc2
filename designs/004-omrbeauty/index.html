@@ -1,0 +1,2104 @@
+<!doctype html>
+<html lang="en">
+	<head><script>
+/* Local-mirror path shim — auto-injected by scrape-url.py.
+   See scrape-url.py for rationale. Behavior under standalone server is unchanged. */
+(function () {
+  function rewrite(u) {
+    if (typeof u !== 'string') return u;
+    if (u.length < 2 || u[0] !== '/' || u[1] === '/') return u;
+    return '.' + u;
+  }
+  var origFetch = window.fetch;
+  if (origFetch) {
+    window.fetch = function (input, init) {
+      if (typeof input === 'string') {
+        input = rewrite(input);
+      } else if (input && typeof Request !== 'undefined' && input instanceof Request) {
+        try {
+          var u = new URL(input.url);
+          if (u.origin === location.origin && u.pathname[0] === '/' && u.pathname[1] !== '/') {
+            input = new Request(rewrite(u.pathname + u.search + u.hash), input);
+          }
+        } catch (e) {}
+      }
+      return origFetch.call(this, input, init);
+    };
+  }
+  var origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url) {
+    arguments[1] = rewrite(url);
+    return origOpen.apply(this, arguments);
+  };
+})();
+</script>
+		<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="">
+<link rel="canonical" href="https://omrbeauty.com/">
+<title>
+	OMR Beauty
+</title>
+<meta name="description" content="OMR Beauty was founded to challenge the beauty industry, break norms, and inspire people to embrace their true selves every day. Our products are developed with a strong belief that you shouldn’t limit yourself—nor should any beauty product.">
+
+<meta property="og:site_name" content="OMR Beauty">
+<meta property="og:url" content="https://omrbeauty.com/">
+<meta property="og:title" content="OMR Beauty">
+<meta property="og:type" content="website">
+<meta property="og:description" content="OMR Beauty was founded to challenge the beauty industry, break norms, and inspire people to embrace their true selves every day. Our products are developed with a strong belief that you shouldn’t limit yourself—nor should any beauty product."><meta property="og:image" content="http://omrbeauty.com/cdn/shop/files/omr-beauty-logo-1200-628.png?v=1757495216">
+	<meta property="og:image:secure_url" content="https://omrbeauty.com/cdn/shop/files/omr-beauty-logo-1200-628.png?v=1757495216">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="628"><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OMR Beauty">
+<meta name="twitter:description" content="OMR Beauty was founded to challenge the beauty industry, break norms, and inspire people to embrace their true selves every day. Our products are developed with a strong belief that you shouldn’t limit yourself—nor should any beauty product.">
+		<!--
+/**
+ * @license
+ * MyFonts Webfont Build ID 3867246, 2020-12-16T11:57:38-0500
+ *
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are
+ * explicitly restricted from using the Licensed Webfonts(s).
+ *
+ * You may obtain a valid license at the URLs below.
+ *
+ * Webfont: Akzidenz-Grotesk Light by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Light Italic by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Regular by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Italic by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Medium by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Medium Italic by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Bold by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Bold Italic by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Extra Bold by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Extra Bold Italic by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Super by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * Webfont: Akzidenz-Grotesk Super Italic by Berthold
+ * URL: https://www.myfonts.com/collections/berthold-foundry
+
+ * © 2025 MyFonts Inc. */
+ -->
+
+
+<link rel="preload" as="font" href="assets/omrbeauty.com/cdn/shop/t/5/assets/Akzidenz-GroteskRegular.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="assets/omrbeauty.com/cdn/shop/t/5/assets/Akzidenz-GroteskMedium.woff2" type="font/woff2" crossorigin>
+
+<link rel="icon" type="image/png" href="assets/omrbeauty.com/cdn/shop/files/OMR_LOGO_BLACK_HORIZONTAL.2cddf94b.svg"><script>window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.start');</script><meta name="google-site-verification" content="mIhD5XFBCk-Xo0JC7iq7Xcg3H7IrfqXxZyYXElWfA-c">
+<meta id="shopify-digital-wallet" name="shopify-digital-wallet" content="/92653879670/digital_wallets/dialog">
+<meta name="shopify-checkout-api-token" content="e2a2c8f13c39e2b5b1e7675d25680d01">
+<meta id="in-context-paypal-metadata" data-shop-id="92653879670" data-venmo-supported="false" data-environment="production" data-locale="en_US" data-paypal-v4="true" data-currency="EUR">
+<script async="async" src="assets/omrbeauty.com/checkouts/internal/preloads.29ad73f8.js"></script>
+<link rel="preconnect" href="https://shop.app" crossorigin="anonymous">
+<script async="async" src="assets/shop.app/checkouts/internal/preloads.cb4329ce.js" crossorigin="anonymous"></script>
+<script id="apple-pay-shop-capabilities" type="application/json">{"shopId":92653879670,"countryCode":"SE","currencyCode":"EUR","merchantCapabilities":["supports3DS"],"merchantId":"gid:\/\/shopify\/Shop\/92653879670","merchantName":"OMR Beauty","requiredBillingContactFields":["postalAddress","email","phone"],"requiredShippingContactFields":["postalAddress","email","phone"],"shippingType":"shipping","supportedNetworks":["visa","maestro","masterCard","amex"],"total":{"type":"pending","label":"OMR Beauty","amount":"1.00"},"shopifyPaymentsEnabled":true,"supportsSubscriptions":true}</script>
+<script id="shopify-features" type="application/json">{"accessToken":"e2a2c8f13c39e2b5b1e7675d25680d01","betas":["rich-media-storefront-analytics"],"domain":"omrbeauty.com","predictiveSearch":true,"shopId":92653879670,"locale":"en"}</script>
+<script>var Shopify = Shopify || {};
+Shopify.shop = "omrbeauty-prod.myshopify.com";
+Shopify.locale = "en";
+Shopify.currency = {"active":"EUR","rate":"0.0920967"};
+Shopify.country = "AT";
+Shopify.theme = {"name":"OMR Beauty x Panagora","id":189187686774,"schema_name":"Panagora","schema_version":"0.0.0","theme_store_id":null,"role":"main"};
+Shopify.theme.handle = "null";
+Shopify.theme.style = {"id":null,"handle":null};
+Shopify.cdnHost = "omrbeauty.com/cdn";
+Shopify.routes = Shopify.routes || {};
+Shopify.routes.root = "/";
+Shopify.shopJsCdnBaseUrl = "https://cdn.shopify.com/shopifycloud/shop-js";</script>
+<script type="module">!function(o){(o.Shopify=o.Shopify||{}).modules=!0}(window);</script>
+<script>!function(o){function n(){var o=[];function n(){o.push(Array.prototype.slice.apply(arguments))}return n.q=o,n}var t=o.Shopify=o.Shopify||{};t.loadFeatures=n(),t.autoloadFeatures=n()}(window);</script>
+<script>
+  window.ShopifyPay = window.ShopifyPay || {};
+  window.ShopifyPay.apiHost = "shop.app\/pay";
+  window.ShopifyPay.redirectState = null;
+</script>
+<script>
+  window.Shopify = window.Shopify || {};
+  window.Shopify.SignInWithShop = window.Shopify.SignInWithShop || {};
+  window.Shopify.SignInWithShop.eligible = true;
+</script>
+<script id="shop-js-analytics" type="application/json">{"pageType":"index"}</script>
+<script defer="defer" async type="module" src="assets/omrbeauty.com/cdn/shopifycloud/shop-js/modules/v2/loader.init-shop-cart-sync.en.esm.js"></script>
+<script type="module">
+  await import("assets/omrbeauty.com/cdn/shopifycloud/shop-js/modules/v2/loader.init-shop-cart-sync.en.esm.js");
+
+  window.Shopify.SignInWithShop?.initShopCartSync?.({"fedCMEnabled":true,"windoidEnabled":true});
+
+</script>
+<script>
+  window.Shopify = window.Shopify || {};
+  if (!window.Shopify.featureAssets) window.Shopify.featureAssets = {};
+  window.Shopify.featureAssets['shop-js'] = {"shop-toast-manager":["modules/v2/loader.shop-toast-manager.en.esm.js"],"init-shop-user-recognition":["modules/v2/loader.init-shop-user-recognition.en.esm.js"],"shop-button":["modules/v2/loader.shop-button.en.esm.js"],"init-shop-email-lookup-coordinator":["modules/v2/loader.init-shop-email-lookup-coordinator.en.esm.js"],"init-fed-cm":["modules/v2/loader.init-fed-cm.en.esm.js"],"init-windoid":["modules/v2/loader.init-windoid.en.esm.js"],"checkout-modal":["modules/v2/loader.checkout-modal.en.esm.js"],"shop-cash-offers":["modules/v2/loader.shop-cash-offers.en.esm.js"],"init-shop-cart-sync":["modules/v2/loader.init-shop-cart-sync.en.esm.js"],"init-shop-for-new-customer-accounts":["modules/v2/loader.init-shop-for-new-customer-accounts.en.esm.js"],"avatar":["modules/v2/loader.avatar.en.esm.js"],"shop-login-button":["modules/v2/loader.shop-login-button.en.esm.js"],"shop-cart-sync":["modules/v2/loader.shop-cart-sync.en.esm.js"],"init-customer-accounts-sign-up":["modules/v2/loader.init-customer-accounts-sign-up.en.esm.js"],"shop-login":["modules/v2/loader.shop-login.en.esm.js"],"shop-follow-button":["modules/v2/loader.shop-follow-button.en.esm.js"],"init-customer-accounts":["modules/v2/loader.init-customer-accounts.en.esm.js"],"shop-user-recognition":["modules/v2/loader.shop-user-recognition.en.esm.js"],"pay-button":["modules/v2/loader.pay-button.en.esm.js"],"lead-capture":["modules/v2/loader.lead-capture.en.esm.js"],"payment-terms":["modules/v2/loader.payment-terms.en.esm.js"]};
+</script>
+<script id="__st">var __st={"a":92653879670,"offset":7200,"reqid":"81f1d11d-f351-46df-afd7-f32300a45ff4-1778122912","pageurl":"omrbeauty.com\/","u":"26c8c72faedf","p":"home"};</script>
+<script>window.ShopifyPaypalV4VisibilityTracking = true;</script>
+<script id="form-persister">!function(){'use strict';const t='contact',e='new_comment',n=[[t,t],['blogs',e],['comments',e],[t,'customer']],o='password',r='form_key',c=['recaptcha-v3-token','g-recaptcha-response','h-captcha-response',o],s=()=>{try{return window.sessionStorage}catch{return}},i='__shopify_v',u=t=>t.elements[r],a=function(){const t=[...n].map((([t,e])=>`form[action*='/${t}']:not([data-nocaptcha='true']) input[name='form_type'][value='${e}']`)).join(',');var e;return e=t,()=>e?[...document.querySelectorAll(e)].map((t=>t.form)):[]}();function m(t){const e=u(t);a().includes(t)&&(!e||!e.value)&&function(t){try{if(!s())return;!function(t){const e=s();if(!e)return;const n=u(t);if(!n)return;const o=n.value;o&&e.removeItem(o)}(t);const e=Array.from(Array(32),(()=>Math.random().toString(36)[2])).join('');!function(t,e){u(t)||t.append(Object.assign(document.createElement('input'),{type:'hidden',name:r})),t.elements[r].value=e}(t,e),function(t,e){const n=s();if(!n)return;const r=[...t.querySelectorAll(`input[type='${o}']`)].map((({name:t})=>t)),u=[...c,...r],a={};for(const[o,c]of new FormData(t).entries())u.includes(o)||(a[o]=c);n.setItem(e,JSON.stringify({[i]:1,action:t.action,data:a}))}(t,e)}catch(e){console.error('failed to persist form',e)}}(t)}const f=t=>{if('true'===t.dataset.persistBound)return;const e=function(t,e){const n=function(t){return'function'==typeof t.submit?t.submit:HTMLFormElement.prototype.submit}(t).bind(t);return function(){let t;return()=>{t||(t=!0,(()=>{try{e(),n()}catch(t){(t=>{console.error('form submit failed',t)})(t)}})(),setTimeout((()=>t=!1),250))}}()}(t,(()=>{m(t)}));!function(t,e){if('function'==typeof t.submit&&'function'==typeof e)try{t.submit=e}catch{}}(t,e),t.addEventListener('submit',(t=>{t.preventDefault(),e()})),t.dataset.persistBound='true'};!function(){function t(t){const e=(t=>{const e=t.target;return e instanceof HTMLFormElement?e:e&&e.form})(t);e&&m(e)}document.addEventListener('submit',t),document.addEventListener('DOMContentLoaded',(()=>{const e=a();for(const t of e)f(t);var n;n=document.body,new window.MutationObserver((t=>{for(const e of t)if('childList'===e.type&&e.addedNodes.length)for(const t of e.addedNodes)1===t.nodeType&&'FORM'===t.tagName&&a().includes(t)&&f(t)})).observe(n,{childList:!0,subtree:!0,attributes:!1}),document.removeEventListener('submit',t)}))}()}();</script>
+<script integrity="sha256-JjoPp5ZfB1sSAs5SQaol1x1GgvveM+BgmRzyDexInEQ=" data-source-attribution="shopify.loadfeatures" defer="defer" src="assets/omrbeauty.com/cdn/shopifycloud/storefront/assets/storefront/load_feature-1bd60354.js" crossorigin="anonymous"></script>
+<script crossorigin="anonymous" defer="defer" src="assets/omrbeauty.com/cdn/shopifycloud/storefront/assets/shopify_pay/storefront-bf1cdb70.466a2245.js"></script>
+<script data-source-attribution="shopify.dynamic_checkout.dynamic.init">var Shopify=Shopify||{};Shopify.PaymentButton=Shopify.PaymentButton||{isStorefrontPortableWallets:!0,init:function(){window.Shopify.PaymentButton.init=function(){};var t=document.createElement("script");t.src="https://omrbeauty.com/cdn/shopifycloud/portable-wallets/latest/portable-wallets.en.js",t.type="module",document.head.appendChild(t)}};
+</script>
+<script data-source-attribution="shopify.dynamic_checkout.buyer_consent">
+  function portableWalletsHideBuyerConsent(e){var t=document.getElementById("shopify-buyer-consent"),n=document.getElementById("shopify-subscription-policy-button");t&&n&&(t.classList.add("hidden"),t.setAttribute("aria-hidden","true"),n.removeEventListener("click",e))}function portableWalletsShowBuyerConsent(e){var t=document.getElementById("shopify-buyer-consent"),n=document.getElementById("shopify-subscription-policy-button");t&&n&&(t.classList.remove("hidden"),t.removeAttribute("aria-hidden"),n.addEventListener("click",e))}window.Shopify?.PaymentButton&&(window.Shopify.PaymentButton.hideBuyerConsent=portableWalletsHideBuyerConsent,window.Shopify.PaymentButton.showBuyerConsent=portableWalletsShowBuyerConsent);
+</script>
+<script data-source-attribution="shopify.dynamic_checkout.cart.bootstrap">document.addEventListener("DOMContentLoaded",(function(){function t(){return document.querySelector("shopify-accelerated-checkout-cart, shopify-accelerated-checkout")}if(t())Shopify.PaymentButton.init();else{new MutationObserver((function(e,n){t()&&(Shopify.PaymentButton.init(),n.disconnect())})).observe(document.body,{childList:!0,subtree:!0})}}));
+</script>
+<script id='scb4127' type='text/javascript' async='' src='assets/omrbeauty.com/cdn/shopifycloud/privacy-banner/storefront-banner.js'></script><link id="shopify-accelerated-checkout-styles" rel="stylesheet" media="screen" href="assets/omrbeauty.com/cdn/shopifycloud/portable-wallets/latest/accelerated-checkout-backwards-compat.css" crossorigin="anonymous">
+<style id="shopify-accelerated-checkout-cart">
+        #shopify-buyer-consent {
+  margin-top: 1em;
+  display: inline-block;
+  width: 100%;
+}
+
+#shopify-buyer-consent.hidden {
+  display: none;
+}
+
+#shopify-subscription-policy-button {
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+#shopify-subscription-policy-button::before {
+  box-shadow: none;
+}
+
+      </style>
+
+<script>window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.end');</script>
+
+		<script>
+			window.Shopify = window.Shopify || {};
+			window.Shopify.money_format = '€{{amount_with_comma_separator}}';
+
+			window.Translations = {
+				'general.show_password': "Show",
+				'general.hide_password': "Hide",
+			};
+		</script>
+		
+
+
+  <script src="assets/omrbeauty.com/cdn/shop/t/5/assets/main-DV4l-cCD.min.js" type="module" crossorigin="anonymous"></script>
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/product-form-Bz8_FG2m.min.js" crossorigin="anonymous">
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/dom-xa7jvIqc.min.js" crossorigin="anonymous">
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/shopify-DDToQbBO.min.js" crossorigin="anonymous">
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/morph-TZnhCGmo.min.js" crossorigin="anonymous">
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/disclosure-5IV_WbE_.min.js" crossorigin="anonymous">
+
+
+
+
+  <link href="assets/omrbeauty.com/cdn/shop/t/5/assets/main-Dqir1CyC.min.css" rel="stylesheet" type="text/css" media="all" />
+
+
+<script>
+		(function (w, l) {
+			w[l] = w[l] || [];
+			w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+		})(window, 'dataLayer');
+	</script>
+
+	<script defer src="assets/www.googletagmanager.com/gtm.e4d07967.js"></script>
+	<!-- BEGIN app block: shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507 -->
+
+
+
+
+
+
+
+
+
+
+
+
+  <script async src="assets/static.klaviyo.com/onsite/js/XK7gD9/klaviyo.1b1f850c.js"></script>
+  <script>!function(){if(!window.klaviyo){window._klOnsite=window._klOnsite||[];try{window.klaviyo=new Proxy({},{get:function(n,i){return"push"===i?function(){var n;(n=window._klOnsite).push.apply(n,arguments)}:function(){for(var n=arguments.length,o=new Array(n),w=0;w<n;w++)o[w]=arguments[w];var t="function"==typeof o[o.length-1]?o.pop():void 0,e=new Promise((function(n){window._klOnsite.push([i].concat(o,[function(i){t&&t(i),n(i)}]))}));return e}}})}catch(n){window.klaviyo=window.klaviyo||[],window.klaviyo.push=function(){var n;(n=window._klOnsite).push.apply(n,arguments)}}}}();</script>
+
+  
+
+
+
+
+  <script>
+    window.klaviyoReviewsProductDesignMode = false
+  </script>
+
+
+
+
+
+
+
+
+
+<!-- END app block --><link href="https://monorail-edge.shopifysvc.com" rel="dns-prefetch">
+<script>(function(){if ("sendBeacon" in navigator && "performance" in window) {try {var session_token_from_headers = performance.getEntriesByType('navigation')[0].serverTiming.find(x => x.name == '_s').description;} catch {var session_token_from_headers = undefined;}var session_cookie_matches = document.cookie.match(/_shopify_s=([^;]*)/);var session_token_from_cookie = session_cookie_matches && session_cookie_matches.length === 2 ? session_cookie_matches[1] : "";var session_token = session_token_from_headers || session_token_from_cookie || "";function handle_abandonment_event(e) {var entries = performance.getEntries().filter(function(entry) {return /monorail-edge.shopifysvc.com/.test(entry.name);});if (!window.abandonment_tracked && entries.length === 0) {window.abandonment_tracked = true;var currentMs = Date.now();var navigation_start = performance.timing.navigationStart;var payload = {shop_id: 92653879670,url: window.location.href,navigation_start,duration: currentMs - navigation_start,session_token,page_type: "index"};window.navigator.sendBeacon("https://monorail-edge.shopifysvc.com/v1/produce", JSON.stringify({schema_id: "online_store_buyer_site_abandonment/1.1",payload: payload,metadata: {event_created_at_ms: currentMs,event_sent_at_ms: currentMs}}));}}window.addEventListener('pagehide', handle_abandonment_event);}}());</script>
+<script>
+  window.__TREKKIE_SHIM_QUEUE = window.__TREKKIE_SHIM_QUEUE || [];
+</script>
+<script id="web-pixels-manager-setup">(function(){var wpmLoader=function(){"use strict";return function(e,d,r,n){var o=arguments.length>4&&void 0!==arguments[4]?arguments[4]:{};if(!Boolean(null==(i=null==(a=window.Shopify)?void 0:a.analytics)?void 0:i.replayQueue)){var a,i;window.Shopify=window.Shopify||{};var t=window.Shopify;t.analytics=t.analytics||{};var s=t.analytics;s.replayQueue=[],s.publish=function(e,d,r){return s.replayQueue.push([e,d,r]),!0};try{self.performance.mark("wpm:start")}catch(e){}var l,u,c,m,p,f,h,g,y,w,v,b,S,P=(u=(l={modern:/Edge?\/(1{2}[4-9]|1[2-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Firefox\/(1{2}[4-9]|1[2-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Chrom(ium|e)\/(9{2}|\d{3,})\.\d+(\.\d+|)|(Maci|X1{2}).+ Version\/(15\.\d+|(1[6-9]|[2-9]\d|\d{3,})\.\d+)([,.]\d+|)( \(\w+\)|)( Mobile\/\w+|) Safari\/|Chrome.+OPR\/(9{2}|\d{3,})\.\d+\.\d+|(CPU[ +]OS|iPhone[ +]OS|CPU[ +]iPhone|CPU IPhone OS|CPU iPad OS)[ +]+(15[._]\d+|(1[6-9]|[2-9]\d|\d{3,})[._]\d+)([._]\d+|)|Android:?[ /-](13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})(\.\d+|)(\.\d+|)|Android.+Firefox\/(13[5-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+Chrom(ium|e)\/(13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|SamsungBrowser\/([2-9]\d|\d{3,})\.\d+/,legacy:/Edge?\/(1[6-9]|[2-9]\d|\d{3,})\.\d+(\.\d+|)|Firefox\/(5[4-9]|[6-9]\d|\d{3,})\.\d+(\.\d+|)|Chrom(ium|e)\/(5[1-9]|[6-9]\d|\d{3,})\.\d+(\.\d+|)([\d.]+$|.*Safari\/(?![\d.]+ Edge\/[\d.]+$))|(Maci|X1{2}).+ Version\/(10\.\d+|(1[1-9]|[2-9]\d|\d{3,})\.\d+)([,.]\d+|)( \(\w+\)|)( Mobile\/\w+|) Safari\/|Chrome.+OPR\/(3[89]|[4-9]\d|\d{3,})\.\d+\.\d+|(CPU[ +]OS|iPhone[ +]OS|CPU[ +]iPhone|CPU IPhone OS|CPU iPad OS)[ +]+(10[._]\d+|(1[1-9]|[2-9]\d|\d{3,})[._]\d+)([._]\d+|)|Android:?[ /-](13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})(\.\d+|)(\.\d+|)|Mobile Safari.+OPR\/([89]\d|\d{3,})\.\d+\.\d+|Android.+Firefox\/(13[5-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+Chrom(ium|e)\/(13[3-9]|1[4-9]\d|[2-9]\d{2}|\d{4,})\.\d+(\.\d+|)|Android.+(UC? ?Browser|UCWEB|U3)[ /]?(15\.([5-9]|\d{2,})|(1[6-9]|[2-9]\d|\d{3,})\.\d+)\.\d+|SamsungBrowser\/(5\.\d+|([6-9]|\d{2,})\.\d+)|Android.+MQ{2}Browser\/(14(\.(9|\d{2,})|)|(1[5-9]|[2-9]\d|\d{3,})(\.\d+|))(\.\d+|)|K[Aa][Ii]OS\/(3\.\d+|([4-9]|\d{2,})\.\d+)(\.\d+|)/}).modern,c=l.legacy,(m=navigator.userAgent).match(u)?"modern":m.match(c)?"legacy":"unknown"),C="modern"===P?"modern":"legacy",_=(null!=n?n:{modern:"",legacy:""})[C],O=[(p={baseUrl:d,hashVersion:r,buildTarget:C}).baseUrl,"/wpm","/b",p.hashVersion,"modern"===p.buildTarget?"m":"l",".js"].join(""),U=(f={version:r,bundleTarget:P,surface:e.surface,pageUrl:self.location.href,monorailEndpoint:e.monorailEndpoint},h=f.version,g=f.bundleTarget,y=f.surface,w=f.pageUrl,v=f.monorailEndpoint,{emit:function(e){var d=e.status,r=e.errorMsg,n=(new Date).getTime(),o=JSON.stringify({metadata:{event_sent_at_ms:n},events:[{schema_id:"web_pixels_manager_load/3.1",payload:{version:h,bundle_target:g,page_url:w,status:d,surface:y,error_msg:r},metadata:{event_created_at_ms:n}}]});if(!v)return console&&console.warn&&console.warn("[Web Pixels Manager] No Monorail endpoint provided, skipping logging."),!1;try{return self.navigator.sendBeacon.bind(self.navigator)(v,o)}catch(e){}var a=new XMLHttpRequest;try{return a.open("POST",v,!0),a.setRequestHeader("Content-Type","text/plain"),a.send(o),!0}catch(e){return console&&console.warn&&console.warn("[Web Pixels Manager] Got an unhandled error while logging to Monorail."),!1}}});try{o.browserTarget=P,function(e){var d=e.src,r=e.async,n=void 0===r||r,o=e.onload,a=e.onerror,i=e.sri,t=e.scriptDataAttributes,s=void 0===t?{}:t,l=document.createElement("script"),u=document.querySelector("head"),c=document.querySelector("body");if(l.async=n,l.src=d,i&&(l.integrity=i,l.crossOrigin="anonymous"),s)for(var m in s)if(Object.prototype.hasOwnProperty.call(s,m))try{l.dataset[m]=s[m]}catch(e){}if(o&&l.addEventListener("load",o),a&&l.addEventListener("error",a),u)u.appendChild(l);else{if(!c)throw new Error("Did not find a head or body element to append the script");c.appendChild(l)}}({src:O,async:!0,onload:function(){if(!function(){var e,d;return Boolean(null==(d=null==(e=window.Shopify)?void 0:e.analytics)?void 0:d.initialized)}()){var d=window.webPixelsManager.init(e)||void 0;if(d){var r=window.Shopify.analytics;r.replayQueue.forEach(function(e){var r=e[0],n=e[1],o=e[2];d.publishCustomEvent(r,n,o)}),r.replayQueue=[],r.publish=d.publishCustomEvent,r.visitor=d.visitor,r.initialized=!0}}},onerror:function(){return U.emit({status:"failed",errorMsg:"".concat(O," has failed to load")})},sri:(b=_,S=/^sha384-[A-Za-z0-9+/=]+$/,"string"==typeof b&&S.test(b)?_:""),scriptDataAttributes:o}),U.emit({status:"loading"})}catch(e){U.emit({status:"failed",errorMsg:(null==e?void 0:e.message)||"Unknown error"})}}}}();wpmLoader({shopId: 92653879670,storefrontBaseUrl: "https://omrbeauty.com",extensionsBaseUrl: "https://extensions.shopifycdn.com/cdn/shopifycloud/web-pixels-manager",monorailEndpoint: "https://monorail-edge.shopifysvc.com/unstable/produce_batch",surface: "storefront-renderer",enabledBetaFlags: ["2dca8a86","d5bdd5d0","5476ea20","5acaffe6"],webPixelsConfigList: [{"id":"3232235894","configuration":"{\"storeIdentity\":\"omrbeauty-prod.myshopify.com\",\"baseURL\":\"https:\\\/\\\/api.printful.com\\\/shopify-pixels\"}","eventPayloadVersion":"v1","runtimeContext":"STRICT","scriptVersion":"74f275712857ab41bea9d998dcb2f9da","type":"APP","apiClientId":156624,"privacyPurposes":["ANALYTICS","MARKETING","SALE_OF_DATA"],"dataSharingAdjustments":{"protectedCustomerApprovalScopes":["read_customer_address","read_customer_email","read_customer_name","read_customer_personal_data","read_customer_phone"],"dataSharingControls":["share_all_events"]},"dataSharingState":"optimized"},{"id":"3202253174","configuration":"{\"pixelCode\":\"CMDRT0BC77U6KDSKJVA0\"}","eventPayloadVersion":"v1","runtimeContext":"STRICT","scriptVersion":"22e92c2ad45662f435e4801458fb78cc","type":"APP","apiClientId":4383523,"privacyPurposes":["ANALYTICS","MARKETING","SALE_OF_DATA"],"dataSharingAdjustments":{"protectedCustomerApprovalScopes":["read_customer_address","read_customer_email","read_customer_name","read_customer_personal_data","read_customer_phone"],"dataSharingControls":["share_all_events"]},"dataSharingState":"optimized"},{"id":"2541814134","configuration":"{\"accountID\":\"XK7gD9\",\"webPixelConfig\":\"eyJlbmFibGVBZGRlZFRvQ2FydEV2ZW50cyI6IHRydWV9\"}","eventPayloadVersion":"v1","runtimeContext":"STRICT","scriptVersion":"524f6c1ee37bacdca7657a665bdca589","type":"APP","apiClientId":123074,"privacyPurposes":["ANALYTICS","MARKETING"],"dataSharingAdjustments":{"protectedCustomerApprovalScopes":["read_customer_address","read_customer_email","read_customer_name","read_customer_personal_data","read_customer_phone"],"dataSharingControls":["share_all_events"]},"dataSharingState":"optimized","enabledFlags":["9a3ed68a"]},{"id":"2513895798","configuration":"{\"config\":\"{\\\"google_tag_ids\\\":[\\\"G-T9QGGDYJRP\\\",\\\"GT-MBND5DG8\\\"],\\\"target_country\\\":\\\"ZZ\\\",\\\"gtag_events\\\":[{\\\"type\\\":\\\"search\\\",\\\"action_label\\\":\\\"G-T9QGGDYJRP\\\"},{\\\"type\\\":\\\"begin_checkout\\\",\\\"action_label\\\":\\\"G-T9QGGDYJRP\\\"},{\\\"type\\\":\\\"view_item\\\",\\\"action_label\\\":[\\\"G-T9QGGDYJRP\\\",\\\"MC-0KEVSN9P0Z\\\"]},{\\\"type\\\":\\\"purchase\\\",\\\"action_label\\\":[\\\"G-T9QGGDYJRP\\\",\\\"MC-0KEVSN9P0Z\\\"]},{\\\"type\\\":\\\"page_view\\\",\\\"action_label\\\":[\\\"G-T9QGGDYJRP\\\",\\\"MC-0KEVSN9P0Z\\\"]},{\\\"type\\\":\\\"add_payment_info\\\",\\\"action_label\\\":\\\"G-T9QGGDYJRP\\\"},{\\\"type\\\":\\\"add_to_cart\\\",\\\"action_label\\\":\\\"G-T9QGGDYJRP\\\"}],\\\"enable_monitoring_mode\\\":false}\"}","eventPayloadVersion":"v1","runtimeContext":"OPEN","scriptVersion":"5a723296a9ab7d2cddda5d574ded9c79","type":"APP","apiClientId":1780363,"privacyPurposes":[],"dataSharingAdjustments":{"protectedCustomerApprovalScopes":["read_customer_address","read_customer_email","read_customer_name","read_customer_personal_data","read_customer_phone"],"dataSharingControls":["share_all_events"]},"dataSharingState":"optimized","enabledFlags":["9a3ed68a"]},{"id":"2513830262","configuration":"{\"pixel_id\":\"852148276283759\",\"pixel_type\":\"facebook_pixel\"}","eventPayloadVersion":"v1","runtimeContext":"OPEN","scriptVersion":"d72ab942028ee4f6bccc581083be605e","type":"APP","apiClientId":2329312,"privacyPurposes":["ANALYTICS","MARKETING","SALE_OF_DATA"],"dataSharingAdjustments":{"protectedCustomerApprovalScopes":["read_customer_address","read_customer_email","read_customer_name","read_customer_personal_data","read_customer_phone"],"dataSharingControls":["share_all_events"]},"dataSharingState":"optimized","enabledFlags":["9a3ed68a"]},{"id":"shopify-app-pixel","configuration":"{}","eventPayloadVersion":"v1","runtimeContext":"STRICT","scriptVersion":"0460","apiClientId":"shopify-pixel","type":"APP","privacyPurposes":["ANALYTICS","MARKETING"]},{"id":"shopify-custom-pixel","eventPayloadVersion":"v1","runtimeContext":"LAX","scriptVersion":"0460","apiClientId":"shopify-pixel","type":"CUSTOM","privacyPurposes":["ANALYTICS","MARKETING"]}],isMerchantRequest: false,initData: {"shop":{"name":"OMR Beauty","paymentSettings":{"currencyCode":"SEK"},"myshopifyDomain":"omrbeauty-prod.myshopify.com","countryCode":"SE","storefrontUrl":"https:\/\/omrbeauty.com"},"customer":null,"cart":null,"checkout":null,"productVariants":[],"products":null,"purchasingCompany":null,"page":null},},"https://omrbeauty.com/cdn","03acfcf2w0af7eda4pd1156192m56eba1ce",{"modern":"","legacy":""},{"trekkieShim":true,"pageType":"home","shopId":"92653879670","storefrontBaseUrl":"https:\/\/omrbeauty.com","extensionBaseUrl":"https:\/\/extensions.shopifycdn.com\/cdn\/shopifycloud\/web-pixels-manager","surface":"storefront-renderer","enabledBetaFlags":"[\"2dca8a86\", \"d5bdd5d0\", \"5476ea20\", \"5acaffe6\"]","isMerchantRequest":"false","hashVersion":"03acfcf2w0af7eda4pd1156192m56eba1ce","publish":"custom","events":"[[\"page_viewed\",{}]]"});})();</script><script>
+  window.ShopifyAnalytics = window.ShopifyAnalytics || {};
+  window.ShopifyAnalytics.meta = window.ShopifyAnalytics.meta || {};
+  window.ShopifyAnalytics.meta.currency = 'EUR';
+  var meta = {"page":{"pageType":"home","requestId":"81f1d11d-f351-46df-afd7-f32300a45ff4-1778122912"}};
+  for (var attr in meta) {
+    window.ShopifyAnalytics.meta[attr] = meta[attr];
+  }
+</script>
+<script class="analytics">
+  (function () {
+    var customDocumentWrite = function(content) {
+      var jquery = null;
+
+      if (window.jQuery) {
+        jquery = window.jQuery;
+      } else if (window.Checkout && window.Checkout.$) {
+        jquery = window.Checkout.$;
+      }
+
+      if (jquery) {
+        jquery('body').append(content);
+      }
+    };
+
+    var hasLoggedConversion = function(token) {
+      if (token) {
+        return document.cookie.indexOf('loggedConversion=' + token) !== -1;
+      }
+      return false;
+    }
+
+    var setCookieIfConversion = function(token) {
+      if (token) {
+        var twoMonthsFromNow = new Date(Date.now());
+        twoMonthsFromNow.setMonth(twoMonthsFromNow.getMonth() + 2);
+
+        document.cookie = 'loggedConversion=' + token + '; expires=' + twoMonthsFromNow;
+      }
+    }
+
+    var trekkie = window.ShopifyAnalytics.lib = window.trekkie = window.trekkie || [];
+    window.ShopifyAnalytics.lib.trekkie = window.trekkie;
+    if (trekkie.integrations) {
+      return;
+    }
+    trekkie.methods = [
+      'identify',
+      'page',
+      'ready',
+      'track',
+      'trackForm',
+      'trackLink'
+    ];
+    trekkie.factory = function(method) {
+      return function() {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(method);
+        trekkie.push(args);
+        if (window.__TREKKIE_SHIM_QUEUE && (method == 'track' || method == 'page')) {
+          try {
+            window.__TREKKIE_SHIM_QUEUE.push({
+              from: 'trekkie-stub',
+              method: method,
+              args: args.slice(1)
+            });
+          } catch (e) {
+            // no-op
+          }
+        }
+        return trekkie;
+      };
+    };
+    for (var i = 0; i < trekkie.methods.length; i++) {
+      var key = trekkie.methods[i];
+      trekkie[key] = trekkie.factory(key);
+    }
+    trekkie.load = function(config) {
+      trekkie.config = config || {};
+      trekkie.config.initialDocumentCookie = document.cookie;
+      var first = document.getElementsByTagName('script')[0];
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.onerror = function(e) {
+  var scriptFallback = document.createElement('script');
+  scriptFallback.type = 'text/javascript';
+  scriptFallback.onerror = function(error) {
+          var Monorail = {
+      produce: function produce(monorailDomain, schemaId, payload) {
+        var currentMs = new Date().getTime();
+        var event = {
+          schema_id: schemaId,
+          payload: payload,
+          metadata: {
+            event_created_at_ms: currentMs,
+            event_sent_at_ms: currentMs
+          }
+        };
+        return Monorail.sendRequest("https://" + monorailDomain + "/v1/produce", JSON.stringify(event));
+      },
+      sendRequest: function sendRequest(endpointUrl, payload) {
+        // Try the sendBeacon API
+        if (window && window.navigator && typeof window.navigator.sendBeacon === 'function' && typeof window.Blob === 'function' && !Monorail.isIos12()) {
+          var blobData = new window.Blob([payload], {
+            type: 'text/plain'
+          });
+
+          if (window.navigator.sendBeacon(endpointUrl, blobData)) {
+            return true;
+          } // sendBeacon was not successful
+
+        } // XHR beacon
+
+        var xhr = new XMLHttpRequest();
+
+        try {
+          xhr.open('POST', endpointUrl);
+          xhr.setRequestHeader('Content-Type', 'text/plain');
+          xhr.send(payload);
+        } catch (e) {
+          console.log(e);
+        }
+
+        return false;
+      },
+      isIos12: function isIos12() {
+        return window.navigator.userAgent.lastIndexOf('iPhone; CPU iPhone OS 12_') !== -1 || window.navigator.userAgent.lastIndexOf('iPad; CPU OS 12_') !== -1;
+      }
+    };
+    Monorail.produce('monorail-edge.shopifysvc.com',
+      'trekkie_storefront_load_errors/1.1',
+      {shop_id: 92653879670,
+      theme_id: 189187686774,
+      app_name: "storefront",
+      context_url: window.location.href,
+      source_url: "//omrbeauty.com/cdn/s/trekkie.storefront.f004f70532a80935fbc1843785865c9096eb1816.min.js"});
+
+  };
+  scriptFallback.async = true;
+  scriptFallback.src = '//omrbeauty.com/cdn/s/trekkie.storefront.f004f70532a80935fbc1843785865c9096eb1816.min.js';
+  first.parentNode.insertBefore(scriptFallback, first);
+};
+script.async = true;
+script.src = '//omrbeauty.com/cdn/s/trekkie.storefront.f004f70532a80935fbc1843785865c9096eb1816.min.js';
+first.parentNode.insertBefore(script, first);
+
+    };
+    trekkie.load(
+      {"Trekkie":{"appName":"storefront","development":false,"defaultAttributes":{"shopId":92653879670,"isMerchantRequest":null,"themeId":189187686774,"themeCityHash":"13126306499945688696","contentLanguage":"en","currency":"EUR","eventMetadataId":"d7eee5f9-2738-40e1-9fef-abe027ec8790"},"isServerSideCookieWritingEnabled":true,"monorailRegion":"shop_domain","enabledBetaFlags":["b5387b81","d5bdd5d0"]},"Session Attribution":{},"S2S":{"facebookCapiEnabled":true,"source":"trekkie-storefront-renderer","apiClientId":580111}}
+    );
+
+    var loaded = false;
+    trekkie.ready(function() {
+      if (loaded) return;
+      loaded = true;
+
+      window.ShopifyAnalytics.lib = window.trekkie;
+
+      var originalDocumentWrite = document.write;
+      document.write = customDocumentWrite;
+      try { window.ShopifyAnalytics.merchantGoogleAnalytics.call(this); } catch(error) {};
+      document.write = originalDocumentWrite;
+
+      window.ShopifyAnalytics.lib.page(null,{"pageType":"home","requestId":"81f1d11d-f351-46df-afd7-f32300a45ff4-1778122912","shopifyEmitted":true});
+
+      var match = window.location.pathname.match(/checkouts\/(.+)\/(thank_you|post_purchase)/)
+      var token = match? match[1]: undefined;
+      if (!hasLoggedConversion(token)) {
+        setCookieIfConversion(token);
+        
+      }
+    });
+
+    var eventsListenerScript = document.createElement('script');
+    eventsListenerScript.async = true;
+    eventsListenerScript.src = "//omrbeauty.com/cdn/shopifycloud/storefront/assets/shop_events_listener-3da45d37.js";
+    document.getElementsByTagName('head')[0].appendChild(eventsListenerScript);
+})();</script>
+<script
+  defer
+  src="assets/omrbeauty.com/cdn/shopifycloud/perf-kit/shopify-perf-kit-3.3.1.min.js"
+  data-application="storefront-renderer"
+  data-shop-id="92653879670"
+  data-render-region="gcp-us-east1"
+  data-page-type="index"
+  data-theme-instance-id="189187686774"
+  data-theme-name="Panagora"
+  data-theme-version="0.0.0"
+  data-monorail-region="shop_domain"
+  data-resource-timing-sampling-rate="10"
+  data-shs="true"
+  data-shs-beacon="true"
+  data-shs-export-with-fetch="true"
+  data-shs-logs-sample-rate="1"
+  data-shs-beacon-endpoint="https://omrbeauty.com/api/collect"
+></script>
+</head>
+	<body
+		data-page-type="index"
+		
+	>
+		<div class="site-skip-links">
+			<a href="#main-content" class="skip-link">Skip to main content</a>
+		</div>
+
+		<div class="site-wrapper">
+			<!-- BEGIN sections: header-group -->
+<div id="shopify-section-sections--27064657805686__announcement_bar_gqMxCJ" class="shopify-section shopify-section-group-header-group">
+	<announcement-bar
+		id="announcement-9432eed2106c5a4616fb10059df6c9fb"
+		class="announcement-bar"
+		role="region"
+		aria-label="Announcement"
+	><div
+			class="announcement-bar__message"
+			data-announcement="message"
+			
+			
+		>
+			<span><p>FREE SHIPPING ON ALL ORDERS ABOVE 1000 SEK / $100 / €100</p></span>
+		</div>
+
+		<button type="button" class="announcement-bar__close" data-announcement="close">
+			<svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="84.9565" y="7" width="11.0247" height="110.247" transform="rotate(45 84.9565 7)"/>
+	<rect x="92.9565" y="85" width="11.0247" height="110.247" transform="rotate(135 92.9565 85)"/>
+</svg>
+
+			<span>Close</span>
+		</button>
+	</announcement-bar>
+
+	
+	<script>
+		(function () {
+			const announcement = document.querySelector('.announcement-bar');
+
+			try {
+				if (window.localStorage.getItem('announcement_bar_hidden') == announcement.id) {
+					announcement.remove();
+				} else {
+					window.localStorage.removeItem('announcement_bar_hidden');
+				}
+			} catch (error) {
+				console.error(error);
+			}
+
+			if (announcement) {
+				document.documentElement.style.setProperty('--announcement-height', `${announcement.offsetHeight}px`);
+			}
+		})();
+	</script>
+</div><div id="shopify-section-sections--27064657805686__header" class="shopify-section shopify-section-group-header-group header-section"><header class="header">
+		<h1 class="header__logo">
+			<svg width="1200" height="308" viewBox="0 0 1200 308" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path d="M610.5 218.6L514.9 1.29961H400V306.4H475.8V88.1996L570.7 306.4H647.4L743 88.9996V306.4H818.8V0.599609H704.6L610.5 218.6Z" fill="currentcolor"/>
+	<path d="M1199.2 96.8996C1199.2 33.8996 1146.3 0.599609 1102.9 0.599609H870.7V306.3H945.7V206.2H1029.7L1100.7 306.3H1191.2L1120.2 205.5C1171.6 191.7 1199.1 159.9 1199.1 96.8996H1199.2ZM1084.1 136H945.8V70.7996H1084.1C1108.7 70.7996 1124.7 85.2996 1124.7 99.7996C1124.7 114.3 1120.4 136 1084.1 136Z" fill="currentcolor"/>
+	<path d="M238.1 0.799805H129.2C53.9998 0.799805 0.799805 57.8998 0.799805 120.1V177.4C0.799805 257 58.6998 307.1 127.7 307.1H236.3C295.9 307.1 362.5 259.9 362.5 179.4C362.5 98.8998 362.5 188.6 362.5 131.1C362.5 73.5998 306.7 0.799805 238.1 0.799805ZM286.8 177.3C286.8 215 260.1 236.7 230.7 236.7H131.6C103.1 236.7 75.8998 213.9 75.8998 177.3V125.2C75.8998 96.6998 99.3998 70.8998 128 70.8998H231.7C261.4 70.8998 286.7 95.5998 286.7 125.2V177.3H286.8Z" fill="currentcolor"/>
+</svg>
+
+		</h1>
+	<nav aria-label="Header menu" class="site-nav header__menu">
+		<button type="button" class="site-nav__trigger" aria-label="Header menu icon"><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path fill-rule="evenodd"
+			  clip-rule="evenodd"
+			  d="M100 53.5L-1.92329e-07 53.5L0 42.5L100 42.5L100 53.5Z"
+		/>
+		<path fill-rule="evenodd"
+			  clip-rule="evenodd"
+			  d="M100 85.5L-2.40412e-07 85.5L0 74.5L100 74.5L100 85.5Z"
+		/>
+		<path fill-rule="evenodd"
+			  clip-rule="evenodd"
+			  d="M100 21.5L-2.40412e-07 21.5L0 10.5L100 10.5L100 21.5Z"
+		/>
+</svg>
+</button>
+
+		<div id="main-menu" class="site-nav__content">
+			<header class="site-nav__header">
+				<div class="site-nav__logo"><svg width="1200" height="308" viewBox="0 0 1200 308" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path d="M610.5 218.6L514.9 1.29961H400V306.4H475.8V88.1996L570.7 306.4H647.4L743 88.9996V306.4H818.8V0.599609H704.6L610.5 218.6Z" fill="currentcolor"/>
+	<path d="M1199.2 96.8996C1199.2 33.8996 1146.3 0.599609 1102.9 0.599609H870.7V306.3H945.7V206.2H1029.7L1100.7 306.3H1191.2L1120.2 205.5C1171.6 191.7 1199.1 159.9 1199.1 96.8996H1199.2ZM1084.1 136H945.8V70.7996H1084.1C1108.7 70.7996 1124.7 85.2996 1124.7 99.7996C1124.7 114.3 1120.4 136 1084.1 136Z" fill="currentcolor"/>
+	<path d="M238.1 0.799805H129.2C53.9998 0.799805 0.799805 57.8998 0.799805 120.1V177.4C0.799805 257 58.6998 307.1 127.7 307.1H236.3C295.9 307.1 362.5 259.9 362.5 179.4C362.5 98.8998 362.5 188.6 362.5 131.1C362.5 73.5998 306.7 0.799805 238.1 0.799805ZM286.8 177.3C286.8 215 260.1 236.7 230.7 236.7H131.6C103.1 236.7 75.8998 213.9 75.8998 177.3V125.2C75.8998 96.6998 99.3998 70.8998 128 70.8998H231.7C261.4 70.8998 286.7 95.5998 286.7 125.2V177.3H286.8Z" fill="currentcolor"/>
+</svg>
+</div>
+				<button type="button" class="site-nav__close" data-dismiss><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="84.9565" y="7" width="11.0247" height="110.247" transform="rotate(45 84.9565 7)"/>
+	<rect x="92.9565" y="85" width="11.0247" height="110.247" transform="rotate(135 92.9565 85)"/>
+</svg>
+</button>
+			</header>
+			<ul class="site-nav__list"><li
+						class="site-nav__item"
+						
+					>
+						<a
+							href="/collections/perfumes"
+							class="site-nav__link"
+						>
+							<span class="site-nav__link-title">eau de parfum</span></a></li><li
+						class="site-nav__item"
+						
+					>
+						<a
+							href="/collections/perfume-oils"
+							class="site-nav__link"
+						>
+							<span class="site-nav__link-title">perfume oil</span></a></li><li
+						class="site-nav__item"
+						
+					>
+						<a
+							href="/collections/home"
+							class="site-nav__link"
+						>
+							<span class="site-nav__link-title">scented candle</span></a></li><li
+						class="site-nav__item"
+						
+					>
+						<a
+							href="/collections/collections"
+							class="site-nav__link"
+						>
+							<span class="site-nav__link-title">collection</span></a></li><li
+						class="site-nav__item"
+						
+					>
+						<a
+							href="/collections/accessories"
+							class="site-nav__link"
+						>
+							<span class="site-nav__link-title">essentials</span></a></li></ul>
+
+			<footer class="site-nav__footer">
+				<a href="" class="site-nav__footer-link">Account</a>
+			</footer>
+		</div>
+
+		<div class="site-nav__backdrop"></div>
+	</nav>
+<ul class="actions-nav header__actions">
+	
+		<li class="actions-nav__search">
+			<button type="button" class="actions-nav__item" data-a11y-dialog-show="search-modal">
+				Search
+			</button>
+		</li>
+	
+	
+		<li class="actions-nav__account">
+			<a href="https://omrbeauty.com/customer_authentication/redirect?locale=en&region_country=AT" class="actions-nav__item">Account</a>
+		</li>
+	
+	<li class="actions-nav__cart">
+		<a
+			href="/cart"
+			class="actions-nav__item"
+				data-a11y-dialog-show="cart-drawer"
+			
+		>
+			<span>Cart</span>
+			(<cart-badge count="0">0</cart-badge>)
+		</a>
+	</li>
+</ul>
+
+</header>
+
+
+</div>
+<!-- END sections: header-group -->
+
+			<main id="main-content">
+				<section id="shopify-section-template--27064658297206__banner_zVjMf9" class="shopify-section"><article
+	id="banner-template--27064658297206__banner_zVjMf9"
+	class="banner banner--margin"
+	data-color="var(--color-text-inverted)"
+>
+	
+<span class="banner__media">
+
+		<picture>
+			<source media="(max-width: 48em), (max-aspect-ratio: 10/15)" srcset="
+assets/omrbeauty.com/cdn/shop/files/coppmob.3c156c4f.jpg 240w, assets/omrbeauty.com/cdn/shop/files/coppmob.1b0e0b83.jpg 360w, assets/omrbeauty.com/cdn/shop/files/coppmob.b383d5f5.jpg 480w, assets/omrbeauty.com/cdn/shop/files/coppmob.69c13c2f.jpg 640w, assets/omrbeauty.com/cdn/shop/files/coppmob.0aa758fb.jpg 768w, assets/omrbeauty.com/cdn/shop/files/coppmob.f4f3418f.jpg 828w"><img src="assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.fb710e32.jpg" alt="" width="480" height="320" loading="eager" srcset="
+assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.17f131f2.jpg 240w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.154119ef.jpg 360w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.fb710e32.jpg 480w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.86675c68.jpg 640w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.46cca8be.jpg 768w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.4d1dd8bc.jpg 828w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.d3eb4e76.jpg 960w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.8acbbd3a.jpg 1080w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.a65b2990.jpg 1280w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.df458f50.jpg 1440w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.1f060f8b.jpg 1680w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.e751a13e.jpg 1920w, assets/omrbeauty.com/cdn/shop/files/copp_792825c9-98ff-4410-ab06-f6246cff59e2.44c7aec8.jpg 2560w" fetchpriority="high" sizes="100vw"></picture></span>
+		
+	
+
+	
+		<div
+			class="banner_content"
+			style="--banner-color: var(--color-text-inverted);"
+		>
+			
+<h2 class="banner__title" ><a href="/collections/collections" class="banner__link">
+										unbound by beauty
+									</a></h2>
+
+<div class="banner__inner-content-wrapper">
+					
+
+					
+<div class="banner__cta-wrapper" >
+										
+											<a
+												href="/collections/collections"
+												class="banner__cta"
+												aria-hidden="true"
+												tabindex="-1"
+											>Shop now</a>
+										
+									</div>
+					
+				</div></div>
+	
+</article>
+
+
+</section><div id="shopify-section-template--27064658297206__richtext_KhiaNN" class="shopify-section text-section">
+	<div class="rte rte--large-text">
+		<p>developed <em>with</em> a strong <strong>belief</strong> that you shouldn’t limit yourself—nor should any<a href="/collections/collections" title="Collection"> beauty product</a>.</p>
+	</div>
+</div><section id="shopify-section-template--27064658297206__featured_product_K4wgXn" class="shopify-section">
+
+
+  <script src="assets/omrbeauty.com/cdn/shop/t/5/assets/product-BG5eJTGT.min.js" type="module" crossorigin="anonymous"></script>
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/dom-xa7jvIqc.min.js" crossorigin="anonymous">
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/shopify-DDToQbBO.min.js" crossorigin="anonymous">
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/product-form-Bz8_FG2m.min.js" crossorigin="anonymous">
+  <link rel="modulepreload" href="assets/omrbeauty.com/cdn/shop/t/5/assets/disclosure-5IV_WbE_.min.js" crossorigin="anonymous">
+
+
+
+<div class="featured-product">
+	<div class="featured-product__media-wrapper">
+<img src="assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.6e9ea055.jpg" alt="" width="480" height="320" loading="lazy" srcset="
+assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.f1d1f4ae.jpg 240w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.3e26051e.jpg 360w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.6e9ea055.jpg 480w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.62a835d0.jpg 640w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.602244c1.jpg 768w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.c1017503.jpg 828w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.8f2c307d.jpg 960w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.a33f6c20.jpg 1080w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.5db7279b.jpg 1280w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.e615967a.jpg 1440w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.55f1627e.jpg 1680w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.ba77a0fe.jpg 1920w, assets/omrbeauty.com/cdn/shop/files/8_852660cf-c0bb-4d68-9c12-5ee127d4f246.672dc414.jpg 2560w" fetchpriority="auto" sizes="100vw"></div>
+
+	<div class="featured-product__content">
+		<div class="featured-product__category">Eaux de Parfum</div>
+		<h3 class="featured-product__title">Copper</h3>
+
+		
+
+<div class="featured-product__price price">
+	<span class="price__current">€58,95</span>
+	
+</div>
+
+<p class="featured-product__variant">50 ml</p>
+
+
+		<div class="featured-product__description">
+			<p><meta charset="utf-8"><span>Ignite your senses with COPPER, a fragrance that captures the raw energy of passion and warmth – for those who embrace intensity.</span></p>
+<p><span>This composition unfolds with an electrifying top note of clove, pink peppercorn, sage, and saffron—a spicy, aromatic introduction that commands attention. </span></p>
+<p><span>The heart reveals itself through tobacco, guaiacwood, cinnamon bark, and red fruits, layering complexity with a smoldering sensuality. </span></p>
+<p><span>Finally, smoke, vanilla, balsam, and musk anchor the composition, creating a lingering base that resonates on the skin like glowing embers long into the evening.</span></p>
+		</div><div class="featured-product__actions">
+				
+					<form method="post" action="/cart/add" id="product_form_15604829356406" accept-charset="UTF-8" class="featured-product__add-to-cart-form product-form" enctype="multipart/form-data"><input type="hidden" name="form_type" value="product" /><input type="hidden" name="utf8" value="✓" />
+						
+<input type="hidden" name="id" value="57250352759158"><div class="featured-product__buttons">
+							<button
+								type="submit"
+								
+								class="featured-product__add-to-cart-btn"
+							>
+								
+<span>Add to cart</span>
+							</button>
+							<a class="featured-product__read-more-btn" href="/products/copper">Read more</a>
+						</div>
+					<input type="hidden" name="product-id" value="15604829356406" /><input type="hidden" name="section-id" value="template--27064658297206__featured_product_K4wgXn" /></form>
+				
+			</div></div>
+</div>
+
+
+</section><section id="shopify-section-template--27064658297206__teaser_grid_JcaHq7" class="shopify-section"><div class="teaser-grid teaser-grid--c-2"><div
+			class="teaser"
+			style="--teaser-color: var(--color);"
+			
+		><a href="/collections/collections" class="teaser__link"><autoplaying-video
+	class="autoplaying-video teaser__video"
+>
+	<video
+		poster="assets/omrbeauty.com/cdn/shop/files/preview_images/83f4eee21e9f41c584a792b92c8b917f.thumbnail.0000000000.af8330bf.jpg"
+		
+			data-video-id="teaser-grid__video--template--27064658297206__teaser_grid_JcaHq7"
+		
+		
+			preload="metadata"
+		
+		playsinline
+		disableremoteplayback
+		loop
+		muted
+	>
+		
+		
+		
+			
+		
+			
+				<source
+					src="assets/omrbeauty.com/cdn/shop/videos/c/vp/83f4eee21e9f41c584a792b92c8b917f/83f4eee21e9f41c584a792b92c8b917f.HD-1080p-7.2Mbps-62470788.f2004700.mp4"
+					
+				>
+			
+		
+
+		
+		
+		<img src="assets/omrbeauty.com/cdn/shop/files/preview_images/83f4eee21e9f41c584a792b92c8b917f.thumbnail.0000000000.a61f8cf4.jpg" alt="" srcset="assets/omrbeauty.com/cdn/shop/files/preview_images/83f4eee21e9f41c584a792b92c8b917f.thumbnail.0000000000.a61f8cf4.jpg 204w" width="204" height="363" loading="lazy">
+	</video>
+</autoplaying-video>
+
+<div class="teaser__content"><h2 class="teaser__title">
+							Bundles
+						</h2><div
+							class="teaser__link-text teaser__link-text--tertiary"
+						>
+							shop now
+						</div></div></a><div class="teaser__video-controls">
+					<video-controls data-video-id="teaser-grid__video--template--27064658297206__teaser_grid_JcaHq7">
+	<button
+		class="video-controls__btn
+"
+		style="--video-control-color: black;"
+		type="button"
+		aria-label="Pause video"
+		aria-pressed="true"
+	>
+		<span
+			class="video-controls__play-icon"
+			
+		><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="4" y="4" width="92" height="92" stroke="currentColor" stroke-width="8" fill="none"/>
+	<path d="M71.5029 50.909L34.4082 73.7361V28.0808L71.5029 50.909Z" stroke="currentColor" stroke-width="7" fill="none"/>
+</svg>
+</span>
+		<span
+			class="video-controls__pause-icon"
+			
+				style="display:none;"
+			
+		><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="4" y="4" width="92" height="92" stroke="currentColor" fill="none" stroke-width="8"/>
+	<line x1="38.146" y1="26.8293" x2="38.146" y2="75.6098" stroke="currentColor" stroke-width="8"/>
+	<line x1="64.9751" y1="26.8292" x2="64.9751" y2="75.6097" stroke="currentColor" stroke-width="8"/>
+</svg>
+</span>
+	</button>
+</video-controls>
+
+				</div></div><div
+			class="teaser"
+			style="--teaser-color: var(--color-text-inverted);"
+			
+		><a href="/products/fluid-eau-de-parfum" class="teaser__link"><autoplaying-video
+	class="autoplaying-video teaser__video"
+>
+	<video
+		poster="assets/omrbeauty.com/cdn/shop/files/preview_images/c3bb24a3fb564dbda750d68fb57f3582.thumbnail.0000000000.f05fb0a3.jpg"
+		
+			data-video-id="teaser-grid__video--template--27064658297206__teaser_grid_JcaHq7"
+		
+		
+			preload="metadata"
+		
+		playsinline
+		disableremoteplayback
+		loop
+		muted
+	>
+		
+		
+		
+			
+		
+			
+				<source
+					src="assets/omrbeauty.com/cdn/shop/videos/c/vp/c3bb24a3fb564dbda750d68fb57f3582/c3bb24a3fb564dbda750d68fb57f3582.HD-1080p-7.2Mbps-56565066.f2004700.mp4"
+					
+				>
+			
+		
+
+		
+		
+		<img src="assets/omrbeauty.com/cdn/shop/files/preview_images/c3bb24a3fb564dbda750d68fb57f3582.thumbnail.0000000000.da422336.jpg" alt="" srcset="assets/omrbeauty.com/cdn/shop/files/preview_images/c3bb24a3fb564dbda750d68fb57f3582.thumbnail.0000000000.da422336.jpg 204w" width="204" height="255" loading="lazy">
+	</video>
+</autoplaying-video>
+
+<div class="teaser__content"><h2 class="teaser__title">
+							Bestsellers
+						</h2><div
+							class="teaser__link-text teaser__link-text--tertiary"
+						>
+							shop now
+						</div></div></a><div class="teaser__video-controls">
+					<video-controls data-video-id="teaser-grid__video--template--27064658297206__teaser_grid_JcaHq7">
+	<button
+		class="video-controls__btn video-controls__btn--bright
+"
+		style="--video-control-color: white;"
+		type="button"
+		aria-label="Pause video"
+		aria-pressed="true"
+	>
+		<span
+			class="video-controls__play-icon"
+			
+		><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="4" y="4" width="92" height="92" stroke="currentColor" stroke-width="8" fill="none"/>
+	<path d="M71.5029 50.909L34.4082 73.7361V28.0808L71.5029 50.909Z" stroke="currentColor" stroke-width="7" fill="none"/>
+</svg>
+</span>
+		<span
+			class="video-controls__pause-icon"
+			
+				style="display:none;"
+			
+		><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="4" y="4" width="92" height="92" stroke="currentColor" fill="none" stroke-width="8"/>
+	<line x1="38.146" y1="26.8293" x2="38.146" y2="75.6098" stroke="currentColor" stroke-width="8"/>
+	<line x1="64.9751" y1="26.8292" x2="64.9751" y2="75.6097" stroke="currentColor" stroke-width="8"/>
+</svg>
+</span>
+	</button>
+</video-controls>
+
+				</div></div></div>
+
+
+</section><section id="shopify-section-template--27064658297206__featured_products_TVpCmx" class="shopify-section">
+	<div
+		class="featured-products"
+		data-scroll-nav
+	>
+		<header class="featured-products__header">
+			
+				<h2 class="featured-products__title">OMR HOODIE</h2>
+			
+			<div class="featured-products__controls">
+				
+					<a
+						href="/collections/accessories"
+						class="featured-products__view-all-link"
+					>View all</a>
+				
+				<div class="featured-products__nav">
+					<button
+						type="button"
+						class="featured-products__nav-btn"
+						aria-label="Previous products"
+						aria-controls="featured-products-template--27064658297206__featured_products_TVpCmx"
+						data-scroll-nav-prev
+						style="display: none;"
+					><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M47 80.2282L38.2787 89L0 50.5L38.2787 12L47 20.7718L23.9053 44H100V57H23.9053L47 80.2282Z"
+	/>
+</svg>
+</button>
+					<button
+						type="button"
+						class="featured-products__nav-btn"
+						aria-label="Next products"
+						aria-controls="featured-products-template--27064658297206__featured_products_TVpCmx"
+						data-scroll-nav-next
+						style="display: none;"
+					><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M53 80.2282L61.7213 89L100 50.5L61.7213 12L53 20.7718L76.0947 44H0V57H76.0947L53 80.2282Z"
+	/>
+</svg>
+</button>
+				</div>
+			</div>
+		</header>
+
+		
+			<div class="featured-products__list product-slider" data-scroll-nav-track id="featured-products-template--27064658297206__featured_products_TVpCmx">
+<article
+	class="card card--product"data-scroll-nav-item="0">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/HOODBLACK.3f3f0eaa.png" alt="OMR Hoodie · Black" srcset="assets/omrbeauty.com/cdn/shop/files/HOODBLACK.0986cb5d.png 376w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK.2fb5a7bb.png 480w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK.48c8edb1.png 640w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK.7b2e6a9c.png 800w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK.cbf147bf.png 960w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK.4ec4d7f3.png 1120w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK.3f3f0eaa.png 1280w" width="1280" height="1589" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/HOODBLACK2.ea3d5675.jpg" alt="OMR Hoodie · Black" srcset="assets/omrbeauty.com/cdn/shop/files/HOODBLACK2.854c590b.jpg 376w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK2.d69d9cb1.jpg 480w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK2.eb487836.jpg 640w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK2.cc7ec2ac.jpg 800w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK2.a6943af0.jpg 960w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK2.ec7ad5c8.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/HOODBLACK2.ea3d5675.jpg 1280w" width="1280" height="1589" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Apparel</div>
+		<h3 class="card__title">
+			<a href="/products/unisex-organic-mid-weight-hoodie-copy-black" class="card__link">OMR Hoodie · Black</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€69,95</span>
+	
+</div>
+
+</div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="1">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/HOODBEIGE2.39bac1f2.png" alt="OMR Hoodie · Beige" srcset="assets/omrbeauty.com/cdn/shop/files/HOODBEIGE2.35fe6ddb.png 376w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE2.216ba747.png 480w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE2.36c7c1c6.png 640w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE2.c21a88af.png 800w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE2.d643bba9.png 960w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE2.7bb25df2.png 1120w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE2.39bac1f2.png 1280w" width="1280" height="1589" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/HOODBEIGE.39bac1f2.jpg" alt="OMR Hoodie · Beige" srcset="assets/omrbeauty.com/cdn/shop/files/HOODBEIGE.35fe6ddb.jpg 376w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE.216ba747.jpg 480w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE.36c7c1c6.jpg 640w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE.c21a88af.jpg 800w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE.d643bba9.jpg 960w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE.7bb25df2.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/HOODBEIGE.39bac1f2.jpg 1280w" width="1280" height="1589" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Apparel</div>
+		<h3 class="card__title">
+			<a href="/products/unisex-organic-mid-weight-hoodie-desert-sand" class="card__link">OMR Hoodie · Beige</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€69,95</span>
+	
+</div>
+
+</div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="2">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/HOOD.e62b1fa3.jpg" alt="OMR Hoodie · Grey" srcset="assets/omrbeauty.com/cdn/shop/files/HOOD.f329bab8.jpg 376w, assets/omrbeauty.com/cdn/shop/files/HOOD.0af743af.jpg 480w, assets/omrbeauty.com/cdn/shop/files/HOOD.c79963a2.jpg 640w, assets/omrbeauty.com/cdn/shop/files/HOOD.b3098539.jpg 800w, assets/omrbeauty.com/cdn/shop/files/HOOD.061d3da0.jpg 960w, assets/omrbeauty.com/cdn/shop/files/HOOD.ccf8350b.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/HOOD.e62b1fa3.jpg 1280w" width="1280" height="1589" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/HOOD2.c3d38431.jpg" alt="OMR Hoodie · Grey" srcset="assets/omrbeauty.com/cdn/shop/files/HOOD2.6c7728b0.jpg 376w, assets/omrbeauty.com/cdn/shop/files/HOOD2.42b555a3.jpg 480w, assets/omrbeauty.com/cdn/shop/files/HOOD2.4564eebf.jpg 640w, assets/omrbeauty.com/cdn/shop/files/HOOD2.bcaccd00.jpg 800w, assets/omrbeauty.com/cdn/shop/files/HOOD2.6761368c.jpg 960w, assets/omrbeauty.com/cdn/shop/files/HOOD2.355dba9a.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/HOOD2.c3d38431.jpg 1280w" width="1280" height="1589" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Apparel</div>
+		<h3 class="card__title">
+			<a href="/products/unisex-organic-mid-weight-hoodie" class="card__link">OMR Hoodie · Grey</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€69,95</span>
+	
+</div>
+
+</div>
+</article>
+
+			</div>
+		
+	</div>
+
+
+
+</section><section id="shopify-section-template--27064658297206__featured_products_VizJCz" class="shopify-section">
+	<div
+		class="featured-products"
+		data-scroll-nav
+	>
+		<header class="featured-products__header">
+			
+				<h2 class="featured-products__title">Collection</h2>
+			
+			<div class="featured-products__controls">
+				
+					<a
+						href="/collections/collections"
+						class="featured-products__view-all-link"
+					>View all</a>
+				
+				<div class="featured-products__nav">
+					<button
+						type="button"
+						class="featured-products__nav-btn"
+						aria-label="Previous products"
+						aria-controls="featured-products-template--27064658297206__featured_products_VizJCz"
+						data-scroll-nav-prev
+						style="display: none;"
+					><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M47 80.2282L38.2787 89L0 50.5L38.2787 12L47 20.7718L23.9053 44H100V57H23.9053L47 80.2282Z"
+	/>
+</svg>
+</button>
+					<button
+						type="button"
+						class="featured-products__nav-btn"
+						aria-label="Next products"
+						aria-controls="featured-products-template--27064658297206__featured_products_VizJCz"
+						data-scroll-nav-next
+						style="display: none;"
+					><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M53 80.2282L61.7213 89L100 50.5L61.7213 12L53 20.7718L76.0947 44H0V57H76.0947L53 80.2282Z"
+	/>
+</svg>
+</button>
+				</div>
+			</div>
+		</header>
+
+		
+			<div class="featured-products__list product-slider" data-scroll-nav-track id="featured-products-template--27064658297206__featured_products_VizJCz">
+<article
+	class="card card--product"data-scroll-nav-item="0">
+	<div class="product-badge">
+		<span class="product-badge__text">
+					New
+			
+		</span>
+	</div>
+<img src="assets/omrbeauty.com/cdn/shop/files/Copper4.50b59c2e.png" alt="Copper" srcset="assets/omrbeauty.com/cdn/shop/files/Copper4.a4e8278d.png 376w, assets/omrbeauty.com/cdn/shop/files/Copper4.a7ac477b.png 480w, assets/omrbeauty.com/cdn/shop/files/Copper4.e7ef168f.png 640w, assets/omrbeauty.com/cdn/shop/files/Copper4.7912d204.png 800w, assets/omrbeauty.com/cdn/shop/files/Copper4.b8eb274f.png 960w, assets/omrbeauty.com/cdn/shop/files/Copper4.6fb39a46.png 1120w, assets/omrbeauty.com/cdn/shop/files/Copper4.50b59c2e.png 1280w" width="1280" height="1589" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/Copper3_4f7b6bcb-f456-4197-8dec-5832ef46c660.e9fa3ebd.png" alt="Copper" srcset="assets/omrbeauty.com/cdn/shop/files/Copper3_4f7b6bcb-f456-4197-8dec-5832ef46c660.55a74d4c.png 376w, assets/omrbeauty.com/cdn/shop/files/Copper3_4f7b6bcb-f456-4197-8dec-5832ef46c660.2b15dfa4.png 480w, assets/omrbeauty.com/cdn/shop/files/Copper3_4f7b6bcb-f456-4197-8dec-5832ef46c660.6ea97753.png 640w, assets/omrbeauty.com/cdn/shop/files/Copper3_4f7b6bcb-f456-4197-8dec-5832ef46c660.99ac0590.png 800w, assets/omrbeauty.com/cdn/shop/files/Copper3_4f7b6bcb-f456-4197-8dec-5832ef46c660.bb49099e.png 960w, assets/omrbeauty.com/cdn/shop/files/Copper3_4f7b6bcb-f456-4197-8dec-5832ef46c660.5cd01d0d.png 1120w, assets/omrbeauty.com/cdn/shop/files/Copper3_4f7b6bcb-f456-4197-8dec-5832ef46c660.e9fa3ebd.png 1280w" width="1280" height="1589" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Eau de Parfum</div>
+		<h3 class="card__title">
+			<a href="/products/copper" class="card__link">Copper</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€58,95</span>
+	
+</div>
+
+<p class="card__variant">50 ml</p></div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="1">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/INTRO3_6a28dbf1-6060-4782-904c-2c07d4865522.89b4795e.jpg" alt="Intro" srcset="assets/omrbeauty.com/cdn/shop/files/INTRO3_6a28dbf1-6060-4782-904c-2c07d4865522.c5ed5faa.jpg 376w, assets/omrbeauty.com/cdn/shop/files/INTRO3_6a28dbf1-6060-4782-904c-2c07d4865522.d55a3f85.jpg 480w, assets/omrbeauty.com/cdn/shop/files/INTRO3_6a28dbf1-6060-4782-904c-2c07d4865522.006cc9be.jpg 640w, assets/omrbeauty.com/cdn/shop/files/INTRO3_6a28dbf1-6060-4782-904c-2c07d4865522.51994e73.jpg 800w, assets/omrbeauty.com/cdn/shop/files/INTRO3_6a28dbf1-6060-4782-904c-2c07d4865522.1cc3d758.jpg 960w, assets/omrbeauty.com/cdn/shop/files/INTRO3_6a28dbf1-6060-4782-904c-2c07d4865522.3761ec81.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/INTRO3_6a28dbf1-6060-4782-904c-2c07d4865522.89b4795e.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/INTRO_c6d6f086-e4f0-46e4-8c7d-10fbba44eb2b.89b4795e.jpg" alt="Intro" srcset="assets/omrbeauty.com/cdn/shop/files/INTRO_c6d6f086-e4f0-46e4-8c7d-10fbba44eb2b.c5ed5faa.jpg 376w, assets/omrbeauty.com/cdn/shop/files/INTRO_c6d6f086-e4f0-46e4-8c7d-10fbba44eb2b.d55a3f85.jpg 480w, assets/omrbeauty.com/cdn/shop/files/INTRO_c6d6f086-e4f0-46e4-8c7d-10fbba44eb2b.006cc9be.jpg 640w, assets/omrbeauty.com/cdn/shop/files/INTRO_c6d6f086-e4f0-46e4-8c7d-10fbba44eb2b.51994e73.jpg 800w, assets/omrbeauty.com/cdn/shop/files/INTRO_c6d6f086-e4f0-46e4-8c7d-10fbba44eb2b.1cc3d758.jpg 960w, assets/omrbeauty.com/cdn/shop/files/INTRO_c6d6f086-e4f0-46e4-8c7d-10fbba44eb2b.3761ec81.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/INTRO_c6d6f086-e4f0-46e4-8c7d-10fbba44eb2b.89b4795e.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Eau de Parfum</div>
+		<h3 class="card__title">
+			<a href="/products/intro-eau-de-parfum" class="card__link">Intro</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€58,95</span>
+	
+</div>
+
+<p class="card__variant">50 ml</p></div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="2">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/FLUID13.106dafba.jpg" alt="Fluid" srcset="assets/omrbeauty.com/cdn/shop/files/FLUID13.e6b1cc86.jpg 376w, assets/omrbeauty.com/cdn/shop/files/FLUID13.0e8d1e6b.jpg 480w, assets/omrbeauty.com/cdn/shop/files/FLUID13.461a509f.jpg 640w, assets/omrbeauty.com/cdn/shop/files/FLUID13.f6024deb.jpg 800w, assets/omrbeauty.com/cdn/shop/files/FLUID13.83510065.jpg 960w, assets/omrbeauty.com/cdn/shop/files/FLUID13.457c160a.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/FLUID13.106dafba.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/FLUID1_6e02ed26-6a03-4a2b-a277-897c7438d2a4.a2f5822a.jpg" alt="Fluid" srcset="assets/omrbeauty.com/cdn/shop/files/FLUID1_6e02ed26-6a03-4a2b-a277-897c7438d2a4.5f5256d1.jpg 376w, assets/omrbeauty.com/cdn/shop/files/FLUID1_6e02ed26-6a03-4a2b-a277-897c7438d2a4.fbbc125d.jpg 480w, assets/omrbeauty.com/cdn/shop/files/FLUID1_6e02ed26-6a03-4a2b-a277-897c7438d2a4.7636cf54.jpg 640w, assets/omrbeauty.com/cdn/shop/files/FLUID1_6e02ed26-6a03-4a2b-a277-897c7438d2a4.4d4e7ac4.jpg 800w, assets/omrbeauty.com/cdn/shop/files/FLUID1_6e02ed26-6a03-4a2b-a277-897c7438d2a4.93f62463.jpg 960w, assets/omrbeauty.com/cdn/shop/files/FLUID1_6e02ed26-6a03-4a2b-a277-897c7438d2a4.1868980e.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/FLUID1_6e02ed26-6a03-4a2b-a277-897c7438d2a4.a2f5822a.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Eau de Parfum</div>
+		<h3 class="card__title">
+			<a href="/products/fluid-eau-de-parfum" class="card__link">Fluid</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€58,95</span>
+	
+</div>
+
+<p class="card__variant">50 ml</p></div>
+</article>
+
+			</div>
+		
+	</div>
+
+
+
+</section><section id="shopify-section-template--27064658297206__featured_products_8enN9Q" class="shopify-section">
+	<div
+		class="featured-products"
+		data-scroll-nav
+	>
+		<header class="featured-products__header">
+			
+				<h2 class="featured-products__title">Perfume Oils</h2>
+			
+			<div class="featured-products__controls">
+				
+					<a
+						href="/products/brunch"
+						class="featured-products__view-all-link"
+					>View all</a>
+				
+				<div class="featured-products__nav">
+					<button
+						type="button"
+						class="featured-products__nav-btn"
+						aria-label="Previous products"
+						aria-controls="featured-products-template--27064658297206__featured_products_8enN9Q"
+						data-scroll-nav-prev
+						style="display: none;"
+					><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M47 80.2282L38.2787 89L0 50.5L38.2787 12L47 20.7718L23.9053 44H100V57H23.9053L47 80.2282Z"
+	/>
+</svg>
+</button>
+					<button
+						type="button"
+						class="featured-products__nav-btn"
+						aria-label="Next products"
+						aria-controls="featured-products-template--27064658297206__featured_products_8enN9Q"
+						data-scroll-nav-next
+						style="display: none;"
+					><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M53 80.2282L61.7213 89L100 50.5L61.7213 12L53 20.7718L76.0947 44H0V57H76.0947L53 80.2282Z"
+	/>
+</svg>
+</button>
+				</div>
+			</div>
+		</header>
+
+		
+			<div class="featured-products__list product-slider" data-scroll-nav-track id="featured-products-template--27064658297206__featured_products_8enN9Q">
+<article
+	class="card card--product"data-scroll-nav-item="0">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION5.ccdce864.jpg" alt="Brunch" srcset="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION5.be1f7d46.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION5.9eda8c05.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION5.522aa50d.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION5.437b4372.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION5.02e02f27.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION5.b7e67255.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION5.ccdce864.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION6.b9927c01.jpg" alt="Brunch" srcset="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION6.b5bf3784.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION6.f82770e7.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION6.30bb1eb0.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION6.d6414113.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION6.04cb2045.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION6.14ae322f.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION6.b9927c01.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Perfume oil</div>
+		<h3 class="card__title">
+			<a href="/products/brunch" class="card__link">Brunch</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€33,95</span>
+	
+</div>
+
+<p class="card__variant">8ml</p></div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="1">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION.4fd3da7b.jpg" alt="Lunch" srcset="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION.8ad76f00.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION.106bccb1.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION.8b1104a9.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION.2e67ca8d.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION.27ab5538.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION.3ce26a67.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION.4fd3da7b.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION2.4fd3da7b.jpg" alt="Lunch" srcset="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION2.8ad76f00.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION2.106bccb1.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION2.8b1104a9.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION2.2e67ca8d.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION2.27ab5538.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION2.3ce26a67.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION2.4fd3da7b.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Perfume oil</div>
+		<h3 class="card__title">
+			<a href="/products/lunch" class="card__link">Lunch</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€33,95</span>
+	
+</div>
+
+<p class="card__variant">8ml</p></div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="2">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION3.6d6b9ef2.jpg" alt="Dinner" srcset="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION3.85a40461.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION3.2c253876.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION3.c073f962.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION3.b16579ca.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION3.5fbac043.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION3.14a4dc34.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION3.6d6b9ef2.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION4.ef23c1bd.jpg" alt="Dinner" srcset="assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION4.4c229319.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION4.e8bd16c1.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION4.fa331a1b.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION4.ca874305.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION4.fa1eadee.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION4.1e5d3d03.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMRCOLLECTION4.ef23c1bd.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Perfume oil</div>
+		<h3 class="card__title">
+			<a href="/products/dinner" class="card__link">Dinner</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€33,95</span>
+	
+</div>
+
+<p class="card__variant">8ml</p></div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="3">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/OMR20263.46d13ff4.jpg" alt="Duo" srcset="assets/omrbeauty.com/cdn/shop/files/OMR20263.f46bab6c.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMR20263.654fd956.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMR20263.3c382b55.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMR20263.0814fc4f.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMR20263.a686d600.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMR20263.df618956.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMR20263.46d13ff4.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/OMR20264.5d1235b1.jpg" alt="Duo" srcset="assets/omrbeauty.com/cdn/shop/files/OMR20264.c9193091.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMR20264.4e967e2e.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMR20264.cf826569.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMR20264.4607c606.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMR20264.4516cfaf.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMR20264.e5a1d485.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMR20264.5d1235b1.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Perfume oil</div>
+		<h3 class="card__title">
+			<a href="/products/duo-perfume-oil" class="card__link">Duo</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€33,95</span>
+	
+</div>
+
+<p class="card__variant">8 ml</p></div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="4">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/OMR20265_ce5cafbb-a71d-4eb0-9d19-d1c027af529a.7814a5c9.jpg" alt="Fluid" srcset="assets/omrbeauty.com/cdn/shop/files/OMR20265_ce5cafbb-a71d-4eb0-9d19-d1c027af529a.c671e157.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMR20265_ce5cafbb-a71d-4eb0-9d19-d1c027af529a.691a2b50.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMR20265_ce5cafbb-a71d-4eb0-9d19-d1c027af529a.f6eac60b.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMR20265_ce5cafbb-a71d-4eb0-9d19-d1c027af529a.bc35d922.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMR20265_ce5cafbb-a71d-4eb0-9d19-d1c027af529a.1e95ddaf.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMR20265_ce5cafbb-a71d-4eb0-9d19-d1c027af529a.afcdc38c.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMR20265_ce5cafbb-a71d-4eb0-9d19-d1c027af529a.7814a5c9.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/OMR20266.7814a5c9.jpg" alt="Fluid" srcset="assets/omrbeauty.com/cdn/shop/files/OMR20266.c671e157.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMR20266.691a2b50.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMR20266.f6eac60b.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMR20266.bc35d922.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMR20266.1e95ddaf.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMR20266.afcdc38c.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMR20266.7814a5c9.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Perfume oil</div>
+		<h3 class="card__title">
+			<a href="/products/fluid" class="card__link">Fluid</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€33,95</span>
+	
+</div>
+
+<p class="card__variant">8ml</p></div>
+</article>
+
+<article
+	class="card card--product"data-scroll-nav-item="5">
+	
+<img src="assets/omrbeauty.com/cdn/shop/files/OMR2026.2f964c51.jpg" alt="Intro" srcset="assets/omrbeauty.com/cdn/shop/files/OMR2026.c12e664c.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMR2026.2e283a19.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMR2026.cd91bafb.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMR2026.58999b3a.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMR2026.fbe7de69.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMR2026.8e0ddb53.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMR2026.2f964c51.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media" sizes="400px"><img src="assets/omrbeauty.com/cdn/shop/files/OMR20262.2f964c51.jpg" alt="Intro" srcset="assets/omrbeauty.com/cdn/shop/files/OMR20262.c12e664c.jpg 376w, assets/omrbeauty.com/cdn/shop/files/OMR20262.2e283a19.jpg 480w, assets/omrbeauty.com/cdn/shop/files/OMR20262.cd91bafb.jpg 640w, assets/omrbeauty.com/cdn/shop/files/OMR20262.58999b3a.jpg 800w, assets/omrbeauty.com/cdn/shop/files/OMR20262.fbe7de69.jpg 960w, assets/omrbeauty.com/cdn/shop/files/OMR20262.8e0ddb53.jpg 1120w, assets/omrbeauty.com/cdn/shop/files/OMR20262.2f964c51.jpg 1280w" width="1280" height="1600" loading="lazy" class="card__media card__hover-media" sizes="400px"><div class="card__content">
+		<div class="card__type">Perfume oil</div>
+		<h3 class="card__title">
+			<a href="/products/intro" class="card__link">Intro</a>
+		</h3>
+
+		
+
+<div class="card__price price">
+	<span class="price__current">€33,95</span>
+	
+</div>
+
+<p class="card__variant">8 ml</p></div>
+</article>
+
+			</div>
+		
+	</div>
+
+
+
+</section><section id="shopify-section-template--27064658297206__banners_C6eXg4" class="shopify-section"><div class="banners banners--margin"><div
+			class="banner-item"
+		><a href="/pages/about-us" class="banner-item__link"><div class="banner-item__media-wrapper"><img src="assets/omrbeauty.com/cdn/shop/files/about.40536367.jpg" alt="" width="480" height="600" loading="lazy" srcset="
+assets/omrbeauty.com/cdn/shop/files/about.b782b888.jpg 240w, assets/omrbeauty.com/cdn/shop/files/about.3f4f2a9a.jpg 360w, assets/omrbeauty.com/cdn/shop/files/about.40536367.jpg 480w, assets/omrbeauty.com/cdn/shop/files/about.f3fdb312.jpg 640w, assets/omrbeauty.com/cdn/shop/files/about.e2529af9.jpg 768w" sizes="400px" class="teaser__image">
+			</div>
+
+			<div class="banner-item__content-wrapper">
+				<h2 class="banner-item__title">
+					Our Story
+				</h2>
+				<div class="banner-item__hidden-content">
+					<p class="banner-item__text">A Swedish fragrance house redefining the boundaries between personal expression and performance.</p><div class="banner-item__btn">
+							More
+						</div></div>
+			</div></a></div><div
+			class="banner-item"
+		><a href="/pages/crafted-with-care" class="banner-item__link"><div class="banner-item__media-wrapper"><img src="assets/omrbeauty.com/cdn/shop/files/scent.23826a3c.jpg" alt="" width="480" height="600" loading="lazy" srcset="
+assets/omrbeauty.com/cdn/shop/files/scent.2b1bf22b.jpg 240w, assets/omrbeauty.com/cdn/shop/files/scent.d3c4a7ca.jpg 360w, assets/omrbeauty.com/cdn/shop/files/scent.23826a3c.jpg 480w, assets/omrbeauty.com/cdn/shop/files/scent.375c27e2.jpg 640w, assets/omrbeauty.com/cdn/shop/files/scent.42f23590.jpg 768w" sizes="400px" class="teaser__image">
+			</div>
+
+			<div class="banner-item__content-wrapper">
+				<h2 class="banner-item__title">
+					Home Fragrance
+				</h2>
+				<div class="banner-item__hidden-content">
+					<p class="banner-item__text">Our scented candles are an extension of our approach to scent: considered, intentional, and designed to be felt — never rushed.</p><div class="banner-item__btn">
+							More
+						</div></div>
+			</div></a></div><div
+			class="banner-item"
+		><a href="/collections/perfumes" class="banner-item__link"><div class="banner-item__media-wrapper"><img src="assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.3cae2b64.png" alt="" width="480" height="600" loading="lazy" srcset="
+assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.e87009a5.png 240w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.52d6f030.png 360w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.3cae2b64.png 480w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.0e4c147f.png 640w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.21b186d9.png 768w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.99e17e72.png 828w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.92268567.png 960w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.fb1c9c39.png 1080w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.c6d4b2c0.png 1280w, assets/omrbeauty.com/cdn/shop/files/header_c68d7fa1-36a3-4434-898f-b0988868b70e.fb3b442d.png 1440w" sizes="400px" class="teaser__image">
+			</div>
+
+			<div class="banner-item__content-wrapper">
+				<h2 class="banner-item__title">
+					Eau de Parfum
+				</h2>
+				<div class="banner-item__hidden-content">
+					<p class="banner-item__text">A collection of fragrances crafted to express individuality and emotion.</p><div class="banner-item__btn">
+							More
+						</div></div>
+			</div></a></div><div
+			class="banner-item"
+		><a href="/collections/perfume-oils" class="banner-item__link"><div class="banner-item__media-wrapper"><img src="assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.8a0a41e3.jpg" alt="" width="480" height="600" loading="lazy" srcset="
+assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.c79d2152.jpg 240w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.1ab7601d.jpg 360w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.8a0a41e3.jpg 480w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.6ddaa962.jpg 640w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.8c4afbf1.jpg 768w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.7f9fd47f.jpg 828w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.dbf0481c.jpg 960w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.ee831625.jpg 1080w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.2e7506ea.jpg 1280w, assets/omrbeauty.com/cdn/shop/files/oil_dce2c014-1e02-40af-9e7c-4d83620d27a3.2db3e673.jpg 1440w" sizes="400px" class="teaser__image">
+			</div>
+
+			<div class="banner-item__content-wrapper">
+				<h2 class="banner-item__title">
+					perfume oils
+				</h2>
+				<div class="banner-item__hidden-content">
+					<p class="banner-item__text">A modern way to wear fragrance. Vegan, skin-friendly, and designed for life on the go.</p><div class="banner-item__btn">
+							More
+						</div></div>
+			</div></a></div></div>
+
+
+</section>
+			</main>
+
+			<!-- BEGIN sections: footer-group -->
+<div id="shopify-section-sections--27064657772918__footer" class="shopify-section shopify-section-group-footer-group"><footer class="footer">
+	<div class="footer__brand">
+		<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 653.54 74.7" fill="none">
+	<g id="Lager_1">
+		<path
+			d="M33.93,74.7c-8.96,0-17.22-2.52-24.46-10.87C2.42,55.68,0,46.41,0,37.45,0,15.71,14.7,0,34.13,0c17.62,0,34.13,13.09,34.03,37.35-.1,20.34-12.38,37.35-34.23,37.35ZM34.03,12.18c-12.18,0-20.34,9.87-20.34,24.67,0,16.01,8.86,25.57,20.64,25.57,8.86,0,20.24-6.44,20.54-23.56.3-13.89-6.85-26.68-20.84-26.68Z"
+			/>
+		<path
+			d="M148.1,1.81v71.08h-12.99l1.21-58.39-15.3,58.39h-11.98l-15.4-58.39,1.31,58.39h-12.99V1.81h19.33l13.89,52.76L128.77,1.81h19.33Z"
+			/>
+		<path
+			d="M164.72,1.81h22.65c9.46.1,15.81.1,22.05,5.13,4.43,3.62,7.85,9.26,7.85,17.52,0,13.59-9.97,18.32-13.99,19.53l15.81,28.89h-15.2l-14.09-26.38h-11.88v26.38h-13.19V1.81ZM177.91,13.29v22.25h4.63c4.53,0,6.24-.1,8.76-.2,2.92-.1,12.48-.6,12.48-10.97,0-1.51-.1-6.75-5.64-9.56-2.82-1.41-6.24-1.51-14.09-1.51h-6.14Z"
+			/>
+		<path
+			d="M254.63,1.81h25.37c9.46.1,11.98.2,15.4,1.21,7.15,2.11,12.48,8.46,12.48,16.21,0,3.12-1.01,6.95-3.02,9.67-2.21,2.92-5.03,4.43-8.86,5.13,7.85,1.41,15.2,7.75,15.2,18.73,0,8.16-4.13,15.4-12.69,18.42-4.53,1.61-8.05,1.71-16.11,1.71h-27.79V1.81ZM267.82,12.69v17.72h4.53c3.73,0,6.44,0,8.05-.1,3.32,0,6.65-.1,9.06-1.41,2.82-1.41,4.73-4.13,4.73-7.35,0-2.72-1.41-5.44-4.13-7.05-2.82-1.61-4.23-1.71-13.89-1.81h-8.36ZM267.82,40.37v21.04h13.09c7.85,0,9.97,0,13.39-2.42,1.81-1.31,3.22-4.03,3.22-7.45,0-1.61-.3-3.52-1.31-5.34-3.22-5.74-10.67-5.74-15.2-5.74l-13.19-.1Z"
+			/>
+		<path d="M338.2,13.69v16.71h34.23v11.48h-34.23v19.03h39.97v11.98h-53.06V1.81h50.54v11.88h-37.45Z"
+			  />
+		<path
+			d="M434.15,59h-26.68l-4.13,13.89h-14.2L413.11,1.81h15.1l24.26,71.08h-14.2l-4.13-13.89ZM430.62,47.42l-9.77-32.72-9.87,32.72h19.63Z"
+			/>
+		<path
+			d="M519.02,1.81v44.8c-.1,8.05-.1,14.7-7.65,21.14-7.25,6.34-16.61,6.95-21.44,6.95-4.33,0-8.56-.5-12.58-1.91-8.46-2.92-12.99-9.06-14.6-14.4-.91-3.12-.91-5.33-1.01-14.2V1.81h13.29v43.69c0,3.02-.1,5.94.91,8.66,2.72,6.85,10.17,7.65,14.4,7.65,2.11,0,7.45-.1,11.38-3.52,3.93-3.52,3.93-7.55,3.93-13.49V1.81h13.39Z"
+			/>
+		<path d="M584.57,13.89h-19.63v59h-13.29V13.89h-19.23V1.81h52.15v12.08Z" />
+		<path d="M629.57,44.8v28.09h-13.09v-28.09l-23.76-42.99h15l15.4,29.5,15.61-29.5h14.8l-23.96,42.99Z"
+			  />
+	</g>
+</svg>
+
+	</div>
+
+	<section class="footer__newsletter">
+		<div class="footer__newsletter-title-wrapper">
+			<h2 class="footer__newsletter-title">Sign up for our newsletter</h2>
+			<div class="footer__newsletter-blinking-square"></div>
+		</div>
+		<form method="post" action="/contact#newsletter-form" id="newsletter-form" accept-charset="UTF-8" class="newsletter-form form"><input type="hidden" name="form_type" value="customer" /><input type="hidden" name="utf8" value="✓" /><input type="hidden" name="contact[tags]" value="newsletter">
+
+	<div class="field">
+		<label for="email-sections--27064657772918__footer" class="field__label">Email</label>
+		<input
+			id="email-sections--27064657772918__footer"
+			type="email"
+			name="contact[email]"
+			placeholder="email@example.com"
+			class="field__input"
+			required
+		>
+	</div>
+
+	<button type="submit" class="newsletter-form__submit-btn">Subscribe</button></form>
+	</section>
+
+	<div class="footer__text"><p>a Swedish fragrance house redefining the rules of beauty. Founded in 2023 by Omar Rudberg and co-owned by Edvin Ryding, whose shared passion for self-expression helped shape the brand's vision.</p></div>
+	<div class="footer__social-links"><ul class="social-links">
+		<li>
+			<a
+				href="https://www.instagram.com/omrbeauty"
+				class="social-link social-link--instagram"
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label="instagram"
+			><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path d="M50 9.0125C63.35 9.0125 64.9333 9.0625 70.2083 9.30417C83.7583 9.92083 90.0875 16.35 90.7042 29.8C90.9458 35.0708 90.9917 36.6542 90.9917 50.0042C90.9917 63.3583 90.9417 64.9375 90.7042 70.2083C90.0833 83.6458 83.7708 90.0875 70.2083 90.7042C64.9333 90.9458 63.3583 90.9958 50 90.9958C36.65 90.9958 35.0667 90.9458 29.7958 90.7042C16.2125 90.0833 9.91667 83.625 9.3 70.2042C9.05833 64.9333 9.00833 63.3542 9.00833 50C9.00833 36.65 9.0625 35.0708 9.3 29.7958C9.92083 16.35 16.2333 9.91667 29.7958 9.3C35.0708 9.0625 36.65 9.0125 50 9.0125ZM50 0C36.4208 0 34.7208 0.0583333 29.3875 0.3C11.2292 1.13333 1.1375 11.2083 0.304167 29.3833C0.0583333 34.7208 0 36.4208 0 50C0 63.5792 0.0583333 65.2833 0.3 70.6167C1.13333 88.775 11.2083 98.8667 29.3833 99.7C34.7208 99.9417 36.4208 100 50 100C63.5792 100 65.2833 99.9417 70.6167 99.7C88.7583 98.8667 98.875 88.7917 99.6958 70.6167C99.9417 65.2833 100 63.5792 100 50C100 36.4208 99.9417 34.7208 99.7 29.3875C98.8833 11.2458 88.7958 1.1375 70.6208 0.304167C65.2833 0.0583333 63.5792 0 50 0ZM50 24.325C35.8208 24.325 24.325 35.8208 24.325 50C24.325 64.1792 35.8208 75.6792 50 75.6792C64.1792 75.6792 75.675 64.1833 75.675 50C75.675 35.8208 64.1792 24.325 50 24.325ZM50 66.6667C40.7958 66.6667 33.3333 59.2083 33.3333 50C33.3333 40.7958 40.7958 33.3333 50 33.3333C59.2042 33.3333 66.6667 40.7958 66.6667 50C66.6667 59.2083 59.2042 66.6667 50 66.6667ZM76.6917 17.3125C73.375 17.3125 70.6875 20 70.6875 23.3125C70.6875 26.625 73.375 29.3125 76.6917 29.3125C80.0042 29.3125 82.6875 26.625 82.6875 23.3125C82.6875 20 80.0042 17.3125 76.6917 17.3125Z"
+	/>
+</svg>
+</a>
+		</li>
+		<li>
+			<a
+				href="https://www.youtube.com/@OMRBEAUTY"
+				class="social-link social-link--youtube"
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label="youtube"
+			><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path d="M81.7292 13.2672C66.7125 12.2422 33.2667 12.2464 18.2708 13.2672C2.03333 14.3755 0.120833 24.1839 0 50.0005C0.120833 75.7713 2.01667 85.6213 18.2708 86.7338C33.2708 87.7547 66.7125 87.7588 81.7292 86.7338C97.9667 85.6255 99.8792 75.8172 100 50.0005C99.8792 24.2297 97.9833 14.3797 81.7292 13.2672ZM37.5 66.6672V33.3339L70.8333 49.9713L37.5 66.6672Z"/>
+</svg>
+</a>
+		</li>
+		<li>
+			<a
+				href="https://www.tiktok.com/@omrbeauty"
+				class="social-link social-link--tiktok"
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label="tiktok"
+			><svg
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 448 448"
+	id="Tiktok--Streamline-Font-Awesome"
+	width="1em"
+	height="1em"
+>
+	<desc>
+		Tiktok Streamline Icon: https://streamlinehq.com
+	</desc>
+	<!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.-->
+	<path d="M416.071 184.5208c-37.7607 0.0903 -74.5954 -11.6858 -105.3004 -33.6649v153.289c-0.0395 107.3255 -116.2473 174.3613 -209.1742 120.6644 -92.9269 -53.6969 -92.8777 -187.8538 0.0886 -241.4824 26.853 -15.4904 58.1027 -21.5892 88.8096 -17.3325v77.0991c-46.9985 -14.7833 -92.3759 26.8546 -81.6793 74.9481 10.6966 48.0936 69.4447 66.5726 105.7466 33.2623 13.2108 -12.122 20.731 -29.2295 20.7306 -47.159V4.48h75.4781c-0.0525 6.3739 0.4816 12.7392 1.5953 19.0153 5.3007 28.3156 22.024 53.2004 46.2389 68.8051 17.046 11.2711 37.0308 17.2785 57.4662 17.2742Z"
+		  fill="currentColor"
+		  stroke-width="1"
+	></path>
+</svg>
+</a>
+		</li></ul>
+</div>
+
+	<div class="footer__menus">
+		
+			
+				
+				<nav
+					aria-label="About"
+					class="footer__menu"
+					style="--footer-nav-desktop-column: 1"
+					
+				>
+					<h3 class="footer__menu-header footer__menu-header--desktop">
+						<span class="footer__menu-title">About</span>
+					</h3>
+					<h3 class="footer__menu-header footer__menu-header--mobile">
+						<button
+							class="footer__menu-trigger"
+							type="button"
+							aria-expanded="false"
+							aria-controls="footer-menu-menu_LhBRqa"
+							id="footer-trigger-menu_LhBRqa"
+						>
+							<span class="footer__menu-title">About</span>
+							<span class="footer__menu-header-icon"><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M0.343262 31.3137L11.657 20L50.0001 58.3431L88.3433 20L99.657 31.3137L50.0001 80.9706L0.343262 31.3137Z"
+	/>
+</svg>
+</span>
+						</button>
+					</h3>
+
+					<ul
+						class="footer__menu-list"
+						id="footer-menu-menu_LhBRqa"
+						aria-labelledby="footer-trigger-menu_LhBRqa"
+						hidden
+					>
+						
+							<li class="footer__menu-item">
+								<a class="footer__menu-item-link" href="/pages/about-us">Our story</a>
+							</li>
+						
+					</ul>
+				</nav>
+			
+		
+			
+				
+				<nav
+					aria-label="Customer care"
+					class="footer__menu"
+					style="--footer-nav-desktop-column: 2"
+					
+				>
+					<h3 class="footer__menu-header footer__menu-header--desktop">
+						<span class="footer__menu-title">Customer care</span>
+					</h3>
+					<h3 class="footer__menu-header footer__menu-header--mobile">
+						<button
+							class="footer__menu-trigger"
+							type="button"
+							aria-expanded="false"
+							aria-controls="footer-menu-menu_zQeJAi"
+							id="footer-trigger-menu_zQeJAi"
+						>
+							<span class="footer__menu-title">Customer care</span>
+							<span class="footer__menu-header-icon"><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M0.343262 31.3137L11.657 20L50.0001 58.3431L88.3433 20L99.657 31.3137L50.0001 80.9706L0.343262 31.3137Z"
+	/>
+</svg>
+</span>
+						</button>
+					</h3>
+
+					<ul
+						class="footer__menu-list"
+						id="footer-menu-menu_zQeJAi"
+						aria-labelledby="footer-trigger-menu_zQeJAi"
+						hidden
+					>
+						
+							<li class="footer__menu-item">
+								<a class="footer__menu-item-link" href="/pages/contact">Contact</a>
+							</li>
+						
+							<li class="footer__menu-item">
+								<a class="footer__menu-item-link" href="/pages/faq">FAQ</a>
+							</li>
+						
+							<li class="footer__menu-item">
+								<a class="footer__menu-item-link" href="/pages/returns-exchanges">Returns</a>
+							</li>
+						
+							<li class="footer__menu-item">
+								<a class="footer__menu-item-link" href="/pages/terms-conditions">Terms & Conditions</a>
+							</li>
+						
+					</ul>
+				</nav>
+			
+		
+			
+				
+				<nav
+					aria-label="Stay in the loop"
+					class="footer__menu"
+					style="--footer-nav-desktop-column: 3"
+					
+				>
+					<h3 class="footer__menu-header footer__menu-header--desktop">
+						<span class="footer__menu-title">Stay in the loop</span>
+					</h3>
+					<h3 class="footer__menu-header footer__menu-header--mobile">
+						<button
+							class="footer__menu-trigger"
+							type="button"
+							aria-expanded="false"
+							aria-controls="footer-menu-menu_GXMMQp"
+							id="footer-trigger-menu_GXMMQp"
+						>
+							<span class="footer__menu-title">Stay in the loop</span>
+							<span class="footer__menu-header-icon"><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M0.343262 31.3137L11.657 20L50.0001 58.3431L88.3433 20L99.657 31.3137L50.0001 80.9706L0.343262 31.3137Z"
+	/>
+</svg>
+</span>
+						</button>
+					</h3>
+
+					<ul
+						class="footer__menu-list"
+						id="footer-menu-menu_GXMMQp"
+						aria-labelledby="footer-trigger-menu_GXMMQp"
+						hidden
+					>
+						
+							<li class="footer__menu-item">
+								<a class="footer__menu-item-link" href="/pages/join-our-list">Join our list</a>
+							</li>
+						
+					</ul>
+				</nav>
+			
+		
+	</div>
+
+	
+		<div class="footer__localization">
+			<button type="button" class="localization-trigger" data-a11y-dialog-show="localization-modal">
+		<span class="localization-trigger__icon"><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M51.939 91.4758C51.4613 91.4919 50.9816 91.5 50.5 91.5C50.275 91.5 50.0504 91.4982 49.8262 91.4947C43.6748 84.9588 39.0998 77.176 36.3514 68.75H65.6132C62.8053 77.184 58.1632 84.9624 51.939 91.4758ZM63.0667 89.5877C73.835 86.2155 82.7377 78.6242 87.8386 68.75H73.3125C71.1194 76.2156 67.6599 83.2698 63.0667 89.5877ZM75.0627 61.25H90.8343C91.9186 57.5213 92.5 53.5786 92.5 49.5C92.5 45.7842 92.0175 42.1811 91.1116 38.75H75.2297C75.7925 42.283 76.0802 45.8767 76.0802 49.5C76.0802 53.4658 75.7355 57.396 75.0627 61.25ZM67.7771 38.75H34.367C33.694 42.3854 33.3485 46.1001 33.3485 49.851C33.3485 53.7045 33.7131 57.5197 34.423 61.25H67.5894C68.3438 57.4082 68.7317 53.4744 68.7317 49.5C68.7317 45.8697 68.4081 42.2733 67.7771 38.75ZM65.9365 31.25H36.255C39.0906 22.4029 43.9358 14.2545 50.5028 7.5C50.9835 7.50003 51.4623 7.50814 51.939 7.52419C58.4084 14.2942 63.1687 22.4309 65.9365 31.25ZM73.598 31.25H88.3384C83.3321 20.8892 74.1957 12.8975 63.0667 9.41232C67.8645 16.0116 71.4253 23.4142 73.598 31.25ZM28.6656 68.75C30.8487 76.3313 34.3353 83.4949 38.9872 89.9025C27.7467 86.7056 18.4278 78.9445 13.1614 68.75H28.6656ZM26 49.851C26 46.1076 26.3071 42.3958 26.9074 38.75H9.88836C8.98253 42.1811 8.5 45.7842 8.5 49.5C8.5 53.5786 9.08135 57.5213 10.1657 61.25H26.9571C26.3241 57.5085 26 53.6965 26 49.851ZM28.5806 31.25C30.8566 23.2084 34.5972 15.6304 39.6381 8.91806C27.7397 12.0946 17.9213 20.3648 12.6616 31.25H28.5806ZM100 49.5C100 76.8381 77.8381 99 50.5 99C23.1619 99 1 76.8381 1 49.5C1 22.1619 23.1619 0 50.5 0C77.8381 0 100 22.1619 100 49.5Z"
+	/>
+</svg>
+</span>
+		<span class="localization-trigger__label">AT / EUR</span>
+	</button>
+		</div>
+	
+
+	<div class="footer__payment-types"><svg class="icon icon--full-color" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pi-american_express" viewBox="0 0 38 24" width="38" height="24"><title id="pi-american_express">American Express</title><path fill="#000" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3Z" opacity=".07"/><path fill="#006FCF" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32Z"/><path fill="#FFF" d="M22.012 19.936v-8.421L37 11.528v2.326l-1.732 1.852L37 17.573v2.375h-2.766l-1.47-1.622-1.46 1.628-9.292-.02Z"/><path fill="#006FCF" d="M23.013 19.012v-6.57h5.572v1.513h-3.768v1.028h3.678v1.488h-3.678v1.01h3.768v1.531h-5.572Z"/><path fill="#006FCF" d="m28.557 19.012 3.083-3.289-3.083-3.282h2.386l1.884 2.083 1.89-2.082H37v.051l-3.017 3.23L37 18.92v.093h-2.307l-1.917-2.103-1.898 2.104h-2.321Z"/><path fill="#FFF" d="M22.71 4.04h3.614l1.269 2.881V4.04h4.46l.77 2.159.771-2.159H37v8.421H19l3.71-8.421Z"/><path fill="#006FCF" d="m23.395 4.955-2.916 6.566h2l.55-1.315h2.98l.55 1.315h2.05l-2.904-6.566h-2.31Zm.25 3.777.875-2.09.873 2.09h-1.748Z"/><path fill="#006FCF" d="M28.581 11.52V4.953l2.811.01L32.84 9l1.456-4.046H37v6.565l-1.74.016v-4.51l-1.644 4.494h-1.59L30.35 7.01v4.51h-1.768Z"/></svg>
+
+<svg class="icon icon--full-color" version="1.1" xmlns="http://www.w3.org/2000/svg" role="img" x="0" y="0" width="38" height="24" viewBox="0 0 165.521 105.965" xml:space="preserve" aria-labelledby="pi-apple_pay"><title id="pi-apple_pay">Apple Pay</title><path fill="#000" d="M150.698 0H14.823c-.566 0-1.133 0-1.698.003-.477.004-.953.009-1.43.022-1.039.028-2.087.09-3.113.274a10.51 10.51 0 0 0-2.958.975 9.932 9.932 0 0 0-4.35 4.35 10.463 10.463 0 0 0-.975 2.96C.113 9.611.052 10.658.024 11.696a70.22 70.22 0 0 0-.022 1.43C0 13.69 0 14.256 0 14.823v76.318c0 .567 0 1.132.002 1.699.003.476.009.953.022 1.43.028 1.036.09 2.084.275 3.11a10.46 10.46 0 0 0 .974 2.96 9.897 9.897 0 0 0 1.83 2.52 9.874 9.874 0 0 0 2.52 1.83c.947.483 1.917.79 2.96.977 1.025.183 2.073.245 3.112.273.477.011.953.017 1.43.02.565.004 1.132.004 1.698.004h135.875c.565 0 1.132 0 1.697-.004.476-.002.952-.009 1.431-.02 1.037-.028 2.085-.09 3.113-.273a10.478 10.478 0 0 0 2.958-.977 9.955 9.955 0 0 0 4.35-4.35c.483-.947.789-1.917.974-2.96.186-1.026.246-2.074.274-3.11.013-.477.02-.954.022-1.43.004-.567.004-1.132.004-1.699V14.824c0-.567 0-1.133-.004-1.699a63.067 63.067 0 0 0-.022-1.429c-.028-1.038-.088-2.085-.274-3.112a10.4 10.4 0 0 0-.974-2.96 9.94 9.94 0 0 0-4.35-4.35A10.52 10.52 0 0 0 156.939.3c-1.028-.185-2.076-.246-3.113-.274a71.417 71.417 0 0 0-1.431-.022C151.83 0 151.263 0 150.698 0z" /><path fill="#FFF" d="M150.698 3.532l1.672.003c.452.003.905.008 1.36.02.793.022 1.719.065 2.583.22.75.135 1.38.34 1.984.648a6.392 6.392 0 0 1 2.804 2.807c.306.6.51 1.226.645 1.983.154.854.197 1.783.218 2.58.013.45.019.9.02 1.36.005.557.005 1.113.005 1.671v76.318c0 .558 0 1.114-.004 1.682-.002.45-.008.9-.02 1.35-.022.796-.065 1.725-.221 2.589a6.855 6.855 0 0 1-.645 1.975 6.397 6.397 0 0 1-2.808 2.807c-.6.306-1.228.511-1.971.645-.881.157-1.847.2-2.574.22-.457.01-.912.017-1.379.019-.555.004-1.113.004-1.669.004H14.801c-.55 0-1.1 0-1.66-.004a74.993 74.993 0 0 1-1.35-.018c-.744-.02-1.71-.064-2.584-.22a6.938 6.938 0 0 1-1.986-.65 6.337 6.337 0 0 1-1.622-1.18 6.355 6.355 0 0 1-1.178-1.623 6.935 6.935 0 0 1-.646-1.985c-.156-.863-.2-1.788-.22-2.578a66.088 66.088 0 0 1-.02-1.355l-.003-1.327V14.474l.002-1.325a66.7 66.7 0 0 1 .02-1.357c.022-.792.065-1.717.222-2.587a6.924 6.924 0 0 1 .646-1.981c.304-.598.7-1.144 1.18-1.623a6.386 6.386 0 0 1 1.624-1.18 6.96 6.96 0 0 1 1.98-.646c.865-.155 1.792-.198 2.586-.22.452-.012.905-.017 1.354-.02l1.677-.003h135.875" /><g><g><path fill="#000" d="M43.508 35.77c1.404-1.755 2.356-4.112 2.105-6.52-2.054.102-4.56 1.355-6.012 3.112-1.303 1.504-2.456 3.959-2.156 6.266 2.306.2 4.61-1.152 6.063-2.858" /><path fill="#000" d="M45.587 39.079c-3.35-.2-6.196 1.9-7.795 1.9-1.6 0-4.049-1.8-6.698-1.751-3.447.05-6.645 2-8.395 5.1-3.598 6.2-.95 15.4 2.55 20.45 1.699 2.5 3.747 5.25 6.445 5.151 2.55-.1 3.549-1.65 6.647-1.65 3.097 0 3.997 1.65 6.696 1.6 2.798-.05 4.548-2.5 6.247-5 1.95-2.85 2.747-5.6 2.797-5.75-.05-.05-5.396-2.101-5.446-8.251-.05-5.15 4.198-7.6 4.398-7.751-2.399-3.548-6.147-3.948-7.447-4.048" /></g><g><path fill="#000" d="M78.973 32.11c7.278 0 12.347 5.017 12.347 12.321 0 7.33-5.173 12.373-12.529 12.373h-8.058V69.62h-5.822V32.11h14.062zm-8.24 19.807h6.68c5.07 0 7.954-2.729 7.954-7.46 0-4.73-2.885-7.434-7.928-7.434h-6.706v14.894z" /><path fill="#000" d="M92.764 61.847c0-4.809 3.665-7.564 10.423-7.98l7.252-.442v-2.08c0-3.04-2.001-4.704-5.562-4.704-2.938 0-5.07 1.507-5.51 3.82h-5.252c.157-4.86 4.731-8.395 10.918-8.395 6.654 0 10.995 3.483 10.995 8.89v18.663h-5.38v-4.497h-.13c-1.534 2.937-4.914 4.782-8.579 4.782-5.406 0-9.175-3.222-9.175-8.057zm17.675-2.417v-2.106l-6.472.416c-3.64.234-5.536 1.585-5.536 3.95 0 2.288 1.975 3.77 5.068 3.77 3.95 0 6.94-2.522 6.94-6.03z" /><path fill="#000" d="M120.975 79.652v-4.496c.364.051 1.247.103 1.715.103 2.573 0 4.029-1.09 4.913-3.899l.52-1.663-9.852-27.293h6.082l6.863 22.146h.13l6.862-22.146h5.927l-10.216 28.67c-2.34 6.577-5.017 8.735-10.683 8.735-.442 0-1.872-.052-2.261-.157z" /></g></g></svg>
+
+<svg class="icon icon--full-color" xmlns="http://www.w3.org/2000/svg" aria-labelledby="pi-bancontact" role="img" viewBox="0 0 38 24" width="38" height="24"><title id="pi-bancontact">Bancontact</title><path fill="#000" opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"/><path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"/><path d="M4.703 3.077h28.594c.139 0 .276.023.405.068.128.045.244.11.343.194a.9.9 0 0 1 .229.29c.053.107.08.223.08.34V20.03a.829.829 0 0 1-.31.631 1.164 1.164 0 0 1-.747.262H4.703a1.23 1.23 0 0 1-.405-.068 1.09 1.09 0 0 1-.343-.194.9.9 0 0 1-.229-.29.773.773 0 0 1-.08-.34V3.97c0-.118.027-.234.08-.342a.899.899 0 0 1 .23-.29c.098-.082.214-.148.342-.193a1.23 1.23 0 0 1 .405-.068Z" fill="#fff"/><path d="M6.38 18.562v-3.077h1.125c.818 0 1.344.259 1.344.795 0 .304-.167.515-.401.638.338.132.536.387.536.734 0 .62-.536.91-1.37.91H6.38Zm.724-1.798h.537c.328 0 .468-.136.468-.387 0-.268-.255-.356-.599-.356h-.406v.743Zm0 1.262h.448c.438 0 .693-.093.693-.383 0-.286-.219-.404-.63-.404h-.51v.787Zm3.284.589c-.713 0-1.073-.295-1.073-.69 0-.436.422-.69 1.047-.695.156.002.31.014.464.035v-.105c0-.269-.183-.396-.531-.396a2.128 2.128 0 0 0-.688.105l-.13-.474a3.01 3.01 0 0 1 .9-.132c.767 0 1.147.343 1.147.936v1.222c-.214.093-.615.194-1.136.194Zm.438-.497v-.47a2.06 2.06 0 0 0-.37-.036c-.24 0-.427.08-.427.286 0 .185.156.281.432.281a.947.947 0 0 0 .365-.061Zm1.204.444v-2.106a3.699 3.699 0 0 1 1.177-.193c.76 0 1.198.316 1.198.9v1.399h-.719v-1.354c0-.303-.167-.444-.484-.444a1.267 1.267 0 0 0-.459.079v1.719h-.713Zm4.886-2.167-.135.479a1.834 1.834 0 0 0-.588-.11c-.422 0-.652.25-.652.664 0 .453.24.685.688.685.2-.004.397-.043.578-.114l.115.488a2.035 2.035 0 0 1-.75.128c-.865 0-1.365-.453-1.365-1.17 0-.712.495-1.182 1.323-1.182.27-.001.538.043.787.132Zm1.553 2.22c-.802 0-1.302-.47-1.302-1.178 0-.704.5-1.174 1.302-1.174.807 0 1.297.47 1.297 1.173 0 .708-.49 1.179-1.297 1.179Zm0-.502c.37 0 .563-.259.563-.677 0-.413-.193-.672-.563-.672-.364 0-.568.26-.568.672 0 .418.204.677.568.677Zm1.713.449v-2.106a3.699 3.699 0 0 1 1.177-.193c.76 0 1.198.316 1.198.9v1.399h-.719v-1.354c0-.303-.166-.444-.484-.444a1.268 1.268 0 0 0-.459.079v1.719h-.713Zm3.996.053c-.62 0-.938-.286-.938-.866v-.95h-.354v-.484h.355v-.488l.718-.03v.518h.578v.484h-.578v.94c0 .256.125.374.36.374.093 0 .185-.008.276-.026l.036.488c-.149.028-.3.041-.453.04Zm1.814 0c-.713 0-1.073-.295-1.073-.69 0-.436.422-.69 1.047-.695.155.002.31.014.464.035v-.105c0-.269-.183-.396-.532-.396a2.128 2.128 0 0 0-.687.105l-.13-.474a3.01 3.01 0 0 1 .9-.132c.766 0 1.146.343 1.146.936v1.222c-.213.093-.614.194-1.135.194Zm.438-.497v-.47a2.06 2.06 0 0 0-.37-.036c-.24 0-.427.08-.427.286 0 .185.156.281.432.281a.946.946 0 0 0 .365-.061Zm3.157-1.723-.136.479a1.834 1.834 0 0 0-.588-.11c-.422 0-.651.25-.651.664 0 .453.24.685.687.685.2-.004.397-.043.578-.114l.115.488a2.035 2.035 0 0 1-.75.128c-.865 0-1.365-.453-1.365-1.17 0-.712.495-1.182 1.323-1.182.27-.001.538.043.787.132Zm1.58 2.22c-.62 0-.938-.286-.938-.866v-.95h-.354v-.484h.354v-.488l.72-.03v.518h.577v.484h-.578v.94c0 .256.125.374.36.374.092 0 .185-.008.276-.026l.036.488c-.149.028-.3.041-.453.04Z" fill="#1E3764"/><path d="M11.394 13.946c3.803 0 5.705-2.14 7.606-4.28H6.38v4.28h5.014Z" fill="url(#pi-bancontact-a)"/><path d="M26.607 5.385c-3.804 0-5.705 2.14-7.607 4.28h12.62v-4.28h-5.013Z" fill="url(#pi-bancontact-b)"/><defs><linearGradient id="pi-bancontact-a" x1="8.933" y1="12.003" x2="17.734" y2="8.13" gradientUnits="userSpaceOnUse"><stop stop-color="#005AB9"/><stop offset="1" stop-color="#1E3764"/></linearGradient><linearGradient id="pi-bancontact-b" x1="19.764" y1="10.037" x2="29.171" y2="6.235" gradientUnits="userSpaceOnUse"><stop stop-color="#FBA900"/><stop offset="1" stop-color="#FFD800"/></linearGradient></defs></svg>
+<svg class="icon icon--full-color" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 38 24" width="38" height="24" aria-labelledby="pi-google_pay"><title id="pi-google_pay">Google Pay</title><path d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z" fill="#000" opacity=".07"/><path d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32" fill="#FFF"/><path d="M18.093 11.976v3.2h-1.018v-7.9h2.691a2.447 2.447 0 0 1 1.747.692 2.28 2.28 0 0 1 .11 3.224l-.11.116c-.47.447-1.098.69-1.747.674l-1.673-.006zm0-3.732v2.788h1.698c.377.012.741-.135 1.005-.404a1.391 1.391 0 0 0-1.005-2.354l-1.698-.03zm6.484 1.348c.65-.03 1.286.188 1.778.613.445.43.682 1.03.65 1.649v3.334h-.969v-.766h-.049a1.93 1.93 0 0 1-1.673.931 2.17 2.17 0 0 1-1.496-.533 1.667 1.667 0 0 1-.613-1.324 1.606 1.606 0 0 1 .613-1.336 2.746 2.746 0 0 1 1.698-.515c.517-.02 1.03.093 1.49.331v-.208a1.134 1.134 0 0 0-.417-.901 1.416 1.416 0 0 0-.98-.368 1.545 1.545 0 0 0-1.319.717l-.895-.564a2.488 2.488 0 0 1 2.182-1.06zM23.29 13.52a.79.79 0 0 0 .337.662c.223.176.5.269.785.263.429-.001.84-.17 1.146-.472.305-.286.478-.685.478-1.103a2.047 2.047 0 0 0-1.324-.374 1.716 1.716 0 0 0-1.03.294.883.883 0 0 0-.392.73zm9.286-3.75l-3.39 7.79h-1.048l1.281-2.728-2.224-5.062h1.103l1.612 3.885 1.569-3.885h1.097z" fill="#5F6368"/><path d="M13.986 11.284c0-.308-.024-.616-.073-.92h-4.29v1.747h2.451a2.096 2.096 0 0 1-.9 1.373v1.134h1.464a4.433 4.433 0 0 0 1.348-3.334z" fill="#4285F4"/><path d="M9.629 15.721a4.352 4.352 0 0 0 3.01-1.097l-1.466-1.14a2.752 2.752 0 0 1-4.094-1.44H5.577v1.17a4.53 4.53 0 0 0 4.052 2.507z" fill="#34A853"/><path d="M7.079 12.05a2.709 2.709 0 0 1 0-1.735v-1.17H5.577a4.505 4.505 0 0 0 0 4.075l1.502-1.17z" fill="#FBBC04"/><path d="M9.629 8.44a2.452 2.452 0 0 1 1.74.68l1.3-1.293a4.37 4.37 0 0 0-3.065-1.183 4.53 4.53 0 0 0-4.027 2.5l1.502 1.171a2.715 2.715 0 0 1 2.55-1.875z" fill="#EA4335"/></svg>
+
+<svg class="icon icon--full-color" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24" role="img" aria-labelledby="pi-spidealwero"><title id="pi-spidealwero">iDEAL Wero</title><path opacity="0.07" d="M35 0H3C1.3 0 0 1.3 0 3V21C0 22.7 1.4 24 3 24H35C36.7 24 38 22.7 38 21V3C38 1.3 36.6 0 35 0Z" fill="black"/><path d="M35 1C36.1 1 37 1.9 37 3V21C37 22.1 36.1 23 35 23H3C1.9 23 1 22.1 1 21V3C1 1.9 1.9 1 3 1H35Z" fill="#FFF48D"/><path d="M3.45001 7.43572V17.0022C3.45001 17.4602 3.82664 17.8347 4.28673 17.8347H10.0301C14.3722 17.8347 16.2539 15.4157 16.2539 12.2063C16.2539 8.99693 14.3715 6.60321 10.0294 6.60321H4.28603C3.82594 6.60321 3.44931 6.97773 3.44931 7.43572H3.45001Z" fill="white"/><path d="M7.29413 8.95133V16.0203H10.385C13.1918 16.0203 14.4087 14.4422 14.4087 12.2112C14.4087 9.98022 13.1911 8.41901 10.385 8.41901H7.82926C7.53259 8.41901 7.29413 8.66027 7.29413 8.95204V8.95133Z" fill="#CC0066"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.03507 17.073H10.0294C13.539 17.073 15.4754 15.3456 15.4754 12.2105C15.4754 10.4038 14.7685 7.36908 10.0294 7.36908H5.03507C4.59182 7.36908 4.23203 7.72677 4.23203 8.16862V16.2742C4.23203 16.7153 4.59182 17.0737 5.03507 17.0737V17.073ZM4.49924 8.16862C4.49924 7.87335 4.7377 7.63559 5.03437 7.63559H10.0287C11.9609 7.63559 15.2068 8.23104 15.2068 12.2105C15.2068 15.1744 13.3665 16.8065 10.0287 16.8065H5.03507C4.7384 16.8065 4.49994 16.5694 4.49994 16.2735V8.16862H4.49924Z" fill="#232323"/><path fill-rule="evenodd" clip-rule="evenodd" d="M8.81464 11.1831C8.72066 11.1494 8.62247 11.1326 8.51586 11.1326V11.1284H7.8082V12.8355H8.52428C8.65122 12.8355 8.76134 12.8102 8.85602 12.7681C8.95 12.7218 9.02785 12.6629 9.08957 12.5872C9.15129 12.5114 9.19618 12.4188 9.22844 12.3136C9.25719 12.2084 9.27332 12.0948 9.27332 11.9686C9.27332 11.8255 9.25299 11.7035 9.21581 11.5983C9.17514 11.4973 9.12183 11.4089 9.05661 11.3374C8.98717 11.27 8.90932 11.2153 8.81534 11.1817L8.81464 11.1831ZM8.64702 12.4995C8.59371 12.5163 8.54462 12.5248 8.49132 12.5248V12.529H8.16799V11.4524H8.4296C8.51937 11.4524 8.59301 11.465 8.65473 11.4903C8.71645 11.5155 8.76554 11.5576 8.80201 11.6039C8.83849 11.6502 8.86724 11.7133 8.88407 11.7806C8.9002 11.8479 8.90862 11.9279 8.90862 12.0121C8.90862 12.1088 8.896 12.1846 8.87215 12.2519C8.85108 12.3106 8.81921 12.3649 8.77817 12.4118C8.74305 12.4524 8.69779 12.4829 8.64702 12.5002V12.4995Z" fill="white"/><path d="M10.7504 11.1333V11.4489H9.87441V11.815H10.6803V12.1053H9.87441V12.5219H10.7707V12.8376H9.51041V11.1305H10.7504V11.1347V11.1333Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12.6244 12.8404L12.0023 11.1333H11.6222L10.9958 12.8404H11.3641L11.4952 12.4616H12.1173L12.2443 12.8404H12.6251H12.6244ZM11.8136 11.5534L12.0226 12.1797H11.5934L11.8101 11.5534H11.8143H11.8136Z" fill="white"/><path d="M13.2178 11.1325V12.5247H14.0278V12.8403H12.8538V11.1332H13.2178V11.1325Z" fill="white"/><path d="M5.85774 12.8656C6.30099 12.8656 6.66009 12.5065 6.66009 12.0625C6.66009 11.6186 6.30099 11.2595 5.85774 11.2595C5.41448 11.2595 5.05539 11.6186 5.05539 12.0625C5.05539 12.5065 5.41448 12.8656 5.85774 12.8656ZM6.33536 16.0771C5.71396 16.0771 5.216 15.5406 5.216 14.8813V13.9478C5.216 13.6181 5.46498 13.3474 5.77778 13.3474C6.09059 13.3474 6.33957 13.6139 6.33957 13.9478V16.0771H6.33536Z" fill="#232323"/><path d="M31.45 12.2209C31.45 11.1773 32.1926 10.2264 33.4749 10.2264C34.7572 10.2264 35.5053 11.178 35.5053 12.2209C35.5053 13.2638 34.7627 14.2154 33.4749 14.2154C32.1926 14.2154 31.45 13.2638 31.45 12.2209ZM34.3782 12.2209C34.3782 11.7178 34.0467 11.2537 33.4749 11.2537C32.9032 11.2537 32.5717 11.7186 32.5717 12.2209C32.5717 12.7232 32.9086 13.1889 33.4749 13.1889C34.0412 13.1889 34.3782 12.724 34.3782 12.2209ZM30.6615 12.9619C31.0889 12.7185 31.3455 12.2537 31.3455 11.7404C31.3455 10.9784 30.7948 10.3294 29.94 10.3294H28.1452V14.1132H29.2567V13.146H29.4649L30.1006 14.1132H31.4095L30.6615 12.9619ZM29.7161 12.2747H29.2567V11.2046H29.7216C30.0211 11.2046 30.213 11.4479 30.213 11.7396C30.213 12.0314 30.0148 12.2747 29.7161 12.2747ZM23.0713 10.3247L22.4044 12.5797L21.7539 10.3247H20.8686L20.2126 12.5797L19.5511 10.3247H18.378L19.722 14.1015H20.6868L21.3108 12.0454L21.9294 14.1015H22.8997L24.2436 10.3247H23.0705H23.0713ZM25.9261 13.1795H25.9237C25.508 13.1795 25.2163 12.9284 25.0915 12.5961H27.9159C27.9385 12.4713 27.9502 12.3434 27.9502 12.2139C27.9502 11.1734 27.21 10.2241 25.9261 10.2233V11.2482C26.3442 11.249 26.6328 11.5002 26.7568 11.8317H23.9363C23.9137 11.9565 23.902 12.0844 23.902 12.2139C23.902 13.2552 24.643 14.2052 25.923 14.2052H25.9253V13.1795H25.9261Z" fill="#1D1C1C"/><path d="M25.9237 14.2044C25.9674 14.2044 26.0103 14.2029 26.0524 14.2013C26.3122 14.188 26.5485 14.135 26.7591 14.05C26.9697 13.965 27.1546 13.8472 27.3114 13.7052C27.4673 13.5644 27.5983 13.3982 27.699 13.2138C27.7903 13.0469 27.8574 12.8667 27.8995 12.6787H26.7225C26.6983 12.7287 26.6702 12.777 26.6382 12.8215C26.5945 12.8831 26.5431 12.9385 26.4846 12.9861C26.4261 13.0344 26.3605 13.075 26.2888 13.1062C26.217 13.1374 26.1382 13.1592 26.0532 13.1709C26.0119 13.1764 25.969 13.1795 25.9245 13.1795C25.6601 13.1795 25.4456 13.0773 25.2919 12.9174L24.5268 13.6912C24.8668 14.0055 25.3387 14.2036 25.9237 14.2036V14.2044Z" fill="#1D1C1C"/><path d="M25.9237 10.2225C24.838 10.2225 24.1399 10.9058 23.9535 11.7482H25.1266C25.267 11.4581 25.5431 11.2475 25.9237 11.2475C26.2272 11.2475 26.4627 11.3785 26.6164 11.5766L27.3886 10.7958C27.0438 10.4464 26.5477 10.2225 25.9245 10.2225H25.9237Z" fill="#1D1C1C"/><path d="M17.3927 16.431C17.3069 16.431 17.2367 16.3608 17.2367 16.275V8.16296C17.2367 8.07716 17.3069 8.00696 17.3927 8.00696C17.4785 8.00696 17.5487 8.07716 17.5487 8.16296V16.275C17.5487 16.3608 17.4785 16.431 17.3927 16.431Z" fill="#1D1C1C"/></svg>
+<svg class="icon icon--full-color" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" viewBox="0 0 38 24" aria-labelledby="pi-klarna" fill="none"><title id="pi-klarna">Klarna</title><rect width="38" height="24" rx="2" fill="#FFA8CD"/><rect x=".5" y=".5" width="37" height="23" rx="1.5" stroke="#000" stroke-opacity=".07"/><path d="M30.62 14.755c-.662 0-1.179-.554-1.179-1.226 0-.673.517-1.226 1.18-1.226.663 0 1.18.553 1.18 1.226 0 .672-.517 1.226-1.18 1.226zm-.33 1.295c.565 0 1.286-.217 1.686-1.068l.04.02c-.176.465-.176.742-.176.81v.11h1.423v-4.786H31.84v.109c0 .069 0 .346.175.81l-.039.02c-.4-.85-1.121-1.068-1.687-1.068-1.355 0-2.31 1.088-2.31 2.522 0 1.433.955 2.521 2.31 2.521zm-4.788-5.043c-.643 0-1.15.228-1.56 1.068l-.039-.02c.175-.464.175-.741.175-.81v-.11h-1.423v4.787h1.462V13.4c0-.662.38-1.078.995-1.078.614 0 .917.356.917 1.068v2.532h1.462v-3.046c0-1.088-.838-1.869-1.989-1.869zm-4.963 1.068l-.039-.02c.176-.464.176-.741.176-.81v-.11h-1.424v4.787h1.463l.01-2.304c0-.673.35-1.078.926-1.078.156 0 .282.02.429.06v-1.464c-.644-.139-1.22.109-1.54.94zm-4.65 2.68c-.664 0-1.18-.554-1.18-1.226 0-.673.516-1.226 1.18-1.226.662 0 1.179.553 1.179 1.226 0 .672-.517 1.226-1.18 1.226zm-.332 1.295c.565 0 1.287-.217 1.687-1.068l.038.02c-.175.465-.175.742-.175.81v.11h1.424v-4.786h-1.424v.109c0 .069 0 .346.175.81l-.038.02c-.4-.85-1.122-1.068-1.687-1.068-1.356 0-2.311 1.088-2.311 2.522 0 1.433.955 2.521 2.31 2.521zm-4.349-.128h1.463V9h-1.463v6.922zM10.136 9H8.644c0 1.236-.751 2.343-1.892 3.134l-.448.317V9h-1.55v6.922h1.55V12.49l2.564 3.43h1.892L8.293 12.64c1.121-.82 1.852-2.096 1.843-3.639z" fill="#0B051D"/></svg>
+<svg class="icon icon--full-color" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" width="38" height="24" role="img" aria-labelledby="pi-maestro"><title id="pi-maestro">Maestro</title><path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"/><path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"/><circle fill="#EB001B" cx="15" cy="12" r="7"/><circle fill="#00A2E5" cx="23" cy="12" r="7"/><path fill="#7375CF" d="M22 12c0-2.4-1.2-4.5-3-5.7-1.8 1.3-3 3.4-3 5.7s1.2 4.5 3 5.7c1.8-1.2 3-3.3 3-5.7z"/></svg>
+<svg class="icon icon--full-color" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-master"><title id="pi-master">Mastercard</title><path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"/><path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"/><circle fill="#EB001B" cx="15" cy="12" r="7"/><circle fill="#F79E1B" cx="23" cy="12" r="7"/><path fill="#FF5F00" d="M22 12c0-2.4-1.2-4.5-3-5.7-1.8 1.3-3 3.4-3 5.7s1.2 4.5 3 5.7c1.8-1.2 3-3.3 3-5.7z"/></svg>
+<svg class="icon icon--full-color" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" width="38" height="24" role="img" aria-labelledby="pi-paypal"><title id="pi-paypal">PayPal</title><path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"/><path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"/><path fill="#003087" d="M23.9 8.3c.2-1 0-1.7-.6-2.3-.6-.7-1.7-1-3.1-1h-4.1c-.3 0-.5.2-.6.5L14 15.6c0 .2.1.4.3.4H17l.4-3.4 1.8-2.2 4.7-2.1z"/><path fill="#3086C8" d="M23.9 8.3l-.2.2c-.5 2.8-2.2 3.8-4.6 3.8H18c-.3 0-.5.2-.6.5l-.6 3.9-.2 1c0 .2.1.4.3.4H19c.3 0 .5-.2.5-.4v-.1l.4-2.4v-.1c0-.2.3-.4.5-.4h.3c2.1 0 3.7-.8 4.1-3.2.2-1 .1-1.8-.4-2.4-.1-.5-.3-.7-.5-.8z"/><path fill="#012169" d="M23.3 8.1c-.1-.1-.2-.1-.3-.1-.1 0-.2 0-.3-.1-.3-.1-.7-.1-1.1-.1h-3c-.1 0-.2 0-.2.1-.2.1-.3.2-.3.4l-.7 4.4v.1c0-.3.3-.5.6-.5h1.3c2.5 0 4.1-1 4.6-3.8v-.2c-.1-.1-.3-.2-.5-.2h-.1z"/></svg>
+<svg class="icon icon--full-color" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 38 24" width="38" height="24" aria-labelledby="pi-shopify_pay"><title id="pi-shopify_pay">Shop Pay</title><path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z" fill="#000"/><path d="M35.889 0C37.05 0 38 .982 38 2.182v19.636c0 1.2-.95 2.182-2.111 2.182H2.11C.95 24 0 23.018 0 21.818V2.182C0 .982.95 0 2.111 0H35.89z" fill="#5A31F4"/><path d="M9.35 11.368c-1.017-.223-1.47-.31-1.47-.705 0-.372.306-.558.92-.558.54 0 .934.238 1.225.704a.079.079 0 00.104.03l1.146-.584a.082.082 0 00.032-.114c-.475-.831-1.353-1.286-2.51-1.286-1.52 0-2.464.755-2.464 1.956 0 1.275 1.15 1.597 2.17 1.82 1.02.222 1.474.31 1.474.705 0 .396-.332.582-.993.582-.612 0-1.065-.282-1.34-.83a.08.08 0 00-.107-.035l-1.143.57a.083.083 0 00-.036.111c.454.92 1.384 1.437 2.627 1.437 1.583 0 2.539-.742 2.539-1.98s-1.155-1.598-2.173-1.82v-.003zM15.49 8.855c-.65 0-1.224.232-1.636.646a.04.04 0 01-.069-.03v-2.64a.08.08 0 00-.08-.081H12.27a.08.08 0 00-.08.082v8.194a.08.08 0 00.08.082h1.433a.08.08 0 00.081-.082v-3.594c0-.695.528-1.227 1.239-1.227.71 0 1.226.521 1.226 1.227v3.594a.08.08 0 00.081.082h1.433a.08.08 0 00.081-.082v-3.594c0-1.51-.981-2.577-2.355-2.577zM20.753 8.62c-.778 0-1.507.24-2.03.588a.082.082 0 00-.027.109l.632 1.088a.08.08 0 00.11.03 2.5 2.5 0 011.318-.366c1.25 0 2.17.891 2.17 2.068 0 1.003-.736 1.745-1.669 1.745-.76 0-1.288-.446-1.288-1.077 0-.361.152-.657.548-.866a.08.08 0 00.032-.113l-.596-1.018a.08.08 0 00-.098-.035c-.799.299-1.359 1.018-1.359 1.984 0 1.46 1.152 2.55 2.76 2.55 1.877 0 3.227-1.313 3.227-3.195 0-2.018-1.57-3.492-3.73-3.492zM28.675 8.843c-.724 0-1.373.27-1.845.746-.026.027-.069.007-.069-.029v-.572a.08.08 0 00-.08-.082h-1.397a.08.08 0 00-.08.082v8.182a.08.08 0 00.08.081h1.433a.08.08 0 00.081-.081v-2.683c0-.036.043-.054.069-.03a2.6 2.6 0 001.808.7c1.682 0 2.993-1.373 2.993-3.157s-1.313-3.157-2.993-3.157zm-.271 4.929c-.956 0-1.681-.768-1.681-1.783s.723-1.783 1.681-1.783c.958 0 1.68.755 1.68 1.783 0 1.027-.713 1.783-1.681 1.783h.001z" fill="#fff"/></svg>
+
+<svg class="icon icon--full-color" viewBox="-36 25 38 24" xmlns="http://www.w3.org/2000/svg" width="38" height="24" role="img" aria-labelledby="pi-unionpay"><title id="pi-unionpay">Union Pay</title><path fill="#005B9A" d="M-36 46.8v.7-.7zM-18.3 25v24h-7.2c-1.3 0-2.1-1-1.8-2.3l4.4-19.4c.3-1.3 1.9-2.3 3.2-2.3h1.4zm12.6 0c-1.3 0-2.9 1-3.2 2.3l-4.5 19.4c-.3 1.3.5 2.3 1.8 2.3h-4.9V25h10.8z"/><path fill="#E9292D" d="M-19.7 25c-1.3 0-2.9 1.1-3.2 2.3l-4.4 19.4c-.3 1.3.5 2.3 1.8 2.3h-8.9c-.8 0-1.5-.6-1.5-1.4v-21c0-.8.7-1.6 1.5-1.6h14.7z"/><path fill="#0E73B9" d="M-5.7 25c-1.3 0-2.9 1.1-3.2 2.3l-4.4 19.4c-.3 1.3.5 2.3 1.8 2.3H-26h.5c-1.3 0-2.1-1-1.8-2.3l4.4-19.4c.3-1.3 1.9-2.3 3.2-2.3h14z"/><path fill="#059DA4" d="M2 26.6v21c0 .8-.6 1.4-1.5 1.4h-12.1c-1.3 0-2.1-1.1-1.8-2.3l4.5-19.4C-8.6 26-7 25-5.7 25H.5c.9 0 1.5.7 1.5 1.6z"/><path fill="#fff" d="M-21.122 38.645h.14c.14 0 .28-.07.28-.14l.42-.63h1.19l-.21.35h1.4l-.21.63h-1.68c-.21.28-.42.42-.7.42h-.84l.21-.63m-.21.91h3.01l-.21.7h-1.19l-.21.7h1.19l-.21.7h-1.19l-.28 1.05c-.07.14 0 .28.28.21h.98l-.21.7h-1.89c-.35 0-.49-.21-.35-.63l.35-1.33h-.77l.21-.7h.77l.21-.7h-.7l.21-.7zm4.83-1.75v.42s.56-.42 1.12-.42h1.96l-.77 2.66c-.07.28-.35.49-.77.49h-2.24l-.49 1.89c0 .07 0 .14.14.14h.42l-.14.56h-1.12c-.42 0-.56-.14-.49-.35l1.47-5.39h.91zm1.68.77h-1.75l-.21.7s.28-.21.77-.21h1.05l.14-.49zm-.63 1.68c.14 0 .21 0 .21-.14l.14-.35h-1.75l-.14.56 1.54-.07zm-1.19.84h.98v.42h.28c.14 0 .21-.07.21-.14l.07-.28h.84l-.14.49c-.07.35-.35.49-.77.56h-.56v.77c0 .14.07.21.35.21h.49l-.14.56h-1.19c-.35 0-.49-.14-.49-.49l.07-2.1zm4.2-2.45l.21-.84h1.19l-.07.28s.56-.28 1.05-.28h1.47l-.21.84h-.21l-1.12 3.85h.21l-.21.77h-.21l-.07.35h-1.19l.07-.35h-2.17l.21-.77h.21l1.12-3.85h-.28m1.26 0l-.28 1.05s.49-.21.91-.28c.07-.35.21-.77.21-.77h-.84zm-.49 1.54l-.28 1.12s.56-.28.98-.28c.14-.42.21-.77.21-.77l-.91-.07zm.21 2.31l.21-.77h-.84l-.21.77h.84zm2.87-4.69h1.12l.07.42c0 .07.07.14.21.14h.21l-.21.7h-.77c-.28 0-.49-.07-.49-.35l-.14-.91zm-.35 1.47h3.57l-.21.77h-1.19l-.21.7h1.12l-.21.77h-1.26l-.28.42h.63l.14.84c0 .07.07.14.21.14h.21l-.21.7h-.7c-.35 0-.56-.07-.56-.35l-.14-.77-.56.84c-.14.21-.35.35-.63.35h-1.05l.21-.7h.35c.14 0 .21-.07.35-.21l.84-1.26h-1.05l.21-.77h1.19l.21-.7h-1.19l.21-.77zm-19.74-5.04c-.14.7-.42 1.19-.91 1.54-.49.35-1.12.56-1.89.56-.7 0-1.26-.21-1.54-.56-.21-.28-.35-.56-.35-.98 0-.14 0-.35.07-.56l.84-3.92h1.19l-.77 3.92v.28c0 .21.07.35.14.49.14.21.35.28.7.28s.7-.07.91-.28c.21-.21.42-.42.49-.77l.77-3.92h1.19l-.84 3.92m1.12-1.54h.84l-.07.49.14-.14c.28-.28.63-.42 1.05-.42.35 0 .63.14.77.35.14.21.21.49.14.91l-.49 2.38h-.91l.42-2.17c.07-.28.07-.49 0-.56-.07-.14-.21-.14-.35-.14-.21 0-.42.07-.56.21-.14.14-.28.35-.28.63l-.42 2.03h-.91l.63-3.57m9.8 0h.84l-.07.49.14-.14c.28-.28.63-.42 1.05-.42.35 0 .63.14.77.35s.21.49.14.91l-.49 2.38h-.91l.42-2.24c.07-.21 0-.42-.07-.49-.07-.14-.21-.14-.35-.14-.21 0-.42.07-.56.21-.14.14-.28.35-.28.63l-.42 2.03h-.91l.7-3.57m-5.81 0h.98l-.77 3.5h-.98l.77-3.5m.35-1.33h.98l-.21.84h-.98l.21-.84zm1.4 4.55c-.21-.21-.35-.56-.35-.98v-.21c0-.07 0-.21.07-.28.14-.56.35-1.05.7-1.33.35-.35.84-.49 1.33-.49.42 0 .77.14 1.05.35.21.21.35.56.35.98v.21c0 .07 0 .21-.07.28-.14.56-.35.98-.7 1.33-.35.35-.84.49-1.33.49-.35 0-.7-.14-1.05-.35m1.89-.7c.14-.21.28-.49.35-.84v-.35c0-.21-.07-.35-.14-.49a.635.635 0 0 0-.49-.21c-.28 0-.49.07-.63.28-.14.21-.28.49-.35.84v.28c0 .21.07.35.14.49.14.14.28.21.49.21.28.07.42 0 .63-.21m6.51-4.69h2.52c.49 0 .84.14 1.12.35.28.21.35.56.35.91v.28c0 .07 0 .21-.07.28-.07.49-.35.98-.7 1.26-.42.35-.84.49-1.4.49h-1.4l-.42 2.03h-1.19l1.19-5.6m.56 2.59h1.12c.28 0 .49-.07.7-.21.14-.14.28-.35.35-.63v-.28c0-.21-.07-.35-.21-.42-.14-.07-.35-.14-.7-.14h-.91l-.35 1.68zm8.68 3.71c-.35.77-.7 1.26-.91 1.47-.21.21-.63.7-1.61.7l.07-.63c.84-.28 1.26-1.4 1.54-1.96l-.28-3.78h1.19l.07 2.38.91-2.31h1.05l-2.03 4.13m-2.94-3.85l-.42.28c-.42-.35-.84-.56-1.54-.21-.98.49-1.89 4.13.91 2.94l.14.21h1.12l.7-3.29-.91.07m-.56 1.82c-.21.56-.56.84-.91.77-.28-.14-.35-.63-.21-1.19.21-.56.56-.84.91-.77.28.14.35.63.21 1.19"/></svg>
+<svg class="icon icon--full-color" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-visa"><title id="pi-visa">Visa</title><path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"/><path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"/><path d="M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9-.1-.2h-2.4c-.1 0-.2 0-.2.2l-.3.9c0 .1-.1.1-.1.1h-2.1l.2-.5L27 8.7c0-.5.3-.7.8-.7h1.5c.1 0 .2 0 .2.2l1.4 6.5c.1.4.2.7.2 1.1.1.1.1.1.1.2zm-13.4-.3l.4-1.8c.1 0 .2.1.2.1.7.3 1.4.5 2.1.4.2 0 .5-.1.7-.2.5-.2.5-.7.1-1.1-.2-.2-.5-.3-.8-.5-.4-.2-.8-.4-1.1-.7-1.2-1-.8-2.4-.1-3.1.6-.4.9-.8 1.7-.8 1.2 0 2.5 0 3.1.2h.1c-.1.6-.2 1.1-.4 1.7-.5-.2-1-.4-1.5-.4-.3 0-.6 0-.9.1-.2 0-.3.1-.4.2-.2.2-.2.5 0 .7l.5.4c.4.2.8.4 1.1.6.5.3 1 .8 1.1 1.4.2.9-.1 1.7-.9 2.3-.5.4-.7.6-1.4.6-1.4 0-2.5.1-3.4-.2-.1.2-.1.2-.2.1zm-3.5.3c.1-.7.1-.7.2-1 .5-2.2 1-4.5 1.4-6.7.1-.2.1-.3.3-.3H18c-.2 1.2-.4 2.1-.7 3.2-.3 1.5-.6 3-1 4.5 0 .2-.1.2-.3.2M5 8.2c0-.1.2-.2.3-.2h3.4c.5 0 .9.3 1 .8l.9 4.4c0 .1 0 .1.1.2 0-.1.1-.1.1-.1l2.1-5.1c-.1-.1 0-.2.1-.2h2.1c0 .1 0 .1-.1.2l-3.1 7.3c-.1.2-.1.3-.2.4-.1.1-.3 0-.5 0H9.7c-.1 0-.2 0-.2-.2L7.9 9.5c-.2-.2-.5-.5-.9-.6-.6-.3-1.7-.5-1.9-.5L5 8.2z" fill="#142688"/></svg>
+</div>
+
+	<div class="footer__legal">© Copyright OMR Beauty 2026<ul class="footer__terms-menu"><li>
+						<a href="/policies/terms-of-service">Terms & Conditions</a>
+					</li><li>
+						<a href="/policies/privacy-policy">Privacy Policy</a>
+					</li><li>
+						<a href="/pages/cookie-policy">Cookie Policy</a>
+					</li></ul></div>
+
+	<a class="footer__panagora" href="https://panagora.agency" target="_blank" rel="noopener" aria-label="Panagora Agency">
+		<svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path d="M46.2743 0.29183C63.1139 -1.0242 75.5763 2.43648 83.2879 4.19118C92.829 6.31633 98.6913 21.2216 96.7339 30.9018C94.7765 40.5819 93.4388 42.4926 88.5699 47.1718C87.8298 47.9068 87.146 48.6954 86.524 49.5309L86.2486 49.8916C83.9961 52.8649 81.7731 56.1696 74.8189 58.4604C65.6418 61.5019 55.6777 62.5938 54.9793 59.7667C54.7531 58.8504 55.7367 58.4702 57.0646 58.0803C57.2676 58.0238 57.4469 57.9042 57.5761 57.7391C57.8573 57.4366 58.1903 57.1858 58.5597 56.9982C59.9073 56.2573 61.3827 56.0233 62.4942 54.8535C63.3007 54.0542 63.7139 52.9819 64.4614 52.1338C65.9675 50.5895 67.7353 49.3192 69.6844 48.3806L70.4517 47.9712C71.4353 47.4253 72.4877 46.8794 73.4025 46.2652C76.9927 43.9451 78.4583 39.1586 81.3501 36.1074C82.1961 35.2203 83.1993 34.4112 84.1239 33.5436C84.224 33.4556 84.3015 33.3453 84.3502 33.2219C84.8843 32.0399 85.2167 30.7782 85.3338 29.4882V29.3323C87.0059 23.9707 88.2256 17.2053 87.1535 17.4587C85.5108 17.8584 82.2354 18.7943 79.1272 19.7009C76.373 20.51 70.373 18.8333 64.3729 18.3751C63.3229 18.1861 62.2449 18.2126 61.2056 18.4531C61.1079 18.4814 61.0125 18.5173 60.9204 18.5603H60.7138C59.6319 18.4336 58.1269 19.7399 58.5105 20.51C58.6428 20.78 58.761 21.0566 58.8646 21.3386L59.1597 22.1672L59.3269 22.5864C59.3877 22.7093 59.4193 22.8443 59.4193 22.9812C59.4193 23.1181 59.3877 23.2531 59.3269 23.376C59.2384 23.532 59.1597 23.688 59.0712 23.8342C58.9847 24.0095 58.9506 24.2057 58.9728 24.3996C59.0711 24.8972 59.0316 25.412 58.8584 25.8891C58.6852 26.3663 58.3848 26.7881 57.9892 27.1096C52.5498 31.7889 53.5433 34.5574 50.917 37.9888C47.4842 42.4536 42.2021 48.2929 40.3824 51.4026C39.1234 53.557 36.5365 58.3922 34.6971 61.2485C32.8578 64.1048 33.9693 69.1544 31.9627 71.4063C29.9561 73.6582 24.379 81.3789 22.2445 87.2572C21.3199 89.7918 18.8412 95.904 17.0707 99.4719C16.9901 99.6268 16.8691 99.7574 16.7203 99.8502C16.5715 99.943 16.4003 99.9946 16.2245 99.9996C16.0488 100.005 15.8749 99.9628 15.721 99.8785C15.5671 99.7943 15.4387 99.6707 15.3494 99.5207C15.2397 99.3063 15.0541 99.1397 14.828 99.0527C14.4838 98.9163 14.2379 98.0194 14.0018 97.1031L13.9034 96.7229C13.7859 96.129 13.6012 95.5502 13.3526 94.9974C13.2307 94.7847 13.1888 94.536 13.2346 94.2955C13.4313 93.4182 13.6379 92.5311 13.8346 91.6829C14.3461 89.4798 15.5461 85.1515 16.7854 80.6478L17.0412 79.7509C17.1199 79.4487 17.2084 79.1465 17.2871 78.8443L17.5428 77.9475C18.9199 73.005 20.2183 68.3258 20.5822 66.5126C20.9462 64.6994 22.2544 60.2152 23.6216 55.5944L23.9855 54.3661C25.4315 49.4919 26.8479 44.764 27.1331 43.3894C27.379 42.1709 28.2544 37.8816 29.2774 33.3584L29.4446 32.6467C30.1233 29.6637 30.861 26.6417 31.5201 24.3898C31.5518 24.2284 31.5418 24.0615 31.491 23.9049C31.4402 23.7483 31.3502 23.607 31.2295 23.4941C31.1087 23.3812 30.9611 23.3005 30.8003 23.2594C30.6396 23.2183 30.471 23.2181 30.3102 23.259L29.7987 23.415L28.8151 23.7367C23.797 25.4295 18.675 26.8036 13.4805 27.8505C11.4444 28.1722 9.4575 26.8757 7.70666 25.9008C7.12853 25.6473 6.47509 25.6194 5.87713 25.8228C5.726 25.8572 5.56881 25.8558 5.41838 25.8185C5.26795 25.7812 5.12855 25.7092 5.01154 25.6084C4.22464 24.9065 3.42792 23.9999 3.69349 23.0836C3.78808 22.822 3.78808 22.536 3.69349 22.2744C3.69349 22.1477 3.69349 22.021 3.76235 21.8845C3.79177 21.743 3.79177 21.5971 3.76235 21.4556C3.27081 20.1891 3.05948 18.8327 3.14266 17.4782C3.20168 17.3515 3.25086 17.215 3.30004 17.0883C3.38288 16.8783 3.38288 16.6451 3.30004 16.4352L3.21152 16.2304C3.21152 16.1135 3.1525 15.977 3.21152 15.8405C3.31972 15.3433 4.26399 14.3295 4.33285 13.7738C4.3997 13.4008 4.58593 13.059 4.86399 12.799C5.66429 12.1818 6.51662 11.6339 7.41157 11.1613C7.48904 11.1136 7.5587 11.0544 7.61813 10.9858L8.60175 10.2547C19.8543 5.77042 32.2774 1.38365 46.2743 0.29183Z"
+	/>
+</svg>
+
+	</a>
+</footer>
+
+
+</div>
+<!-- END sections: footer-group -->
+		</div><cart-drawer
+	id="cart-drawer"
+	role="dialog"
+	class="modal-wrapper"
+	aria-hidden="true"
+	aria-labelledby="cart-drawer-title"
+	data-url="/cart?section_id=cart"
+>
+	<div class="modal-backdrop" data-a11y-dialog-hide></div>
+	<div class="modal cart-drawer" role="document">
+		<div class="cart-drawer-upsell__desktop-target"></div>
+
+		<h2 id="cart-drawer-title" class="modal__title">Cart&nbsp; (<cart-badge count="0">0</cart-badge>)
+		</h2>
+
+		<div class="modal__content">
+			
+		</div>
+
+		<button type="button" class="modal__close" data-a11y-dialog-hide>
+			<svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="84.9565" y="7" width="11.0247" height="110.247" transform="rotate(45 84.9565 7)"/>
+	<rect x="92.9565" y="85" width="11.0247" height="110.247" transform="rotate(135 92.9565 85)"/>
+</svg>
+
+			<span>Close</span>
+		</button>
+	</div>
+</cart-drawer>
+<modal-dialog
+	id="search-modal"
+	role="dialog"
+	class="modal-wrapper"
+	aria-hidden="true"
+	
+		aria-labelledby="search-btn"
+	
+>
+	<div
+		class="modal-backdrop"
+		
+			data-a11y-dialog-hide
+		
+	></div>
+	<div class="modal search-modal" role="document">
+		
+
+		<div class="modal__content">
+			<form id="search-form" class="search-form" action="/search" method="get" role="search">
+	<div class="search-field field">
+		<input
+			id="search-input"
+			type="search"
+			name="q"
+			placeholder="Search"
+			value=""
+			autocomplete="off"
+			aria-labelledby="search-btn"
+			class="field__input"
+			required
+		>
+	</div><p class="search-form__text">Search for products, categories, information, inspiration and more</p><div id="predictive-search-results" class="predictive-search" tabindex="-1"></div>
+</form>
+
+		</div>
+
+		<button type="button" class="modal__close" data-a11y-dialog-hide>
+			<svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="84.9565" y="7" width="11.0247" height="110.247" transform="rotate(45 84.9565 7)"/>
+	<rect x="92.9565" y="85" width="11.0247" height="110.247" transform="rotate(135 92.9565 85)"/>
+</svg>
+
+			<span>Close</span>
+		</button>
+	</div>
+</modal-dialog>
+<modal-dialog
+	id="localization-modal"
+	role="dialog"
+	class="modal-wrapper"
+	aria-hidden="true"
+	
+		aria-labelledby="localization-modal-title"
+	
+>
+	<div
+		class="modal-backdrop"
+		
+			data-a11y-dialog-hide
+		
+	></div>
+	<div class="modal localization-modal" role="document">
+		
+			<h2 id="localization-modal-title" class="modal__title">Select country</h2>
+		
+
+		<div class="modal__content">
+			
+	
+
+	<form method="post" action="/localization" id="localization_form" accept-charset="UTF-8" class="form" enctype="multipart/form-data"><input type="hidden" name="form_type" value="localization" /><input type="hidden" name="utf8" value="✓" /><input type="hidden" name="_method" value="put" /><input type="hidden" name="return_to" value="/" />
+		
+			<div class="field">
+				<label for="localization-country" class="field__label">Country</label>
+				<div class="field__select-wrapper">
+					<select name="country_code" id="localization-country" class="field__input field__input--select"><option
+								value="AR"
+							>
+								Argentina (USD)
+							</option><option
+								value="AU"
+							>
+								Australia (AUD)
+							</option><option
+								value="AT"
+									selected
+								
+							>
+								Austria (EUR)
+							</option><option
+								value="BE"
+							>
+								Belgium (EUR)
+							</option><option
+								value="BW"
+							>
+								Botswana (USD)
+							</option><option
+								value="BR"
+							>
+								Brazil (USD)
+							</option><option
+								value="BG"
+							>
+								Bulgaria (EUR)
+							</option><option
+								value="CA"
+							>
+								Canada (CAD)
+							</option><option
+								value="CV"
+							>
+								Cape Verde (USD)
+							</option><option
+								value="CL"
+							>
+								Chile (USD)
+							</option><option
+								value="CN"
+							>
+								China (USD)
+							</option><option
+								value="CO"
+							>
+								Colombia (USD)
+							</option><option
+								value="CR"
+							>
+								Costa Rica (USD)
+							</option><option
+								value="HR"
+							>
+								Croatia (EUR)
+							</option><option
+								value="CZ"
+							>
+								Czechia (CZK)
+							</option><option
+								value="DK"
+							>
+								Denmark (DKK)
+							</option><option
+								value="EE"
+							>
+								Estonia (EUR)
+							</option><option
+								value="FI"
+							>
+								Finland (EUR)
+							</option><option
+								value="FR"
+							>
+								France (EUR)
+							</option><option
+								value="DE"
+							>
+								Germany (EUR)
+							</option><option
+								value="GH"
+							>
+								Ghana (USD)
+							</option><option
+								value="GR"
+							>
+								Greece (EUR)
+							</option><option
+								value="HU"
+							>
+								Hungary (HUF)
+							</option><option
+								value="IN"
+							>
+								India (USD)
+							</option><option
+								value="ID"
+							>
+								Indonesia (USD)
+							</option><option
+								value="IE"
+							>
+								Ireland (EUR)
+							</option><option
+								value="IT"
+							>
+								Italy (EUR)
+							</option><option
+								value="JP"
+							>
+								Japan (JPY)
+							</option><option
+								value="JO"
+							>
+								Jordan (USD)
+							</option><option
+								value="KZ"
+							>
+								Kazakhstan (USD)
+							</option><option
+								value="KE"
+							>
+								Kenya (USD)
+							</option><option
+								value="KW"
+							>
+								Kuwait (USD)
+							</option><option
+								value="LV"
+							>
+								Latvia (EUR)
+							</option><option
+								value="LT"
+							>
+								Lithuania (EUR)
+							</option><option
+								value="LU"
+							>
+								Luxembourg (EUR)
+							</option><option
+								value="MY"
+							>
+								Malaysia (USD)
+							</option><option
+								value="MV"
+							>
+								Maldives (USD)
+							</option><option
+								value="MU"
+							>
+								Mauritius (USD)
+							</option><option
+								value="MX"
+							>
+								Mexico (USD)
+							</option><option
+								value="MA"
+							>
+								Morocco (USD)
+							</option><option
+								value="NA"
+							>
+								Namibia (USD)
+							</option><option
+								value="NP"
+							>
+								Nepal (USD)
+							</option><option
+								value="NL"
+							>
+								Netherlands (EUR)
+							</option><option
+								value="NZ"
+							>
+								New Zealand (USD)
+							</option><option
+								value="NO"
+							>
+								Norway (NOK)
+							</option><option
+								value="OM"
+							>
+								Oman (USD)
+							</option><option
+								value="PA"
+							>
+								Panama (USD)
+							</option><option
+								value="PE"
+							>
+								Peru (USD)
+							</option><option
+								value="PH"
+							>
+								Philippines (USD)
+							</option><option
+								value="PL"
+							>
+								Poland (PLN)
+							</option><option
+								value="PT"
+							>
+								Portugal (EUR)
+							</option><option
+								value="RO"
+							>
+								Romania (RON)
+							</option><option
+								value="SN"
+							>
+								Senegal (USD)
+							</option><option
+								value="SC"
+							>
+								Seychelles (USD)
+							</option><option
+								value="SG"
+							>
+								Singapore (USD)
+							</option><option
+								value="SK"
+							>
+								Slovakia (EUR)
+							</option><option
+								value="SI"
+							>
+								Slovenia (EUR)
+							</option><option
+								value="ZA"
+							>
+								South Africa (USD)
+							</option><option
+								value="KR"
+							>
+								South Korea (USD)
+							</option><option
+								value="ES"
+							>
+								Spain (EUR)
+							</option><option
+								value="LK"
+							>
+								Sri Lanka (USD)
+							</option><option
+								value="SE"
+							>
+								Sweden (SEK)
+							</option><option
+								value="CH"
+							>
+								Switzerland (CHF)
+							</option><option
+								value="TW"
+							>
+								Taiwan (USD)
+							</option><option
+								value="TH"
+							>
+								Thailand (USD)
+							</option><option
+								value="TN"
+							>
+								Tunisia (USD)
+							</option><option
+								value="TR"
+							>
+								Türkiye (USD)
+							</option><option
+								value="GB"
+							>
+								United Kingdom (GBP)
+							</option><option
+								value="US"
+							>
+								United States (USD)
+							</option><option
+								value="UY"
+							>
+								Uruguay (USD)
+							</option><option
+								value="VN"
+							>
+								Vietnam (USD)
+							</option></select>
+					<div class="field__select-arrow"><svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path fill-rule="evenodd"
+		  clip-rule="evenodd"
+		  d="M0.343262 31.3137L11.657 20L50.0001 58.3431L88.3433 20L99.657 31.3137L50.0001 80.9706L0.343262 31.3137Z"
+	/>
+</svg>
+</div>
+				</div>
+			</div>
+		
+
+		
+
+		<button type="submit" class="btn--submit">Confirm</button>
+	</form>
+
+
+		</div>
+
+		<button type="button" class="modal__close" data-a11y-dialog-hide>
+			<svg width="1em" height="1em" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<rect x="84.9565" y="7" width="11.0247" height="110.247" transform="rotate(45 84.9565 7)"/>
+	<rect x="92.9565" y="85" width="11.0247" height="110.247" transform="rotate(135 92.9565 85)"/>
+</svg>
+
+			<span>Close</span>
+		</button>
+	</div>
+</modal-dialog>
+</body>
+</html>

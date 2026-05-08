@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Good Life · Weight Loss product carousel · sc2 effect</title>
+<style>
+/* --- Self-contained reproduction of Good Life Meds' `products-section` (Weight Loss variant)
+   Original: https://www.goodlifemeds.com/  (homepage, "01 / Weight Loss" block)
+
+   Behavior copied 1:1:
+     - Two-row layout: top row = section title + numbered intro paragraph
+       overlaying a tall portrait image bg (woman, sage tones); bottom row =
+       horizontal product carousel + slider arrows + "Important Safety
+       Information" link under each card + closing CTA strip.
+     - Carousel: peek-style horizontal scroll. Two cards visible @desktop with
+       a partial third on the right edge ("peek"); 1.6 cards on tablet; 1
+       card with snap on mobile. Drag-to-scroll on the desktop too (pointer
+       events), exactly like the original gsap Draggable.
+     - Slider arrow buttons (bottom-right) shift one card width per click.
+       The "prev" button greys out at the start, "next" at the end — controlled
+       by reading scrollLeft against scrollWidth.
+     - Each product-card: white rounded box, top-left product title + Rx
+       superscript, accent-colored small-caps subheading, big product visual
+       (vial / pill / pen) center-bottom, then 2 buttons sharing a row:
+       sage-filled "Get started" + outlined "Learn more" with arrow icon.
+     - Bottom strip: big H3 ("Achieve your weight loss goals") + paragraph +
+       outlined "Explore Weight Loss" CTA, on a beige bg.
+   Differences from original (documented):
+     - GSAP Draggable + ScrollSmoother replaced with native scroll-snap +
+       PointerEvent drag handler (40 lines, no library dependency).
+     - Webflow CMS / Shopify-style product item collection replaced with
+       static product cards in markup. The 7 products are hard-coded.
+     - Webflow's parallax controller (data-parallax="trigger"/"target") on the
+       bg image is dropped. Image is just position: absolute; object-fit:
+       cover. Visually equivalent at viewport scale.
+     - Inter substituted for the original Geist Mono / PP Neue Montreal pair
+       (both commercial, not redistributable).
+     - Hover-spin video: the original swaps the static product still for a
+       muted looping mp4 of the bottle/pen rotating on mouseenter. Implemented
+       here for the 2 cards that have a source mp4 (Tirzepatide, Semaglutide).
+       Wegovy / Wegovy Pill / Ozempic / Zepbound / Mounjaro had empty
+       data-video-src on the original — those stay as static stills. */
+
+* { box-sizing: border-box; }
+:root {
+  --color-text: #0a0a0a;
+  --color-grey-text: #6f6f6f;
+  --color-bg: #efece4;            /* warm beige page bg */
+  --color-card-bg: #ffffff;
+  --color-accent-wl: #6a8360;     /* sage – Weight Loss accent */
+  --color-accent-wl-hover: #4f6446;
+  --color-mid: #cfcfcf;
+  --color-line: #d8d4c7;
+  --font-display: "Inter", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--font-display);
+  --font-mono: ui-monospace, SFMono-Regular, "Menlo", "Consolas", monospace;
+}
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- top: section heading row over image bg ---------------------------- */
+.products-section { padding-top: 64px; }
+
+.product-image-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+/* tall portrait bg image — covers the area behind the heading + carousel
+   top half, then fades into the page bg. The original keeps a parallax
+   target inside this; we just place the image directly. */
+.bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  z-index: 0;
+}
+.bg-image-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(239,236,228,0) 30%, var(--color-bg) 100%);
+  z-index: 1;
+}
+
+.product-section-content {
+  position: relative;
+  z-index: 2;
+  padding: 64px 32px 0;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+@media (min-width: 64rem) {
+  .product-section-content { padding: 96px 64px 0; }
+}
+
+.section-display {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(56px, 9vw, 168px);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  color: #fff;                    /* over the image */
+  text-shadow: 0 1px 24px rgba(0,0,0,0.18);
+}
+
+.featured-flex {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px 24px;
+  align-items: start;
+  max-width: 880px;
+  margin-left: auto;              /* right-align the intro pair */
+}
+.subheading-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: #fff;
+  padding-top: 6px;
+}
+.featured-flex p {
+  margin: 0;
+  font-size: clamp(18px, 1.4vw, 24px);
+  line-height: 1.32;
+  color: #fff;
+  font-weight: 400;
+}
+
+/* --- carousel ----------------------------------------------------------- */
+.gsap-slider {
+  position: relative;
+  z-index: 2;
+  margin-top: 64px;
+  padding-bottom: 32px;
+}
+
+.gsap-slider__viewport {
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+  padding-inline: 32px;
+}
+.gsap-slider__viewport::-webkit-scrollbar { display: none; }
+.gsap-slider__viewport.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+
+@media (min-width: 64rem) {
+  .gsap-slider__viewport { padding-inline: 64px; }
+}
+
+.gsap-slider__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 78%;          /* mobile: ~1 card visible */
+  gap: 16px;
+}
+@media (min-width: 48rem) {
+  .gsap-slider__list { grid-auto-columns: 48%; gap: 20px; }
+}
+@media (min-width: 64rem) {
+  /* desktop: ~2 cards visible + a peek of the third */
+  .gsap-slider__list { grid-auto-columns: calc((100% - 64px) / 2.5); gap: 24px; }
+}
+
+.product-slide { scroll-snap-align: start; display: flex; flex-direction: column; gap: 12px; }
+
+/* the white card --------------------------------------------------------- */
+.product-card {
+  background: var(--color-card-bg);
+  border-radius: 24px;
+  aspect-ratio: 1.05 / 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 24px 16px;
+}
+@media (min-width: 64rem) {
+  .product-card { padding: 32px 32px 20px; aspect-ratio: 1.05 / 1; }
+}
+
+.card-top { display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2; }
+.product-title-div {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  width: max-content;
+}
+.heading-6 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(20px, 2vw, 32px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.rx-text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+.subheading-card {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  /* color is set per-card via inline style for variant */
+}
+
+/* product visual: positioned bottom-center, slightly wider than card */
+.video-card-visual {
+  position: absolute;
+  inset: 30% 0 80px 0;            /* top space for buttons clearance */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.video-card-visual__img,
+.video-card-visual__video {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 24px rgba(0,0,0,0.08));
+  pointer-events: none;
+  transition: transform 0.6s ease, opacity 0.3s ease;
+}
+.video-card-visual__video {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  opacity: 0;
+}
+.product-card:hover .video-card-visual__img { transform: scale(1.04); }
+/* on hover, if the card carries an mp4, fade the still out and the video in */
+.product-card.is-playing .video-card-visual__img { opacity: 0; }
+.product-card.is-playing .video-card-visual__video { opacity: 1; }
+
+/* button row pinned to bottom of card */
+.card-buttons-flex {
+  position: absolute;
+  left: 24px; right: 24px; bottom: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  z-index: 3;
+}
+@media (min-width: 64rem) {
+  .card-buttons-flex { left: 32px; right: 32px; bottom: 20px; }
+}
+
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 56px;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+.primary-button.is-p-l {              /* left = primary "Get started" */
+  color: #fff;                        /* bg color set inline per-card */
+}
+.primary-button.is-p-l:hover { filter: brightness(0.92); }
+.primary-button.is-p-r {              /* right = secondary "Learn more" */
+  background: #f0ebe1;
+  color: var(--color-text);
+}
+.primary-button.is-p-r:hover { background: #e6dfcf; }
+.arrow-icon { width: 12px; height: 8px; }
+
+/* "Important Safety Information" link below each card */
+.safety-link {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  padding-bottom: 2px;
+  width: max-content;
+  margin-left: 2px;
+  transition: border-color 0.2s ease;
+}
+.safety-link:hover { border-bottom-color: #fff; }
+
+/* --- slider arrow controls (bottom-right) ------------------------------ */
+.gsap-slider__controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 24px 32px 0;
+  max-width: 1600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+@media (min-width: 64rem) { .gsap-slider__controls { padding: 24px 64px 0; } }
+
+.gsap-slider__control {
+  width: 56px; height: 56px;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+.gsap-slider__control:hover { background: #fff; color: var(--color-text); }
+.gsap-slider__control[aria-disabled="true"] { opacity: 0.35; pointer-events: none; }
+.slider-arrow { width: 16px; height: 12px; }
+.slider-arrow.is-left { transform: rotate(180deg); }
+
+/* --- closing CTA strip ------------------------------------------------- */
+.products-subsection {
+  background: var(--color-bg);
+  padding: 80px 32px 96px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+@media (min-width: 64rem) { .products-subsection { padding: 120px 64px 144px; } }
+
+.products-subsection-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media (min-width: 64rem) {
+  .products-subsection-grid { grid-template-columns: 1fr 1fr; gap: 64px; }
+}
+
+.h-max-width {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(40px, 4vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+.is-wl-text { color: var(--color-accent-wl); font-style: italic; font-weight: 400; }
+
+.featured-content { display: flex; flex-direction: column; gap: 32px; }
+.p-max-width {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--color-grey-text);
+  max-width: 60ch;
+}
+.cta-flex { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.is-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid #1a1a1a;
+}
+.is-secondary:hover { background: #1a1a1a; color: #fff; }
+
+/* on the heading row, color the safety link dark instead of light */
+@media (max-width: 47.99rem) {
+  .featured-flex { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<section class="products-section">
+  <div class="product-image-wrap">
+    <img class="bg-image" src="assets/bg-weight-loss.webp" alt="" loading="lazy">
+    <div class="bg-image-fade"></div>
+
+    <div class="product-section-content">
+      <h2 class="section-display">Weight Loss</h2>
+      <div class="featured-flex">
+        <div class="subheading-num">01</div>
+        <p>Discover the power of GLP-1 and GIP medications to support your weight loss journey. Start today and move towards a healthier, more fulfilling life.</p>
+      </div>
+    </div>
+
+    <div class="gsap-slider" aria-roledescription="carousel" aria-label="Weight Loss products">
+      <div class="gsap-slider__viewport" data-track>
+        <ul class="gsap-slider__list" role="list">
+
+          <li class="product-slide" role="listitem">
+            <article class="product-card">
+              <div class="card-top">
+                <div class="product-title-div"><div class="heading-6">Compounded Tirzepatide</div><div class="rx-text">Rx</div></div>
+                <div class="subheading-card" style="color:#6a8360">GLP-1 + GIP Injection</div>
+              </div>
+              <div class="video-card-visual">
+                <img class="video-card-visual__img" src="assets/tirzepatide.avif" alt="Compounded Tirzepatide vial" loading="lazy">
+                <video class="video-card-visual__video" src="assets/tirzepatide.mp4" muted loop playsinline preload="metadata"></video>
+              </div>
+              <div class="card-buttons-flex">
+                <a href="#" class="primary-button is-p-l" style="background:#6a8360">Get started</a>
+                <a href="#" class="primary-button is-p-r"><svg class="arrow-icon" viewBox="0 0 8 5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.32517 0.0354578L5.42397 1.6028e-07L8 2.51064L5.4458 5L4.3052 4.96635L5.57012 3.73355C5.878 3.43348 6.15998 3.16461 6.41658 2.92694L0.205982 2.9077L0.244359 2.0731L6.45486 2.09244C6.20397 1.86046 5.92658 1.59621 5.62262 1.29997L4.32517 0.0354578Z" fill="currentColor"/><path d="M0.82393 2.00287e-07L0.82393 2.90815H0L2.64111e-07 1.65186e-07L0.82393 2.00287e-07Z" fill="currentColor"/></svg>Learn more</a>
+              </div>
+            </article>
+            <a href="#" class="safety-link">Important Safety Information</a>
+          </li>
+
+          <li class="product-slide" role="listitem">
+            <article class="product-card">
+              <div class="card-top">
+                <div class="product-title-div"><div class="heading-6">Compounded Semaglutide</div><div class="rx-text">Rx</div></div>
+                <div class="subheading-card" style="color:#6a8360">GLP-1 Injection</div>
+              </div>
+              <div class="video-card-visual">
+                <img class="video-card-visual__img" src="assets/semaglutide.avif" alt="Compounded Semaglutide vial" loading="lazy">
+                <video class="video-card-visual__video" src="assets/semaglutide.mp4" muted loop playsinline preload="metadata"></video>
+              </div>
+              <div class="card-buttons-flex">
+                <a href="#" class="primary-button is-p-l" style="background:#6a8360">Get started</a>
+                <a href="#" class="primary-button is-p-r"><svg class="arrow-icon" viewBox="0 0 8 5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.32517 0.0354578L5.42397 1.6028e-07L8 2.51064L5.4458 5L4.3052 4.96635L5.57012 3.73355C5.878 3.43348 6.15998 3.16461 6.41658 2.92694L0.205982 2.9077L0.244359 2.0731L6.45486 2.09244C6.20397 1.86046 5.92658 1.59621 5.62262 1.29997L4.32517 0.0354578Z" fill="currentColor"/><path d="M0.82393 2.00287e-07L0.82393 2.90815H0L2.64111e-07 1.65186e-07L0.82393 2.00287e-07Z" fill="currentColor"/></svg>Learn more</a>
+              </div>
+            </article>
+            <a href="#" class="safety-link">Important Safety Information</a>
+          </li>
+
+          <li class="product-slide" role="listitem">
+            <article class="product-card">
+              <div class="card-top">
+                <div class="product-title-div"><div class="heading-6">Wegovy® Pill</div><div class="rx-text">Rx</div></div>
+                <div class="subheading-card" style="color:#6a8360">Same formula, pill form</div>
+              </div>
+              <div class="video-card-visual">
+                <img class="video-card-visual__img" src="assets/wegovy-pill.png" alt="Wegovy Pill" loading="lazy">
+              </div>
+              <div class="card-buttons-flex">
+                <a href="#" class="primary-button is-p-l" style="background:#6a8360">Get started</a>
+                <a href="#" class="primary-button is-p-r"><svg class="arrow-icon" viewBox="0 0 8 5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.32517 0.0354578L5.42397 1.6028e-07L8 2.51064L5.4458 5L4.3052 4.96635L5.57012 3.73355C5.878 3.43348 6.15998 3.16461 6.41658 2.92694L0.205982 2.9077L0.244359 2.0731L6.45486 2.09244C6.20397 1.86046 5.92658 1.59621 5.62262 1.29997L4.32517 0.0354578Z" fill="currentColor"/><path d="M0.82393 2.00287e-07L0.82393 2.90815H0L2.64111e-07 1.65186e-07L0.82393 2.00287e-07Z" fill="currentColor"/></svg>Learn more</a>
+              </div>
+            </article>
+            <a href="#" class="safety-link">Important Safety Information</a>
+          </li>
+
+          <li class="product-slide" role="listitem">
+            <article class="product-card">
+              <div class="card-top">
+                <div class="product-title-div"><div class="heading-6">Wegovy®</div><div class="rx-text">Rx</div></div>
+                <div class="subheading-card" style="color:#6a8360">FDA approved for weight loss</div>
+              </div>
+              <div class="video-card-visual">
+                <img class="video-card-visual__img" src="assets/wegovy.avif" alt="Wegovy injection pen" loading="lazy">
+              </div>
+              <div class="card-buttons-flex">
+                <a href="#" class="primary-button is-p-l" style="background:#6a8360">Get started</a>
+                <a href="#" class="primary-button is-p-r"><svg class="arrow-icon" viewBox="0 0 8 5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.32517 0.0354578L5.42397 1.6028e-07L8 2.51064L5.4458 5L4.3052 4.96635L5.57012 3.73355C5.878 3.43348 6.15998 3.16461 6.41658 2.92694L0.205982 2.9077L0.244359 2.0731L6.45486 2.09244C6.20397 1.86046 5.92658 1.59621 5.62262 1.29997L4.32517 0.0354578Z" fill="currentColor"/><path d="M0.82393 2.00287e-07L0.82393 2.90815H0L2.64111e-07 1.65186e-07L0.82393 2.00287e-07Z" fill="currentColor"/></svg>Learn more</a>
+              </div>
+            </article>
+            <a href="#" class="safety-link">Important Safety Information</a>
+          </li>
+
+          <li class="product-slide" role="listitem">
+            <article class="product-card">
+              <div class="card-top">
+                <div class="product-title-div"><div class="heading-6">Ozempic®</div><div class="rx-text">Rx</div></div>
+                <div class="subheading-card" style="color:#6a8360">Empowering weight loss, Elevating health</div>
+              </div>
+              <div class="video-card-visual">
+                <img class="video-card-visual__img" src="assets/ozempic.avif" alt="Ozempic injection pen" loading="lazy">
+              </div>
+              <div class="card-buttons-flex">
+                <a href="#" class="primary-button is-p-l" style="background:#6a8360">Get started</a>
+                <a href="#" class="primary-button is-p-r"><svg class="arrow-icon" viewBox="0 0 8 5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.32517 0.0354578L5.42397 1.6028e-07L8 2.51064L5.4458 5L4.3052 4.96635L5.57012 3.73355C5.878 3.43348 6.15998 3.16461 6.41658 2.92694L0.205982 2.9077L0.244359 2.0731L6.45486 2.09244C6.20397 1.86046 5.92658 1.59621 5.62262 1.29997L4.32517 0.0354578Z" fill="currentColor"/><path d="M0.82393 2.00287e-07L0.82393 2.90815H0L2.64111e-07 1.65186e-07L0.82393 2.00287e-07Z" fill="currentColor"/></svg>Learn more</a>
+              </div>
+            </article>
+            <a href="#" class="safety-link">Important Safety Information</a>
+          </li>
+
+          <li class="product-slide" role="listitem">
+            <article class="product-card">
+              <div class="card-top">
+                <div class="product-title-div"><div class="heading-6">Zepbound®</div><div class="rx-text">Rx</div></div>
+                <div class="subheading-card" style="color:#6a8360">FDA approved for weight loss</div>
+              </div>
+              <div class="video-card-visual">
+                <img class="video-card-visual__img" src="assets/zepbound.webp" alt="Zepbound injection pen" loading="lazy">
+              </div>
+              <div class="card-buttons-flex">
+                <a href="#" class="primary-button is-p-l" style="background:#6a8360">Get started</a>
+                <a href="#" class="primary-button is-p-r"><svg class="arrow-icon" viewBox="0 0 8 5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.32517 0.0354578L5.42397 1.6028e-07L8 2.51064L5.4458 5L4.3052 4.96635L5.57012 3.73355C5.878 3.43348 6.15998 3.16461 6.41658 2.92694L0.205982 2.9077L0.244359 2.0731L6.45486 2.09244C6.20397 1.86046 5.92658 1.59621 5.62262 1.29997L4.32517 0.0354578Z" fill="currentColor"/><path d="M0.82393 2.00287e-07L0.82393 2.90815H0L2.64111e-07 1.65186e-07L0.82393 2.00287e-07Z" fill="currentColor"/></svg>Learn more</a>
+              </div>
+            </article>
+            <a href="#" class="safety-link">Important Safety Information</a>
+          </li>
+
+          <li class="product-slide" role="listitem">
+            <article class="product-card">
+              <div class="card-top">
+                <div class="product-title-div"><div class="heading-6">Mounjaro®</div><div class="rx-text">Rx</div></div>
+                <div class="subheading-card" style="color:#6a8360">FDA approved for weight loss</div>
+              </div>
+              <div class="video-card-visual">
+                <img class="video-card-visual__img" src="assets/mounjaro.avif" alt="Mounjaro injection pen" loading="lazy">
+              </div>
+              <div class="card-buttons-flex">
+                <a href="#" class="primary-button is-p-l" style="background:#6a8360">Get started</a>
+                <a href="#" class="primary-button is-p-r"><svg class="arrow-icon" viewBox="0 0 8 5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.32517 0.0354578L5.42397 1.6028e-07L8 2.51064L5.4458 5L4.3052 4.96635L5.57012 3.73355C5.878 3.43348 6.15998 3.16461 6.41658 2.92694L0.205982 2.9077L0.244359 2.0731L6.45486 2.09244C6.20397 1.86046 5.92658 1.59621 5.62262 1.29997L4.32517 0.0354578Z" fill="currentColor"/><path d="M0.82393 2.00287e-07L0.82393 2.90815H0L2.64111e-07 1.65186e-07L0.82393 2.00287e-07Z" fill="currentColor"/></svg>Learn more</a>
+              </div>
+            </article>
+            <a href="#" class="safety-link">Important Safety Information</a>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="gsap-slider__controls">
+        <button type="button" class="gsap-slider__control" data-nav="prev" aria-label="Previous">
+          <svg class="slider-arrow is-left" viewBox="0 0 12 8" fill="none" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.34208 0.0567323L8.03384 0L12 4.01702L8.06744 8L6.31133 7.94616L8.25885 5.97367C8.73288 5.49356 9.16703 5.06338 9.56209 4.68311L0 4.65232L0.0590857 3.31696L9.62103 3.3479C9.23475 2.97674 8.80767 2.55394 8.33968 2.07995L6.34208 0.0567323Z" fill="currentColor"/></svg>
+        </button>
+        <button type="button" class="gsap-slider__control" data-nav="next" aria-label="Next">
+          <svg class="slider-arrow" viewBox="0 0 12 8" fill="none" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.34208 0.0567323L8.03384 0L12 4.01702L8.06744 8L6.31133 7.94616L8.25885 5.97367C8.73288 5.49356 9.16703 5.06338 9.56209 4.68311L0 4.65232L0.0590857 3.31696L9.62103 3.3479C9.23475 2.97674 8.80767 2.55394 8.33968 2.07995L6.34208 0.0567323Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="products-subsection">
+    <div class="products-subsection-grid">
+      <div>
+        <h3 class="h-max-width">Achieve your <span class="is-wl-text">weight loss</span> goals</h3>
+      </div>
+      <div class="featured-content">
+        <p class="p-max-width">Explore our weight loss medications to learn how they work, or complete a quick medical intake to get personalized guidance from a licensed provider.</p>
+        <div class="cta-flex">
+          <a href="#" class="primary-button is-secondary">
+            <svg class="arrow-icon" viewBox="0 0 8 5" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.32517 0.0354578L5.42397 1.6028e-07L8 2.51064L5.4458 5L4.3052 4.96635L5.57012 3.73355C5.878 3.43348 6.15998 3.16461 6.41658 2.92694L0.205982 2.9077L0.244359 2.0731L6.45486 2.09244C6.20397 1.86046 5.92658 1.59621 5.62262 1.29997L4.32517 0.0354578Z" fill="currentColor"/><path d="M0.82393 2.00287e-07L0.82393 2.90815H0L2.64111e-07 1.65186e-07L0.82393 2.00287e-07Z" fill="currentColor"/></svg>
+            Explore Weight Loss
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* Carousel: drag-to-scroll + arrow navigation, mirrors what the original
+   gsap Draggable + scroll-snap setup does without the GSAP dependency.
+   - Pointer drag: convert pointer-x delta to scrollLeft, suspend scroll-snap
+     while dragging so the user-controlled scroll feels continuous.
+   - Arrow buttons: shift one card width per click. We disable each button
+     when the relevant edge is reached. */
+(function () {
+  const track = document.querySelector('[data-track]');
+  if (!track) return;
+  const prevBtn = document.querySelector('[data-nav="prev"]');
+  const nextBtn = document.querySelector('[data-nav="next"]');
+
+  const cardStep = () => {
+    const card = track.querySelector('.product-slide');
+    if (!card) return 400;
+    const styles = getComputedStyle(track.querySelector('.gsap-slider__list'));
+    const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+    return card.getBoundingClientRect().width + gap;
+  };
+
+  const updateBtns = () => {
+    const max = track.scrollWidth - track.clientWidth;
+    prevBtn.setAttribute('aria-disabled', track.scrollLeft <= 1 ? 'true' : 'false');
+    nextBtn.setAttribute('aria-disabled', track.scrollLeft >= max - 1 ? 'true' : 'false');
+  };
+
+  prevBtn.addEventListener('click', () => track.scrollBy({ left: -cardStep(), behavior: 'smooth' }));
+  nextBtn.addEventListener('click', () => track.scrollBy({ left:  cardStep(), behavior: 'smooth' }));
+  track.addEventListener('scroll', updateBtns, { passive: true });
+  window.addEventListener('resize', updateBtns);
+  updateBtns();
+
+  /* hover-spin video: any product-card containing a <video> swaps the still
+     for the looping mp4 on mouseenter. Original Webflow site uses a Bunny
+     Stream player + data-video-on-hover controller for the same swap. */
+  document.querySelectorAll('.product-card').forEach(card => {
+    const video = card.querySelector('.video-card-visual__video');
+    if (!video || !video.getAttribute('src')) return;
+    card.addEventListener('mouseenter', () => {
+      card.classList.add('is-playing');
+      video.play().catch(() => {});
+    });
+    card.addEventListener('mouseleave', () => {
+      card.classList.remove('is-playing');
+      try { video.pause(); video.currentTime = 0; } catch {}
+    });
+  });
+
+  // pointer drag — desktop "grab and pull" UX (mobile uses native touch scroll)
+  let isDown = false, startX = 0, startScroll = 0, moved = 0;
+  track.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') return; // touch handled natively
+    isDown = true; moved = 0;
+    startX = e.clientX;
+    startScroll = track.scrollLeft;
+    track.classList.add('is-dragging');
+    track.setPointerCapture(e.pointerId);
+  });
+  track.addEventListener('pointermove', (e) => {
+    if (!isDown) return;
+    const dx = e.clientX - startX;
+    moved = Math.max(moved, Math.abs(dx));
+    track.scrollLeft = startScroll - dx;
+  });
+  const release = (e) => {
+    if (!isDown) return;
+    isDown = false;
+    track.classList.remove('is-dragging');
+    try { track.releasePointerCapture(e.pointerId); } catch {}
+  };
+  track.addEventListener('pointerup', release);
+  track.addEventListener('pointercancel', release);
+  // suppress click-through after a real drag (>5px)
+  track.addEventListener('click', (e) => { if (moved > 5) { e.preventDefault(); e.stopPropagation(); } }, true);
+})();
+</script>
+</body>
+</html>

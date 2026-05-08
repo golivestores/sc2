@@ -1,0 +1,11 @@
+{
+  "title":       "OMR 产品 3 列 hover 换图",
+  "subtitle":    "Shopify featured-products with image swap",
+  "description": "OMR Beauty 首页 OMR Hoodie 区：3 列产品卡（黑/米/灰三色），鼠标 hover 时 .card__hover-media 切换显示替代主图（典型 Shopify 二图切换）。卡片底部 apparel 小标签 + 大写产品名 + 价格。顶部 header 含巨号大写标题、底划 View all 链接（hover 时下划线消失）、左右 SVG 箭头滚动按钮。",
+  "tech":        "CSS Grid + scroll-snap + hover image swap",
+  "tags":        ["interaction", "animation"],
+  "previewHref": "",
+  "sourceUrl":   "https://omrbeauty.com/",
+  "localMirror": "../designs/004-omrbeauty/index.html",
+  "order":       8
+}

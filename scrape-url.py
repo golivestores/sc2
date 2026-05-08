@@ -360,13 +360,24 @@ def main():
     pending_css = []
     for absu, (rel, data, ct) in downloaded.items():
         target = out_dir / rel
-        target.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            target.parent.mkdir(parents=True, exist_ok=True)
+        except OSError as e:
+            failed.append((absu, f"mkdir failed: {e}"))
+            continue
         is_css = "css" in ct.lower() or rel.lower().endswith(".css")
         if is_css:
             pending_css.append((absu, rel, data, target))
         else:
-            with open(target, "wb") as f:
-                f.write(data)
+            try:
+                with open(target, "wb") as f:
+                    f.write(data)
+            except OSError as e:
+                # Most often: Windows MAX_PATH (260) exceeded due to deep CDN
+                # paths + ridiculously long original filenames (Webflow image
+                # IDs etc). Skip and keep going — the asset just won't be
+                # mirrored locally.
+                failed.append((absu, f"write failed: {e}"))
 
     # process CSS in a second wave so we discover its url() references
     css_second_wave = {}
@@ -382,9 +393,12 @@ def main():
         except Exception:
             css_text = data.decode("latin-1", errors="replace")
         new_css = rewrite_css(css_text, absu, register_and_fetch)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with open(target, "w", encoding="utf-8") as f:
-            f.write(new_css)
+        try:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with open(target, "w", encoding="utf-8") as f:
+                f.write(new_css)
+        except OSError as e:
+            failed.append((absu, f"css write failed: {e}"))
 
     if css_second_wave:
         print(f"    fetching {len(css_second_wave)} additional assets referenced inside CSS")
@@ -396,9 +410,12 @@ def main():
                     failed.append((absu, err))
                     continue
                 target = out_dir / rel
-                target.parent.mkdir(parents=True, exist_ok=True)
-                with open(target, "wb") as wf:
-                    wf.write(data)
+                try:
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    with open(target, "wb") as wf:
+                        wf.write(data)
+                except OSError as e:
+                    failed.append((absu, f"write failed: {e}"))
 
     # JS dynamic-chunk discovery — Vite/Webpack/Rollup output bundles often contain
     # string literals like `import("./Lottie-XYZ.js")` or `fetch("/api/data.json")` that
@@ -475,16 +492,23 @@ def main():
                     continue
                 downloaded[absu] = (rel, data, ct or "")
                 target = out_dir / rel
-                target.parent.mkdir(parents=True, exist_ok=True)
-                with open(target, "wb") as wf:
-                    wf.write(data)
+                try:
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    with open(target, "wb") as wf:
+                        wf.write(data)
+                except OSError as e:
+                    failed.append((absu, f"write failed: {e}"))
+                    continue
                 # absolute-path refs ALSO need a copy at out_dir/<path> for runtime
                 # absolute URL resolution under a local server rooted at out_dir
                 if absu in js_root_copy:
                     root_target = out_dir / js_root_copy[absu]
-                    root_target.parent.mkdir(parents=True, exist_ok=True)
-                    with open(root_target, "wb") as wf:
-                        wf.write(data)
+                    try:
+                        root_target.parent.mkdir(parents=True, exist_ok=True)
+                        with open(root_target, "wb") as wf:
+                            wf.write(data)
+                    except OSError as e:
+                        failed.append((absu, f"root-copy write failed: {e}"))
                 js_total += 1
                 # recurse: JS chunks may import further chunks
                 if rel.lower().endswith((".js", ".mjs")) or "javascript" in (ct or "").lower():

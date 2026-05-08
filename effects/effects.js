@@ -84,5 +84,136 @@ window.__EFFECTS__ = [
         "sourceUrl":  "https://shift5.io/",
         "localMirror":  "../designs/002-shift5/index.html",
         "order":  5
+    },
+    {
+        "num":  "006",
+        "folder":  "006-adf-news",
+        "title":  "ADF NOS ACTUALITÉS · 三列新闻卡片",
+        "subtitle":  "12-col grid: 4+3+5 split with vertical separators",
+        "description":  "Armateurs de France 首页中段新闻区：12 列 grid 拆 4+3+5，每列一张卡（图 + 标题 + 日期 + 箭头），2/3 列开头加左侧细线 separator。卡片 hover 时图片 scale(1.05)。第一列顶部带「Nos actualités」红色 small-caps 标签 + 「+ Voir toutes les actualités」CTA（hover 时下划线从右滑到左切换为红色）。",
+        "tech":  "CSS Grid + transition",
+        "tags":  [
+                     "interaction",
+                     "animation"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.armateursdefrance.org/",
+        "localMirror":  "../designs/003-armateursdefrance/index.html",
+        "order":  6
+    },
+    {
+        "num":  "007",
+        "folder":  "007-adf-domains",
+        "title":  "ADF Domaines d\u0027intervention · 玻璃卡片网格",
+        "subtitle":  "dark hero with glass cards over boat photo",
+        "description":  "Armateurs de France 中段「Nos domaines d\u0027intervention」区：深蓝 #001060 圆角容器，里面铺一张大船海面照片做背景；顶部巨大白色 UPPERCASE 标题，下方 12 列 grid 排 6 张玻璃质感卡（rgba(255,255,255,0.10) + backdrop-filter:blur(5px)，aspect 208/230），每卡含分类名 + 圆形白边箭头按钮。卡片 hover 时整张上浮 (translateY(-1rem))，圆形按钮翻成白底深蓝箭头。",
+        "tech":  "CSS Grid + backdrop-filter + :has() hover",
+        "tags":  [
+                     "interaction",
+                     "animation"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.armateursdefrance.org/",
+        "localMirror":  "../designs/003-armateursdefrance/index.html",
+        "order":  7
+    },
+    {
+        "num":  "008",
+        "folder":  "008-omr-hoodie-grid",
+        "title":  "OMR 产品 3 列 hover 换图",
+        "subtitle":  "Shopify featured-products with image swap",
+        "description":  "OMR Beauty 首页 OMR Hoodie 区：3 列产品卡（黑/米/灰三色），鼠标 hover 时 .card__hover-media 切换显示替代主图（典型 Shopify 二图切换）。卡片底部 apparel 小标签 + 大写产品名 + 价格。顶部 header 含巨号大写标题、底划 View all 链接（hover 时下划线消失）、左右 SVG 箭头滚动按钮。",
+        "tech":  "CSS Grid + scroll-snap + hover image swap",
+        "tags":  [
+                     "interaction",
+                     "animation"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://omrbeauty.com/",
+        "localMirror":  "../designs/004-omrbeauty/index.html",
+        "order":  8
+    },
+    {
+        "num":  "009",
+        "folder":  "009-omr-banner-tiles",
+        "title":  "OMR 4 列分类瓦片 hover reveal",
+        "subtitle":  "Shopify banners with grid-row 0fr → 1fr text reveal",
+        "description":  "OMR Beauty 中段 4 个分类导航瓦片：Our Story / Home Fragrance / Eau de Parfum / Perfume Oils。每瓦 4:5 图片铺满 + 底部叠标题；hover 时正文用 grid-template-rows 0fr → 1fr 平滑展开（Shopify 用这个 trick 替代 max-height 动画，过渡更顺），同时一块黑色 ::after 面板 translateY(100%) → 0 从底部升上来做文字背景，标题转白。整段桌面 4 等分，移动端 75% scroll-snap 横滑。",
+        "tech":  "CSS Grid + grid-row 0fr trick + container queries",
+        "tags":  [
+                     "interaction",
+                     "animation"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://omrbeauty.com/",
+        "localMirror":  "../designs/004-omrbeauty/index.html",
+        "order":  9
+    },
+    {
+        "num":  "010",
+        "folder":  "010-glm-weight-loss-carousel",
+        "title":  "Good Life Weight Loss · 产品横滑卡片",
+        "subtitle":  "drag-to-scroll product carousel with peek + arrow nav",
+        "description":  "Good Life Meds 首页「01 / Weight Loss」产品区：上半段大写超大标题 + 数字小标 + 介绍段落叠在沙绿色女性背影图上；下半段是横滑产品卡片轨（7 张：Tirzepatide / Semaglutide / Wegovy Pill / Wegovy / Ozempic / Zepbound / Mounjaro），每卡白底圆角，左上产品名 + Rx 角标 + 沙绿小标，中间药瓶/药片/笔产品图，右下两按钮（沙绿底 Get started + 米色 Learn more 带箭头）。原版用 GSAP Draggable + scroll-snap，这里用 PointerEvent 手势 + CSS scroll-snap 等价复刻：mouse 拖拽时取消 snap、移动距离 \u003e5px 抑制点击穿透；右下角圆形描边箭头按钮按一卡步距 scrollBy，到边自动 aria-disabled 灰掉。**hover 时静态药瓶 fade out → 同位 mp4 fade in 旋转播放**（Tirzepatide / Semaglutide 两张卡有源 mp4，其余 5 张原版即留空）。结尾是「Achieve your weight loss goals」CTA 条。",
+        "tech":  "CSS Grid + scroll-snap + PointerEvent drag",
+        "tags":  [
+                     "interaction",
+                     "animation",
+                     "scroll"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.goodlifemeds.com/",
+        "localMirror":  "../designs/005-goodlifemeds/index.html",
+        "order":  10
+    },
+    {
+        "num":  "011",
+        "folder":  "011-glm-daily-wellness-carousel",
+        "title":  "Good Life Daily Wellness · 产品横滑（桃色）",
+        "subtitle":  "products carousel — peach accent, dark text variant",
+        "description":  "Good Life Meds 首页「02 / Daily Wellness」产品区，与 010 同源同骨架但调色完全不同：桃色 #d2a382 替代沙绿做小标 + Get started 底色，标题 + 数字小标改为深色叠在朝阳 unsplash 照片上（原版从 is-light-text 切到 is-dark）；轨道里 8 张产品卡（NAD+ Injections / Microdose GLP-1 / MIC+B12 / Sermorelin / Glutathione / Slim Shot® / Vitamin B12 / NAD+ Nasal Spray）。底部箭头按钮翻转为深色描边、hover 反相填充。**8 张卡每一张 hover 时都触发药瓶/喷雾 mp4 旋转播放**（fade in 300ms，离开复位到首帧）。结尾 CTA 条多一条「Get started today」沙绿实心副按钮，由竖线 divider 分隔，原版交互完整保留。",
+        "tech":  "CSS Grid + scroll-snap + PointerEvent drag",
+        "tags":  [
+                     "interaction",
+                     "animation",
+                     "scroll"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.goodlifemeds.com/",
+        "localMirror":  "../designs/005-goodlifemeds/index.html",
+        "order":  11
+    },
+    {
+        "num":  "012",
+        "folder":  "012-glm-testimonials",
+        "title":  "Good Life · Trusted by 客户视频墙 + Trustpilot",
+        "subtitle":  "asymmetric video collage with lightbox + Trustpilot pill",
+        "description":  "Good Life Meds 首页客户证言区。**最终布局对齐原版截图**：global-grid 4.2/7.8 双列，行高 0.55fr / 1fr 对齐 — 左列上小（testimonial-1 黑衣女）下大（testimonial-2 / Screenshot 10.59 金发女），右列上是文字+Trustpilot 区（Trusted by / [3 头像叠] / thousands / of customers / nationwide + Excellent ★4.5），下是 7fr/5fr 两块（左大 testimonial-3 灰发女 + 右小 testimonial-cover 棕卫衣女）。**4 张 tile + 1 文字块** 视觉与原版一致。每个 tile 底 poster 用 Ken-Burns 16-21s 慢漂移代替原版 Bunny Stream auto-play 视频（HLS 流原 scraper 没拉本地）；hover 漂移暂停 + scale(1.05) + 播放按钮放大变白；**点击触发 lightbox FLIP 开盒动画 — 弹层 transform-origin 按点击点设定，scale(0.4)→1 + opacity 0→1 用 cubic-bezier(.18,.78,.30,1.0) 弹性曲线播 400ms，黑色蒙层同步淡入**。ESC / 点蒙层 / ✕ 关闭。Trustpilot pill 用 5 角星 clip-path 自绘视觉 1:1。",
+        "tech":  "CSS Grid (asymmetric) + clip-path stars + dialog lightbox",
+        "tags":  [
+                     "interaction",
+                     "animation"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.goodlifemeds.com/",
+        "localMirror":  "../designs/005-goodlifemeds/index.html",
+        "order":  12
+    },
+    {
+        "num":  "013",
+        "folder":  "013-glm-how-it-works",
+        "title":  "Good Life · How it works 玻璃卡 + 虚线连接",
+        "subtitle":  "dark video bg + 3 blur-boxes with dotted SVG joints",
+        "description":  "Good Life Meds 首页流程区：底图 howitworks-cover 用 object-position:right center 锚到右侧让绿色药盒留在右边（不再全屏铺平），左→右深色渐变蒙层让左半侧的标题/卡片读得清、右半侧药盒完全可见；**右中位置叠一段真 Lottie 盒子打开循环（GoodLife_Box_03_1x_02.json，70 帧 60fps，约 1.16s 一循环），用 lottie-web light 渲染，替代原版本地缺失的 Bunny HLS 视频做「盒子打开」核心动画**。左上小段说明 + 巨号「How it works」标题（IO fade+lift 入场），底部 12 列 grid 布 3 张玻璃卡（rgba 0.10 + backdrop-filter:blur(16px) + 1px 边），第二张 align-self:end + translateY(48px) 形成 top-bottom-top zig-zag，配两条 dasharray 2 4 SVG 折角虚线连接。移动端 picture 切到竖版 howitworks-mobile + 3 张卡堆叠并隐藏连接线。",
+        "tech":  "CSS Grid zig-zag + lottie-web Box-opening loop + backdrop-filter + IO fade",
+        "tags":  [
+                     "interaction",
+                     "animation",
+                     "scroll"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.goodlifemeds.com/",
+        "localMirror":  "../designs/005-goodlifemeds/index.html",
+        "order":  13
     }
 ];

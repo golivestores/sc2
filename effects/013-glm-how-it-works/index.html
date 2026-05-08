@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Good Life · How it works · sc2 effect</title>
+<style>
+/* --- Self-contained reproduction of Good Life Meds' `process-section`
+   ("How it works"). Original: https://www.goodlifemeds.com/
+
+   What the original does (reverse-engineered from the live source):
+     - Full-bleed `bunny-bg` HLS video (Bunny Stream playlist.m3u8) showing
+       a green meds box being opened and re-stacked on a dark wood desk.
+     - Title "How it works" + intro sit TOP-LEFT in the section.
+     - 3 .blur-box cards laid out in a zig-zag (top → bottom-mid → top)
+       across a 12-col grid. Two dashed SVG curves connect them.
+     - The whole thing fades in via Webflow's IX2 + ScrollTrigger as it
+       enters the viewport.
+
+   What this self-contained version does (faithful where possible):
+     - The HLS video ISN'T in the local mirror. We use:
+         (a) `howitworks-cover.avif` (the actual frame the player loads
+              before activating) as the page bg, positioned RIGHT so the
+              green box dominates the right side just like the screenshot.
+         (b) a real Lottie animation (`box-03.json`, the
+              `Goodlife_Box_03_1x_02` animation that the live site loads
+              for its medical-section box accent — the only "box opening"
+              vector animation in the local mirror) plays on loop,
+              positioned center-right over the bg photo so the box visibly
+              animates.  This swaps in the missing video's main intent:
+              "show a box opening over and over."
+     - 3 cards in a zig-zag (top, bottom, top), with two dashed SVG joint
+       curves connecting them — same pattern as the original.
+     - Title fades + lifts in once on scroll-into-view (substitutes for
+       Webflow's data-text-in-view per-line reveal — no SplitText dep).
+*/
+
+* { box-sizing: border-box; }
+:root {
+  --color-text-light: #f5f4ee;
+  --color-text-mid: rgba(245,244,238,0.78);
+  --font-display: "Inter", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--font-display);
+  --font-mono: ui-monospace, SFMono-Regular, "Menlo", "Consolas", monospace;
+}
+html, body { margin: 0; padding: 0; }
+body {
+  background: #161210;
+  color: var(--color-text-light);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.process-section { position: relative; overflow: hidden; min-height: 100vh; }
+
+/* --- background photo (right-anchored so the box is visible on right)  */
+.process-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.process-bg__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;     /* box stack stays on the right */
+  display: block;
+}
+.process-bg__overlay {
+  position: absolute;
+  inset: 0;
+  /* darkening fades from left → right so left half (where text + cards
+     sit) reads cleanly; right half stays open so the box scene remains
+     visible like the original screenshot. */
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.10) 65%, rgba(0,0,0,0.05) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.45) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* --- Lottie box animation (replaces the missing HLS box-opening video).
+   Sits center-right where the box is in the photo; the loop continuously
+   "opens" the box. mix-blend-mode lighten lets it sit on top of the photo
+   without fully blocking the wood-desk warmth behind. */
+.lottie-box {
+  position: absolute;
+  z-index: 2;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(220px, 28vw, 480px);
+  aspect-ratio: 366 / 195;
+  pointer-events: none;
+}
+.lottie-box svg { width: 100% !important; height: 100% !important; display: block; }
+.lottie-box[data-loaded="true"] + .process-bg__sticker { opacity: 0; }
+
+/* fallback "sticker" image hidden once Lottie finishes loading */
+.process-bg__sticker {
+  position: absolute;
+  z-index: 1;
+  right: 12%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(160px, 20vw, 320px);
+  opacity: 0.85;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  display: none;     /* off by default; Lottie always loads from sibling .min.js */
+}
+
+/* --- container + grid -------------------------------------------------- */
+.process-container {
+  position: relative;
+  z-index: 3;
+  padding: 64px 32px 96px;
+  max-width: 1600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+}
+@media (min-width: 64rem) {
+  .process-container { padding: 96px 64px 128px; gap: 96px; }
+}
+
+/* heading row sits top-left */
+.process-heading-div {
+  max-width: 48ch;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.process-intro {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--color-text-mid);
+  max-width: 28ch;
+}
+.display-hiw {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(64px, 10vw, 192px);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--color-text-light);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.display-hiw.is-in { opacity: 1; transform: none; }
+
+/* card row at the bottom */
+.process-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media (min-width: 64rem) {
+  .process-grid {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    gap: 24px 16px;
+    align-items: end;
+  }
+}
+
+/* --- blur-box cards ---------------------------------------------------- */
+.blur-box {
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: var(--color-text-light);
+}
+@media (min-width: 64rem) { .blur-box { padding: 28px; min-height: 220px; } }
+
+.box-heading { display: flex; flex-direction: column; gap: 16px; }
+.subheading {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-text-light);
+  opacity: 0.85;
+}
+.heading-process {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--color-text-light);
+}
+.heading-process span {
+  display: block;
+  font-style: italic;
+  font-weight: 400;
+  opacity: 0.92;
+}
+.box-text p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--color-text-mid);
+}
+
+/* zig-zag placement: card1 top, card2 bottom, card3 top */
+@media (min-width: 64rem) {
+  .blur-box.is-1 { grid-column: 1 / span 4;  align-self: start; }
+  .blur-box.is-2 { grid-column: 5 / span 4;  align-self: end;   transform: translateY(48px); }
+  .blur-box.is-3 { grid-column: 9 / span 4;  align-self: start; }
+}
+
+/* --- joint dotted SVG curves ------------------------------------------ */
+.joint-div {
+  display: none;
+  color: rgba(255,255,255,0.7);
+}
+@media (min-width: 64rem) {
+  .joint-div {
+    display: block;
+    height: 90px;
+    grid-row: 1;
+    z-index: 1;
+    margin-bottom: -32px;     /* nudge up so they connect card edges */
+  }
+  /* curve 1: drops out of card 1's right side, runs right under card 2 */
+  .joint-div.is-1 { grid-column: 4 / span 2; align-self: start; transform: translateY(70%); }
+  /* curve 2: rises out of card 2, runs up to card 3 */
+  .joint-div.is-2 { grid-column: 8 / span 2; align-self: end; transform: translateY(-70%); }
+}
+.joint-svg { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+
+<section class="process-section">
+
+  <div class="process-bg" aria-hidden="true">
+    <picture>
+      <source media="(max-width: 47.99rem)" srcset="assets/howitworks-mobile.avif">
+      <img class="process-bg__img" src="assets/howitworks-cover.avif" alt="" loading="eager">
+    </picture>
+  </div>
+
+  <!-- the live "box opening" Lottie loop. Replaces the original Bunny
+       Stream HLS video which isn't in the local mirror; the Lottie itself
+       is the GoodLife_Box_03 animation the live site uses for its boxes. -->
+  <div class="lottie-box" id="lottie-box" aria-hidden="true"></div>
+
+  <div class="process-bg__overlay" aria-hidden="true"></div>
+
+  <div class="process-container">
+
+    <div class="process-heading-div">
+      <p class="process-intro">Follow a quick, guided process to receive personalized treatment recommendations and receive your medication in just a few days.</p>
+      <h2 class="display-hiw" data-text-in-view>How it works</h2>
+    </div>
+
+    <div class="process-grid">
+      <article class="blur-box is-1">
+        <header class="box-heading">
+          <div class="subheading">[01]</div>
+          <h3 class="heading-process">Simple <span>Questionnaire</span></h3>
+        </header>
+        <div class="box-text">
+          <p>Choose the plan that fits your needs, then complete a free medical intake and health history form for review by a licensed provider.</p>
+        </div>
+      </article>
+
+      <div class="joint-div is-1" aria-hidden="true">
+        <svg class="joint-svg" viewBox="0 0 160 87" fill="none" preserveAspectRatio="none" vector-effect="non-scaling-stroke">
+          <path d="M0.5 0V83C0.5 84.6569 1.84315 86 3.5 86H159.5" stroke="currentColor" stroke-dasharray="2 4"/>
+        </svg>
+      </div>
+
+      <article class="blur-box is-2">
+        <header class="box-heading">
+          <div class="subheading">[02]</div>
+          <h3 class="heading-process">Provider <span>Evaluation</span></h3>
+        </header>
+        <div class="box-text">
+          <p>Our licensed medical provider will review your medical history and determine if the medication is right for you and your needs.</p>
+        </div>
+      </article>
+
+      <div class="joint-div is-2" aria-hidden="true">
+        <svg class="joint-svg" viewBox="0 0 160 87" fill="none" preserveAspectRatio="none" vector-effect="non-scaling-stroke">
+          <path d="M159 86.5V3.5C159 1.84315 157.657 0.5 156 0.5H0" stroke="currentColor" stroke-dasharray="2 4"/>
+        </svg>
+      </div>
+
+      <article class="blur-box is-3">
+        <header class="box-heading">
+          <div class="subheading">[03]</div>
+          <h3 class="heading-process">Approved <span>&amp; Delivered</span></h3>
+        </header>
+        <div class="box-text">
+          <p>Your prescription gets approved and ships straight to your door in discreet packaging within 3–5 business days.</p>
+        </div>
+      </article>
+    </div>
+
+  </div>
+
+</section>
+
+<script src="assets/lottie.min.js"></script>
+<script>
+/* Render the box-opening Lottie on loop. The original Webflow integration
+   loads it via IX2 — we just call lottie.loadAnimation() with the same
+   JSON. Same loop / direction / autoplay flags. */
+(function () {
+  const target = document.getElementById('lottie-box');
+  if (!target || !window.lottie) return;
+  try {
+    const anim = lottie.loadAnimation({
+      container: target,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'assets/box-03.json',
+    });
+    anim.addEventListener('DOMLoaded', () => target.dataset.loaded = 'true');
+  } catch (e) {
+    console.warn('Lottie load failed', e);
+  }
+})();
+
+/* Headline reveal — scroll-trigger fade + lift, once per page load. */
+(function () {
+  const target = document.querySelector('[data-text-in-view]');
+  if (!target) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        target.classList.add('is-in');
+        io.unobserve(target);
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(target);
+})();
+</script>
+</body>
+</html>
