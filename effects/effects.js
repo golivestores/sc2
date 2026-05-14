@@ -215,5 +215,86 @@ window.__EFFECTS__ = [
         "sourceUrl":  "https://www.goodlifemeds.com/",
         "localMirror":  "../designs/005-goodlifemeds/index.html",
         "order":  13
+    },
+    {
+        "num":  "014",
+        "folder":  "014-flowerknows-bestsellers",
+        "title":  "Flower Knows · Shop Our Bestsellers",
+        "subtitle":  "Moast TikTok-style video showcase carousel",
+        "description":  "Flower Knows 首页 \u0027Shop Our Bestsellers\u0027 的视频内容轮播：第三方 Shopify 应用 **Moast** 渲染的 TikTok 风格 video showcase，21 个竖版视频缩略图横向 Embla carousel，shadowDOM 自定义元素 `\u003cmoast-carousel\u003e` 内嵌 `\u003cmoast-media\u003e` / `\u003cmoast-video\u003e` / `\u003cmoast-mute\u003e` / `\u003cmoast-products\u003e`。逐元素 IntersectionObserver 懒加载（rootMargin 200px），slide 进入视口后 ~2s setupVideo，自动静音播放，鼠标 hover 切换卡片，点击进入全屏播放器（player-mode=\u0027fullscreen\u0027），底部 below pagination + autoplay-mode=\u0027showcase\u0027 居中突出当前 slide（slide-size 250px、slide-spacing 16px、aspect 9/16）。整套 ES module bundle（24 个 chunk，~914KB）原样打到 lib/，运行时缩略图 + 视频流走 cdn.shopify.com（需联网）。**bundle 在 connectedCallback 里读 `window.Shopify.shop` 决定走哪个 shop 的 API**，所以页面顶部补了一段 `Shopify.shop = \u0027flowerknows.myshopify.com\u0027` 的最小 shim，否则 Observer 不会装、carousel 死在 skeleton 状态。本地没 Shopify 后端，所以 `/products/\u003chandle\u003e.js` 价格刷新调用全 404，卡片显示的是嵌入 JSON 里的快照价（不影响视觉）。",
+        "tech":  "Moast Shopify app · Lit + Embla + HLS.js · ES module bundle (24 chunks)",
+        "tags":  [
+                     "interaction",
+                     "scroll",
+                     "carousel"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://flowerknows.co/",
+        "localMirror":  "../designs/006-flowerknows/index.html",
+        "order":  14
+    },
+    {
+        "num":  "015",
+        "folder":  "015-donmolinico-products-carousel",
+        "title":  "Don Molinico 产品轮播卡",
+        "subtitle":  "hover-reveal marquee + tilt jar",
+        "description":  "Don Molinico /products 页的产品卡阵列：4 张色块卡（粉/蓝/棕/橙），每张内置一个 product-card__marquee 彩色背板 + 居中的玻璃罐图。hover 时彩色背板用 clip-path 从 inset(0) 收缩到 inset(4%) 露出圆角内框，里面的 4 行重复 text 用 opacity 0→1 + 8s linear 无限纵向 translate3d(0,-50%,0) 跑马灯，同时罐子图 transform scale(1.1) rotate(-4deg)。所有过渡用 cubic-bezier(0.19,1,0.22,1)。原站是 Vue + scroll-snap，本 effect 改成纯 CSS 4-列 grid，小屏 fallback 成横向 scroll-snap-x 保留原版手机端体验。",
+        "tech":  "CSS Grid + clip-path + @keyframes",
+        "tags":  [
+                     "animation",
+                     "interaction",
+                     "scroll"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.donmolinico.es/products/",
+        "localMirror":  "../designs/008-donmolinico/index.html",
+        "order":  15
+    },
+    {
+        "num":  "016",
+        "folder":  "016-donmolinico-litolata-trio",
+        "title":  "Don Molinico Litolata 三连卡",
+        "subtitle":  "hover-reveal marquee · 3-up flat-tin variant",
+        "description":  "Don Molinico /products 页第二屏的三张扁罐头卡（Litolata：Merluza/Bacalao/Carne 三色）。结构跟 015 (Frasco) 完全一致：彩色 marquee 背板 + clip-path 4% inset hover reveal + 6 份重复纵向跑马灯 + 罐头 scale(1.1) rotate(-4deg) 倾斜。差异只有 grid 列数（3 列 clamp(300,30vw,520)）、卡片背景色、罐头图、marquee 文案。同样用原版 super-med 字体 + 14.4px 根字号让 fs-35 / fs-110 公式落到原版尺寸。",
+        "tech":  "CSS Grid + clip-path + @keyframes",
+        "tags":  [
+                     "animation",
+                     "interaction"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.donmolinico.es/products/",
+        "localMirror":  "../designs/008-donmolinico/index.html",
+        "order":  16
+    },
+    {
+        "num":  "017",
+        "folder":  "017-donmolinico-pandereta-duo",
+        "title":  "Don Molinico Pandereta 双卡",
+        "subtitle":  "hover-reveal marquee · 2-up large-tin variant",
+        "description":  "Don Molinico /products 页第三屏的两张大圆罐头卡（Pandereta：Atun/Carne 860g）。结构和 015 / 016 一致，差异只有 grid 列数（2 列 clamp(300,30vw,520)）+ 2 张卡片背景色 + 罐头图 + marquee 文案。两卡居中、左右留较大 cream 留白，跟原版 desktop 视觉一致。",
+        "tech":  "CSS Grid + clip-path + @keyframes",
+        "tags":  [
+                     "animation",
+                     "interaction"
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "https://www.donmolinico.es/products/",
+        "localMirror":  "../designs/008-donmolinico/index.html",
+        "order":  17
+    },
+    {
+        "num":  "018",
+        "folder":  "018-obsidianassembly-places-slider",
+        "title":  "018-obsidianassembly-places-slider",
+        "subtitle":  "",
+        "description":  "",
+        "tech":  "",
+        "tags":  [
+
+                 ],
+        "previewHref":  "",
+        "sourceUrl":  "",
+        "localMirror":  "",
+        "order":  18
     }
 ];

@@ -1,0 +1,7 @@
+{
+  "title": "Don Molinico",
+  "description": "Nuxt 2 客户端路由 SPA。镜像只能用来取源/抽块——预览界面会显示 PAGE NOT FOUND，因为 Vue Router 按 location.pathname 配路由，本地 URL 对不上 /products。HTML 骨架 + 65 个 JS chunk + 字体都在本地。",
+  "sourceUrl": "https://www.donmolinico.es/products/",
+  "savedAt": "2026-05-14",
+  "tags": ["spa", "nuxt", "reference-only"]
+}

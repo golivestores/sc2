@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Don Molinico — litolata trio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* === sc2 effect 16 · 1:1 of donmolinico.es/products/ §products-type (3 cards) === */
+
+  @font-face {
+    font-family: "super-med";
+    font-style: normal;
+    font-display: swap;
+    src: url("assets/fonts/super-med.woff2") format("woff2"),
+         url("assets/fonts/super-med.woff")  format("woff");
+  }
+
+  /* Root font-size 90% matches original site so the fs-35 / fs-110 formulas
+     (max(2rem,min(2vw,3.5rem)) etc.) hit the same px values as live. */
+  html { font-size: 90%; }
+
+  :root {
+    --c-bg: #fbf5e7;
+    --c-accent: #d70321;       /* brand red — text color */
+    --radius: 1.5rem;
+    --gutter: 1.8rem;
+    --offset: 1.8rem;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--c-bg);
+    color: #2a1d12;
+    font-family: "super-med", Helvetica, sans-serif;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 4rem 0;
+    overflow-x: hidden;
+  }
+
+  .products-list {
+    display: grid;
+    gap: var(--gutter);
+    padding: 0 var(--offset);
+    grid-template-columns: repeat(3, clamp(300px, 30vw, 520px));
+    justify-content: center;
+    width: max-content;
+  }
+  @media (max-width: 900px) {
+    .products-list {
+      width: 100%;
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 75%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      white-space: nowrap;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .products-list::-webkit-scrollbar { display: none; }
+    .products-list > * { scroll-snap-align: center; }
+  }
+
+  .products-list > a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .product-card {
+    align-items: center;
+    aspect-ratio: 580 / 660;
+    color: var(--c-accent);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .product-card__marquee {
+    clip-path: inset(0 round var(--radius));
+    flex-direction: column;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    left: 0; top: 0;
+    pointer-events: none;
+    position: absolute;
+    user-select: none;
+    width: 100%;
+    transition: clip-path 1s cubic-bezier(0.19, 1, 0.22, 1);
+    will-change: clip-path;
+    display: flex;
+    text-transform: uppercase;
+  }
+  .product-card:hover .product-card__marquee {
+    clip-path: inset(4% round var(--radius));
+  }
+
+  .product-card__marquee__inner {
+    animation: dm-marquee 8s linear infinite;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    will-change: opacity, transform;
+  }
+  .product-card:hover .product-card__marquee__inner { opacity: 1; }
+
+  @keyframes dm-marquee {
+    0%   { transform: translateZ(0); }
+    100% { transform: translate3d(0, -50%, 0); }
+  }
+
+  .product-card__marquee__inner .ta-c {
+    text-align: center;
+  }
+  .product-card__marquee__line {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .fs-35  { font-size: max(2rem, min(2vw, 3.5rem));  line-height: 100%; }
+  .fs-110 { font-size: max(6rem, min(6vw, 11rem));   line-height: 90%;  }
+  .tt-u   { text-transform: uppercase; }
+
+  .product-card__media {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    max-height: 80%;
+    transition: transform 1.25s cubic-bezier(0.19, 1, 0.22, 1);
+    width: 80%;
+    will-change: transform;
+    z-index: 15;
+    position: relative;
+  }
+  .product-card:hover .product-card__media {
+    transform: scale(1.1) rotate(-4deg);
+  }
+  .product-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="products-list">
+  <!-- card 1 — merluza · blue-violet -->
+  <a href="#">
+    <div class="product-card">
+      <div class="product-card__marquee" style="background-color: rgb(155, 175, 239);">
+        <div class="product-card__marquee__inner">
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Merluza</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Merluza</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Merluza</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Merluza</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Merluza</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Merluza</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-card__media">
+        <img src="assets/images/merluza.png" alt="Frasco merluza" draggable="false">
+      </div>
+    </div>
+  </a>
+
+  <!-- card 2 — bacalao · lavender -->
+  <a href="#">
+    <div class="product-card">
+      <div class="product-card__marquee" style="background-color: rgb(189, 197, 233);">
+        <div class="product-card__marquee__inner">
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Bacalao</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Bacalao</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Bacalao</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Bacalao</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Bacalao</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Bacalao</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-card__media">
+        <img src="assets/images/bacalao.png" alt="Frasco bacalao" draggable="false">
+      </div>
+    </div>
+  </a>
+
+  <!-- card 3 — carne · orange -->
+  <a href="#">
+    <div class="product-card">
+      <div class="product-card__marquee" style="background-color: rgb(254, 174, 2);">
+        <div class="product-card__marquee__inner">
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Carne</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Carne</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Carne</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Carne</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Carne</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+          <div class="ta-c">
+            <span class="product-card__marquee__line tt-u fs-35">Descubre</span>
+            <span class="product-card__marquee__line fs-110">Pimientos</span>
+            <span class="product-card__marquee__line tt-u fs-35">Rellenos De Carne</span>
+            <span class="product-card__marquee__line fs-110">Del Piquillo</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-card__media">
+        <img src="assets/images/carne.png" alt="Frasco carne" draggable="false">
+      </div>
+    </div>
+  </a>
+</div>
+
+<script>
+(function () {
+  const previewMode = new URLSearchParams(location.search).get('demo') === 'preview';
+  if (!previewMode) return;
+
+  const cards = [...document.querySelectorAll('.product-card')];
+  if (!cards.length) return;
+
+  const css = document.createElement('style');
+  css.textContent = `
+    .product-card.is-preview-hover .product-card__marquee { clip-path: inset(4% round var(--radius)); }
+    .product-card.is-preview-hover .product-card__marquee__inner { opacity: 1; }
+    .product-card.is-preview-hover .product-card__media { transform: scale(1.1) rotate(-4deg); }
+  `;
+  document.head.appendChild(css);
+
+  let i = 0;
+  function tick() {
+    cards.forEach(c => c.classList.remove('is-preview-hover'));
+    cards[i].classList.add('is-preview-hover');
+    i = (i + 1) % cards.length;
+  }
+  setTimeout(tick, 400);
+  setInterval(tick, 1800);
+})();
+</script>
+
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="016-donmolinico-litolata-trio.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=016-donmolinico-litolata-trio" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

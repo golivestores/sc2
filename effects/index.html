@@ -270,6 +270,7 @@
     // hero/intro and runs a faked cascade on load — see effect's index.html.
     // Standalone-opened pages (no params) keep the original 1:1 behavior.
     const previewSrc = folder + (item.previewHref || 'index.html') + '?demo=preview';
+    const zipHref    = folder + encodeURIComponent(item.folder) + '.zip';
     const viewerHref = 'view.html?effect=' + encodeURIComponent(item.folder);
     // "原站 ↗" goes to the LOCAL scraped mirror under designs/, not the live URL.
     const sourceLink = item.localMirror
@@ -302,7 +303,8 @@
           <div class="card__meta">${techTag}${tags}</div>
         </a>
         <div class="card__actions">
-          <a class="btn-source" href="${escapeHTML(viewerHref)}" title="看源码 / 下载 zip">&lt;/&gt; 源码</a>
+          <a href="${escapeHTML(viewerHref)}" title="查看 / 复制源码">📋 源码</a>
+          <a href="${escapeHTML(zipHref)}" download title="下载 zip 包">📦 zip</a>
           ${sourceLink}
         </div>
       </div>`;

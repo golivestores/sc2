@@ -46,7 +46,7 @@ KNOWN GOTCHAS (read these before declaring a mirror "complete"):
     for `miniCssF` (mini-css-extract output). Currently this scraper has no
     automatic handling; spot-check by searching the live page for unique selectors.
 """
-import sys, os, re, json, hashlib, mimetypes
+import sys, os, re, json, shutil, socket, subprocess, hashlib, mimetypes
 from pathlib import Path
 from urllib.parse import urljoin, urlparse, urldefrag, unquote
 from urllib.request import Request, urlopen
@@ -152,7 +152,7 @@ class AssetExtractor(HTMLParser):
                 continue
             handled.add(name)
             if kind == "srcset":
-                for part in v.split(","):
+                for part in split_srcset(v):
                     p = part.strip().split()
                     if p and p[0]:
                         self.assets.append((p[0], "srcset-item"))
@@ -201,9 +201,37 @@ def local_path_for(url, base_url):
     return absu, rel
 
 
+def split_srcset(value):
+    """Split a srcset value on commas, ignoring commas inside (), [], or {}.
+
+    Storyblok and Imgix produce URLs like
+      .../m/768x659/filters:format(avif,webp):quality(80)
+    where a naive value.split(",") rips the URL in half.
+    """
+    parts = []
+    buf = []
+    depth = 0
+    for ch in value:
+        if ch in "([{":
+            depth += 1
+            buf.append(ch)
+        elif ch in ")]}":
+            if depth > 0:
+                depth -= 1
+            buf.append(ch)
+        elif ch == "," and depth == 0:
+            parts.append("".join(buf))
+            buf = []
+        else:
+            buf.append(ch)
+    if buf:
+        parts.append("".join(buf))
+    return parts
+
+
 def rewrite_srcset(value, mapper):
     parts = []
-    for item in value.split(","):
+    for item in split_srcset(value):
         s = item.strip()
         if not s:
             continue
@@ -269,12 +297,32 @@ def rel_path_between(from_dir, to_path):
 
 
 def main():
-    if len(sys.argv) < 3:
-        print(__doc__)
-        sys.exit(1)
-    url = sys.argv[1]
-    folder = sys.argv[2]
-    title = sys.argv[3] if len(sys.argv) > 3 else folder
+    import argparse
+    p = argparse.ArgumentParser(
+        description="Scrape a webpage into designs/<folder>/ with all assets.",
+        epilog="After scraping, the script auto-runs rebuild-index.ps1 and "
+               "headless-renders the local mirror to spot console errors / 404s. "
+               "Disable with --no-rebuild and/or --no-verify.",
+    )
+    p.add_argument("url")
+    p.add_argument("folder")
+    p.add_argument("title", nargs="?", default=None)
+    p.add_argument("--no-rebuild", action="store_true",
+                   help="skip auto-running rebuild-index.ps1 at the end")
+    p.add_argument("--no-verify", action="store_true",
+                   help="skip headless render check of the local mirror")
+    p.add_argument("--nuxt-spa-fixup", action="store_true",
+                   help=("apply the 5-step Nuxt 3 SPA recipe after scraping: "
+                         "fetch missing CSS chunks, copy images/fonts to mirror root, "
+                         "rewrite /images/ → ./images/, inject <base href>, "
+                         "headless scroll + fetch lazy assets"))
+    args = p.parse_args()
+    url = args.url
+    folder = args.folder
+    title = args.title or folder
+    skip_rebuild = args.no_rebuild
+    skip_verify = args.no_verify
+    apply_nuxt_fixup = args.nuxt_spa_fixup
 
     out_dir = DESIGNS / folder
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -635,7 +683,348 @@ def main():
         print(f"  (first 5 failures)")
         for u, e in failed[:5]:
             print(f"    {u[:90]}  -> {e}")
-    print(f"\nNext: double-click rebuild-index.bat, then open the navigator page.")
+
+    # === post-process: framework asset directories that runtime code wants at
+    # the document root (Nuxt fetches /_nuxt/builds/meta/<buildId>.json, Astro
+    # fetches /_astro/*, Next fetches /_next/*, SvelteKit /_app/*). These URLs
+    # are constructed at runtime (templated against buildId + publicPath) so
+    # the JS string-literal scan can't find them. Path shim rewrites /x to ./x
+    # which resolves to designs/<folder>/_nuxt/... → must exist there. Solution:
+    # if assets/<host>/_framework/ exists, duplicate the tree to <out_dir>/_framework/. */
+    framework_dirs_copied = []
+    for fw in ("_nuxt", "_astro", "_next", "_app", "_svelte"):
+        existing_root = out_dir / fw
+        if existing_root.exists():
+            continue
+        candidates = list((out_dir / "assets").glob(f"*/{fw}"))
+        for src in candidates:
+            if src.is_dir() and not existing_root.exists():
+                try:
+                    shutil.copytree(src, existing_root)
+                    framework_dirs_copied.append((fw, src.parent.name))
+                except OSError as e:
+                    print(f"  framework dir copy failed for {fw}: {e}")
+                break
+    if framework_dirs_copied:
+        for fw, host in framework_dirs_copied:
+            print(f"  copied {host}/{fw}/ → {out_dir.name}/{fw}/ (runtime-resolved root path)")
+
+    if apply_nuxt_fixup:
+        apply_nuxt_spa_fixup(out_dir, original_url=url)
+
+    if not skip_rebuild:
+        run_rebuild_index(ROOT)
+    if not skip_verify:
+        verify_mirror_headless(out_dir, original_url=url)
+
+
+def apply_nuxt_spa_fixup(mirror_dir: Path, original_url: str):
+    """5-step recipe to turn a Nuxt 3 SPA scrape into a self-contained renderable mirror.
+
+    Default scrape captures the HTML shell + assets the static parser sees, but
+    Nuxt apps fall through five gaps:
+      1. Route-specific CSS chunks (default/index/error-*.HASH.css) loaded by JS
+         at runtime — not in the HTML, not auto-downloaded.
+      2. CSS @font-face / url() and JS `"/images/..."` references point at the
+         document root, but the mirror lives at /designs/NNN/. Files exist under
+         assets/<host>/{images,fonts}/ but not at the mirror root where lookups land.
+      3. Image src and CSS url() with leading `/` bypass the fetch/XHR path shim.
+      4. After hydration Nuxt history.replaceState rewrites location.href to `/`,
+         breaking all relative paths set by subsequent JS.
+      5. Lazy-scrolled images referenced only at scroll-trigger time.
+
+    The recipe — applied automatically when --nuxt-spa-fixup is passed:
+      step 1: grep `entry.HASH.js` for `./X.HASH.css` literals, fetch missing
+              ones from live `https://<host>/_nuxt/` into both copies of _nuxt/.
+      step 2: copy assets/<host>/{images,fonts,audio,video,media}/ to mirror root.
+      step 3: rewrite `"/X/`, `url(/X/` → `./X/` in all mirror JS/CSS for the
+              common asset-folder names.
+      step 4: inject `<base href="/designs/<folder>/">` right after <head>.
+      step 5: headless scroll-through; for every 4xx response under the mirror
+              path, fetch the corresponding URL from <host>/<rel-path>.
+
+    Idempotent: re-running skips work already done.
+    """
+    import shutil
+    from urllib.parse import urlparse
+    from urllib.request import Request, urlopen
+    from concurrent.futures import ThreadPoolExecutor
+
+    host = urlparse(original_url).netloc
+    if not host:
+        print("[nuxt-spa-fixup] cannot determine host from URL, aborting")
+        return
+    print(f"\n[nuxt-spa-fixup] applying 5-step Nuxt 3 SPA recipe (host={host})")
+
+    UA = {"User-Agent": "Mozilla/5.0"}
+    mirror_nuxt = mirror_dir / "_nuxt"
+    assets_nuxt = mirror_dir / "assets" / host / "_nuxt"
+
+    # === step 1: fetch missing CSS chunks ===
+    entry_js = next(iter(assets_nuxt.glob("entry.*.js")), None)
+    if entry_js:
+        text = entry_js.read_text(encoding="utf-8", errors="replace")
+        css_refs = set(re.findall(r'"\.\/([A-Za-z0-9_.-]+\.[a-f0-9]{8}\.css)"', text))
+        have = set(p.name for p in mirror_nuxt.glob("*.css")) if mirror_nuxt.exists() else set()
+        missing = sorted(css_refs - have)
+        if missing:
+            print(f"  step 1: fetching {len(missing)} missing CSS chunks")
+            def fetch_css(name):
+                try:
+                    with urlopen(Request(f"https://{host}/_nuxt/{name}", headers=UA), timeout=15) as r:
+                        data = r.read()
+                    for d in [mirror_nuxt, assets_nuxt]:
+                        d.mkdir(parents=True, exist_ok=True)
+                        (d / name).write_bytes(data)
+                    return f"    ok {name}"
+                except Exception as e:
+                    return f"    fail {name}: {e}"
+            with ThreadPoolExecutor(max_workers=6) as ex:
+                for r in ex.map(fetch_css, missing):
+                    print(r)
+        else:
+            print("  step 1: no missing CSS chunks")
+    else:
+        print("  step 1: no entry.*.js found, skipping CSS chunk grep")
+
+    # === step 2: copy asset folders to mirror root ===
+    src_host = mirror_dir / "assets" / host
+    if src_host.exists():
+        copied = []
+        for d in src_host.iterdir():
+            if not d.is_dir() or d.name in ("_nuxt", "_astro", "_next", "_app", "_svelte"):
+                continue
+            if d.name in ("images", "fonts", "audio", "video", "videos", "media"):
+                dst = mirror_dir / d.name
+                if not dst.exists():
+                    try:
+                        shutil.copytree(d, dst)
+                        copied.append(d.name)
+                    except OSError as e:
+                        print(f"    skip {d.name}: {e}")
+        if copied:
+            print(f"  step 2: copied {', '.join(copied)}/ to mirror root")
+        else:
+            print("  step 2: no fresh asset folders to copy")
+
+    # === step 3: rewrite /images/ → ./images/ in JS/CSS ===
+    patterns = [
+        (re.compile(r'(["\'])\/(images|fonts|audio|video|videos|media)\/'), r'\1./\2/'),
+        (re.compile(r'url\(\/(images|fonts|audio|video|videos|media)\/'),    r'url(./\1/'),
+    ]
+    rewrites = 0
+    files_changed = 0
+    for f in list(mirror_dir.rglob("*.js")) + list(mirror_dir.rglob("*.css")):
+        text = f.read_text(encoding="utf-8", errors="replace")
+        new = text
+        for pat, repl in patterns:
+            new = pat.sub(repl, new)
+        if new != text:
+            f.write_text(new, encoding="utf-8")
+            files_changed += 1
+            rewrites += sum(len(re.findall(p, text)) for p, _ in patterns)
+    print(f"  step 3: rewrote {rewrites} asset paths across {files_changed} files")
+
+    # === step 4: inject <base href> ===
+    index_html = mirror_dir / "index.html"
+    h = index_html.read_text(encoding="utf-8")
+    base_href = f"/designs/{mirror_dir.name}/"
+    base_tag = f'<base href="{base_href}">'
+    if base_tag in h:
+        print(f"  step 4: <base href> already present")
+    else:
+        new_h, n = re.subn(r"(<head\b[^>]*>)", lambda m: m.group(1) + base_tag, h, count=1, flags=re.I)
+        if n:
+            index_html.write_text(new_h, encoding="utf-8")
+            print(f"  step 4: injected <base href=\"{base_href}\">")
+        else:
+            print(f"  step 4: no <head> found, base href not injected")
+
+    # === step 5: headless scroll + fetch lazy assets ===
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print("  step 5: playwright not installed — skipping lazy-asset sweep")
+        return
+
+    # spawn temp server rooted at sc2/
+    s = socket.socket(); s.bind(("127.0.0.1", 0)); port = s.getsockname()[1]; s.close()
+    server = subprocess.Popen(
+        [sys.executable, "-m", "http.server", str(port), "--bind", "127.0.0.1"],
+        cwd=str(ROOT), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+    try:
+        # wait for server
+        for _ in range(30):
+            try:
+                with socket.create_connection(("127.0.0.1", port), timeout=0.2):
+                    break
+            except OSError:
+                pass
+
+        url = f"http://127.0.0.1:{port}/designs/{mirror_dir.name}/index.html"
+        mirror_prefix = f"http://127.0.0.1:{port}/designs/{mirror_dir.name}/"
+        bad = set()
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            ctx = browser.new_context(service_workers="block", viewport={"width": 1440, "height": 900})
+            page = ctx.new_page()
+            page.on("response", lambda r: bad.add(r.url) if r.status >= 400 and r.url.startswith(mirror_prefix) else None)
+            try:
+                page.goto(url, wait_until="domcontentloaded", timeout=20000)
+                page.wait_for_timeout(4000)
+                for y in (400, 1200, 2400, 4000, 6000, 8000):
+                    page.evaluate(f"() => window.scrollTo(0, {y})")
+                    page.wait_for_timeout(700)
+            except Exception as e:
+                print(f"    headless scroll failed: {e}")
+            browser.close()
+
+        if not bad:
+            print("  step 5: no missing mirror-relative assets")
+            return
+        print(f"  step 5: fetching {len(bad)} missing lazy assets")
+
+        def fetch_lazy(u):
+            rel = u[len(mirror_prefix):]
+            live = f"https://{host}/{rel}"
+            dst = mirror_dir / rel
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                with urlopen(Request(live, headers=UA), timeout=15) as r:
+                    dst.write_bytes(r.read())
+                return f"    ok {rel}"
+            except Exception as e:
+                return f"    fail {rel}: {e}"
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            for r in ex.map(fetch_lazy, sorted(bad)):
+                print(r)
+    finally:
+        server.terminate()
+        try:
+            server.wait(timeout=3)
+        except subprocess.TimeoutExpired:
+            server.kill()
+
+
+def run_rebuild_index(root: Path):
+    """Invoke rebuild-index.ps1 so the new mirror appears in designs/designs.js.
+
+    Best-effort: prints the failure but doesn't stop the scrape if PowerShell
+    isn't available (non-Windows). The user can run rebuild-index.* by hand.
+    """
+    script = root / "rebuild-index.ps1"
+    if not script.exists():
+        return
+    print("\n[rebuild] regenerating designs.js + effects.js")
+    candidates = [["pwsh", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script)],
+                  ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script)]]
+    for cmd in candidates:
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+            if r.returncode == 0:
+                # surface the "Indexed N design(s)" line so the user sees what happened
+                for line in r.stdout.splitlines():
+                    if line.strip():
+                        print(f"  {line}")
+                return
+            else:
+                print(f"  rebuild stderr: {r.stderr.strip()[:200]}")
+                return
+        except FileNotFoundError:
+            continue
+        except Exception as e:
+            print(f"  rebuild failed: {e}")
+            return
+    print("  no powershell/pwsh found — run rebuild-index.ps1 (or .bat) manually")
+
+
+def verify_mirror_headless(mirror_dir: Path, original_url: str):
+    """Headless render of the local mirror; report console errors + 404s.
+
+    Starts a one-shot http.server bound to a free port in a subprocess, opens
+    the mirror in Playwright, dumps any errors, then tears the server down.
+    Silent skip when Playwright isn't installed.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print("\n[verify] playwright not installed — skipping headless check (pip install playwright + playwright install chromium)")
+        return
+
+    # Find a free port
+    s = socket.socket()
+    s.bind(("127.0.0.1", 0))
+    port = s.getsockname()[1]
+    s.close()
+
+    # Spawn http.server rooted at sc2/ (so designs/<folder>/index.html resolves
+    # alongside other mirrors and the path shim's "./" works).
+    root = mirror_dir.parent.parent
+    server = subprocess.Popen(
+        [sys.executable, "-m", "http.server", str(port), "--bind", "127.0.0.1"],
+        cwd=str(root), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+    try:
+        # Give the server a moment to bind
+        for _ in range(20):
+            try:
+                with socket.create_connection(("127.0.0.1", port), timeout=0.2):
+                    break
+            except OSError:
+                pass
+
+        url = f"http://127.0.0.1:{port}/designs/{mirror_dir.name}/index.html"
+        print(f"\n[verify] headless rendering {url}")
+
+        errors = []
+        failed_resources = []
+        warnings = []
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            page = browser.new_page()
+            page.on("pageerror", lambda e: errors.append(f"PAGEERROR: {str(e)[:200]}"))
+            page.on("console", lambda m: (errors if m.type == "error" else warnings).append(
+                f"[{m.type}] {m.text[:200]}") if m.type in ("error", "warning") else None)
+            page.on("requestfailed", lambda r: failed_resources.append(
+                f"{r.failure or 'failed'} {r.url[:140]}") if "favicon" not in r.url else None)
+            try:
+                page.goto(url, wait_until="domcontentloaded", timeout=15000)
+                page.wait_for_timeout(2500)
+            except Exception as e:
+                errors.append(f"GOTO: {str(e)[:200]}")
+
+            title = page.title()
+            body_chars = page.evaluate("() => document.body.innerText.length")
+            screenshot = mirror_dir / "preview.png"
+            try:
+                page.screenshot(path=str(screenshot), full_page=False)
+            except Exception:
+                screenshot = None
+            browser.close()
+
+        print(f"  title:        {title!r}")
+        print(f"  body length:  {body_chars} chars")
+        if screenshot:
+            print(f"  screenshot:   {screenshot.relative_to(root)}")
+        if errors:
+            print(f"  ERRORS ({len(errors)}):")
+            for e in errors[:8]:
+                print(f"    {e}")
+        if failed_resources:
+            print(f"  404/failed resources ({len(failed_resources)}):")
+            for r in failed_resources[:8]:
+                print(f"    {r}")
+        if not errors and not failed_resources:
+            print(f"  ✓ no console errors / failed requests")
+        print(f"\n  Open: {url}")
+        print(f"  Compare with: {original_url}")
+    finally:
+        server.terminate()
+        try:
+            server.wait(timeout=3)
+        except subprocess.TimeoutExpired:
+            server.kill()
 
 
 if __name__ == "__main__":

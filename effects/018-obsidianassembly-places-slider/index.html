@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Obsidian Assembly — sticky scroll collage</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* === sc2 effect 018 · obsidianassembly.com /#places — three-phase sticky scroll ===
+
+     STRICTLY INDEPENDENT mechanisms:
+
+     (A) ARROWS / KEYBOARD ←→ / TIMER RING : swap which IMAGE appears in the
+         central active slot. Crossfade between outgoing & incoming (0.7s).
+         Tile positions DO NOT MOVE on arrow click.
+         A circular SVG ring runs around each arrow (4s), and when it completes
+         auto-advances to the next image. Clicking either arrow resets the ring.
+
+     (B) SCROLL = three phases, mapped from --progress 0..1:
+           phase 1 (0   → 0.45) : collage → fullscreen
+              7 images visible (6 satellites + 1 main). As scroll progresses,
+              the 6 fly outward + fade; main grows from ~56vw × 60vh to 100vw × 100vh.
+           phase 2 (0.45 → 0.75): HOLD fullscreen, timer ring auto-cycles.
+           phase 3 (0.75 → 1.0) : shrink-back arch.
+              Active retracts from fullscreen to a small ~26vw × 50vh rounded-top
+              "arch" rectangle, anchored upper-center, then continues to exit.
+
+     Section is 350vh tall (gives 3 phases of scroll). Sticky-frame is 100vh, pins
+     while user scrolls through the section. */
+
+  :root {
+    --bg: #2d2723;
+    --fg: #ece4d6;
+    --fg-dim: rgba(236, 228, 214, .5);
+    --tile-radius: 6px;
+    --active-radius: 14px;
+    --arch-radius: 200px;       /* tall radius → top is round, becoming "arch" */
+    --serif: "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+    --sans:  -apple-system, "Segoe UI", "Inter", Helvetica, sans-serif;
+    --ease: cubic-bezier(0.19, 1, 0.22, 1);
+    --xfade: 0.45s;             /* image crossfade duration (matches the live snap-fast feel) */
+    --ring-duration: 4s;        /* auto-advance period */
+
+    /* progress (raw 0..1) is set by JS as --p. The three sub-progresses are
+       also computed in JS so CSS can reference them as plain numbers. */
+    --p:  0;
+    --p1: 0;  /* phase-1 progress (collage → fullscreen) */
+    --p2: 0;  /* phase-2 progress (hold; unused for sizing, drives ring/auto-cycle in JS) */
+    --p3: 0;  /* phase-3 progress (fullscreen → arch) */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    overflow-x: hidden;
+  }
+
+  /* outer section — 350vh of scroll runway for three phases */
+  .slider-section {
+    position: relative;
+    height: 350vh;
+    background: var(--bg);
+  }
+  .sticky-frame {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* === stone-wall texture background — matches the original's relief-bg layer ===
+     The live site renders a WebGL relief-mapped stone wall on a canvas; we
+     approximate with the actual stone-wall.webp image we scraped, tiled and
+     darkened via a multiply gradient for legibility. Sits behind all tiles
+     + active. Fades out slightly as scroll progresses into phase 2 (so the
+     fullscreen image dominates). */
+  .bg-texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url("assets/images/stone-wall.webp");
+    background-repeat: repeat;
+    background-size: 800px auto;
+    opacity: calc(0.85 - 0.6 * var(--p1));
+    pointer-events: none;
+  }
+  .bg-texture::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(45,39,35,.25) 0%, rgba(20,16,13,.9) 90%);
+  }
+
+  /* === title block — measured against live obsidianassembly.com at vw=1907 ===
+     Live "Not / Everything / is Visible": font-size 34.375px, italic serif,
+     each word on its own line vertically stacked (no horizontal stair-step),
+     all centered. The whole block translates UP 1:1 with scroll (it scrolls
+     out of view as the user enters the section). */
+  .title-block {
+    position: absolute;
+    top: 14vh; left: 0; right: 0;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    /* moves up linearly across phase 1 — at p1=1, block has translated 35vh up */
+    transform: translateY(calc(-35vh * var(--p1)));
+    opacity: calc(1 - var(--p1) * var(--p1));
+  }
+  .title-block .caps {
+    display: block;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: .28em;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  .title-block .words {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 2.15rem;             /* = 34.4px @ 16px base — matches live */
+    color: var(--fg);
+    line-height: 1.18;
+    letter-spacing: 0;
+  }
+  .title-block .words span { display: block; }
+
+  /* === 6 satellite tiles — FIXED viewport-anchored positions ===
+     Each declares its own --x, --y, --w, --h (collage state) inline.
+     During phase 1, they drift via per-tile --dx/--dy. After p1 reaches 1
+     they remain off-screen + faded for the rest of the scroll. */
+  .tile {
+    position: absolute;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--tile-radius);
+    background: #1a1612;
+    box-shadow: 0 8px 32px -8px rgba(0,0,0,.45);
+    filter: brightness(0.88) saturate(0.95);
+    left:   calc(var(--x) + var(--dx, 0vw) * var(--p1));
+    top:    calc(var(--y) + var(--dy, 0vh) * var(--p1));
+    width:  var(--w);
+    height: var(--h);
+    opacity: calc(1 - var(--p1));
+    pointer-events: none;
+    z-index: 2;
+  }
+  .tile img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    -webkit-user-drag: none;
+  }
+
+  /* === ACTIVE block — three-phase position/size ===
+     Collage state    (p1=0):      left:22vw top:26vh  w:56vw  h:60vh
+     Fullscreen state (p1=1,p3=0): left: 0   top: 0    w:100vw h:100vh
+     Arch exit state  (p3=1):      left:26vw top:48vh  w:48vw  h:60vh   centered + slides down
+
+     Phase 1: collage → fullscreen via --p1.
+     Phase 3: fullscreen → arch (wider/taller than before, slides DOWN to bottom). */
+  .active {
+    position: absolute;
+    left:   calc(0vw + 22vw * (1 - var(--p1)) + 26vw * var(--p3));
+    top:    calc(0vh + 26vh * (1 - var(--p1)) + 48vh * var(--p3));
+    width:  calc(100vw - 44vw * (1 - var(--p1)) - 52vw * var(--p3));
+    height: calc(100vh - 40vh * (1 - var(--p1)) - 40vh * var(--p3));
+    overflow: hidden;
+    /* phase 3 → tall rounded-top arch shape */
+    border-top-left-radius:     calc(14px + 286px * var(--p3));
+    border-top-right-radius:    calc(14px + 286px * var(--p3));
+    border-bottom-left-radius:  calc(14px - 14px  * var(--p3));
+    border-bottom-right-radius: calc(14px - 14px  * var(--p3));
+    background: #1a1612;
+    box-shadow: 0 30px 90px -20px rgba(0,0,0,.65);
+    z-index: 5;
+  }
+
+  /* 7 stacked images — horizontal "page-flip" transition.
+     Incoming slides in from the RIGHT, outgoing translates LEFT off the active. */
+  .active-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity var(--xfade) var(--ease),
+                transform calc(var(--xfade) * 1.5) var(--ease);
+    -webkit-user-drag: none;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .active-img.is-current {
+    opacity: 1;
+    transform: translateX(0);
+    z-index: 1;
+  }
+  .active-img.is-leaving {
+    opacity: 0;
+    transform: translateX(-100%);
+    z-index: 0;
+  }
+
+  /* inner gradient for legibility */
+  .active::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(120% 90% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,.35) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* title — BOTTOM-LEFT, with thin horizontal rule underline,
+     animated slide-up on text change. Hidden during arch phase. */
+  .active-title-wrap {
+    position: absolute;
+    left: 5%; bottom: 28%;
+    z-index: 4;
+    pointer-events: none;
+    opacity: calc(1 - var(--p3));
+    overflow: hidden;
+    padding-right: 1.5rem;
+  }
+  .active-title {
+    margin: 0 0 0.55rem 0;
+    text-align: left;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 2.6vw, 2.7rem);
+    color: var(--fg);
+    line-height: 1.0;
+    letter-spacing: -0.005em;
+    text-shadow: 0 2px 28px rgba(0,0,0,.55);
+    /* horizontal slide animation — matches the image flip direction */
+    transform: translateX(0);
+    transition: transform 0.5s var(--ease), opacity 0.3s var(--ease);
+    will-change: transform, opacity;
+  }
+  /* outgoing: slides LEFT off the title wrapper */
+  .active-title.is-leaving {
+    transform: translateX(-110%);
+    opacity: 0;
+  }
+  /* incoming: instant jump to RIGHT (no transition), then transition removed → slides LEFT into place */
+  .active-title.is-entering {
+    transform: translateX(110%);
+    opacity: 0;
+    transition: none;
+  }
+  /* underline rule under the title */
+  .active-title-wrap::after {
+    content: "";
+    display: block;
+    width: clamp(40vw, 50vw, 55vw);
+    height: 1px;
+    background: rgba(255, 255, 255, .55);
+  }
+
+  /* === arrows — BOTTOM-CENTER, aligned to roughly the same baseline as
+     the title underline + counter underline (the "ruler" row). === */
+  .arrows {
+    position: absolute;
+    left: 50%; bottom: 26%;
+    transform: translateX(-50%);
+    display: flex; gap: 14px;
+    z-index: 6;
+    opacity: calc(1 - var(--p3));
+    transition: opacity 0.3s linear;
+  }
+  /* button click feedback: white-fill flash on the active arrow */
+  .arrow.is-firing::before {
+    background: rgba(255, 255, 255, .92);
+  }
+  .arrow.is-firing .chevron { color: #1a1612; }
+  .arrow {
+    position: relative;
+    width: 92px; height: 92px;
+    border: 0;
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
+    padding: 0;
+  }
+  /* dark backdrop circle behind chevron */
+  .arrow::before {
+    content: "";
+    position: absolute; inset: 8px;
+    border-radius: 50%;
+    background: rgba(20, 16, 13, .78);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    transition: background .25s, transform .25s;
+  }
+  .arrow:hover::before  { background: rgba(20, 16, 13, .96); }
+  .arrow:active::before { transform: scale(0.94); }
+
+  /* chevron icon */
+  .arrow .chevron {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 28px; height: 28px;
+    stroke: currentColor; stroke-width: 1.6;
+    fill: none; stroke-linecap: round; stroke-linejoin: round;
+    z-index: 1;
+  }
+
+  /* TIMER RING — ONLY on the NEXT (right) arrow. Stroke-dashoffset animates
+     from full circumference to 0 over --ring-duration; when the animation
+     loops (animationiteration fires) the JS auto-advances to the next image
+     and the ring restarts. Prev arrow has no ring. */
+  .arrow .ring {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+    pointer-events: none;
+    opacity: calc(1 - var(--p3));
+  }
+  .arrow .ring circle {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.4;
+    /* circumference for r=44 in 100×100 viewBox = 2π × 44 ≈ 276.46 */
+    stroke-dasharray: 276.46;
+    stroke-dashoffset: 276.46;
+    animation: ring-fill var(--ring-duration) linear infinite;
+  }
+  @keyframes ring-fill {
+    0%   { stroke-dashoffset: 276.46; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  /* === counter — BOTTOM-RIGHT, mirrors title style + underline === */
+  .counter-wrap {
+    position: absolute;
+    right: 5%; bottom: 28%;
+    z-index: 4;
+    pointer-events: none;
+    opacity: calc(1 - var(--p3));
+    overflow: hidden;
+    text-align: right;
+  }
+  .counter {
+    color: var(--fg);
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 2.6vw, 2.7rem);
+    line-height: 1.0;
+    letter-spacing: 0;
+    margin: 0 0 0.55rem 0;
+    text-shadow: 0 2px 28px rgba(0,0,0,.55);
+  }
+  .counter b { font-weight: 400; }
+  .counter .sep { opacity: .6; margin: 0 .15em; }
+  /* underline rule under the counter — short, sized to fit "N/7" */
+  .counter-wrap::after {
+    content: "";
+    display: block;
+    width: 5.5rem;
+    margin-left: auto;
+    height: 1px;
+    background: rgba(255, 255, 255, .55);
+  }
+
+  @media (max-width: 720px) {
+    .tile { opacity: 0; pointer-events: none; }
+    .active {
+      left:   calc(0vw + 5vw * (1 - var(--p1)) + 37vw * var(--p3));
+      top:    calc(0vh + 20vh * (1 - var(--p1)) - 10vh * var(--p3));
+      width:  calc(100vw - 10vw * (1 - var(--p1)) - 74vw * var(--p3));
+      height: calc(100vh - 35vh * (1 - var(--p1)) - 44vh * var(--p3));
+    }
+    .title-block em { font-size: clamp(2rem, 9vw, 3.5rem); }
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap');
+</style>
+</head>
+<body>
+
+<section class="slider-section" id="section">
+  <div class="sticky-frame">
+
+    <div class="bg-texture" aria-hidden="true"></div>
+
+    <div class="title-block" aria-hidden="true">
+      <span class="caps">Explore Places</span>
+      <div class="words">
+        <span>Not</span>
+        <span>Everything</span>
+        <span>is Visible</span>
+      </div>
+    </div>
+
+    <!-- 6 fixed satellite tiles, decorative, drift outward during phase 1 -->
+    <figure class="tile" data-pos="left-top"
+            style="--x: 2vw;  --y: 30vh; --w: 19vw; --h: 36vh; --dx: -25vw; --dy: -5vh;">
+      <img src="assets/images/2.webp" alt="" loading="eager">
+    </figure>
+    <figure class="tile" data-pos="left-bottom"
+            style="--x: 2vw;  --y: 70vh; --w: 19vw; --h: 22vh; --dx: -25vw; --dy: 20vh;">
+      <img src="assets/images/3.webp" alt="" loading="eager">
+    </figure>
+    <figure class="tile" data-pos="top-center"
+            style="--x: 40vw; --y: 2vh;  --w: 18vw; --h: 16vh; --dx:  0vw;  --dy: -22vh;">
+      <img src="assets/images/4.webp" alt="" loading="eager">
+    </figure>
+    <figure class="tile" data-pos="right-top"
+            style="--x: 79vw; --y: 22vh; --w: 19vw; --h: 28vh; --dx:  25vw; --dy: -5vh;">
+      <img src="assets/images/5.webp" alt="" loading="eager">
+    </figure>
+    <figure class="tile" data-pos="right-bottom"
+            style="--x: 79vw; --y: 55vh; --w: 19vw; --h: 35vh; --dx:  25vw; --dy: 15vh;">
+      <img src="assets/images/6.webp" alt="" loading="eager">
+    </figure>
+    <figure class="tile" data-pos="bottom-center"
+            style="--x: 38vw; --y: 82vh; --w: 22vw; --h: 22vh; --dx:  0vw;  --dy: 22vh;">
+      <img src="assets/images/7.webp" alt="" loading="eager">
+    </figure>
+
+    <div class="active" id="active">
+      <img class="active-img is-current" src="assets/images/1.webp" alt="Lower Hall"     data-title="Lower Hall"     loading="eager">
+      <img class="active-img"            src="assets/images/2.webp" alt="Inner Chamber"  data-title="Inner Chamber"  loading="eager">
+      <img class="active-img"            src="assets/images/3.webp" alt="The Passage"    data-title="The Passage"    loading="eager">
+      <img class="active-img"            src="assets/images/4.webp" alt="Silent Room"    data-title="Silent Room"    loading="eager">
+      <img class="active-img"            src="assets/images/5.webp" alt="The Threshold"  data-title="The Threshold"  loading="eager">
+      <img class="active-img"            src="assets/images/6.webp" alt="The Vault"      data-title="The Vault"      loading="eager">
+      <img class="active-img"            src="assets/images/7.webp" alt="Back Space"     data-title="Back Space"     loading="eager">
+
+      <div class="active-title-wrap">
+        <h2 class="active-title" id="active-title">Lower Hall</h2>
+      </div>
+
+      <div class="arrows">
+        <button class="arrow" id="prev" aria-label="previous">
+          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <polyline points="14,6 8,12 14,18"/>
+          </svg>
+        </button>
+        <button class="arrow has-ring" id="next" aria-label="next">
+          <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
+            <circle id="ring-circle" cx="50" cy="50" r="44" />
+          </svg>
+          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <polyline points="10,6 16,12 10,18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="counter-wrap" aria-hidden="true">
+        <div class="counter"><b id="counter-now">1</b><span class="sep">/</span>7</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  const section = document.getElementById('section');
+  const root    = document.documentElement;
+  const imgs    = [...document.querySelectorAll('.active-img')];
+  const titleEl = document.getElementById('active-title');
+  const counter = document.getElementById('counter-now');
+  const total   = imgs.length;
+  let current   = 0;
+  let busy      = false;
+
+  // ===== scroll-driven progress =====
+  // Three sub-progresses: p1 (0..0.45→0..1), p2 (0.45..0.75), p3 (0.75..1→0..1)
+  function clamp01(x) { return Math.max(0, Math.min(1, x)); }
+  function recompute() {
+    const rect = section.getBoundingClientRect();
+    const scrollable = section.offsetHeight - window.innerHeight;
+    const scrolled = Math.max(0, -rect.top);
+    const p = scrollable > 0 ? clamp01(scrolled / scrollable) : 0;
+    const p1 = clamp01(p / 0.45);
+    const p2 = clamp01((p - 0.45) / 0.30);
+    const p3 = clamp01((p - 0.75) / 0.25);
+    root.style.setProperty('--p',  p.toFixed(4));
+    root.style.setProperty('--p1', p1.toFixed(4));
+    root.style.setProperty('--p2', p2.toFixed(4));
+    root.style.setProperty('--p3', p3.toFixed(4));
+  }
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => { recompute(); ticking = false; });
+      ticking = true;
+    }
+  }, { passive: true });
+  window.addEventListener('resize', recompute);
+  recompute();
+
+  // ===== arrow image swap (crossfade) =====
+  function swap(targetIdx, direction) {
+    if (busy) return;
+    targetIdx = ((targetIdx % total) + total) % total;
+    if (targetIdx === current) return;
+    busy = true;
+    const outgoing = imgs[current];
+    const incoming = imgs[targetIdx];
+    // outgoing gets .is-leaving (slides up + scale-down) for ~xfade duration
+    outgoing.classList.remove('is-current');
+    outgoing.classList.add('is-leaving');
+    incoming.classList.add('is-current');
+    setTimeout(() => outgoing.classList.remove('is-leaving'), 800);
+
+    // title slides LEFT out, text swaps, then slides in from RIGHT (matches image flip)
+    titleEl.classList.remove('is-entering');
+    titleEl.classList.add('is-leaving');
+    setTimeout(() => {
+      titleEl.textContent = incoming.dataset.title;
+      counter.textContent = (targetIdx + 1);
+      // jump to right (off-screen) instantly, then release class → animates back to 0
+      titleEl.classList.remove('is-leaving');
+      titleEl.classList.add('is-entering');
+      void titleEl.offsetWidth;       // force reflow so the next class-removal triggers animation
+      titleEl.classList.remove('is-entering');
+    }, 240);
+
+    // button click feedback flash on the firing arrow
+    const dir = direction || (targetIdx > current ? 'next' : 'prev');
+    const firing = document.getElementById(dir === 'prev' ? 'prev' : 'next');
+    if (firing) {
+      firing.classList.add('is-firing');
+      setTimeout(() => firing.classList.remove('is-firing'), 320);
+    }
+
+    current = targetIdx;
+    setTimeout(() => { busy = false; }, 500);
+    resetRing();
+    if (typeof startCycle === 'function') startCycle();
+  }
+
+  // ===== auto-advance timer — dead-simple, always running =====
+  // One setInterval at page load fires every RING_MS. Each fire calls swap()
+  // unconditionally (as long as the active is visible — i.e., not deep into
+  // phase-3 arch where image is gone). The CSS ring animation also runs
+  // from page load with the same 4s period, so they stay visually synced
+  // by virtue of starting together — no phase-2 entry detection needed.
+  //
+  // Manual click: swap() restarts the visible ring (resetRing) AND restarts
+  // the interval (so the next auto-swap is RING_MS away from the click,
+  // matching the ring's new revolution).
+  const ringCircle = document.getElementById('ring-circle');
+  const RING_MS = 4000;
+  let cycleTimer = null;
+
+  function resetRing() {
+    if (!ringCircle) return;
+    ringCircle.style.animation = 'none';
+    void ringCircle.offsetWidth;
+    ringCircle.style.animation = '';
+  }
+  function startCycle() {
+    if (cycleTimer) clearInterval(cycleTimer);
+    cycleTimer = setInterval(() => {
+      const p3 = parseFloat(root.style.getPropertyValue('--p3') || 0);
+      // skip auto-swap only when deep in phase-3 arch (image is sliding out)
+      if (p3 < 0.5) swap(current + 1, 'next');
+    }, RING_MS);
+  }
+  startCycle();
+
+  document.getElementById('prev').addEventListener('click', e => { e.stopPropagation(); swap(current - 1, 'prev'); });
+  document.getElementById('next').addEventListener('click', e => { e.stopPropagation(); swap(current + 1, 'next'); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  swap(current - 1, 'prev');
+    if (e.key === 'ArrowRight') swap(current + 1, 'next');
+  });
+
+  // ===== preview mode (gallery thumbnail) =====
+  const previewMode = new URLSearchParams(location.search).get('demo') === 'preview';
+  if (previewMode) {
+    // simulate three-phase scroll: oscillate p between 0 and 1
+    let dir = 1, pv = 0;
+    setInterval(() => {
+      pv += dir * 0.012;
+      if (pv >= 1) { pv = 1; dir = -1; }
+      if (pv <= 0) { pv = 0; dir = 1; }
+      const p1 = clamp01(pv / 0.45);
+      const p2 = clamp01((pv - 0.45) / 0.30);
+      const p3 = clamp01((pv - 0.75) / 0.25);
+      root.style.setProperty('--p',  pv.toFixed(3));
+      root.style.setProperty('--p1', p1.toFixed(3));
+      root.style.setProperty('--p2', p2.toFixed(3));
+      root.style.setProperty('--p3', p3.toFixed(3));
+    }, 50);
+    setInterval(() => swap(current + 1), 2200);
+  }
+})();
+</script>
+
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="018-obsidianassembly-places-slider.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=018-obsidianassembly-places-slider" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

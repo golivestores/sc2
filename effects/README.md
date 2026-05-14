@@ -4,9 +4,12 @@
 
 画廊页 [`index.html`](index.html) 由数据驱动渲染（数据源是 [`effects.js`](effects.js) / [`effects.json`](effects.json)，由根目录 [`rebuild-index.ps1`](../rebuild-index.ps1) 扫描各子文件夹的 `meta.json` 自动生成）。**新增 / 改 / 删 effect 时不要手动改 `index.html` 里的卡片列表。**
 
-每张卡片下方有两个新按钮：
-- **`</> 源码`** → 打开 [`view.html`](view.html)，可以逐文件复制、下载整体 .zip
-- **`原站 ↗`** → 跳转到 `meta.json` 的 `sourceUrl`（原网站链接，用于跳转原网页对比）
+每张卡片下方有三个按钮：
+- **`📋 源码`** → 打开 [`view.html`](view.html)，可以逐文件复制 HTML/CSS/JS，或下载整体 zip
+- **`📦 zip`** → 直接下载这个 effect 的 zip 包（同目录下 `NNN-名字.zip`，由 `package-effects.py` 生成）
+- **`原站 ↗`** → 跳转到 `meta.json` 的 `localMirror`（本地镜像 demo，用于对照原网页）
+
+点卡片本体进 demo 单页（`effects/NNN/index.html`），demo 右上角浮起两个按钮：📦 下载 zip + 📋 源码——画廊缩略图通过 `?demo=preview` 自动隐藏 overlay。
 
 ---
 
@@ -20,26 +23,27 @@ effects/
 ├── effects.json           # 自动生成 · 通用 JSON 数据
 ├── effects.js             # 自动生成 · 被 index.html / view.html 加载
 └── NNN-短名/
-    ├── index.html         # demo 主体（自包含，**不引用 ../../vendor/**）
+    ├── index.html         # demo 主体（自包含；底部 sc2-overlay 注入两个浮动按钮：📦 zip + 📋 源码，仅在非 ?demo=preview 时显示）
     ├── meta.json          # 卡片元信息（schema 见下）
     ├── original.html      # 可选 · 嵌入原站镜像作预览（适用于强依赖原站上下文的 effect）
     ├── assets/            # 可选 · demo 私有资源（图片/字体/SVG）
     ├── lib/               # 可选 · effect 自带的库副本（GSAP/Three/Lottie 等）
-    └── NNN-短名.zip       # 自动生成 · 由 ../../package-effects.py 产出，给 view.html 下载用
+    ├── source-bundle.js   # 自动生成 · 被 view.html 加载（gitignored；本地用）
+    └── NNN-短名.zip       # 自动生成 · 由 ../../package-effects.py 产出（gitignored；本地用）
 ```
 
 ---
 
 ## 添加新效果（sc2 流程）
 
+完整 5 步流程见 [根 README](../README.md#五步工作流扩充素材库照这个走)。这里只列 effects 这部分：
+
 1. 在 [`../designs/`](../designs/) 浏览已抓的镜像，**指定一屏**给我（截图、URL 锚点、或文字描述）
-2. 我建 `NNN-kebab-case/`，**编号递增**（0xx 是真·可复用组件保留段，不要拿来当占位）：
-   - `index.html` —— standalone 可复用 demo（**完全自包含**）
-   - `meta.json` —— 卡片元信息（schema 见下）
-   - 必要的 `assets/` `lib/` 等（同样必须在自己文件夹内）
-3. 跑 [根目录的 rebuild-index.bat](../rebuild-index.bat)（或 `rebuild-index.ps1`）→ 刷新 `effects.js` / `effects.json`
-4. 跑 `python ../package-effects.py` → 给每个 effect 文件夹打一个 `<名字>.zip`（view.html 的下载按钮要用）
-5. 浏览器刷新 [`index.html`](index.html)，新卡片出现；点 `</> 源码` 进 [view.html](view.html) 检查复制 / 下载是否就绪
+2. 跑 `python ../new-effect.py <slug> --source-url <URL> --mirror ../designs/<NNN>/index.html` → 自动建 `NNN-slug/` 骨架（index.html + meta.json + assets/ + lib/）
+3. 编辑 `NNN-slug/index.html`：**1:1** 抄原镜像那段的 HTML/CSS/JS，必要时拿 `?demo=preview` 分支跑伪 cascade
+4. 编辑 `meta.json`：填 `description` / `tech` / `tags`（其它字段 new-effect.py 已经预填）
+5. 跑 `python ../finalize.py` → rebuild 索引 + 打 zip + 注入 overlay 一条龙
+6. 浏览器开 `http://localhost:8080/effects/` 看新卡片，点进 demo 单页人工验收（hover、滚动、动画都试一遍）
 
 ### 自包含铁律 (A.2)
 

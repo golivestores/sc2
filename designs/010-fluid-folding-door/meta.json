@@ -1,0 +1,7 @@
+{
+  "title": "Fluid Glass - Fluid Folding Door",
+  "description": "fluid.glass /collection/fluid-folding-door 产品详情页：左侧大幅产品图 + 右侧粘性 sidebar（产品标签 / 标题 / 介绍 / GET A QUOTE CTA）。开屏 splash 动画淡出后呈现 hero；下方依次为 BENEFITS / INFORMATION / CONFIGURATIONS 三段 anchor 切换的产品信息。配色：奶白底 #f1ede6 + 深灰文字，serif + sans 混排，整体克制、画廊感强",
+  "sourceUrl": "https://fluid.glass/collection/fluid-folding-door",
+  "savedAt": "2026-05-14",
+  "tags": ["product-detail", "luxury", "sticky-sidebar", "splash-intro", "nuxt3"]
+}

@@ -1,0 +1,1 @@
+import{e as s,o as n,c as t,a as o}from"./entry.6ece3b7b.js";const a=["href"],l=s({__name:"BaseIcon",props:{src:{type:String,default:""}},setup(e){return(c,_)=>(n(),t("svg",null,[o("use",{href:`#${e.src}`},null,8,a)]))}});export{l as _};

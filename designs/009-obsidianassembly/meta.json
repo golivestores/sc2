@@ -1,0 +1,7 @@
+{
+  "title": "Obsidian Assembly",
+  "description": "Nuxt 3 SPA。镜像本身可以正常渲染（含 hero blur 字 + nav + 多个 placeholder section），用了 5 步手工补救：补抓 7 个 CSS chunk、复制 images/fonts 目录到镜像根、JS/CSS 里 /images/ → ./images/ 路径改写、注入 <base href=/designs/009.../> 锁定 Nuxt history.replaceState 后的相对路径基准、补抓 35 张 lazy 图。",
+  "sourceUrl": "https://obsidianassembly.com/",
+  "savedAt": "2026-05-14",
+  "tags": ["spa", "nuxt", "experimental-effects"]
+}
