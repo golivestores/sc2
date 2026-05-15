@@ -26,13 +26,27 @@
   header .meta { display: flex; gap: 16px; font-size: 12.5px; color: var(--fg-dim); flex-wrap: wrap; }
 
   .toolbar {
-    padding: 20px 48px;
-    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    padding: 16px 48px;
+    display: flex; flex-direction: column; gap: 6px;
     border-bottom: 1px solid var(--border);
     position: sticky; top: 0; z-index: 10; background: var(--bg);
   }
+  .toolbar-row {
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  }
+  .toolbar-row--main {
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 4px;
+  }
+  .toolbar-row__label {
+    font-size: 11px; letter-spacing: .14em;
+    color: var(--fg-dim);
+    min-width: 38px;
+    user-select: none;
+  }
   .chip {
-    font-size: 12.5px; padding: 7px 14px; border-radius: 999px;
+    font-size: 12.5px; padding: 6px 13px; border-radius: 999px;
     background: transparent; color: var(--fg); border: 1px solid var(--border);
     cursor: pointer; transition: .15s;
   }
@@ -41,12 +55,12 @@
   .search {
     margin-left: auto;
     font: inherit; font-size: 12.5px;
-    padding: 6px 12px; width: 180px;
+    padding: 6px 12px; width: 220px;
     border: 1px solid var(--border); border-radius: 999px;
     background: transparent; color: var(--fg);
     transition: border-color .15s, width .2s;
   }
-  .search:focus { outline: none; border-color: var(--fg); width: 220px; }
+  .search:focus { outline: none; border-color: var(--fg); width: 280px; }
   .search::placeholder { color: var(--fg-dim); }
   .count { font-size: 12px; color: var(--fg-dim); margin-left: 12px; }
 
@@ -217,25 +231,40 @@
 </header>
 
 <div class="toolbar">
-  <!-- Chip filter = axis 1 板块 (where on the page this block fits).
-       产品类型 has 13 values and would clutter the bar — use search box instead.
-       Keep in sync with TAGS.md axis 1. -->
-  <button class="chip is-active" data-filter="all">全部</button>
-  <button class="chip" data-filter="首屏">首屏</button>
-  <button class="chip" data-filter="导航">导航</button>
-  <button class="chip" data-filter="产品">产品</button>
-  <button class="chip" data-filter="分类">分类</button>
-  <button class="chip" data-filter="服务">服务</button>
-  <button class="chip" data-filter="流程">流程</button>
-  <button class="chip" data-filter="评价">评价</button>
-  <button class="chip" data-filter="新闻">新闻</button>
-  <button class="chip" data-filter="案例">案例</button>
-  <button class="chip" data-filter="CTA">CTA</button>
-  <button class="chip" data-filter="关于">关于</button>
-  <button class="chip" data-filter="联系">联系</button>
-  <button class="chip" data-filter="页脚">页脚</button>
-  <input class="search" type="search" id="search" placeholder="搜索…" autocomplete="off">
-  <span class="count" id="count"></span>
+  <!-- Chip filter = axis 1 板块 (where on the page this block fits), grouped
+       by page position so the 13 sections read as a hierarchy rather than a
+       flat row. 产品类型 has 13 values and is intentionally not exposed as
+       chips — use the search box instead. Keep in sync with TAGS.md axis 1. -->
+  <div class="toolbar-row toolbar-row--main">
+    <button class="chip is-active" data-filter="all">全部</button>
+    <input class="search" type="search" id="search" placeholder="搜索 标题 / 描述 / 行业 / 技术…" autocomplete="off">
+    <span class="count" id="count"></span>
+  </div>
+  <div class="toolbar-row">
+    <span class="toolbar-row__label">顶部</span>
+    <button class="chip" data-filter="首屏">首屏</button>
+    <button class="chip" data-filter="导航">导航</button>
+  </div>
+  <div class="toolbar-row">
+    <span class="toolbar-row__label">主体</span>
+    <button class="chip" data-filter="产品">产品</button>
+    <button class="chip" data-filter="分类">分类</button>
+    <button class="chip" data-filter="服务">服务</button>
+    <button class="chip" data-filter="流程">流程</button>
+    <button class="chip" data-filter="评价">评价</button>
+    <button class="chip" data-filter="新闻">新闻</button>
+    <button class="chip" data-filter="案例">案例</button>
+  </div>
+  <div class="toolbar-row">
+    <span class="toolbar-row__label">转化</span>
+    <button class="chip" data-filter="CTA">CTA</button>
+  </div>
+  <div class="toolbar-row">
+    <span class="toolbar-row__label">底部</span>
+    <button class="chip" data-filter="关于">关于</button>
+    <button class="chip" data-filter="联系">联系</button>
+    <button class="chip" data-filter="页脚">页脚</button>
+  </div>
 </div>
 
 <main>
