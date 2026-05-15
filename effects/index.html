@@ -27,23 +27,9 @@
 
   .toolbar {
     padding: 16px 48px;
-    display: flex; flex-direction: column; gap: 6px;
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
     border-bottom: 1px solid var(--border);
     position: sticky; top: 0; z-index: 10; background: var(--bg);
-  }
-  .toolbar-row {
-    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  }
-  .toolbar-row--main {
-    padding-bottom: 6px;
-    border-bottom: 1px dashed var(--border);
-    margin-bottom: 4px;
-  }
-  .toolbar-row__label {
-    font-size: 11px; letter-spacing: .14em;
-    color: var(--fg-dim);
-    min-width: 38px;
-    user-select: none;
   }
   .chip {
     font-size: 12.5px; padding: 6px 13px; border-radius: 999px;
@@ -52,6 +38,46 @@
   }
   .chip:hover { border-color: var(--fg); }
   .chip.is-active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+  /* 板块 dropdown — collapses the 11 板块 chips behind one button to save
+     vertical space. Click toggles the panel; click outside or pick a chip
+     closes it. Button label reflects the current active filter so users
+     don't need to open the panel just to see what's selected. */
+  .dropdown { position: relative; }
+  .dropdown__toggle {
+    font-size: 12.5px; padding: 6px 13px 6px 14px; border-radius: 999px;
+    background: transparent; color: var(--fg); border: 1px solid var(--border);
+    cursor: pointer; transition: .15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .dropdown__toggle:hover { border-color: var(--fg); }
+  .dropdown__toggle.is-open { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .dropdown__toggle.is-narrowed { background: #f3efd6; border-color: var(--border); }
+  .dropdown__toggle::after {
+    content: "▾"; font-size: 10px; opacity: .7;
+  }
+  .dropdown__panel {
+    position: absolute; top: calc(100% + 8px); left: 0;
+    min-width: 460px; max-width: min(720px, 90vw);
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    display: flex; flex-direction: column; gap: 6px;
+    z-index: 20;
+  }
+  .dropdown__panel[hidden] { display: none; }
+  .panel-row {
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  }
+  .panel-row__label {
+    font-size: 11px; letter-spacing: .14em;
+    color: var(--fg-dim);
+    min-width: 38px;
+    user-select: none;
+  }
+
   .search {
     margin-left: auto;
     font: inherit; font-size: 12.5px;
@@ -231,38 +257,41 @@
 </header>
 
 <div class="toolbar">
-  <!-- Chip filter = axis 1 板块 (where on the page this block fits), grouped
-       by page position so the 13 sections read as a hierarchy rather than a
-       flat row. 产品类型 has 13 values and is intentionally not exposed as
-       chips — use the search box instead. Keep in sync with TAGS.md axis 1. -->
-  <div class="toolbar-row toolbar-row--main">
-    <button class="chip is-active" data-filter="all">全部</button>
-    <input class="search" type="search" id="search" placeholder="搜索 标题 / 描述 / 行业 / 技术…" autocomplete="off">
-    <span class="count" id="count"></span>
+  <!-- Filter UI: '全部' resets to all; '板块 ▾' opens a panel listing the 11
+       板块 chips grouped by page position (顶部/主体/转化/底部). The dropdown
+       saves the ~3 extra rows the flat layout used to take. 产品类型 stays
+       in the search box (13 values, would crowd the dropdown). -->
+  <button class="chip is-active" data-filter="all">全部</button>
+  <div class="dropdown" id="bankuai-dropdown">
+    <button class="dropdown__toggle" id="bankuai-toggle" aria-haspopup="true" aria-expanded="false">板块</button>
+    <div class="dropdown__panel" id="bankuai-panel" hidden>
+      <div class="panel-row">
+        <span class="panel-row__label">顶部</span>
+        <button class="chip" data-filter="首屏">首屏</button>
+        <button class="chip" data-filter="导航">导航</button>
+      </div>
+      <div class="panel-row">
+        <span class="panel-row__label">主体</span>
+        <button class="chip" data-filter="产品">产品</button>
+        <button class="chip" data-filter="分类">分类</button>
+        <button class="chip" data-filter="介绍">介绍</button>
+        <button class="chip" data-filter="评价">评价</button>
+        <button class="chip" data-filter="案例动态">案例动态</button>
+      </div>
+      <div class="panel-row">
+        <span class="panel-row__label">转化</span>
+        <button class="chip" data-filter="CTA">CTA</button>
+      </div>
+      <div class="panel-row">
+        <span class="panel-row__label">底部</span>
+        <button class="chip" data-filter="关于">关于</button>
+        <button class="chip" data-filter="联系">联系</button>
+        <button class="chip" data-filter="页脚">页脚</button>
+      </div>
+    </div>
   </div>
-  <div class="toolbar-row">
-    <span class="toolbar-row__label">顶部</span>
-    <button class="chip" data-filter="首屏">首屏</button>
-    <button class="chip" data-filter="导航">导航</button>
-  </div>
-  <div class="toolbar-row">
-    <span class="toolbar-row__label">主体</span>
-    <button class="chip" data-filter="产品">产品</button>
-    <button class="chip" data-filter="分类">分类</button>
-    <button class="chip" data-filter="介绍">介绍</button>
-    <button class="chip" data-filter="评价">评价</button>
-    <button class="chip" data-filter="案例动态">案例动态</button>
-  </div>
-  <div class="toolbar-row">
-    <span class="toolbar-row__label">转化</span>
-    <button class="chip" data-filter="CTA">CTA</button>
-  </div>
-  <div class="toolbar-row">
-    <span class="toolbar-row__label">底部</span>
-    <button class="chip" data-filter="关于">关于</button>
-    <button class="chip" data-filter="联系">联系</button>
-    <button class="chip" data-filter="页脚">页脚</button>
-  </div>
+  <input class="search" type="search" id="search" placeholder="搜索 标题 / 描述 / 行业 / 技术…" autocomplete="off">
+  <span class="count" id="count"></span>
 </div>
 
 <main>
@@ -435,11 +464,43 @@
   }
   init();
 
+  // Dropdown control — toggle visibility, sync the toggle label with the
+  // current 板块 selection so users see what's filtered without opening.
+  const dropdown = document.getElementById('bankuai-dropdown');
+  const toggle   = document.getElementById('bankuai-toggle');
+  const panel    = document.getElementById('bankuai-panel');
+  function setOpen(open) {
+    panel.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.classList.toggle('is-open', open);
+  }
+  function setToggleLabel() {
+    if (activeFilter === 'all') {
+      toggle.firstChild.nodeValue = '板块';
+      toggle.classList.remove('is-narrowed');
+    } else {
+      toggle.firstChild.nodeValue = activeFilter;
+      toggle.classList.add('is-narrowed');
+    }
+  }
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setOpen(panel.hidden);
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+
   chips.forEach(chip => {
     chip.addEventListener('click', () => {
       chips.forEach(c => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       activeFilter = chip.dataset.filter;
+      setToggleLabel();
+      setOpen(false);
       applyFilter();
     });
   });

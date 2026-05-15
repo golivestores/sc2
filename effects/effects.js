@@ -144,7 +144,7 @@ window.__EFFECTS__ = [
                      "网格",
                      "悬停",
                      "路径裁切",
-                     "美妆"
+                     "时尚"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://omrbeauty.com/",
@@ -163,7 +163,7 @@ window.__EFFECTS__ = [
                      "横幅",
                      "悬停",
                      "形变",
-                     "美妆"
+                     "时尚"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://omrbeauty.com/",
