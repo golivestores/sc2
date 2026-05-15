@@ -1,11 +1,17 @@
 {
-  "title":       "Talamus Hero（Himax 定制版）",
-  "subtitle":    "video bg + char-by-char title reveal",
+  "title": "Talamus Hero（Himax 定制版）",
+  "subtitle": "video bg + char-by-char title reveal",
   "description": "Talamus 首页 hero 1:1 还原：橙色粒子背景视频铺满，超大标题用 splitting.js 拆字母后逐个 translateY 上滑（per-char-delay = char-index × 10ms）；CTA 带白块右扩 + 箭头旋转 hover；右下角说明配竖线 0%→100% + 文字 translateX 滑入。Tadam 类在 window load 后 10ms 一次性给所有 [data-tadam] 加 --tadam 触发动画。已替换文案为「阿祖AI建站」+ 左上角 Himax 品牌标，字体改用 Inter 800（halyard-display 是 Adobe Typekit 私有授权，离线 fallback 系统 bold sans）。",
-  "tech":        "splitting.js + CSS transitions",
-  "tags":        ["animation", "intro", "typography", "hero"],
+  "tech": "splitting.js + CSS transitions",
+  "tags": [
+    "首屏",
+    "入场",
+    "逐字出场",
+    "形变",
+    "B2B服务"
+  ],
   "previewHref": "",
-  "sourceUrl":   "https://talamus.pro/",
+  "sourceUrl": "https://talamus.pro/",
   "localMirror": "../designs/001-talamus/index.html",
-  "order":       2
+  "order": 2
 }

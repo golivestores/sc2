@@ -1,11 +1,17 @@
 {
-  "title":       "Good Life · Trusted by 客户视频墙 + Trustpilot",
-  "subtitle":    "asymmetric video collage with lightbox + Trustpilot pill",
+  "title": "Good Life · Trusted by 客户视频墙 + Trustpilot",
+  "subtitle": "asymmetric video collage with lightbox + Trustpilot pill",
   "description": "Good Life Meds 首页客户证言区。**最终布局对齐原版截图**：global-grid 4.2/7.8 双列，行高 0.55fr / 1fr 对齐 — 左列上小（testimonial-1 黑衣女）下大（testimonial-2 / Screenshot 10.59 金发女），右列上是文字+Trustpilot 区（Trusted by / [3 头像叠] / thousands / of customers / nationwide + Excellent ★4.5），下是 7fr/5fr 两块（左大 testimonial-3 灰发女 + 右小 testimonial-cover 棕卫衣女）。**4 张 tile + 1 文字块** 视觉与原版一致。每个 tile 底 poster 用 Ken-Burns 16-21s 慢漂移代替原版 Bunny Stream auto-play 视频（HLS 流原 scraper 没拉本地）；hover 漂移暂停 + scale(1.05) + 播放按钮放大变白；**点击触发 lightbox FLIP 开盒动画 — 弹层 transform-origin 按点击点设定，scale(0.4)→1 + opacity 0→1 用 cubic-bezier(.18,.78,.30,1.0) 弹性曲线播 400ms，黑色蒙层同步淡入**。ESC / 点蒙层 / ✕ 关闭。Trustpilot pill 用 5 角星 clip-path 自绘视觉 1:1。",
-  "tech":        "CSS Grid (asymmetric) + clip-path stars + dialog lightbox",
-  "tags":        ["interaction", "animation"],
+  "tech": "CSS Grid (asymmetric) + clip-path stars + dialog lightbox",
+  "tags": [
+    "评价",
+    "轮播",
+    "自动播放",
+    "交叉淡入",
+    "健康"
+  ],
   "previewHref": "",
-  "sourceUrl":   "https://www.goodlifemeds.com/",
+  "sourceUrl": "https://www.goodlifemeds.com/",
   "localMirror": "../designs/005-goodlifemeds/index.html",
-  "order":       12
+  "order": 12
 }

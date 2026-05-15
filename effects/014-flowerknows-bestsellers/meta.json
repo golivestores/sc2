@@ -1,11 +1,18 @@
 {
-  "title":       "Flower Knows · Shop Our Bestsellers",
-  "subtitle":    "Moast TikTok-style video showcase carousel",
+  "title": "Flower Knows · Shop Our Bestsellers",
+  "subtitle": "Moast TikTok-style video showcase carousel",
   "description": "Flower Knows 首页 'Shop Our Bestsellers' 的视频内容轮播：第三方 Shopify 应用 **Moast** 渲染的 TikTok 风格 video showcase，21 个竖版视频缩略图横向 Embla carousel，shadowDOM 自定义元素 `<moast-carousel>` 内嵌 `<moast-media>` / `<moast-video>` / `<moast-mute>` / `<moast-products>`。逐元素 IntersectionObserver 懒加载（rootMargin 200px），slide 进入视口后 ~2s setupVideo，自动静音播放，鼠标 hover 切换卡片，点击进入全屏播放器（player-mode='fullscreen'），底部 below pagination + autoplay-mode='showcase' 居中突出当前 slide（slide-size 250px、slide-spacing 16px、aspect 9/16）。整套 ES module bundle（24 个 chunk，~914KB）原样打到 lib/，运行时缩略图 + 视频流走 cdn.shopify.com（需联网）。**bundle 在 connectedCallback 里读 `window.Shopify.shop` 决定走哪个 shop 的 API**，所以页面顶部补了一段 `Shopify.shop = 'flowerknows.myshopify.com'` 的最小 shim，否则 Observer 不会装、carousel 死在 skeleton 状态。本地没 Shopify 后端，所以 `/products/<handle>.js` 价格刷新调用全 404，卡片显示的是嵌入 JSON 里的快照价（不影响视觉）。",
-  "tech":        "Moast Shopify app · Lit + Embla + HLS.js · ES module bundle (24 chunks)",
-  "tags":        ["interaction", "scroll", "carousel"],
+  "tech": "Moast Shopify app · Lit + Embla + HLS.js · ES module bundle (24 chunks)",
+  "tags": [
+    "产品",
+    "网格",
+    "悬停",
+    "文字滚动",
+    "路径裁切",
+    "美妆"
+  ],
   "previewHref": "",
-  "sourceUrl":   "https://flowerknows.co/",
+  "sourceUrl": "https://flowerknows.co/",
   "localMirror": "../designs/006-flowerknows/index.html",
-  "order":       14
+  "order": 14
 }

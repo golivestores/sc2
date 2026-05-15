@@ -3,7 +3,14 @@
   "subtitle": "hover-reveal marquee + tilt jar",
   "description": "Don Molinico /products 页的产品卡阵列：4 张色块卡（粉/蓝/棕/橙），每张内置一个 product-card__marquee 彩色背板 + 居中的玻璃罐图。hover 时彩色背板用 clip-path 从 inset(0) 收缩到 inset(4%) 露出圆角内框，里面的 4 行重复 text 用 opacity 0→1 + 8s linear 无限纵向 translate3d(0,-50%,0) 跑马灯，同时罐子图 transform scale(1.1) rotate(-4deg)。所有过渡用 cubic-bezier(0.19,1,0.22,1)。原站是 Vue + scroll-snap，本 effect 改成纯 CSS 4-列 grid，小屏 fallback 成横向 scroll-snap-x 保留原版手机端体验。",
   "tech": "CSS Grid + clip-path + @keyframes",
-  "tags": ["animation", "interaction", "scroll"],
+  "tags": [
+    "产品",
+    "网格",
+    "悬停",
+    "文字滚动",
+    "路径裁切",
+    "食品"
+  ],
   "previewHref": "",
   "sourceUrl": "https://www.donmolinico.es/products/",
   "localMirror": "../designs/008-donmolinico/index.html",

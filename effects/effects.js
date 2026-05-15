@@ -8,9 +8,11 @@ window.__EFFECTS__ = [
         "description":  "7 张白色卡片用 grid + nth-child(8n+k) translateY/translateX 错位排布；每张卡的 scale + opacity 由独立 IntersectionObserver 触发，所以滚动到位会陆续出现而非一次全显；同时叠加 simpleparallax-js 的连续滚动 drift（每张卡 scale 1.0 + index*0.2，速率不同制造层次）。源自 Talamus 首页 \"formations\" section。",
         "tech":  "CSS Grid + IO + simpleparallax-js",
         "tags":  [
-                     "animation",
-                     "intro",
-                     "scroll"
+                     "产品",
+                     "网格",
+                     "入场",
+                     "逐字出场",
+                     "B2B服务"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://talamus.pro/",
@@ -25,10 +27,11 @@ window.__EFFECTS__ = [
         "description":  "Talamus 首页 hero 1:1 还原：橙色粒子背景视频铺满，超大标题用 splitting.js 拆字母后逐个 translateY 上滑（per-char-delay = char-index × 10ms）；CTA 带白块右扩 + 箭头旋转 hover；右下角说明配竖线 0%→100% + 文字 translateX 滑入。Tadam 类在 window load 后 10ms 一次性给所有 [data-tadam] 加 --tadam 触发动画。已替换文案为「阿祖AI建站」+ 左上角 Himax 品牌标，字体改用 Inter 800（halyard-display 是 Adobe Typekit 私有授权，离线 fallback 系统 bold sans）。",
         "tech":  "splitting.js + CSS transitions",
         "tags":  [
-                     "animation",
-                     "intro",
-                     "typography",
-                     "hero"
+                     "首屏",
+                     "入场",
+                     "逐字出场",
+                     "形变",
+                     "B2B服务"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://talamus.pro/",
@@ -43,10 +46,10 @@ window.__EFFECTS__ = [
         "description":  "Talamus 中段 CTA：黑底红色粒子视频铺满，标题用 splitting.js 拆字母后逐个 translateY 上滑（per-char-delay = char-index × 10ms），跟着 0.5s opacity 淡出橙色 CTA 按钮（带白块右扩 + 箭头旋转 hover）。整段由 TadamScroll 监听滚动位置，scrollY+innerHeight 越过 section 绝对顶时给 .module-cta 加 --tadam，连锁触发标题字符 + CTA 反复。完全 1:1 还原原版交互。",
         "tech":  "splitting.js + scroll trigger",
         "tags":  [
-                     "animation",
-                     "intro",
-                     "scroll",
-                     "typography"
+                     "CTA",
+                     "入场",
+                     "逐字出场",
+                     "B2B服务"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://talamus.pro/",
@@ -61,8 +64,11 @@ window.__EFFECTS__ = [
         "description":  "Shift5 中段产品分类区：横向 4 卡片 grid，每卡 48rem 宽（~480px @1440px），细线边框由 4 个 absolute 定位的 ::line 元素拼出。鼠标 hover 时卡片整体变珊瑚红 #ff5841、Explore 按钮反相（黑底珊瑚字），0.2s ease 过渡。每张卡片有独特 SVG 图标（地球线框 / 半色调圆点 / 星芒 / 立方体）。顶部带左右 slider 箭头控件，点击 scrollBy 一格。",
         "tech":  "CSS Grid + SVG sprite + scroll snap",
         "tags":  [
-                     "interaction",
-                     "animation"
+                     "分类",
+                     "网格",
+                     "悬停",
+                     "路径裁切",
+                     "工业安防"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://shift5.io/",
@@ -77,8 +83,11 @@ window.__EFFECTS__ = [
         "description":  "Shift5 的 newsroom 区：左侧黑底特色文章面板（图片 + 标题 + 日期 + 描述 + READ MORE 按钮）做 sticky；右侧灰底 2 列 grid 排 12 篇文章卡片，鼠标 hover 卡片整体翻转成黑底浅字（0.4s ease-in-out）。原版用 JS scroll listener + transform 实现 sticky，我们用 CSS position: sticky 等价替换。每张卡片用 absolute 定位的细线（item-line[data-line=x|y]）拼出格子边框。",
         "tech":  "CSS Grid + position: sticky",
         "tags":  [
-                     "interaction",
-                     "scroll"
+                     "新闻",
+                     "文字段",
+                     "滚动",
+                     "逐字出场",
+                     "工业安防"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://shift5.io/",
@@ -93,8 +102,11 @@ window.__EFFECTS__ = [
         "description":  "Armateurs de France 首页中段新闻区：12 列 grid 拆 4+3+5，每列一张卡（图 + 标题 + 日期 + 箭头），2/3 列开头加左侧细线 separator。卡片 hover 时图片 scale(1.05)。第一列顶部带「Nos actualités」红色 small-caps 标签 + 「+ Voir toutes les actualités」CTA（hover 时下划线从右滑到左切换为红色）。",
         "tech":  "CSS Grid + transition",
         "tags":  [
-                     "interaction",
-                     "animation"
+                     "新闻",
+                     "轮播",
+                     "自动播放",
+                     "交叉淡入",
+                     "协会组织"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.armateursdefrance.org/",
@@ -109,8 +121,11 @@ window.__EFFECTS__ = [
         "description":  "Armateurs de France 中段「Nos domaines d\u0027intervention」区：深蓝 #001060 圆角容器，里面铺一张大船海面照片做背景；顶部巨大白色 UPPERCASE 标题，下方 12 列 grid 排 6 张玻璃质感卡（rgba(255,255,255,0.10) + backdrop-filter:blur(5px)，aspect 208/230），每卡含分类名 + 圆形白边箭头按钮。卡片 hover 时整张上浮 (translateY(-1rem))，圆形按钮翻成白底深蓝箭头。",
         "tech":  "CSS Grid + backdrop-filter + :has() hover",
         "tags":  [
-                     "interaction",
-                     "animation"
+                     "服务",
+                     "网格",
+                     "悬停",
+                     "多态切换",
+                     "协会组织"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.armateursdefrance.org/",
@@ -125,8 +140,11 @@ window.__EFFECTS__ = [
         "description":  "OMR Beauty 首页 OMR Hoodie 区：3 列产品卡（黑/米/灰三色），鼠标 hover 时 .card__hover-media 切换显示替代主图（典型 Shopify 二图切换）。卡片底部 apparel 小标签 + 大写产品名 + 价格。顶部 header 含巨号大写标题、底划 View all 链接（hover 时下划线消失）、左右 SVG 箭头滚动按钮。",
         "tech":  "CSS Grid + scroll-snap + hover image swap",
         "tags":  [
-                     "interaction",
-                     "animation"
+                     "产品",
+                     "网格",
+                     "悬停",
+                     "路径裁切",
+                     "美妆"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://omrbeauty.com/",
@@ -141,8 +159,11 @@ window.__EFFECTS__ = [
         "description":  "OMR Beauty 中段 4 个分类导航瓦片：Our Story / Home Fragrance / Eau de Parfum / Perfume Oils。每瓦 4:5 图片铺满 + 底部叠标题；hover 时正文用 grid-template-rows 0fr → 1fr 平滑展开（Shopify 用这个 trick 替代 max-height 动画，过渡更顺），同时一块黑色 ::after 面板 translateY(100%) → 0 从底部升上来做文字背景，标题转白。整段桌面 4 等分，移动端 75% scroll-snap 横滑。",
         "tech":  "CSS Grid + grid-row 0fr trick + container queries",
         "tags":  [
-                     "interaction",
-                     "animation"
+                     "分类",
+                     "横幅",
+                     "悬停",
+                     "形变",
+                     "美妆"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://omrbeauty.com/",
@@ -157,9 +178,11 @@ window.__EFFECTS__ = [
         "description":  "Good Life Meds 首页「01 / Weight Loss」产品区：上半段大写超大标题 + 数字小标 + 介绍段落叠在沙绿色女性背影图上；下半段是横滑产品卡片轨（7 张：Tirzepatide / Semaglutide / Wegovy Pill / Wegovy / Ozempic / Zepbound / Mounjaro），每卡白底圆角，左上产品名 + Rx 角标 + 沙绿小标，中间药瓶/药片/笔产品图，右下两按钮（沙绿底 Get started + 米色 Learn more 带箭头）。原版用 GSAP Draggable + scroll-snap，这里用 PointerEvent 手势 + CSS scroll-snap 等价复刻：mouse 拖拽时取消 snap、移动距离 \u003e5px 抑制点击穿透；右下角圆形描边箭头按钮按一卡步距 scrollBy，到边自动 aria-disabled 灰掉。**hover 时静态药瓶 fade out → 同位 mp4 fade in 旋转播放**（Tirzepatide / Semaglutide 两张卡有源 mp4，其余 5 张原版即留空）。结尾是「Achieve your weight loss goals」CTA 条。",
         "tech":  "CSS Grid + scroll-snap + PointerEvent drag",
         "tags":  [
-                     "interaction",
-                     "animation",
-                     "scroll"
+                     "产品",
+                     "轮播",
+                     "自动播放",
+                     "交叉淡入",
+                     "健康"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.goodlifemeds.com/",
@@ -174,9 +197,11 @@ window.__EFFECTS__ = [
         "description":  "Good Life Meds 首页「02 / Daily Wellness」产品区，与 010 同源同骨架但调色完全不同：桃色 #d2a382 替代沙绿做小标 + Get started 底色，标题 + 数字小标改为深色叠在朝阳 unsplash 照片上（原版从 is-light-text 切到 is-dark）；轨道里 8 张产品卡（NAD+ Injections / Microdose GLP-1 / MIC+B12 / Sermorelin / Glutathione / Slim Shot® / Vitamin B12 / NAD+ Nasal Spray）。底部箭头按钮翻转为深色描边、hover 反相填充。**8 张卡每一张 hover 时都触发药瓶/喷雾 mp4 旋转播放**（fade in 300ms，离开复位到首帧）。结尾 CTA 条多一条「Get started today」沙绿实心副按钮，由竖线 divider 分隔，原版交互完整保留。",
         "tech":  "CSS Grid + scroll-snap + PointerEvent drag",
         "tags":  [
-                     "interaction",
-                     "animation",
-                     "scroll"
+                     "产品",
+                     "轮播",
+                     "自动播放",
+                     "形变",
+                     "健康"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.goodlifemeds.com/",
@@ -191,8 +216,11 @@ window.__EFFECTS__ = [
         "description":  "Good Life Meds 首页客户证言区。**最终布局对齐原版截图**：global-grid 4.2/7.8 双列，行高 0.55fr / 1fr 对齐 — 左列上小（testimonial-1 黑衣女）下大（testimonial-2 / Screenshot 10.59 金发女），右列上是文字+Trustpilot 区（Trusted by / [3 头像叠] / thousands / of customers / nationwide + Excellent ★4.5），下是 7fr/5fr 两块（左大 testimonial-3 灰发女 + 右小 testimonial-cover 棕卫衣女）。**4 张 tile + 1 文字块** 视觉与原版一致。每个 tile 底 poster 用 Ken-Burns 16-21s 慢漂移代替原版 Bunny Stream auto-play 视频（HLS 流原 scraper 没拉本地）；hover 漂移暂停 + scale(1.05) + 播放按钮放大变白；**点击触发 lightbox FLIP 开盒动画 — 弹层 transform-origin 按点击点设定，scale(0.4)→1 + opacity 0→1 用 cubic-bezier(.18,.78,.30,1.0) 弹性曲线播 400ms，黑色蒙层同步淡入**。ESC / 点蒙层 / ✕ 关闭。Trustpilot pill 用 5 角星 clip-path 自绘视觉 1:1。",
         "tech":  "CSS Grid (asymmetric) + clip-path stars + dialog lightbox",
         "tags":  [
-                     "interaction",
-                     "animation"
+                     "评价",
+                     "轮播",
+                     "自动播放",
+                     "交叉淡入",
+                     "健康"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.goodlifemeds.com/",
@@ -207,9 +235,10 @@ window.__EFFECTS__ = [
         "description":  "Good Life Meds 首页流程区：底图 howitworks-cover 用 object-position:right center 锚到右侧让绿色药盒留在右边（不再全屏铺平），左→右深色渐变蒙层让左半侧的标题/卡片读得清、右半侧药盒完全可见；**右中位置叠一段真 Lottie 盒子打开循环（GoodLife_Box_03_1x_02.json，70 帧 60fps，约 1.16s 一循环），用 lottie-web light 渲染，替代原版本地缺失的 Bunny HLS 视频做「盒子打开」核心动画**。左上小段说明 + 巨号「How it works」标题（IO fade+lift 入场），底部 12 列 grid 布 3 张玻璃卡（rgba 0.10 + backdrop-filter:blur(16px) + 1px 边），第二张 align-self:end + translateY(48px) 形成 top-bottom-top zig-zag，配两条 dasharray 2 4 SVG 折角虚线连接。移动端 picture 切到竖版 howitworks-mobile + 3 张卡堆叠并隐藏连接线。",
         "tech":  "CSS Grid zig-zag + lottie-web Box-opening loop + backdrop-filter + IO fade",
         "tags":  [
-                     "interaction",
-                     "animation",
-                     "scroll"
+                     "流程",
+                     "滚动",
+                     "逐字出场",
+                     "健康"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.goodlifemeds.com/",
@@ -224,9 +253,12 @@ window.__EFFECTS__ = [
         "description":  "Flower Knows 首页 \u0027Shop Our Bestsellers\u0027 的视频内容轮播：第三方 Shopify 应用 **Moast** 渲染的 TikTok 风格 video showcase，21 个竖版视频缩略图横向 Embla carousel，shadowDOM 自定义元素 `\u003cmoast-carousel\u003e` 内嵌 `\u003cmoast-media\u003e` / `\u003cmoast-video\u003e` / `\u003cmoast-mute\u003e` / `\u003cmoast-products\u003e`。逐元素 IntersectionObserver 懒加载（rootMargin 200px），slide 进入视口后 ~2s setupVideo，自动静音播放，鼠标 hover 切换卡片，点击进入全屏播放器（player-mode=\u0027fullscreen\u0027），底部 below pagination + autoplay-mode=\u0027showcase\u0027 居中突出当前 slide（slide-size 250px、slide-spacing 16px、aspect 9/16）。整套 ES module bundle（24 个 chunk，~914KB）原样打到 lib/，运行时缩略图 + 视频流走 cdn.shopify.com（需联网）。**bundle 在 connectedCallback 里读 `window.Shopify.shop` 决定走哪个 shop 的 API**，所以页面顶部补了一段 `Shopify.shop = \u0027flowerknows.myshopify.com\u0027` 的最小 shim，否则 Observer 不会装、carousel 死在 skeleton 状态。本地没 Shopify 后端，所以 `/products/\u003chandle\u003e.js` 价格刷新调用全 404，卡片显示的是嵌入 JSON 里的快照价（不影响视觉）。",
         "tech":  "Moast Shopify app · Lit + Embla + HLS.js · ES module bundle (24 chunks)",
         "tags":  [
-                     "interaction",
-                     "scroll",
-                     "carousel"
+                     "产品",
+                     "网格",
+                     "悬停",
+                     "文字滚动",
+                     "路径裁切",
+                     "美妆"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://flowerknows.co/",
@@ -241,9 +273,12 @@ window.__EFFECTS__ = [
         "description":  "Don Molinico /products 页的产品卡阵列：4 张色块卡（粉/蓝/棕/橙），每张内置一个 product-card__marquee 彩色背板 + 居中的玻璃罐图。hover 时彩色背板用 clip-path 从 inset(0) 收缩到 inset(4%) 露出圆角内框，里面的 4 行重复 text 用 opacity 0→1 + 8s linear 无限纵向 translate3d(0,-50%,0) 跑马灯，同时罐子图 transform scale(1.1) rotate(-4deg)。所有过渡用 cubic-bezier(0.19,1,0.22,1)。原站是 Vue + scroll-snap，本 effect 改成纯 CSS 4-列 grid，小屏 fallback 成横向 scroll-snap-x 保留原版手机端体验。",
         "tech":  "CSS Grid + clip-path + @keyframes",
         "tags":  [
-                     "animation",
-                     "interaction",
-                     "scroll"
+                     "产品",
+                     "网格",
+                     "悬停",
+                     "文字滚动",
+                     "路径裁切",
+                     "食品"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.donmolinico.es/products/",
@@ -258,8 +293,12 @@ window.__EFFECTS__ = [
         "description":  "Don Molinico /products 页第二屏的三张扁罐头卡（Litolata：Merluza/Bacalao/Carne 三色）。结构跟 015 (Frasco) 完全一致：彩色 marquee 背板 + clip-path 4% inset hover reveal + 6 份重复纵向跑马灯 + 罐头 scale(1.1) rotate(-4deg) 倾斜。差异只有 grid 列数（3 列 clamp(300,30vw,520)）、卡片背景色、罐头图、marquee 文案。同样用原版 super-med 字体 + 14.4px 根字号让 fs-35 / fs-110 公式落到原版尺寸。",
         "tech":  "CSS Grid + clip-path + @keyframes",
         "tags":  [
-                     "animation",
-                     "interaction"
+                     "产品",
+                     "网格",
+                     "悬停",
+                     "文字滚动",
+                     "路径裁切",
+                     "食品"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.donmolinico.es/products/",
@@ -274,8 +313,12 @@ window.__EFFECTS__ = [
         "description":  "Don Molinico /products 页第三屏的两张大圆罐头卡（Pandereta：Atun/Carne 860g）。结构和 015 / 016 一致，差异只有 grid 列数（2 列 clamp(300,30vw,520)）+ 2 张卡片背景色 + 罐头图 + marquee 文案。两卡居中、左右留较大 cream 留白，跟原版 desktop 视觉一致。",
         "tech":  "CSS Grid + clip-path + @keyframes",
         "tags":  [
-                     "animation",
-                     "interaction"
+                     "产品",
+                     "网格",
+                     "悬停",
+                     "文字滚动",
+                     "路径裁切",
+                     "食品"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.donmolinico.es/products/",
@@ -285,16 +328,22 @@ window.__EFFECTS__ = [
     {
         "num":  "018",
         "folder":  "018-obsidianassembly-places-slider",
-        "title":  "018-obsidianassembly-places-slider",
-        "subtitle":  "",
-        "description":  "",
-        "tech":  "",
+        "title":  "Obsidian Assembly 房间轮播",
+        "subtitle":  "collage of 7 tiles · click to zoom into focus",
+        "description":  "obsidianassembly.com /#places 段的核心交互：7 张房间图全部同时在画面上，1 张占中心大区（slot 0，约 55%×72% 居中），其它 6 张作为小卫星缩略图分布四周（slot 1-6 是 6 个固定位置）。点 next / prev：当前活动图缩回它的目标小位置、新活动图从它的小位置放大到中心，所有 7 张同时以 transform translate+scale 平滑过渡（1.15s cubic-bezier(0.19,1,0.22,1)）。\\n\\n核心机制 = slot 轮转：slide 索引 N 是当前活动时，slot k 装的就是 slide (N+k)%7。点 next 时 N→N+1，所有 data-slot 重新映射，CSS transition 自动跑出「小图→大图」的放大效果。点 prev 同理反向。\\n\\n额外：键盘 ←→ 切换；点任意卫星图也直接切到它；?demo=preview 自动 1.7s 一切（缩略图也能看到这个 zoom 效果）；标题用 Cormorant Garamond 斜体覆盖活动区中心、X/7 计数器在活动区右下角、上方小标题 「Explore Places · Not Everything is Visible」 与原站一致；点活动图不会触发任何动作。",
+        "tech":  "CSS transform interpolation + JS slot rotation",
         "tags":  [
-
+                     "案例",
+                     "滑块",
+                     "滚动",
+                     "形变",
+                     "路径裁切",
+                     "键盘",
+                     "设计建筑"
                  ],
         "previewHref":  "",
-        "sourceUrl":  "",
-        "localMirror":  "",
+        "sourceUrl":  "https://obsidianassembly.com/",
+        "localMirror":  "../designs/009-obsidianassembly/index.html",
         "order":  18
     },
     {
@@ -305,10 +354,13 @@ window.__EFFECTS__ = [
         "description":  "Don Molinico 首页顶 bar 的 1:1 复刻，带 hover 触发的展开/收起。默认态 = collapsed：窄红条 60×114（mobile）/ max(60px,6vw) 宽，金色 .logo-mono SVG 只含 monogram-small 的 M+王冠+® 四条 path，紧 viewBox 14 108 151 157 居中显示，hamburger 宽度变窄到 25px。鼠标 hover 到 .menu-label（或 :focus-within / body.is-menu-open）→ bg width/height 同时过渡到展开尺寸（mobile 240×143、desktop 1440 时 346×192，公式 max(240px,24vw) × calc(124px+4.7vw)，三档视口实测 Δ ≤ 2px），同时 .logo-mono opacity→0、.logo-morphing opacity→1（带 0.25s delay 让 bg 先展开），hamburger 宽度回到 60px。展开后显示完整 desde / nueva-tradicion / don / molinico / monogram-small 五组金色 path。入场动画：红 bg 从 100vw×100vh 全屏收到 collapsed 尺寸，full logo 从中心 scale 2.6 fade in 再 fade out 切到 logo-mono。点 hamburger → body.is-menu-open 触发：两条 .menu-label__line translate3d±0.35rem + rotate±8° 形成微 X，#menu 全屏红覆盖 clip-path inset 自上而下展开，4 个 menu__item（Inicio/Productos/Nuestra Historia/Contactico）+ 当前项左右菱形 .icon-molinico 风车标记 scale(0)→scale(1) 带 stagger 出场。颜色统一 gold #cba058 / red #d70321 / cream #fbf5e7，缓动 cubic-bezier(0.19,1,0.22,1)。字体 super-med（woff2+woff，复用 008-donmolinico）。",
         "tech":  "CSS clip-path + keyframes + inline multi-group SVG",
         "tags":  [
-                     "intro",
-                     "navigation",
-                     "interaction",
-                     "animation"
+                     "导航",
+                     "顶栏",
+                     "滚动",
+                     "多态切换",
+                     "形变",
+                     "响应式",
+                     "食品"
                  ],
         "previewHref":  "",
         "sourceUrl":  "https://www.donmolinico.es/",

@@ -1,11 +1,17 @@
 {
-  "title":       "Good Life Weight Loss · 产品横滑卡片",
-  "subtitle":    "drag-to-scroll product carousel with peek + arrow nav",
+  "title": "Good Life Weight Loss · 产品横滑卡片",
+  "subtitle": "drag-to-scroll product carousel with peek + arrow nav",
   "description": "Good Life Meds 首页「01 / Weight Loss」产品区：上半段大写超大标题 + 数字小标 + 介绍段落叠在沙绿色女性背影图上；下半段是横滑产品卡片轨（7 张：Tirzepatide / Semaglutide / Wegovy Pill / Wegovy / Ozempic / Zepbound / Mounjaro），每卡白底圆角，左上产品名 + Rx 角标 + 沙绿小标，中间药瓶/药片/笔产品图，右下两按钮（沙绿底 Get started + 米色 Learn more 带箭头）。原版用 GSAP Draggable + scroll-snap，这里用 PointerEvent 手势 + CSS scroll-snap 等价复刻：mouse 拖拽时取消 snap、移动距离 >5px 抑制点击穿透；右下角圆形描边箭头按钮按一卡步距 scrollBy，到边自动 aria-disabled 灰掉。**hover 时静态药瓶 fade out → 同位 mp4 fade in 旋转播放**（Tirzepatide / Semaglutide 两张卡有源 mp4，其余 5 张原版即留空）。结尾是「Achieve your weight loss goals」CTA 条。",
-  "tech":        "CSS Grid + scroll-snap + PointerEvent drag",
-  "tags":        ["interaction", "animation", "scroll"],
+  "tech": "CSS Grid + scroll-snap + PointerEvent drag",
+  "tags": [
+    "产品",
+    "轮播",
+    "自动播放",
+    "交叉淡入",
+    "健康"
+  ],
   "previewHref": "",
-  "sourceUrl":   "https://www.goodlifemeds.com/",
+  "sourceUrl": "https://www.goodlifemeds.com/",
   "localMirror": "../designs/005-goodlifemeds/index.html",
-  "order":       10
+  "order": 10
 }

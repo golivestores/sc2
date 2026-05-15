@@ -85,7 +85,15 @@ META_TEMPLATE = {
     "subtitle": "",
     "description": "",
     "tech": "",
-    "tags": [],
+    # tags follow the 5-axis taxonomy from TAGS.md:
+    #   axis 1 板块     required exactly 1 of: 首屏/导航/产品/分类/服务/流程/评价/新闻/案例/CTA/关于/联系/页脚
+    #   axis 2 形态     optional 0-1 of:       网格/轮播/滑块/跑马灯/顶栏/横幅/文字段/列表
+    #   axis 3 触发     required exactly 1 of: 入场/滚动/悬停/点击/自动播放
+    #   axis 4 技术     optional 0-3 of:       形变/路径裁切/逐字出场/视差/交叉淡入/多态切换/遮罩/文字滚动/响应式/键盘
+    #   axis 5 产品类型 required exactly 1 of: 美妆/食品/健康/时尚/B2B服务/工业安防/协会组织/设计建筑/科技/教育/金融/房产/生活方式
+    # Example: ["产品", "网格", "悬停", "路径裁切", "美妆"]
+    # package-effects.py refuses to package if the tag set is invalid.
+    "tags": ["TODO-板块", "TODO-触发", "TODO-产品类型"],
     "previewHref": "",
     "sourceUrl": "",
     "localMirror": "",

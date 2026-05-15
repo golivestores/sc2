@@ -470,6 +470,51 @@ def package_one(effect_dir: Path, skip_zip: bool = False):
     return zip_path, len(files_for_zip), raw_bytes, bundle_path
 
 
+# === Tag taxonomy (locked — see TAGS.md) ====================================
+# Order matters only for human review of axis 4 (technique). Axes 1/3/5 are
+# required exactly-one; axis 2 is optional 0-1; axis 4 is optional 0-3.
+TAG_AXIS_BANKUAI = {"首屏","导航","产品","分类","服务","流程","评价","新闻","案例","CTA","关于","联系","页脚"}
+TAG_AXIS_XINGTAI = {"网格","轮播","滑块","跑马灯","顶栏","横幅","文字段","列表"}
+TAG_AXIS_CHUFA   = {"入场","滚动","悬停","点击","自动播放"}
+TAG_AXIS_JISHU   = {"形变","路径裁切","逐字出场","视差","交叉淡入","多态切换","遮罩","文字滚动","响应式","键盘"}
+TAG_AXIS_CHANPIN = {"美妆","食品","健康","时尚","B2B服务","工业安防","协会组织","设计建筑","科技","教育","金融","房产","生活方式"}
+
+ALL_KNOWN_TAGS = TAG_AXIS_BANKUAI | TAG_AXIS_XINGTAI | TAG_AXIS_CHUFA | TAG_AXIS_JISHU | TAG_AXIS_CHANPIN
+
+
+def _validate_tags(tags: list[str]) -> list[str]:
+    """Return list of human-readable errors. Empty list = valid."""
+    errors = []
+
+    # Unknown tags first — usually a typo or someone making up a new tag.
+    unknown = [t for t in tags if t not in ALL_KNOWN_TAGS]
+    if unknown:
+        errors.append(f"unknown tag(s) {unknown} — see TAGS.md for the allowed set")
+
+    # Bucket into axes.
+    bk = [t for t in tags if t in TAG_AXIS_BANKUAI]
+    xt = [t for t in tags if t in TAG_AXIS_XINGTAI]
+    cf = [t for t in tags if t in TAG_AXIS_CHUFA]
+    js = [t for t in tags if t in TAG_AXIS_JISHU]
+    cp = [t for t in tags if t in TAG_AXIS_CHANPIN]
+
+    # Required-exactly-one axes.
+    if len(bk) != 1:
+        errors.append(f"axis 1 板块: need exactly 1, got {len(bk)} ({bk})")
+    if len(cf) != 1:
+        errors.append(f"axis 3 触发: need exactly 1, got {len(cf)} ({cf})")
+    if len(cp) != 1:
+        errors.append(f"axis 5 产品类型: need exactly 1, got {len(cp)} ({cp})")
+
+    # Bounded axes.
+    if len(xt) > 1:
+        errors.append(f"axis 2 形态: max 1 allowed, got {len(xt)} ({xt})")
+    if len(js) > 3:
+        errors.append(f"axis 4 技术: max 3 allowed, got {len(js)} ({js})")
+
+    return errors
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     parser.add_argument(
@@ -503,14 +548,29 @@ def main():
             bad_meta.append((d.name, "meta.json missing"))
             continue
         try:
-            _json.loads(m.read_text(encoding="utf-8"))
+            parsed = _json.loads(m.read_text(encoding="utf-8"))
         except Exception as e:
             bad_meta.append((d.name, f"JSON parse error: {e}"))
+            continue
+        # Tag taxonomy validation — see TAGS.md for the locked spec.
+        # Axes:
+        #   1 板块       (required, exactly 1)
+        #   2 形态       (optional, 0 or 1)
+        #   3 触发       (required, exactly 1)
+        #   4 技术       (optional, 0-3)
+        #   5 产品类型   (required, exactly 1)
+        tags = parsed.get("tags", [])
+        if not isinstance(tags, list):
+            bad_meta.append((d.name, "tags must be a JSON array"))
+            continue
+        for err in _validate_tags(tags):
+            bad_meta.append((d.name, err))
     if bad_meta:
         print("aborting: invalid meta.json found —")
         for name, err in bad_meta:
             print(f"  {name}: {err}")
-        print("\nFix the listed meta.json file(s) and re-run package-effects.py.")
+        print("\nFix the listed meta.json file(s) — see TAGS.md for the tag spec —")
+        print("then re-run package-effects.py.")
         sys.exit(1)
 
     if args.bundle_only:

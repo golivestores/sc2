@@ -3,7 +3,15 @@
   "subtitle": "collage of 7 tiles · click to zoom into focus",
   "description": "obsidianassembly.com /#places 段的核心交互：7 张房间图全部同时在画面上，1 张占中心大区（slot 0，约 55%×72% 居中），其它 6 张作为小卫星缩略图分布四周（slot 1-6 是 6 个固定位置）。点 next / prev：当前活动图缩回它的目标小位置、新活动图从它的小位置放大到中心，所有 7 张同时以 transform translate+scale 平滑过渡（1.15s cubic-bezier(0.19,1,0.22,1)）。\\n\\n核心机制 = slot 轮转：slide 索引 N 是当前活动时，slot k 装的就是 slide (N+k)%7。点 next 时 N→N+1，所有 data-slot 重新映射，CSS transition 自动跑出「小图→大图」的放大效果。点 prev 同理反向。\\n\\n额外：键盘 ←→ 切换；点任意卫星图也直接切到它；?demo=preview 自动 1.7s 一切（缩略图也能看到这个 zoom 效果）；标题用 Cormorant Garamond 斜体覆盖活动区中心、X/7 计数器在活动区右下角、上方小标题 「Explore Places · Not Everything is Visible」 与原站一致；点活动图不会触发任何动作。",
   "tech": "CSS transform interpolation + JS slot rotation",
-  "tags": ["interaction", "intro", "hero", "animation"],
+  "tags": [
+    "案例",
+    "滑块",
+    "滚动",
+    "形变",
+    "路径裁切",
+    "键盘",
+    "设计建筑"
+  ],
   "previewHref": "",
   "sourceUrl": "https://obsidianassembly.com/",
   "localMirror": "../designs/009-obsidianassembly/index.html",

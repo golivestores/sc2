@@ -1,11 +1,17 @@
 {
-  "title":       "ADF NOS ACTUALITÉS · 三列新闻卡片",
-  "subtitle":    "12-col grid: 4+3+5 split with vertical separators",
+  "title": "ADF NOS ACTUALITÉS · 三列新闻卡片",
+  "subtitle": "12-col grid: 4+3+5 split with vertical separators",
   "description": "Armateurs de France 首页中段新闻区：12 列 grid 拆 4+3+5，每列一张卡（图 + 标题 + 日期 + 箭头），2/3 列开头加左侧细线 separator。卡片 hover 时图片 scale(1.05)。第一列顶部带「Nos actualités」红色 small-caps 标签 + 「+ Voir toutes les actualités」CTA（hover 时下划线从右滑到左切换为红色）。",
-  "tech":        "CSS Grid + transition",
-  "tags":        ["interaction", "animation"],
+  "tech": "CSS Grid + transition",
+  "tags": [
+    "新闻",
+    "轮播",
+    "自动播放",
+    "交叉淡入",
+    "协会组织"
+  ],
   "previewHref": "",
-  "sourceUrl":   "https://www.armateursdefrance.org/",
+  "sourceUrl": "https://www.armateursdefrance.org/",
   "localMirror": "../designs/003-armateursdefrance/index.html",
-  "order":       6
+  "order": 6
 }
