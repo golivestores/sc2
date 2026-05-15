@@ -58,29 +58,66 @@
   }
   .dropdown__panel {
     position: absolute; top: calc(100% + 8px); left: 0;
-    min-width: 460px; max-width: min(720px, 90vw);
-    padding: 14px 16px;
+    min-width: 480px; max-width: min(720px, 92vw);
+    padding: 16px 18px 14px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
-    display: flex; flex-direction: column; gap: 6px;
+    border-radius: 14px;
+    box-shadow: 0 14px 40px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.04);
+    display: flex; flex-direction: column; gap: 8px;
     z-index: 20;
   }
   .dropdown__panel[hidden] { display: none; }
   .panel-row {
-    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    display: flex; gap: 7px; flex-wrap: wrap; align-items: center;
+    padding: 2px 0;
   }
+  /* small inline divider so 动画 row is visually separated without a heavy
+     horizontal rule. Mirrors the axis distinction (filter scope vs trigger). */
   .panel-row--alt {
-    margin-top: 4px;
-    padding-top: 10px;
+    margin-top: 6px;
+    padding-top: 12px;
     border-top: 1px dashed var(--border);
   }
   .panel-row__label {
-    font-size: 11px; letter-spacing: .14em;
-    color: var(--fg-dim);
-    min-width: 38px;
+    font-size: 11px; letter-spacing: .18em;
+    color: #8c8473;
+    min-width: 32px;
+    padding-right: 11px;
+    margin-right: 4px;
+    border-right: 1px solid var(--border);
     user-select: none;
+    line-height: 1.4;
+  }
+  /* Axis-colored chips inside the dropdown — same hue family as the card
+     tag chips so users see the link "click blue chip → blue tag on cards". */
+  .panel-row .chip {
+    border-color: transparent;
+    background: #f7f5e9;
+    font-size: 12.5px;
+    padding: 5px 12px;
+    transition: background .12s, color .12s, border-color .12s, transform .08s;
+  }
+  .panel-row .chip:hover {
+    transform: translateY(-1px);
+  }
+  .panel-row[data-axis="bankuai"] .chip {
+    background: #eaf0ff; color: #2b3d73;
+  }
+  .panel-row[data-axis="bankuai"] .chip:hover {
+    background: #dde6ff;
+  }
+  .panel-row[data-axis="bankuai"] .chip.is-active {
+    background: #2b3d73; color: #fff;
+  }
+  .panel-row[data-axis="chufa"] .chip {
+    background: #ecf6e9; color: #2c5026;
+  }
+  .panel-row[data-axis="chufa"] .chip:hover {
+    background: #d6ecd3;
+  }
+  .panel-row[data-axis="chufa"] .chip.is-active {
+    background: #2c5026; color: #fff;
   }
 
   .search {
@@ -269,12 +306,12 @@
   <div class="dropdown" id="bankuai-dropdown">
     <button class="dropdown__toggle" id="bankuai-toggle" aria-haspopup="true" aria-expanded="false">板块</button>
     <div class="dropdown__panel" id="bankuai-panel" hidden>
-      <div class="panel-row">
+      <div class="panel-row" data-axis="bankuai">
         <span class="panel-row__label">顶部</span>
         <button class="chip" data-filter="首屏">首屏</button>
         <button class="chip" data-filter="导航">导航</button>
       </div>
-      <div class="panel-row">
+      <div class="panel-row" data-axis="bankuai">
         <span class="panel-row__label">主体</span>
         <button class="chip" data-filter="产品">产品</button>
         <button class="chip" data-filter="分类">分类</button>
@@ -282,19 +319,19 @@
         <button class="chip" data-filter="评价">评价</button>
         <button class="chip" data-filter="案例动态">案例动态</button>
       </div>
-      <div class="panel-row">
+      <div class="panel-row" data-axis="bankuai">
         <span class="panel-row__label">转化</span>
         <button class="chip" data-filter="CTA">CTA</button>
       </div>
-      <div class="panel-row">
+      <div class="panel-row" data-axis="bankuai">
         <span class="panel-row__label">底部</span>
         <button class="chip" data-filter="关于">关于</button>
         <button class="chip" data-filter="联系">联系</button>
         <button class="chip" data-filter="页脚">页脚</button>
       </div>
       <!-- 触发轴（axis 3）—— 跟 4 个板块组并列，方便"按动画类型"筛而不限定板块。
-           视觉用 dashed divider 跟上面 4 行分开，说明这不是板块。 -->
-      <div class="panel-row panel-row--alt">
+           视觉上用 dashed divider + 绿色 chip 跟上面 4 行（蓝色 = 板块）分开。 -->
+      <div class="panel-row panel-row--alt" data-axis="chufa">
         <span class="panel-row__label">动画</span>
         <button class="chip" data-filter="入场">入场</button>
         <button class="chip" data-filter="滚动">滚动</button>
