@@ -104,7 +104,7 @@ scrape 末尾会打印：
 1. 跑 `python new-effect.py <slug> --source-url <URL> --mirror "../designs/<NNN>/index.html"`——脚本建好 `effects/NNN-slug/{index.html, meta.json, assets/, lib/}` 骨架（含 `?demo=preview` plumbing 注释）
 2. 把镜像里那段的 HTML / CSS / JS **1:1** 抄进 index.html（核心约定见后面）
 3. 把动画依赖的第三方库（GSAP / splitting.js / simpleparallax-js / Three.js 等）复制到 effect 的 `lib/`；自己的图/视频/字体放 `assets/`
-4. 填 `meta.json`（`title` / `subtitle` / `description` / `tech` / `tags` / `localMirror`）
+4. 填 `meta.json`（`title` / `subtitle` / `description` / `tech` / `tags` / `localMirror`）。`tags` 按 [TAGS.md](TAGS.md) 五轴规范填——错了下一步打包会拒
 
 ### 第 4 步 · 收尾 + 验证 effect
 
@@ -127,6 +127,7 @@ python finalize.py                              # 三件套：rebuild + package 
 - [ ] 字体、颜色、间距与截图肉眼一致
 - [ ] 用到的第三方库都在 `lib/` 里、`<script src>` 路径正确
 - [ ] `?demo=preview` 加载下不会有 scroll trigger 卡住、伪 cascade 跑得正常
+- [ ] `meta.json` 的 `tags` 按 [TAGS.md](TAGS.md) 填齐五轴（`package-effects.py` 会自动校验）
 
 不对就改回第 3 步循环，直到满意。
 
@@ -221,7 +222,7 @@ scrape 自动写好；只有 description / tags 可能要你手填。
   "subtitle":    "staggered card grid",
   "description": "7 张白色卡片用 grid + nth-child(8n+k) 错位排布……",
   "tech":        "CSS Grid + IO + simpleparallax-js",
-  "tags":        ["animation", "intro", "scroll"],
+  "tags":        ["产品", "网格", "入场", "逐字出场", "B2B服务"],
   "previewHref": "",
   "sourceUrl":   "https://talamus.pro/",
   "localMirror": "../designs/001-talamus/index.html",
@@ -235,7 +236,7 @@ scrape 自动写好；只有 description / tags 可能要你手填。
 | `subtitle` |  | 卡片小字（紧跟在 `NNN ·` 后面） |
 | `description` |  | 一段说明（HTML escape，纯文本） |
 | `tech` |  | 技术栈标签（米黄色单独样式） |
-| `tags` |  | **数组、英文键**。命中 chip 列表的会显示成蓝色中文（动画 / 入场 等），其它显示成黄色 |
+| `tags` | ✓ | **数组，五轴中文标签**——见 [TAGS.md](TAGS.md)。必填板块×1 + 触发×1 + 产品类型×1；可选形态 0-1 + 技术 0-3。`package-effects.py` 会校验，违反就拒绝打包 |
 | `previewHref` |  | 缩略图 iframe 加载的子文件，默认 `index.html` |
 | `sourceUrl` |  | 原网站 URL（仅元数据；任何按钮都不直接链接它） |
 | `localMirror` |  | **从 `effects/` 出发的相对路径**，指向 `designs/<NNN>/index.html`。画廊卡的「原站 ↗」和 viewer 的「跳转原网页 ↗」用这个 |
@@ -243,24 +244,31 @@ scrape 自动写好；只有 description / tags 可能要你手填。
 
 ---
 
-## 分类标签 / chip 筛选
+## 分类标签 — 五轴规范
 
-画廊顶部的 chip（顺序就是显示顺序）：
+**完整定义见 [TAGS.md](TAGS.md)**。这里只放速查。
 
-| chip 中文 | data-filter 英文键 |
-|---|---|
-| 全部 | all |
-| 动画 | animation |
-| 文字 | typography |
-| 交互 | interaction |
-| 入场 | intro |
-| 滚动 | scroll |
-| 首屏 | hero |
+每个 effect 必须按下面五轴打 tags：
 
-- **meta.json `tags` 数组始终用英文键**（`["animation", "intro"]`）
-- 画廊和 viewer 把英文键映射成中文显示（蓝色 `.tag--category`）
-- 不在表里的 tag（如 `glassmorphism`）保持原文，黄色 `.tag`
-- **加新 chip 要改两处**：`effects/index.html` 的 chip 按钮 + `effects/view.html` 里的 `CATEGORY_LABELS` 字典
+| 轴 | 必填？ | 数量 | 可选值（节选） |
+|---|---|---|---|
+| 1 板块 | ✅ | 1 | `首屏` `导航` `产品` `分类` `服务` `流程` `评价` `新闻` `案例` `CTA` `关于` `联系` `页脚` |
+| 2 形态 | ⭕ | 0–1 | `网格` `轮播` `滑块` `跑马灯` `顶栏` `横幅` `文字段` `列表` |
+| 3 触发 | ✅ | 1 | `入场` `滚动` `悬停` `点击` `自动播放` |
+| 4 技术 | ⭕ | 0–3 | `形变` `路径裁切` `逐字出场` `视差` `交叉淡入` `多态切换` `遮罩` `文字滚动` `响应式` `键盘` |
+| 5 产品类型 | ✅ | 1 | `美妆` `食品` `健康` `时尚` `B2B服务` `工业安防` `协会组织` `设计建筑` `科技` `教育` `金融` `房产` `生活方式` |
+
+示例：`"tags": ["产品", "网格", "悬停", "路径裁切", "美妆"]`
+
+**强制守门**：跑 `package-effects.py`（或 `finalize.py`）时会校验所有 meta.json：
+
+- 缺板块 / 触发 / 产品类型 → 拒绝打包
+- 用了表外的 tag（拼写错、deprecated 词）→ 拒绝打包
+- 形态 ≥ 2 个 / 技术 ≥ 4 个 → 拒绝打包
+
+错误信息会指出**具体哪个 effect 的哪个轴出问题**。改了再跑。
+
+**用 `new-effect.py` 起新 effect 时**，`meta.json` 的 `tags` 会带 `["TODO-板块", "TODO-触发", "TODO-产品类型"]` 占位符 + 注释。填不对就过不了打包关——逼着规范执行。
 
 ---
 
