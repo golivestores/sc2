@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Don Molinico — mobile top bar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* === sc2 effect 19 · 1:1 of donmolinico.es mobile persistent top bar ===
+       - .intro overlay covers viewport on load; the gold logo (multi-group SVG)
+         fades in centered, then the red .intro__bg and the logo shrink/translate
+         into the final top-center "tab bar" position (.menu-label + .menu-label__bg).
+       - Hamburger button tilts its two lines into a slight-X via .is-menu-open on body.
+       - Full-screen red overlay (#menu) slides in with menu items; each item's
+         windmill .icon-molinico scales 0→1 with stagger when the item enters view.
+       - Source: scoped CSS captured from live donmolinico.es (Vue/Nuxt v2 site).  */
+
+  @font-face {
+    font-family: "super-med";
+    font-style: normal;
+    font-display: swap;
+    src: url("assets/fonts/super-med.woff2") format("woff2"),
+         url("assets/fonts/super-med.woff")  format("woff");
+  }
+
+  /* Root font-size 90% to match the original site's rem→px mapping. */
+  html { font-size: 90%; }
+
+  :root {
+    --c-bg:        #fbf5e7;
+    --c-accent:    #d70321;  /* brand red */
+    --c-secondary: #cba058;  /* brand gold */
+    --c-text-alt:  #fbf5e7;
+    --offset:      1.8rem;
+    --gutter:      1.8rem;
+    --ease-expo:   cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-power:  cubic-bezier(1, 0, 0, 1);
+
+    /* Bar has two states:
+         - resting (collapsed):  narrow strip showing only the M monogram
+         - hover (expanded):     full DESDE 1987 / DON MOLINICO / NUEVA TRADICION
+
+       Live measurements at scrolled-collapsed state:
+         viewport 390  -> bar 60x114   ham 25w
+       Live measurements at expanded (top-of-page) state:
+         viewport 390  -> bar 240x143  ham 60w
+         viewport 768  -> bar 240x162
+         viewport 1440 -> bar 346x192  */
+    --bar-w:           max(240px, 24vw);
+    --bar-h:           calc(124px + 4.7vw);
+    --bar-w-collapsed: max(60px, 6vw);
+    --bar-h-collapsed: calc(99px + 3.75vw);
+    --ham-w:           max(60px, 6vw);
+    --ham-w-collapsed: calc(var(--ham-w) * 0.42);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--c-bg);
+    color: #2a1d12;
+    font-family: "super-med", Helvetica, sans-serif;
+    text-transform: uppercase;
+    /* tall page so user can actually scroll to test the collapse trigger */
+    min-height: 280vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+  .scroll-hint {
+    position: absolute;
+    top: 50vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(42, 29, 18, 0.55);
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    pointer-events: none;
+    text-align: center;
+  }
+  .scroll-hint::after {
+    content: "↓";
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1.4rem;
+    animation: hint-bob 1.6s ease-in-out infinite;
+  }
+  @keyframes hint-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+  /* faint hero plate so the floating red bar has visible context (not from live site,
+     just so the demo isn't pure cream) */
+  .stage {
+    position: fixed;
+    inset: 0;
+    background: var(--c-bg);
+    z-index: 0;
+  }
+  .stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 18% 32%, #f1d6a8 0 8%, transparent 9%),
+      radial-gradient(circle at 78% 22%, #efc7a1 0 7%, transparent 8%),
+      radial-gradient(circle at 64% 78%, #d9986b 0 10%, transparent 11%),
+      radial-gradient(circle at 24% 76%, #c8804b 0 9%, transparent 10%),
+      radial-gradient(circle at 88% 60%, #e4c098 0 6%, transparent 7%);
+    opacity: 0.55;
+    filter: blur(8px);
+  }
+
+  /* ===== .menu-label — the persistent top bar =====
+     Two states: resting (small monogram strip) and hover-expanded (full logo).
+     The outer .menu-label keeps a constant hit-area but its visible parts
+     (.menu-label__bg, hamburger width, logo group) animate between sizes. */
+  .menu-label {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Default = expanded (page at top of scroll). */
+    width: var(--bar-w);
+    height: var(--bar-h);
+    z-index: 20;
+    transition: width 0.6s var(--ease-expo), height 0.6s var(--ease-expo);
+    will-change: width, height;
+  }
+  /* Scrolled past threshold → collapsed. Three things bring it back to
+     expanded: scroll back to top, mouse-enter the bar (is-bar-hovered, set
+     in JS so scroll can clear it even if the cursor lingers), or open the
+     menu. CSS :hover would stick to the cursor's current position and the
+     bar would never collapse while a wheel-scroll happened directly over
+     it — so we use a JS-driven class instead. */
+  body.is-scrolled .menu-label {
+    width: var(--bar-w-collapsed);
+    height: var(--bar-h-collapsed);
+  }
+  body.is-scrolled.is-bar-hovered .menu-label,
+  body.is-menu-open .menu-label {
+    width: var(--bar-w);
+    height: var(--bar-h);
+  }
+  .menu-label__bg {
+    background: var(--c-accent);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+  }
+  .menu-label__inner {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: max(2rem, min(2.6vw, 3rem));
+    justify-content: space-between;
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    padding: clamp(1rem, 3.6vw, 1.5rem) 0;
+  }
+  .menu-label__hamburger {
+    appearance: none;
+    background: none;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0;
+    transition: width 0.6s var(--ease-expo), transform 0.75s var(--ease-expo);
+    width: var(--ham-w);
+    z-index: 10;
+    cursor: pointer;
+  }
+  @media (min-width: 960px) {
+    .menu-label__hamburger { gap: 1rem; }
+  }
+  body.is-scrolled .menu-label__hamburger { width: var(--ham-w-collapsed); }
+  body.is-scrolled.is-bar-hovered .menu-label__hamburger,
+  body.is-menu-open .menu-label__hamburger { width: var(--ham-w); }
+  .menu-label__hamburger:hover { transform: scaleX(0.8); }
+  .menu-label__line {
+    background: var(--c-secondary);
+    display: flex;
+    height: 2px;
+    position: relative;
+    transform-origin: center center;
+    transition: transform 1s var(--ease-expo);
+    width: 100%;
+  }
+  /* hamburger → slight X when menu is open (mobile) */
+  body.is-menu-open .menu-label__line:first-child {
+    transform: translate3d(0, 0.35rem, 0) rotate(-8deg);
+  }
+  body.is-menu-open .menu-label__line:last-child {
+    transform: translate3d(0, -0.35rem, 0) rotate(8deg);
+  }
+  @media (min-width: 960px) {
+    body.is-menu-open .menu-label__line:first-child {
+      transform: translate3d(0, 0.6rem, 0) rotate(-8deg);
+    }
+    body.is-menu-open .menu-label__line:last-child {
+      transform: translate3d(0, -0.6rem, 0) rotate(8deg);
+    }
+  }
+
+  .menu-label__logos {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    position: relative;
+    z-index: 5;
+    color: var(--c-secondary);
+    text-decoration: none;
+    width: 100%;
+    padding: 0 max(0.5rem, 2vw);
+    place-items: center;
+  }
+  /* Both SVGs occupy the same grid cell so they overlay. Only one is
+     visible at a time (opacity-based cross-fade). */
+  .menu-label__logos > svg {
+    display: block;
+    color: var(--c-secondary);
+    grid-area: 1 / 1;
+    transition: opacity 0.35s var(--ease-expo);
+  }
+  .logo-mono {
+    width: clamp(28px, 14vw, 60px);
+    height: auto;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .logo-morphing {
+    width: 100%;
+    height: auto;
+    opacity: 1;
+  }
+  /* During intro, hide the bar's own logo until the big intro-logo has
+     translated up to land in the bar's position — then cross-fade in. */
+  .menu-label.is-entering .logo-morphing {
+    opacity: 0;
+    animation: bar-logo-in 1800ms var(--ease-expo) forwards;
+  }
+  @keyframes bar-logo-in {
+    0%, 65% { opacity: 0; }
+    100%    { opacity: 1; }
+  }
+  /* Scrolled state: swap full logo → small M monogram. */
+  body.is-scrolled .logo-morphing { opacity: 0; transition-delay: 0s; }
+  body.is-scrolled .logo-mono      { opacity: 1; transition-delay: 0.25s; }
+  /* Hover-while-scrolled or menu-open both bring the full logo back. */
+  body.is-scrolled.is-bar-hovered .logo-morphing,
+  body.is-menu-open .logo-morphing { opacity: 1; transition-delay: 0.25s; }
+  body.is-scrolled.is-bar-hovered .logo-mono,
+  body.is-menu-open .logo-mono     { opacity: 0; transition-delay: 0s; }
+  /* Per-group staggered fade for the "text animates out" effect during the
+     expanded→collapsed transition. desde + nueva-tradicion fade first (side
+     labels), then DON, then MOLINICO. */
+  .logo-morphing > g {
+    opacity: 1;
+    transition: opacity 0.35s var(--ease-expo);
+  }
+  body.is-scrolled .logo-morphing > g { opacity: 0; }
+  body.is-scrolled .logo-morphing > #desde            { transition-delay: 0s;   }
+  body.is-scrolled .logo-morphing > #nueva-tradicion  { transition-delay: 60ms; }
+  body.is-scrolled .logo-morphing > #don              { transition-delay: 120ms;}
+  body.is-scrolled .logo-morphing > #molinico         { transition-delay: 180ms;}
+  body.is-scrolled .logo-morphing > #monogram-small   { transition-delay: 240ms;}
+  /* Hover-while-scrolled / menu-open: bring the groups back. Without this,
+     the wrapper opacity is 1 but its children stay at 0 → empty red box. */
+  body.is-scrolled.is-bar-hovered .logo-morphing > g,
+  body.is-menu-open .logo-morphing > g { opacity: 1; }
+  body.is-scrolled.is-bar-hovered .logo-morphing > #desde,
+  body.is-menu-open .logo-morphing > #desde           { transition-delay: 280ms; }
+  body.is-scrolled.is-bar-hovered .logo-morphing > #nueva-tradicion,
+  body.is-menu-open .logo-morphing > #nueva-tradicion { transition-delay: 340ms; }
+  body.is-scrolled.is-bar-hovered .logo-morphing > #don,
+  body.is-menu-open .logo-morphing > #don             { transition-delay: 380ms; }
+  body.is-scrolled.is-bar-hovered .logo-morphing > #molinico,
+  body.is-menu-open .logo-morphing > #molinico        { transition-delay: 420ms; }
+  body.is-scrolled.is-bar-hovered .logo-morphing > #monogram-small,
+  body.is-menu-open .logo-morphing > #monogram-small  { transition-delay: 460ms; }
+  .logo-morphing path,
+  .logo-mono path { fill: currentColor; }
+
+  /* ===== Intro animation =====
+     A separate .intro-curtain (position: fixed, 100vw×100vh red) covers the
+     viewport on load and then collapses down to nothing — revealing the
+     already-positioned .menu-label underneath. The full logo flashes in at
+     center, then fades out as the mono fades in. */
+  .intro-curtain {
+    position: fixed;
+    inset: 0;
+    background: var(--c-accent);
+    /* must sit BELOW .menu-label so the intro-scaled logo (rendered inside
+       .menu-label, z-index 20) paints on top of the curtain. */
+    z-index: 15;
+    pointer-events: none;
+    transform-origin: 50% 0%;
+    animation: curtain-out 1800ms var(--ease-expo) forwards;
+  }
+  @keyframes curtain-out {
+    0%   { transform: scale(1, 1);                                                                       opacity: 1; }
+    35%  { transform: scale(1, 1);                                                                       opacity: 1; }
+    /* Shrinks down to the EXPANDED bar size at top-center, then fades out
+       so the bar (already painted underneath) seamlessly takes over. */
+    100% { transform: scale(calc(var(--bar-w) / 100vw), calc(var(--bar-h) / 100vh));                     opacity: 0; visibility: hidden; }
+  }
+  /* Dedicated fixed-position big logo for the intro phase. Decoupled from the
+     bar so it can be max(280px, 30vw) wide at viewport center, matching the
+     original site's .intro__logo { width: max(30rem, min(30vw, 60rem)) }. */
+  .intro-logo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: max(280px, min(30vw, 600px));
+    height: auto;
+    z-index: 20;
+    color: var(--c-secondary);
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    animation: intro-logo-fade 1800ms var(--ease-expo) forwards;
+  }
+  .intro-logo svg { width: 100%; height: auto; display: block; }
+  .intro-logo path { fill: currentColor; }
+  @keyframes intro-logo-fade {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+    18%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    55%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    /* end: shrink + translate upward so the logo lands at the bar's logo
+       y-position (~half bar height from viewport top). Bar's own
+       .logo-morphing fades to visible during the last ~200ms via its own
+       transition, so the cross-fade reads as a continuous shrink-up. */
+    100% { opacity: 0; transform: translate(-50%, calc(-50vh + var(--bar-h) / 2)) scale(0.55); }
+  }
+  .menu-label.is-entering .menu-label__inner { pointer-events: none; }
+  .menu-label.is-entering .menu-label__hamburger {
+    opacity: 0;
+    animation: ham-in 500ms ease-out forwards;
+    animation-delay: 1500ms;
+  }
+  @keyframes ham-in { to { opacity: 1; } }
+
+  /* ===== full-screen menu overlay (aside#menu) ===== */
+  .menu {
+    align-items: center;
+    background: var(--c-accent);
+    color: var(--c-secondary);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: flex-end;
+    left: 0;
+    padding: clamp(6rem, 16vh, 12rem) 0;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 19; /* below .menu-label (20) so hamburger stays clickable */
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.9s var(--ease-expo), opacity 0.4s ease;
+    opacity: 0;
+  }
+  body.is-menu-open .menu {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  .menu__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .menu__item {
+    align-items: center;
+    border-bottom: 1px solid var(--c-secondary);
+    display: flex;
+    gap: var(--gutter);
+    justify-content: center;
+    padding: 1.6rem 0;
+    width: 100%;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+  }
+  .menu__item:first-child { border-top: 1px solid var(--c-secondary); }
+  .menu__item a {
+    color: var(--c-secondary);
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+  }
+  .icon-molinico {
+    width: max(1.4rem, min(2.2vw, 2.2rem));
+    height: auto;
+    transform: scale(0);
+    transition: transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    will-change: transform;
+    color: var(--c-secondary);
+  }
+  .icon-molinico:first-child { transform: rotate(-90deg) scale(0); }
+  .icon-molinico:last-child  { transform: rotate(90deg)  scale(0); }
+  body.is-menu-open .menu__item .icon-molinico {
+    transform: scale(1);
+    transition-delay: calc(0.45s + var(--i) * 80ms);
+  }
+  body.is-menu-open .menu__item .icon-molinico:first-child {
+    transform: rotate(-90deg) scale(1);
+  }
+  body.is-menu-open .menu__item .icon-molinico:last-child {
+    transform: rotate(90deg) scale(1);
+  }
+  /* only the active item shows its rotating windmill markers — others stay scale-0;
+     here we keep them visible to mirror the hover/animation but hide neighbors of
+     non-active items per live behavior */
+  .menu__item:not(.is-active) > .icon-molinico:not(.menu__item__active-shown) {
+    display: none;
+  }
+  .menu__item.is-active > .icon-molinico { display: block; }
+
+  /* ===== replay button (effect demo only) ===== */
+  .replay {
+    appearance: none;
+    border: 1px solid var(--c-secondary);
+    background: transparent;
+    color: var(--c-secondary);
+    font: 600 0.85rem/1 "super-med", Helvetica, sans-serif;
+    letter-spacing: 0.12em;
+    padding: 0.7rem 1.2rem;
+    position: fixed;
+    bottom: 1.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    text-transform: uppercase;
+    z-index: 50;
+  }
+  .replay:hover { background: var(--c-secondary); color: var(--c-accent); }
+
+  .credit {
+    position: fixed;
+    bottom: 1.6rem;
+    left: 1.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: rgba(42, 29, 18, 0.5);
+    z-index: 50;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage"></div>
+<div class="intro-curtain" aria-hidden="true"></div>
+<div class="intro-logo" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 972.69 337.5" fill="none">
+    <g>
+      <path d="M147.69,72.15h-6.94V42.76h6.94c6.53,0,11.43,4.9,11.43,14.7s-4.82,14.7-11.43,14.7V72.15z M146.47,48.06v18.78c4.9,0,6.53-2.86,6.53-9.39S151.37,48.06,146.47,48.06z"/>
+      <path d="M177.91,72.15h-12.65V42.76h12.65l0.41,5.31h-7.35v6.53h6.53v5.1h-6.53v7.14h7.35L177.91,72.15z"/>
+      <path d="M191.38,72.96c-4.9,0-7.35-3.27-8.57-6.53l4.49-2.45c0.82,2.45,2.45,3.67,4.08,3.67c1.63,0,2.86-0.82,2.86-2.86c0-4.49-10.61-7.76-10.61-15.51c0-4.49,2.86-7.35,7.76-7.35c4.33,0,6.86,2.29,7.92,5.47l-4.65,1.88c-0.82-2.04-1.63-2.45-3.27-2.45c-1.22,0-2.04,0.82-2.04,2.45c0,4.9,10.61,7.35,10.61,15.51C199.96,70.5,196.29,72.95,191.38,72.96L191.38,72.96z"/>
+      <path d="M212.41,72.15h-6.94V42.76h6.94c6.53,0,11.43,4.9,11.43,14.7s-4.82,14.7-11.43,14.7V72.15z M211.18,48.06v18.78c4.9,0,6.53-2.86,6.53-9.39S216.08,48.06,211.18,48.06z"/>
+      <path d="M242.62,72.15h-12.65V42.76h12.65l0.41,5.31h-7.35v6.53h6.53v5.1h-6.53v7.14h7.35L242.62,72.15z"/>
+      <path d="M157.19,110.06V88.42l-3.27,2.86v-5.71l3.67-3.27h5.1v27.76h-5.51H157.19z"/>
+      <path d="M181.76,105.12c-0.57,0.9-2.73,4.2-3.35,4.94h-5.88c2.69-3.51,4.41-6.49,6.29-9.72c-5.71,1.55-9.39-2.12-9.39-8.82c0-6.29,2.86-10.04,8.57-10.04s8.37,3.55,8.37,10c0,5.59-2.24,10-4.61,13.63V105.12z M178.01,86.38c-1.84,0-3.06,1.8-3.06,5.31s1.1,4.78,2.94,4.78s2.94-1.67,2.98-4.98c0.04-3.51-1.02-5.1-2.86-5.1V86.38z"/>
+      <path d="M200.67,110.87c-5.71,0-8.78-3.67-8.78-9.39c0-3.06,1.47-5.39,3.63-6.98c-1.51-1.31-2.61-2.98-2.61-5.27c0-4.9,3.27-7.76,7.76-7.76s7.76,2.86,7.76,7.76c0,2.24-1.02,3.96-2.49,5.23c2.16,1.59,3.51,4.37,3.51,7.43C209.45,107.2,206.39,110.87,200.67,110.87z M200.67,96.99c-2.04,0-3.27,1.63-3.27,4.49c0,2.86,1.43,4.49,3.27,4.49s3.27-1.51,3.27-4.49C203.94,98.5,202.72,96.99,200.67,96.99z M200.67,85.97c-1.59,0-2.65,1.1-2.65,3.27c0,2.17,1.1,3.27,2.65,3.27s2.65-1.14,2.65-3.27C203.32,87.11,202.22,85.97,200.67,85.97z"/>
+      <path d="M216.8,110.06l7.76-22.86h-11.02l0.82-4.9h15.92v4.9l-7.35,22.86H216.8z"/>
+      <path d="M779.43,72.15l-5.35-14.29c-0.25-0.69-0.45-1.23-0.69-2.04h-0.08v16.33h-5.71V42.76h5.71l5.35,14.29c0.24,0.69,0.45,1.22,0.69,2.04h0.08V42.76h5.71v29.39H779.43z"/>
+      <path d="M801.07,72.96c-5.92,0-8.78-3.67-8.78-9.39V42.75H798v20.82c0,2.86,1.23,4.08,3.06,4.08s3.06-1.22,3.06-4.08V42.75h5.71v20.82c0,5.71-2.86,9.39-8.78,9.39H801.07z"/>
+      <path d="M829.65,72.15H817V42.76h12.65l0.41,5.31h-7.35v6.53h6.53v5.1h-6.53v7.14h7.35L829.65,72.15z"/>
+      <path d="M840.06,72.15l-5.71-29.39h6.12l2.74,17.55c0.12,0.82,0.25,1.63,0.29,2.45h0.08c0.08-0.82,0.16-1.67,0.29-2.45l2.74-17.55h6.12l-5.71,29.39H840.06z"/>
+      <path d="M869.46,72.15l-1.1-5.51h-5.55l-1.1,5.51h-5.92l6.94-29.39h5.71l6.94,29.39H869.46z M865.99,55c-0.12-0.69-0.24-1.23-0.37-2.45h-0.08c-0.12,1.22-0.24,1.76-0.37,2.45l-1.39,6.94h3.59L865.98,55H865.99z"/>
+      <path d="M739.12,85.97v24.08h-5.71V85.97h-4.9l0.61-5.31h14.29l0.61,5.31H739.12z"/>
+      <path d="M760.47,97.03l4.98,13.02h-6.12l-4.2-12.25h-0.29v12.25h-5.71V80.66h6.53c6.12,0,10.2,2.86,10.2,8.57C765.86,92.99,763.7,95.72,760.47,97.03z M754.84,92.5c3.27,0,5.31-0.41,5.31-3.27c0-2.86-2.04-3.27-5.31-3.27V92.5z"/>
+      <path d="M783.41,110.06l-1.1-5.51h-5.55l-1.1,5.51h-5.92l6.94-29.39h5.71l6.94,29.39H783.41z M779.94,92.91c-0.12-0.69-0.24-1.23-0.37-2.45h-0.08c-0.12,1.22-0.24,1.76-0.37,2.45l-1.39,6.94h3.59l-1.39-6.94H779.94z"/>
+      <path d="M801.38,110.06h-6.94V80.67h6.94c6.53,0,11.43,4.9,11.43,14.7s-4.82,14.7-11.43,14.7V110.06z M800.15,85.97v18.78c4.9,0,6.53-2.86,6.53-9.39S805.05,85.97,800.15,85.97z"/>
+      <path d="M818.93,110.06V80.67h5.71v29.39H818.93z"/>
+      <path d="M840.57,110.87c-6.12,0-9.8-5.71-9.8-15.51s3.71-15.51,9.8-15.51c4.9,0,7.96,2.86,8.98,8.78l-5.51,1.22c-0.29-2.65-1.43-4.69-3.47-4.69c-2.45,0-4.08,2.86-4.08,10.21c0,7.35,1.63,10.21,4.08,10.21c2.04,0,3.06-1.63,3.47-4.9l5.71,1.22c-1.23,5.71-4.08,8.98-9.19,8.98L840.57,110.87z"/>
+      <path d="M855.27,110.06V80.67h5.71v29.39H855.27z"/>
+      <path d="M876.91,110.87c-6.12,0-9.8-5.71-9.8-15.51c0-8.9,3.1-14.53,8.37-15.39l-1.63,4.57h4.41l2.29-3.92c3.92,1.88,6.16,7.06,6.16,14.74C886.71,105.16,883.04,110.87,876.91,110.87z M876.91,85.16c-2.45,0-4.08,2.86-4.08,10.21c0,7.35,1.63,10.21,4.08,10.21c2.45,0,4.08-2.86,4.08-10.21C880.99,88.02,879.36,85.16,876.91,85.16z M877.93,83.93h-3.26l2.04-5.71h4.49L877.93,83.93z"/>
+      <path d="M904.67,110.06l-5.35-14.29c-0.25-0.69-0.45-1.23-0.69-2.04h-0.08v16.33h-5.71V80.67h5.71l5.35,14.29c0.24,0.69,0.45,1.22,0.69,2.04h0.08V80.67h5.71v29.39H904.67z"/>
+      <path d="M613.36,63.93l53.62,93.77h40V2.84h-42.07v93.35L611.99,2.84h-40.7V157.7h42.07V63.93z"/>
+      <path d="M484.12,0C441.9,0,409.6,33.01,409.6,80.27s32.31,80.27,74.52,80.27s74.53-33.01,74.53-80.27S526.34,0,484.12,0z M516.77,80.27c0,22.44-10.1,53.55-32.65,53.55c-22.55,0-32.65-31.11-32.65-53.55s10.1-53.55,32.65-53.55C506.67,26.72,516.77,57.83,516.77,80.27z"/>
+      <path d="M327.09,157.64c36.57,0,70.42-32.87,70.42-77.37S363.56,2.9,327.09,2.9l-55.06-0.06v154.87L327.09,157.64L327.09,157.64z M311.28,135.4V25.21c0,0,47.2-8.33,47.2,55.06S311.28,135.4,311.28,135.4z"/>
+      <path d="M898.16,176.96c-42.22,0-74.52,33.01-74.52,80.27s32.31,80.27,74.52,80.27c42.21,0,74.53-33.01,74.53-80.27S940.38,176.96,898.16,176.96z M930.81,257.23c0,22.44-10.1,53.55-32.65,53.55c-22.55,0-32.65-31.11-32.65-53.55s10.1-53.55,32.65-53.55C920.71,203.68,930.81,234.79,930.81,257.23z"/>
+      <path d="M752.06,312.32c-16.32,0-26.73-27.78-26.73-55.09s10.41-55.09,26.73-55.09c13.27,0,21.73,20.4,25.38,40.49l37.37-6.25c-6.82-36.31-29.01-59.42-62.3-59.42c-39.47,0-69.85,33.01-69.85,80.27s30.38,80.27,69.85,80.27c33.25,0,55.46-23.14,62.28-59.43l-37.36-6.24c-3.65,20.09-12.1,40.49-25.38,40.49H752.06z"/>
+      <path d="M670.59,179.8h-39.25v154.87h39.25V179.8z"/>
+      <path d="M520.04,238.07l56.44,96.6h37.17V179.8h-42.07v96.18l-52.92-96.18h-40.7v154.87h42.08V238.07z"/>
+      <path d="M462.56,179.8h-39.25v154.87h39.25V179.8z"/>
+      <path d="M364.99,179.8h-42.07v154.87h79.35l8.46-20.77h-45.74V179.8z"/>
+      <path d="M236.05,176.96c-42.22,0-74.52,33.01-74.52,80.27s32.31,80.27,74.52,80.27s74.53-33.01,74.53-80.27S278.27,176.96,236.05,176.96z M268.7,257.23c0,22.44-10.1,53.55-32.65,53.55s-32.65-31.11-32.65-53.55s10.1-53.55,32.65-53.55S268.7,234.79,268.7,257.23z"/>
+      <path d="M107.08,180.09l34.53-48.24l-37.93,13.02L81.9,108.87l-21.78,35.99l-37.93-13.02l34.55,48.24H107.08z"/>
+      <path d="M81.9,215.3l-25.18-35.19H14.45v154.56h35.03V219.11l32.42,45.33l32.42-45.33v115.56h35.03V180.11h-42.27L81.9,215.3z"/>
+      <path d="M161.18,148.83c-2.68-2.68-5.99-4.04-9.8-4.04s-7.06,1.36-9.75,4.04c-2.7,2.7-4.06,5.97-4.06,9.76s1.36,7.13,4.02,9.82c2.68,2.7,5.97,4.08,9.8,4.08c3.83,0,7.12-1.38,9.8-4.08c2.7-2.7,4.06-6.01,4.06-9.83s-1.36-7.1-4.06-9.76L161.18,148.83z M158.91,166.21c-2.06,2.07-4.6,3.15-7.53,3.15c-2.93,0-5.44-1.02-7.53-3.13c-2.07-2.11-3.09-4.6-3.09-7.6c0-3,1.04-5.45,3.09-7.53c2.07-2.07,4.6-3.13,7.51-3.13c2.91,0,5.44,1.02,7.53,3.13c2.06,2.06,3.09,4.6,3.09,7.53c0,2.93-1.02,5.49-3.09,7.58H158.91z"/>
+      <path d="M156.34,155.7c0-2.56-2.13-4.13-4.52-4.13h-5.11v14.16h2.65v-5.9h0.98l3.63,5.9h3.34l-4.13-6.1c1.57-0.39,3.15-1.81,3.15-3.93H156.34z M151.42,157.67h-2.06v-3.93h2.06c1.18,0,2.16,0.59,2.16,1.97S152.6,157.67,151.42,157.67z"/>
+    </g>
+  </svg>
+</div>
+
+<header class="menu-label is-entering" aria-label="Site bar">
+  <div class="menu-label__bg"></div>
+  <div class="menu-label__inner">
+    <button class="menu-label__hamburger" aria-label="Menu">
+      <div class="menu-label__line"></div>
+      <div class="menu-label__line"></div>
+    </button>
+    <a class="menu-label__logos" href="#" aria-label="Homepage">
+      <!-- collapsed-state SVG: just the M+crown monogram cropped tight -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="14 108 151 157" fill="none" class="logo-mono">
+        <path d="M107.08,180.09l34.53-48.24l-37.93,13.02L81.9,108.87l-21.78,35.99l-37.93-13.02l34.55,48.24H107.08z"/>
+        <path d="M81.9,215.3l-25.18-35.19H14.45v154.56h35.03V219.11l32.42,45.33l32.42-45.33v115.56h35.03V180.11h-42.27L81.9,215.3z"/>
+        <path d="M161.18,148.83c-2.68-2.68-5.99-4.04-9.8-4.04s-7.06,1.36-9.75,4.04c-2.7,2.7-4.06,5.97-4.06,9.76s1.36,7.13,4.02,9.82c2.68,2.7,5.97,4.08,9.8,4.08c3.83,0,7.12-1.38,9.8-4.08c2.7-2.7,4.06-6.01,4.06-9.83s-1.36-7.1-4.06-9.76L161.18,148.83z M158.91,166.21c-2.06,2.07-4.6,3.15-7.53,3.15c-2.93,0-5.44-1.02-7.53-3.13c-2.07-2.11-3.09-4.6-3.09-7.6c0-3,1.04-5.45,3.09-7.53c2.07-2.07,4.6-3.13,7.51-3.13c2.91,0,5.44,1.02,7.53,3.13c2.06,2.06,3.09,4.6,3.09,7.53c0,2.93-1.02,5.49-3.09,7.58H158.91z"/>
+        <path d="M156.34,155.7c0-2.56-2.13-4.13-4.52-4.13h-5.11v14.16h2.65v-5.9h0.98l3.63,5.9h3.34l-4.13-6.1c1.57-0.39,3.15-1.81,3.15-3.93H156.34z M151.42,157.67h-2.06v-3.93h2.06c1.18,0,2.16,0.59,2.16,1.97S152.6,157.67,151.42,157.67z"/>
+      </svg>
+      <!-- hover-state SVG: full DESDE / DON MOLINICO / NUEVA TRADICION -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 972.69 337.5" fill="none" class="logo-morphing">
+        <g id="desde" class="fade" style="--i:0">
+          <path d="M147.69,72.15h-6.94V42.76h6.94c6.53,0,11.43,4.9,11.43,14.7s-4.82,14.7-11.43,14.7V72.15z M146.47,48.06v18.78c4.9,0,6.53-2.86,6.53-9.39S151.37,48.06,146.47,48.06z"/>
+          <path d="M177.91,72.15h-12.65V42.76h12.65l0.41,5.31h-7.35v6.53h6.53v5.1h-6.53v7.14h7.35L177.91,72.15z"/>
+          <path d="M191.38,72.96c-4.9,0-7.35-3.27-8.57-6.53l4.49-2.45c0.82,2.45,2.45,3.67,4.08,3.67c1.63,0,2.86-0.82,2.86-2.86c0-4.49-10.61-7.76-10.61-15.51c0-4.49,2.86-7.35,7.76-7.35c4.33,0,6.86,2.29,7.92,5.47l-4.65,1.88c-0.82-2.04-1.63-2.45-3.27-2.45c-1.22,0-2.04,0.82-2.04,2.45c0,4.9,10.61,7.35,10.61,15.51C199.96,70.5,196.29,72.95,191.38,72.96L191.38,72.96z"/>
+          <path d="M212.41,72.15h-6.94V42.76h6.94c6.53,0,11.43,4.9,11.43,14.7s-4.82,14.7-11.43,14.7V72.15z M211.18,48.06v18.78c4.9,0,6.53-2.86,6.53-9.39S216.08,48.06,211.18,48.06z"/>
+          <path d="M242.62,72.15h-12.65V42.76h12.65l0.41,5.31h-7.35v6.53h6.53v5.1h-6.53v7.14h7.35L242.62,72.15z"/>
+          <path d="M157.19,110.06V88.42l-3.27,2.86v-5.71l3.67-3.27h5.1v27.76h-5.51H157.19z"/>
+          <path d="M181.76,105.12c-0.57,0.9-2.73,4.2-3.35,4.94h-5.88c2.69-3.51,4.41-6.49,6.29-9.72c-5.71,1.55-9.39-2.12-9.39-8.82c0-6.29,2.86-10.04,8.57-10.04s8.37,3.55,8.37,10c0,5.59-2.24,10-4.61,13.63V105.12z M178.01,86.38c-1.84,0-3.06,1.8-3.06,5.31s1.1,4.78,2.94,4.78s2.94-1.67,2.98-4.98c0.04-3.51-1.02-5.1-2.86-5.1V86.38z"/>
+          <path d="M200.67,110.87c-5.71,0-8.78-3.67-8.78-9.39c0-3.06,1.47-5.39,3.63-6.98c-1.51-1.31-2.61-2.98-2.61-5.27c0-4.9,3.27-7.76,7.76-7.76s7.76,2.86,7.76,7.76c0,2.24-1.02,3.96-2.49,5.23c2.16,1.59,3.51,4.37,3.51,7.43C209.45,107.2,206.39,110.87,200.67,110.87z M200.67,96.99c-2.04,0-3.27,1.63-3.27,4.49c0,2.86,1.43,4.49,3.27,4.49s3.27-1.51,3.27-4.49C203.94,98.5,202.72,96.99,200.67,96.99z M200.67,85.97c-1.59,0-2.65,1.1-2.65,3.27c0,2.17,1.1,3.27,2.65,3.27s2.65-1.14,2.65-3.27C203.32,87.11,202.22,85.97,200.67,85.97z"/>
+          <path d="M216.8,110.06l7.76-22.86h-11.02l0.82-4.9h15.92v4.9l-7.35,22.86H216.8z"/>
+        </g>
+        <g id="nueva-tradicion" class="fade" style="--i:1">
+          <path d="M779.43,72.15l-5.35-14.29c-0.25-0.69-0.45-1.23-0.69-2.04h-0.08v16.33h-5.71V42.76h5.71l5.35,14.29c0.24,0.69,0.45,1.22,0.69,2.04h0.08V42.76h5.71v29.39H779.43z"/>
+          <path d="M801.07,72.96c-5.92,0-8.78-3.67-8.78-9.39V42.75H798v20.82c0,2.86,1.23,4.08,3.06,4.08s3.06-1.22,3.06-4.08V42.75h5.71v20.82c0,5.71-2.86,9.39-8.78,9.39H801.07z"/>
+          <path d="M829.65,72.15H817V42.76h12.65l0.41,5.31h-7.35v6.53h6.53v5.1h-6.53v7.14h7.35L829.65,72.15z"/>
+          <path d="M840.06,72.15l-5.71-29.39h6.12l2.74,17.55c0.12,0.82,0.25,1.63,0.29,2.45h0.08c0.08-0.82,0.16-1.67,0.29-2.45l2.74-17.55h6.12l-5.71,29.39H840.06z"/>
+          <path d="M869.46,72.15l-1.1-5.51h-5.55l-1.1,5.51h-5.92l6.94-29.39h5.71l6.94,29.39H869.46z M865.99,55c-0.12-0.69-0.24-1.23-0.37-2.45h-0.08c-0.12,1.22-0.24,1.76-0.37,2.45l-1.39,6.94h3.59L865.98,55H865.99z"/>
+          <path d="M739.12,85.97v24.08h-5.71V85.97h-4.9l0.61-5.31h14.29l0.61,5.31H739.12z"/>
+          <path d="M760.47,97.03l4.98,13.02h-6.12l-4.2-12.25h-0.29v12.25h-5.71V80.66h6.53c6.12,0,10.2,2.86,10.2,8.57C765.86,92.99,763.7,95.72,760.47,97.03z M754.84,92.5c3.27,0,5.31-0.41,5.31-3.27c0-2.86-2.04-3.27-5.31-3.27V92.5z"/>
+          <path d="M783.41,110.06l-1.1-5.51h-5.55l-1.1,5.51h-5.92l6.94-29.39h5.71l6.94,29.39H783.41z M779.94,92.91c-0.12-0.69-0.24-1.23-0.37-2.45h-0.08c-0.12,1.22-0.24,1.76-0.37,2.45l-1.39,6.94h3.59l-1.39-6.94H779.94z"/>
+          <path d="M801.38,110.06h-6.94V80.67h6.94c6.53,0,11.43,4.9,11.43,14.7s-4.82,14.7-11.43,14.7V110.06z M800.15,85.97v18.78c4.9,0,6.53-2.86,6.53-9.39S805.05,85.97,800.15,85.97z"/>
+          <path d="M818.93,110.06V80.67h5.71v29.39H818.93z"/>
+          <path d="M840.57,110.87c-6.12,0-9.8-5.71-9.8-15.51s3.71-15.51,9.8-15.51c4.9,0,7.96,2.86,8.98,8.78l-5.51,1.22c-0.29-2.65-1.43-4.69-3.47-4.69c-2.45,0-4.08,2.86-4.08,10.21c0,7.35,1.63,10.21,4.08,10.21c2.04,0,3.06-1.63,3.47-4.9l5.71,1.22c-1.23,5.71-4.08,8.98-9.19,8.98L840.57,110.87z"/>
+          <path d="M855.27,110.06V80.67h5.71v29.39H855.27z"/>
+          <path d="M876.91,110.87c-6.12,0-9.8-5.71-9.8-15.51c0-8.9,3.1-14.53,8.37-15.39l-1.63,4.57h4.41l2.29-3.92c3.92,1.88,6.16,7.06,6.16,14.74C886.71,105.16,883.04,110.87,876.91,110.87z M876.91,85.16c-2.45,0-4.08,2.86-4.08,10.21c0,7.35,1.63,10.21,4.08,10.21c2.45,0,4.08-2.86,4.08-10.21C880.99,88.02,879.36,85.16,876.91,85.16z M877.93,83.93h-3.26l2.04-5.71h4.49L877.93,83.93z"/>
+          <path d="M904.67,110.06l-5.35-14.29c-0.25-0.69-0.45-1.23-0.69-2.04h-0.08v16.33h-5.71V80.67h5.71l5.35,14.29c0.24,0.69,0.45,1.22,0.69,2.04h0.08V80.67h5.71v29.39H904.67z"/>
+        </g>
+        <g id="don" style="--i:2">
+          <path d="M613.36,63.93l53.62,93.77h40V2.84h-42.07v93.35L611.99,2.84h-40.7V157.7h42.07V63.93z"/>
+          <path d="M484.12,0C441.9,0,409.6,33.01,409.6,80.27s32.31,80.27,74.52,80.27s74.53-33.01,74.53-80.27S526.34,0,484.12,0z M516.77,80.27c0,22.44-10.1,53.55-32.65,53.55c-22.55,0-32.65-31.11-32.65-53.55s10.1-53.55,32.65-53.55C506.67,26.72,516.77,57.83,516.77,80.27z"/>
+          <path d="M327.09,157.64c36.57,0,70.42-32.87,70.42-77.37S363.56,2.9,327.09,2.9l-55.06-0.06v154.87L327.09,157.64L327.09,157.64z M311.28,135.4V25.21c0,0,47.2-8.33,47.2,55.06S311.28,135.4,311.28,135.4z"/>
+        </g>
+        <g id="molinico" style="--i:3">
+          <path d="M898.16,176.96c-42.22,0-74.52,33.01-74.52,80.27s32.31,80.27,74.52,80.27c42.21,0,74.53-33.01,74.53-80.27S940.38,176.96,898.16,176.96z M930.81,257.23c0,22.44-10.1,53.55-32.65,53.55c-22.55,0-32.65-31.11-32.65-53.55s10.1-53.55,32.65-53.55C920.71,203.68,930.81,234.79,930.81,257.23z"/>
+          <path d="M752.06,312.32c-16.32,0-26.73-27.78-26.73-55.09s10.41-55.09,26.73-55.09c13.27,0,21.73,20.4,25.38,40.49l37.37-6.25c-6.82-36.31-29.01-59.42-62.3-59.42c-39.47,0-69.85,33.01-69.85,80.27s30.38,80.27,69.85,80.27c33.25,0,55.46-23.14,62.28-59.43l-37.36-6.24c-3.65,20.09-12.1,40.49-25.38,40.49H752.06z"/>
+          <path d="M670.59,179.8h-39.25v154.87h39.25V179.8z"/>
+          <path d="M520.04,238.07l56.44,96.6h37.17V179.8h-42.07v96.18l-52.92-96.18h-40.7v154.87h42.08V238.07z"/>
+          <path d="M462.56,179.8h-39.25v154.87h39.25V179.8z"/>
+          <path d="M364.99,179.8h-42.07v154.87h79.35l8.46-20.77h-45.74V179.8z"/>
+          <path d="M236.05,176.96c-42.22,0-74.52,33.01-74.52,80.27s32.31,80.27,74.52,80.27s74.53-33.01,74.53-80.27S278.27,176.96,236.05,176.96z M268.7,257.23c0,22.44-10.1,53.55-32.65,53.55s-32.65-31.11-32.65-53.55s10.1-53.55,32.65-53.55S268.7,234.79,268.7,257.23z"/>
+        </g>
+        <g id="monogram-small" style="--i:4">
+          <path d="M107.08,180.09l34.53-48.24l-37.93,13.02L81.9,108.87l-21.78,35.99l-37.93-13.02l34.55,48.24H107.08z"/>
+          <path d="M81.9,215.3l-25.18-35.19H14.45v154.56h35.03V219.11l32.42,45.33l32.42-45.33v115.56h35.03V180.11h-42.27L81.9,215.3z"/>
+          <path d="M161.18,148.83c-2.68-2.68-5.99-4.04-9.8-4.04s-7.06,1.36-9.75,4.04c-2.7,2.7-4.06,5.97-4.06,9.76s1.36,7.13,4.02,9.82c2.68,2.7,5.97,4.08,9.8,4.08c3.83,0,7.12-1.38,9.8-4.08c2.7-2.7,4.06-6.01,4.06-9.83s-1.36-7.1-4.06-9.76L161.18,148.83z M158.91,166.21c-2.06,2.07-4.6,3.15-7.53,3.15c-2.93,0-5.44-1.02-7.53-3.13c-2.07-2.11-3.09-4.6-3.09-7.6c0-3,1.04-5.45,3.09-7.53c2.07-2.07,4.6-3.13,7.51-3.13c2.91,0,5.44,1.02,7.53,3.13c2.06,2.06,3.09,4.6,3.09,7.53c0,2.93-1.02,5.49-3.09,7.58H158.91z"/>
+          <path d="M156.34,155.7c0-2.56-2.13-4.13-4.52-4.13h-5.11v14.16h2.65v-5.9h0.98l3.63,5.9h3.34l-4.13-6.1c1.57-0.39,3.15-1.81,3.15-3.93H156.34z M151.42,157.67h-2.06v-3.93h2.06c1.18,0,2.16,0.59,2.16,1.97S152.6,157.67,151.42,157.67z"/>
+        </g>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<aside id="menu" class="menu" aria-hidden="true">
+  <ul class="menu__list">
+    <li class="menu__item is-active" style="--i:0">
+      <svg class="icon-molinico menu__item__active-shown" fill="none" height="20" viewBox="0 0 34 20" width="34" xmlns="http://www.w3.org/2000/svg"><path d="M16.7989 0L10.6622 10.1166L0 6.46797L9.71325 20H24.2867L34 6.46797L22.9356 10.1166L16.7989 0Z" fill="currentColor"/></svg>
+      <a href="#"><span>Inicio</span></a>
+      <svg class="icon-molinico menu__item__active-shown" fill="none" height="20" viewBox="0 0 34 20" width="34" xmlns="http://www.w3.org/2000/svg"><path d="M16.7989 0L10.6622 10.1166L0 6.46797L9.71325 20H24.2867L34 6.46797L22.9356 10.1166L16.7989 0Z" fill="currentColor"/></svg>
+    </li>
+    <li class="menu__item" style="--i:1">
+      <svg class="icon-molinico" fill="none" height="20" viewBox="0 0 34 20" width="34" xmlns="http://www.w3.org/2000/svg"><path d="M16.7989 0L10.6622 10.1166L0 6.46797L9.71325 20H24.2867L34 6.46797L22.9356 10.1166L16.7989 0Z" fill="currentColor"/></svg>
+      <a href="#"><span>Productos</span></a>
+      <svg class="icon-molinico" fill="none" height="20" viewBox="0 0 34 20" width="34" xmlns="http://www.w3.org/2000/svg"><path d="M16.7989 0L10.6622 10.1166L0 6.46797L9.71325 20H24.2867L34 6.46797L22.9356 10.1166L16.7989 0Z" fill="currentColor"/></svg>
+    </li>
+    <li class="menu__item" style="--i:2">
+      <svg class="icon-molinico" fill="none" height="20" viewBox="0 0 34 20" width="34" xmlns="http://www.w3.org/2000/svg"><path d="M16.7989 0L10.6622 10.1166L0 6.46797L9.71325 20H24.2867L34 6.46797L22.9356 10.1166L16.7989 0Z" fill="currentColor"/></svg>
+      <a href="#"><span>Nuestra Historia</span></a>
+      <svg class="icon-molinico" fill="none" height="20" viewBox="0 0 34 20" width="34" xmlns="http://www.w3.org/2000/svg"><path d="M16.7989 0L10.6622 10.1166L0 6.46797L9.71325 20H24.2867L34 6.46797L22.9356 10.1166L16.7989 0Z" fill="currentColor"/></svg>
+    </li>
+    <li class="menu__item" style="--i:3">
+      <svg class="icon-molinico" fill="none" height="20" viewBox="0 0 34 20" width="34" xmlns="http://www.w3.org/2000/svg"><path d="M16.7989 0L10.6622 10.1166L0 6.46797L9.71325 20H24.2867L34 6.46797L22.9356 10.1166L16.7989 0Z" fill="currentColor"/></svg>
+      <a href="#"><span>Contactico</span></a>
+      <svg class="icon-molinico" fill="none" height="20" viewBox="0 0 34 20" width="34" xmlns="http://www.w3.org/2000/svg"><path d="M16.7989 0L10.6622 10.1166L0 6.46797L9.71325 20H24.2867L34 6.46797L22.9356 10.1166L16.7989 0Z" fill="currentColor"/></svg>
+    </li>
+  </ul>
+</aside>
+
+<div class="scroll-hint">scroll to collapse</div>
+<button class="replay" type="button">replay intro</button>
+<div class="credit">DESDE 1987 · NUEVA TRADICION</div>
+
+<script>
+  const bar = document.querySelector('.menu-label');
+  const curtain = document.querySelector('.intro-curtain');
+  const introLogo = document.querySelector('.intro-logo');
+  const burger = document.querySelector('.menu-label__hamburger');
+  const replay = document.querySelector('.replay');
+  const menu = document.getElementById('menu');
+
+  // strip .is-entering after the curtain finishes so re-render doesn't replay
+  curtain.addEventListener('animationend', () => {
+    bar.classList.remove('is-entering');
+    curtain.style.display = 'none';
+  });
+
+  // scroll-trigger: collapse when past threshold, expand at top. Scroll also
+  // clears .is-bar-hovered so a wheel-scroll over the bar still collapses it
+  // even if the cursor is stationary on top of it.
+  const SCROLL_THRESHOLD = 60;
+  let lastScrolled = false;
+  let lastScrollTs = 0;
+  function checkScroll() {
+    const scrolled = window.scrollY > SCROLL_THRESHOLD;
+    if (scrolled !== lastScrolled) {
+      document.body.classList.toggle('is-scrolled', scrolled);
+      lastScrolled = scrolled;
+    }
+    document.body.classList.remove('is-bar-hovered');
+    lastScrollTs = Date.now();
+  }
+  window.addEventListener('scroll', checkScroll, { passive: true });
+  checkScroll();
+
+  // JS-driven hover state: mouseenter/leave instead of CSS :hover, plus a
+  // mousemove re-trigger so the cursor sitting on the bar can re-engage after
+  // a scroll cleared the hover class (200ms cooldown to avoid scroll-induced
+  // mousemove events flipping it right back on).
+  bar.addEventListener('mouseenter', () => {
+    document.body.classList.add('is-bar-hovered');
+  });
+  bar.addEventListener('mouseleave', () => {
+    document.body.classList.remove('is-bar-hovered');
+  });
+  bar.addEventListener('mousemove', () => {
+    if (Date.now() - lastScrollTs > 200) {
+      document.body.classList.add('is-bar-hovered');
+    }
+  });
+
+  // hamburger toggles menu overlay
+  burger.addEventListener('click', () => {
+    document.body.classList.toggle('is-menu-open');
+    menu.setAttribute('aria-hidden', document.body.classList.contains('is-menu-open') ? 'false' : 'true');
+  });
+
+  // tap outside the bar inside the open menu also closes
+  menu.addEventListener('click', (e) => {
+    if (e.target.closest('a')) {
+      e.preventDefault();
+      document.body.classList.remove('is-menu-open');
+      menu.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  // replay intro button — reset every animated element so all 3 keyframe
+  // tracks (bar logos, curtain, big intro-logo) restart in sync.
+  function restartAnim(el) {
+    el.style.animation = 'none';
+    void el.offsetWidth;  // force reflow
+    el.style.animation = '';
+  }
+  replay.addEventListener('click', () => {
+    document.body.classList.remove('is-menu-open');
+    bar.classList.remove('is-entering');
+    curtain.style.display = '';
+    void bar.offsetWidth;
+    bar.classList.add('is-entering');
+    restartAnim(curtain);
+    restartAnim(introLogo);
+  });
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="019-donmolinico-mobile-topbar.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=019-donmolinico-mobile-topbar" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

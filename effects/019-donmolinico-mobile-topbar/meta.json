@@ -1,0 +1,11 @@
+{
+  "title": "Don Molinico 顶部红条 + 入场 logo",
+  "subtitle": "intro fade + collapsed/expanded hover tab bar + hamburger menu",
+  "description": "Don Molinico 首页顶 bar 的 1:1 复刻，带 hover 触发的展开/收起。默认态 = collapsed：窄红条 60×114（mobile）/ max(60px,6vw) 宽，金色 .logo-mono SVG 只含 monogram-small 的 M+王冠+® 四条 path，紧 viewBox 14 108 151 157 居中显示，hamburger 宽度变窄到 25px。鼠标 hover 到 .menu-label（或 :focus-within / body.is-menu-open）→ bg width/height 同时过渡到展开尺寸（mobile 240×143、desktop 1440 时 346×192，公式 max(240px,24vw) × calc(124px+4.7vw)，三档视口实测 Δ ≤ 2px），同时 .logo-mono opacity→0、.logo-morphing opacity→1（带 0.25s delay 让 bg 先展开），hamburger 宽度回到 60px。展开后显示完整 desde / nueva-tradicion / don / molinico / monogram-small 五组金色 path。入场动画：红 bg 从 100vw×100vh 全屏收到 collapsed 尺寸，full logo 从中心 scale 2.6 fade in 再 fade out 切到 logo-mono。点 hamburger → body.is-menu-open 触发：两条 .menu-label__line translate3d±0.35rem + rotate±8° 形成微 X，#menu 全屏红覆盖 clip-path inset 自上而下展开，4 个 menu__item（Inicio/Productos/Nuestra Historia/Contactico）+ 当前项左右菱形 .icon-molinico 风车标记 scale(0)→scale(1) 带 stagger 出场。颜色统一 gold #cba058 / red #d70321 / cream #fbf5e7，缓动 cubic-bezier(0.19,1,0.22,1)。字体 super-med（woff2+woff，复用 008-donmolinico）。",
+  "tech": "CSS clip-path + keyframes + inline multi-group SVG",
+  "tags": ["intro", "navigation", "interaction", "animation"],
+  "previewHref": "",
+  "sourceUrl": "https://www.donmolinico.es/",
+  "localMirror": "../designs/011-donmolinico-home/index.html",
+  "order": 19
+}

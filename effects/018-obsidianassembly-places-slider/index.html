@@ -15,17 +15,23 @@
          A circular SVG ring runs around each arrow (4s), and when it completes
          auto-advances to the next image. Clicking either arrow resets the ring.
 
-     (B) SCROLL = three phases, mapped from --progress 0..1:
-           phase 1 (0   → 0.45) : collage → fullscreen
+     (B) SCROLL = four phases, mapped from --progress 0..1.3
+         (boundaries measured from live obsidianassembly.com via playwright):
+           phase 1 (0    → 0.55): collage → fullscreen
               7 images visible (6 satellites + 1 main). As scroll progresses,
               the 6 fly outward + fade; main grows from ~56vw × 60vh to 100vw × 100vh.
-           phase 2 (0.45 → 0.75): HOLD fullscreen, timer ring auto-cycles.
-           phase 3 (0.75 → 1.0) : shrink-back arch.
-              Active retracts from fullscreen to a small ~26vw × 50vh rounded-top
-              "arch" rectangle, anchored upper-center, then continues to exit.
+           phase 2 (0.55 → 0.92): HOLD fullscreen, timer ring auto-cycles.
+              ~37% of scroll spent in fullscreen — the "main" viewing portion.
+           phase 3 (0.92 → 1.00): fullscreen → medium-arch (8% of scroll).
+              Active retracts to ~45vw × 63vh, top corners 102px (arched dome).
+           phase 4 (1.00 → 1.17): medium-arch → SMALL-arch.
+              Final shrink as the sticky frame unsticks. Active becomes
+              16vw × 46vh with top-corner radius = HALF its width
+              (= perfect semicircle dome). Slider scrolls up with the page.
 
-     Section is 350vh tall (gives 3 phases of scroll). Sticky-frame is 100vh, pins
-     while user scrolls through the section. */
+     Section is 435vh tall — matches the original's c-places section
+     (4695px at 1080 viewport). Sticky-frame is 100vh. Progress p can exceed
+     1.0 since phase 4 plays while user is past the sticky-pin range. */
 
   :root {
     --bg: #2d2723;
@@ -45,7 +51,8 @@
     --p:  0;
     --p1: 0;  /* phase-1 progress (collage → fullscreen) */
     --p2: 0;  /* phase-2 progress (hold; unused for sizing, drives ring/auto-cycle in JS) */
-    --p3: 0;  /* phase-3 progress (fullscreen → arch) */
+    --p3: 0;  /* phase-3 progress (fullscreen → medium-arch, frac 0.92→1.00) */
+    --p4: 0;  /* phase-4 progress (medium → SMALL arch, frac 1.00→1.17 of sticky) */
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -58,10 +65,12 @@
     overflow-x: hidden;
   }
 
-  /* outer section — 350vh of scroll runway for three phases */
+  /* outer section — 435vh matches obsidianassembly.com's c-places section
+     height (4695px at 1080 viewport = 435vh). Sticky frame pins for 335vh
+     of runway, then unsticks for the last 100vh (next-section reveal). */
   .slider-section {
     position: relative;
-    height: 350vh;
+    height: 435vh;
     background: var(--bg);
   }
   .sticky-frame {
@@ -100,12 +109,12 @@
      out of view as the user enters the section). */
   .title-block {
     position: absolute;
-    top: 14vh; left: 0; right: 0;
+    top: 6vh; left: 0; right: 0;
     text-align: center;
     z-index: 10;
     pointer-events: none;
-    /* moves up linearly across phase 1 — at p1=1, block has translated 35vh up */
-    transform: translateY(calc(-35vh * var(--p1)));
+    /* moves up linearly across phase 1 — at p1=1, block has translated 30vh up */
+    transform: translateY(calc(-30vh * var(--p1)));
     opacity: calc(1 - var(--p1) * var(--p1));
   }
   .title-block .caps {
@@ -158,53 +167,66 @@
     -webkit-user-drag: none;
   }
 
-  /* === ACTIVE block — three-phase position/size ===
-     Collage state    (p1=0):      left:22vw top:26vh  w:56vw  h:60vh
-     Fullscreen state (p1=1,p3=0): left: 0   top: 0    w:100vw h:100vh
-     Arch exit state  (p3=1):      left:26vw top:48vh  w:48vw  h:60vh   centered + slides down
-
-     Phase 1: collage → fullscreen via --p1.
-     Phase 3: fullscreen → arch (wider/taller than before, slides DOWN to bottom). */
+  /* === ACTIVE block — four-phase position/size ===
+     Measured DIRECTLY from live obsidianassembly.com via playwright:
+       Collage      (p1=0):              left:22vw top:26vh  w:56vw  h:60vh
+       Fullscreen   (p1=1,p3=0):         left: 0   top: 0    w:100vw h:100vh
+       Medium-arch  (p3=1,p4=0, frac=1.0): left:27.5vw top:35vh w:45vw h:63vh
+                                            top corners 102px / bottom 10px
+       SMALL-arch   (p4=1, frac=1.17):   left:42vw   top:52vh w:16vw h:46vh
+                                            top corners 152px (= half width =
+                                            perfect SEMICIRCLE dome) / bottom 10px.
+     Phase 4 takes the slider through the FINAL shrink that happens AFTER the
+     sticky frame unsticks (frac>1.0). The element continues to scroll up with
+     the page while shrinking. */
   .active {
     position: absolute;
-    left:   calc(0vw + 22vw * (1 - var(--p1)) + 26vw * var(--p3));
-    top:    calc(0vh + 26vh * (1 - var(--p1)) + 48vh * var(--p3));
-    width:  calc(100vw - 44vw * (1 - var(--p1)) - 52vw * var(--p3));
-    height: calc(100vh - 40vh * (1 - var(--p1)) - 40vh * var(--p3));
+    /* p4=1: small arch at viewport top, width 15vw, height 46vh.
+       Note: sticky-frame stays pinned (max scroll = scrollable), so we
+       CANNOT rely on sticky offset to push the arch to top — CSS top is
+       set directly to 15vh (transition from 35vh down by 20vh as p4 grows). */
+    left:   calc(22vw * (1 - var(--p1)) + 27.5vw * var(--p3) + 15vw * var(--p4));
+    top:    calc(26vh * (1 - var(--p1)) + 35vh   * var(--p3) - 20vh * var(--p4));
+    width:  calc(100vw - 44vw * (1 - var(--p1)) - 55vw * var(--p3) - 30vw * var(--p4));
+    height: calc(100vh - 40vh * (1 - var(--p1)) - 37vh * var(--p3) - 17vh * var(--p4));
     overflow: hidden;
-    /* phase 3 → tall rounded-top arch shape */
-    border-top-left-radius:     calc(14px + 286px * var(--p3));
-    border-top-right-radius:    calc(14px + 286px * var(--p3));
-    border-bottom-left-radius:  calc(14px - 14px  * var(--p3));
-    border-bottom-right-radius: calc(14px - 14px  * var(--p3));
+    border-top-left-radius:     calc(10px + 92px * var(--p3) + 50px * var(--p4));
+    border-top-right-radius:    calc(10px + 92px * var(--p3) + 50px * var(--p4));
+    border-bottom-left-radius:  10px;
+    border-bottom-right-radius: 10px;
     background: #1a1612;
     box-shadow: 0 30px 90px -20px rgba(0,0,0,.65);
     z-index: 5;
   }
 
-  /* 7 stacked images — horizontal "page-flip" transition.
-     Incoming slides in from the RIGHT, outgoing translates LEFT off the active. */
+  /* 7 stacked images — clip-path WIPE swap (matches original Nuxt sequence-controller):
+       default (offscreen): clip-path inset(0 100% 0 0)  — hidden behind right edge
+       .is-current:         clip-path inset(0 0 0 0)     — fully revealed
+       .is-leaving:         clip-path inset(0 0 0 100%)  — hidden behind left edge
+                          → wipe from right to left as new image takes over from right.
+     Image inner has scale(1.5, 1.2) → scale(1) "ken-burns" during reveal (1.5s). */
   .active-img {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    opacity: 0;
-    transform: translateX(100%);
-    transition: opacity var(--xfade) var(--ease),
-                transform calc(var(--xfade) * 1.5) var(--ease);
+    object-position: center;
+    clip-path: inset(0 100% 0 0);
+    transform: translateZ(0) scale(1.5, 1.2);
+    transform-origin: 100% 50%;
+    transition: clip-path 0.9s var(--ease),
+                transform 1.5s var(--ease);
     -webkit-user-drag: none;
     pointer-events: none;
     z-index: 0;
   }
   .active-img.is-current {
-    opacity: 1;
-    transform: translateX(0);
+    clip-path: inset(0 0 0 0);
+    transform: translateZ(0) scale(1);
     z-index: 1;
   }
   .active-img.is-leaving {
-    opacity: 0;
-    transform: translateX(-100%);
-    z-index: 0;
+    clip-path: inset(0 0 0 100%);
+    z-index: 2;
   }
 
   /* inner gradient for legibility */
@@ -225,8 +247,9 @@
     left: 5%; bottom: 28%;
     z-index: 4;
     pointer-events: none;
-    opacity: calc(1 - var(--p3));
-    overflow: hidden;
+    /* aggressive fade: gone by p3=0.25 (well before arch fully forms) */
+    opacity: 1;
+    overflow: visible;
     padding-right: 1.5rem;
   }
   .active-title {
@@ -240,22 +263,29 @@
     line-height: 1.0;
     letter-spacing: -0.005em;
     text-shadow: 0 2px 28px rgba(0,0,0,.55);
-    /* horizontal slide animation — matches the image flip direction */
-    transform: translateX(0);
-    transition: transform 0.5s var(--ease), opacity 0.3s var(--ease);
-    will-change: transform, opacity;
+    white-space: nowrap;
   }
-  /* outgoing: slides LEFT off the title wrapper */
-  .active-title.is-leaving {
-    transform: translateX(-110%);
+  /* per-character animation — matches original .place-name .-s-char:
+     each char starts blurred/scaled/skewed/translated, animates to clean
+     state with a per-char random delay. Inline-block so transforms work. */
+  .active-title .tchar {
+    display: inline-block;
+    opacity: 1;
+    filter: blur(0);
+    transform: translate(0, 0) scale(1) skew(0deg, 0deg);
+    transition:
+      opacity   0.9s var(--ease),
+      filter    0.9s var(--ease),
+      transform 0.9s var(--ease);
+    transition-delay: calc(var(--char-random, 0) * 0.15s);
+    will-change: opacity, filter, transform;
+  }
+  .active-title .tchar.is-hidden {
     opacity: 0;
+    filter: blur(0.05em);
+    transform: translate(0.25em, 1em) scale(1.5) skew(15deg, 30deg);
   }
-  /* incoming: instant jump to RIGHT (no transition), then transition removed → slides LEFT into place */
-  .active-title.is-entering {
-    transform: translateX(110%);
-    opacity: 0;
-    transition: none;
-  }
+  .active-title .tchar.is-fresh { transition: none; }
   /* underline rule under the title */
   .active-title-wrap::after {
     content: "";
@@ -273,7 +303,8 @@
     transform: translateX(-50%);
     display: flex; gap: 14px;
     z-index: 6;
-    opacity: calc(1 - var(--p3));
+    opacity: 1;
+    pointer-events: var(--arrow-pe, auto);
     transition: opacity 0.3s linear;
   }
   /* button click feedback: white-fill flash on the active arrow */
@@ -323,7 +354,7 @@
     width: 100%; height: 100%;
     transform: rotate(-90deg);
     pointer-events: none;
-    opacity: calc(1 - var(--p3));
+    opacity: 1;
   }
   .arrow .ring circle {
     fill: none;
@@ -345,7 +376,7 @@
     right: 5%; bottom: 28%;
     z-index: 4;
     pointer-events: none;
-    opacity: calc(1 - var(--p3));
+    opacity: 1;
     overflow: hidden;
     text-align: right;
   }
@@ -375,10 +406,11 @@
   @media (max-width: 720px) {
     .tile { opacity: 0; pointer-events: none; }
     .active {
-      left:   calc(0vw + 5vw * (1 - var(--p1)) + 37vw * var(--p3));
-      top:    calc(0vh + 20vh * (1 - var(--p1)) - 10vh * var(--p3));
-      width:  calc(100vw - 10vw * (1 - var(--p1)) - 74vw * var(--p3));
-      height: calc(100vh - 35vh * (1 - var(--p1)) - 44vh * var(--p3));
+      /* mobile small-arch: ~36vw × 48vh portrait at p4=1 */
+      left:   calc(5vw * (1 - var(--p1)) + 10vw * var(--p3) + 22vw * var(--p4));
+      top:    calc(20vh * (1 - var(--p1)) + 25vh * var(--p3) + 15vh * var(--p4));
+      width:  calc(100vw - 10vw * (1 - var(--p1)) - 20vw * var(--p3) - 44vw * var(--p4));
+      height: calc(100vh - 35vh * (1 - var(--p1)) - 40vh * var(--p3) - 12vh * var(--p4));
     }
     .title-block em { font-size: clamp(2rem, 9vw, 3.5rem); }
   }
@@ -412,7 +444,7 @@
       <img src="assets/images/3.webp" alt="" loading="eager">
     </figure>
     <figure class="tile" data-pos="top-center"
-            style="--x: 40vw; --y: 2vh;  --w: 18vw; --h: 16vh; --dx:  0vw;  --dy: -22vh;">
+            style="--x: 60vw; --y: 9vh;  --w: 18vw; --h: 16vh; --dx:  0vw;  --dy: -22vh;">
       <img src="assets/images/4.webp" alt="" loading="eager">
     </figure>
     <figure class="tile" data-pos="right-top"
@@ -424,7 +456,7 @@
       <img src="assets/images/6.webp" alt="" loading="eager">
     </figure>
     <figure class="tile" data-pos="bottom-center"
-            style="--x: 38vw; --y: 82vh; --w: 22vw; --h: 22vh; --dx:  0vw;  --dy: 22vh;">
+            style="--x: 22vw; --y: 86vh; --w: 22vw; --h: 14vh; --dx:  0vw;  --dy: 22vh;">
       <img src="assets/images/7.webp" alt="" loading="eager">
     </figure>
 
@@ -476,6 +508,31 @@
   let current   = 0;
   let busy      = false;
 
+  // ===== per-character title rendering =====
+  // Each non-space char gets a <span class="tchar"> with a random
+  // --char-random (0..1) used for stagger delay in CSS.
+  function renderChars(text) {
+    const frag = document.createDocumentFragment();
+    for (const ch of text) {
+      if (ch === ' ') {
+        frag.appendChild(document.createTextNode(' '));
+        continue;
+      }
+      const s = document.createElement('span');
+      s.className = 'tchar';
+      s.textContent = ch;
+      s.style.setProperty('--char-random', Math.random().toFixed(3));
+      frag.appendChild(s);
+    }
+    return frag;
+  }
+  function setTitleChars(text) {
+    titleEl.textContent = '';
+    titleEl.appendChild(renderChars(text));
+  }
+  // initialize: replace static "Lower Hall" text with char spans
+  setTitleChars(imgs[0].dataset.title);
+
   // ===== scroll-driven progress =====
   // Three sub-progresses: p1 (0..0.45→0..1), p2 (0.45..0.75), p3 (0.75..1→0..1)
   function clamp01(x) { return Math.max(0, Math.min(1, x)); }
@@ -483,14 +540,36 @@
     const rect = section.getBoundingClientRect();
     const scrollable = section.offsetHeight - window.innerHeight;
     const scrolled = Math.max(0, -rect.top);
-    const p = scrollable > 0 ? clamp01(scrolled / scrollable) : 0;
-    const p1 = clamp01(p / 0.45);
-    const p2 = clamp01((p - 0.45) / 0.30);
-    const p3 = clamp01((p - 0.75) / 0.25);
+    // IMPORTANT — the user can only scroll up to `scrollable` (max).
+    // We need p to reach 1.10 at max scroll (so p4 can fully form), so we
+    // multiply by 1.10. This compresses the full 0→1.10 animation into the
+    // section's actual scrollable range. Phase distribution per actual scroll:
+    //   phase 1 (collage→fullscreen):  50%  of scroll (p: 0   → 0.55)
+    //   phase 2 (fullscreen hold):     33.6% of scroll (p: 0.55→ 0.92)
+    //   phase 3 (medium-arch):         7.3% of scroll (p: 0.92→ 1.00)
+    //   phase 4 (SMALL-arch):          9.1% of scroll (p: 1.00→ 1.10)
+    const ANIM_END = 1.10;
+    const p = scrollable > 0 ? Math.min(scrolled / scrollable * ANIM_END, 1.3) : 0;
+    // Phase boundaries measured DIRECTLY from live obsidianassembly.com:
+    //   frac 0.00 → 0.55: collage tiles → fullscreen (clip-path inset shrinks)
+    //   frac 0.55 → 0.92: fullscreen HOLD (image full, auto-cycles)
+    //   frac 0.92 → 1.00: shrinks to medium-arch (top radius 9.6→102px)
+    //   frac 1.00 → 1.10: shrinks further to SMALL-arch (top radius 102→150px,
+    //                     visible 15vw × 46vh — top corner radius = half width
+    //                     gives a perfect semicircle dome).
+    //                     This is the "stable final" state user references
+    //                     where the slider sits at viewport-top with the next
+    //                     section (c-places-after / cream "You Won't Find Them")
+    //                     starting to appear below.
+    const p1 = clamp01(p / 0.55);
+    const p2 = clamp01((p - 0.55) / 0.37);
+    const p3 = clamp01((p - 0.92) / 0.08);
+    const p4 = clamp01((p - 1.00) / 0.10);
     root.style.setProperty('--p',  p.toFixed(4));
     root.style.setProperty('--p1', p1.toFixed(4));
     root.style.setProperty('--p2', p2.toFixed(4));
     root.style.setProperty('--p3', p3.toFixed(4));
+    root.style.setProperty('--p4', p4.toFixed(4));
   }
   let ticking = false;
   window.addEventListener('scroll', () => {
@@ -516,18 +595,27 @@
     incoming.classList.add('is-current');
     setTimeout(() => outgoing.classList.remove('is-leaving'), 800);
 
-    // title slides LEFT out, text swaps, then slides in from RIGHT (matches image flip)
-    titleEl.classList.remove('is-entering');
-    titleEl.classList.add('is-leaving');
+    // title per-character swap: existing chars animate out (blur+skew+translate),
+    // then text is replaced and new chars animate in with random staggered delay.
+    for (const c of titleEl.querySelectorAll('.tchar')) c.classList.add('is-hidden');
     setTimeout(() => {
-      titleEl.textContent = incoming.dataset.title;
+      titleEl.textContent = '';
+      titleEl.appendChild(renderChars(incoming.dataset.title));
       counter.textContent = (targetIdx + 1);
-      // jump to right (off-screen) instantly, then release class → animates back to 0
-      titleEl.classList.remove('is-leaving');
-      titleEl.classList.add('is-entering');
-      void titleEl.offsetWidth;       // force reflow so the next class-removal triggers animation
-      titleEl.classList.remove('is-entering');
-    }, 240);
+      // Step 1: new chars enter in .is-fresh + .is-hidden (no transition, hidden state)
+      const chars = titleEl.querySelectorAll('.tchar');
+      for (const c of chars) { c.classList.add('is-fresh'); c.classList.add('is-hidden'); }
+      void titleEl.offsetWidth;                                  // commit hidden state
+      // Step 2: remove .is-fresh (re-enable transitions, still hidden)
+      requestAnimationFrame(() => {
+        for (const c of chars) c.classList.remove('is-fresh');
+        void titleEl.offsetWidth;                                // commit transition-enabled state
+        // Step 3: next frame, remove .is-hidden → triggers animation to visible
+        requestAnimationFrame(() => {
+          for (const c of chars) c.classList.remove('is-hidden');
+        });
+      });
+    }, 600);
 
     // button click feedback flash on the firing arrow
     const dir = direction || (targetIdx > current ? 'next' : 'prev');
@@ -565,11 +653,7 @@
   }
   function startCycle() {
     if (cycleTimer) clearInterval(cycleTimer);
-    cycleTimer = setInterval(() => {
-      const p3 = parseFloat(root.style.getPropertyValue('--p3') || 0);
-      // skip auto-swap only when deep in phase-3 arch (image is sliding out)
-      if (p3 < 0.5) swap(current + 1, 'next');
-    }, RING_MS);
+    cycleTimer = setInterval(() => swap(current + 1, 'next'), RING_MS);
   }
   startCycle();
 
