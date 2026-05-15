@@ -1,0 +1,19 @@
+<!--
+  divider-knot.svg — horizontal rule with a centered contour-knot motif.
+  Two side rails flank a small interlocking-arc knot that echoes the cubic
+  curves in topographic.svg. Acts as a quiet section divider without the
+  template-hr look.
+  Intended slot: between the Journey quote and the Manifesto section.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="#5A0711" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <!-- Left rail -->
+  <path opacity="0.7" d="M 0 20 L 260 20" />
+  <!-- Right rail -->
+  <path opacity="0.7" d="M 340 20 L 600 20" />
+  <!-- Knot: two crossing arcs spanning x=260 to x=340 -->
+  <path opacity="0.85" d="M 260 20 C 280 6, 320 6, 340 20" />
+  <path opacity="0.85" d="M 260 20 C 280 34, 320 34, 340 20" />
+  <!-- Crossing strokes through the knot's waist -->
+  <path opacity="0.55" d="M 290 12 C 298 18, 302 22, 310 28" />
+  <path opacity="0.55" d="M 290 28 C 298 22, 302 18, 310 12" />
+</svg>

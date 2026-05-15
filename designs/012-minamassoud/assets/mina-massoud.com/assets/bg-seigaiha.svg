@@ -1,0 +1,49 @@
+<!--
+  bg-seigaiha.svg — tileable seigaiha (青海波) wave pattern, line-art.
+  Tile size 256x128 designed to repeat horizontally AND vertically without
+  seams. Two offset rows of fans interlock so scallops flow across the grid.
+  Intended slot: background strip behind "By the numbers" band, used via
+  CSS background-image + background-repeat.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 128" preserveAspectRatio="xMidYMid meet" fill="none" stroke="#5A0711" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <g opacity="0.75">
+    <!-- Row A: fans on the bottom baseline (y=128), 4 across. -->
+    <path d="M 0 128 A 32 32 0 0 1 64 128" />
+    <path d="M 10 128 A 22 22 0 0 1 54 128" />
+    <path d="M 20 128 A 12 12 0 0 1 44 128" />
+
+    <path d="M 64 128 A 32 32 0 0 1 128 128" />
+    <path d="M 74 128 A 22 22 0 0 1 118 128" />
+    <path d="M 84 128 A 12 12 0 0 1 108 128" />
+
+    <path d="M 128 128 A 32 32 0 0 1 192 128" />
+    <path d="M 138 128 A 22 22 0 0 1 182 128" />
+    <path d="M 148 128 A 12 12 0 0 1 172 128" />
+
+    <path d="M 192 128 A 32 32 0 0 1 256 128" />
+    <path d="M 202 128 A 22 22 0 0 1 246 128" />
+    <path d="M 212 128 A 12 12 0 0 1 236 128" />
+  </g>
+  <g opacity="0.55">
+    <!-- Row B: offset fans straddling the vertical seams so pattern tiles cleanly. -->
+    <path d="M -32 64 A 32 32 0 0 1 32 64" />
+    <path d="M -22 64 A 22 22 0 0 1 22 64" />
+    <path d="M -12 64 A 12 12 0 0 1 12 64" />
+
+    <path d="M 32 64 A 32 32 0 0 1 96 64" />
+    <path d="M 42 64 A 22 22 0 0 1 86 64" />
+    <path d="M 52 64 A 12 12 0 0 1 76 64" />
+
+    <path d="M 96 64 A 32 32 0 0 1 160 64" />
+    <path d="M 106 64 A 22 22 0 0 1 150 64" />
+    <path d="M 116 64 A 12 12 0 0 1 140 64" />
+
+    <path d="M 160 64 A 32 32 0 0 1 224 64" />
+    <path d="M 170 64 A 22 22 0 0 1 214 64" />
+    <path d="M 180 64 A 12 12 0 0 1 204 64" />
+
+    <path d="M 224 64 A 32 32 0 0 1 288 64" />
+    <path d="M 234 64 A 22 22 0 0 1 278 64" />
+    <path d="M 244 64 A 12 12 0 0 1 268 64" />
+  </g>
+</svg>

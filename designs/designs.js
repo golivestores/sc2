@@ -126,5 +126,25 @@ window.__DESIGNS__ = [
     ],
     "href": "011-donmolinico-home/index.html",
     "preview": "011-donmolinico-home/preview.png"
+  },
+  {
+    "folder": "012-minamassoud",
+    "title": "Mina Massoud",
+    "description": "",
+    "sourceUrl": "https://mina-massoud.com/",
+    "savedAt": "2026-05-15",
+    "tags": [],
+    "href": "012-minamassoud/index.html",
+    "preview": "012-minamassoud/preview.png"
+  },
+  {
+    "folder": "013-more-nutrition",
+    "title": "More Nutrition",
+    "description": "",
+    "sourceUrl": "https://more-nutrition.webflow.io/",
+    "savedAt": "2026-05-15",
+    "tags": [],
+    "href": "013-more-nutrition/index.html",
+    "preview": "013-more-nutrition/preview.png"
   }
 ];

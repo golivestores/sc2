@@ -1,0 +1,20 @@
+<!--
+  ornament-enso.svg — Zen enso circle with an intentional gap in the lower-right.
+  A single brush-style arc on a deliberately imperfect loop. Two overlapping
+  arc paths at different stroke widths approximate the brush taper without
+  resorting to filters or gradients.
+  Intended slot: corner accent in the manifesto section ("Three things I keep
+  coming back to"), low opacity so it frames the copy rather than competing.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet" fill="none" stroke="#5A0711" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <!-- Primary body of the ring -->
+  <path d="M 330 125 A 150 150 0 1 0 345 239" stroke-width="3.2" opacity="0.85" />
+  <!-- Thinner shadow stroke offset slightly inward for brush depth -->
+  <path d="M 328 130 A 147 147 0 1 0 340 236" stroke-width="1.2" opacity="0.45" />
+  <!-- A few tiny splatter dots along the opening suggesting brush-end spray -->
+  <g opacity="0.55">
+    <circle cx="350" cy="244" r="1.6" fill="#5A0711" stroke="none" />
+    <circle cx="356" cy="250" r="1.1" fill="#5A0711" stroke="none" />
+    <circle cx="344" cy="256" r="0.9" fill="#5A0711" stroke="none" />
+  </g>
+</svg>

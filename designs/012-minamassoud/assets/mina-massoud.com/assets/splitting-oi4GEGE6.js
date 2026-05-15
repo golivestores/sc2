@@ -1,0 +1,1 @@
+import{t as e}from"./vendor-splitting-C_XI8yvf.js";export default e();

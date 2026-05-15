@@ -1,0 +1,26 @@
+<!--
+  glyph-compass.svg — four-point compass rose, same stroke language as topo.
+  Editorial map-marker glyph; pairs with the topographic backdrop language.
+  Intended slot: footer micro-detail, or alongside the ".side-label" on the
+  hero.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" preserveAspectRatio="xMidYMid meet" fill="none" stroke="#5A0711" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <!-- Outer ring -->
+  <circle opacity="0.85" cx="40" cy="40" r="30" />
+  <!-- Inner dot ring -->
+  <circle opacity="0.55" cx="40" cy="40" r="4" />
+  <!-- Cardinal spokes -->
+  <path opacity="0.85" d="M 40 6 L 40 36" />
+  <path opacity="0.85" d="M 40 44 L 40 74" />
+  <path opacity="0.85" d="M 6 40 L 36 40" />
+  <path opacity="0.85" d="M 44 40 L 74 40" />
+  <!-- North arrowhead -->
+  <path opacity="0.9" d="M 35 14 L 40 6 L 45 14" />
+  <!-- Intercardinal tick marks -->
+  <g opacity="0.4">
+    <path d="M 16 16 L 22 22" />
+    <path d="M 64 16 L 58 22" />
+    <path d="M 16 64 L 22 58" />
+    <path d="M 64 64 L 58 58" />
+  </g>
+</svg>

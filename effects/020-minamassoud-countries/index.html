@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="en" class="js-enabled" data-tier="high">
+<head>
+<meta charset="utf-8">
+<title>Mina Massoud · THE COUNTRIES · sc2 effect</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--
+  Self-contained reproduction of the "THE COUNTRIES" section from
+  https://mina-massoud.com/ — a scroll-pinned, 3-portrait page-turning
+  effect (Anubis · Liberty · Kangaroo) representing Egypt / USA / Australia.
+
+  Mechanics (replicated from the original):
+    - .countries-runway is 400vh tall; .countries-stick is position: sticky
+      and pins for the runway's duration, so 4 viewport-heights of scroll
+      drive the section's internal progress (0 -> 1).
+    - Progress thresholds [0.5] split the runway into two transitions:
+        [0.0, 0.5]  Anubis -> Liberty
+        [0.5, 1.0]  Liberty -> Kangaroo
+    - Three story articles (埃及 · 米国 · 豪州) fade in over progress
+      ranges {0.02-0.38, 0.52-0.72, 0.86-1.01} — same offsets as live.
+    - Cultural pattern backgrounds (hieroglyph / stars / kangaroo) crossfade
+      with the same mix as the portraits, at .16 max opacity.
+    - Blood-red progress bar pinned to viewport top fills with current
+      progress, tick marks at 1/3 and 2/3.
+
+  Live uses an OGL WebGL shader to do an fbm-distorted right→left wipe
+  between portraits + parallax tilt on mouse-move. The shader is too
+  entangled with the site's main bundle to extract cleanly; this effect
+  ships the CSS fallback path the site itself uses under
+  prefers-reduced-motion / tier=low — opacity crossfade between
+  <img class="countries-fallback__img"> elements. Mechanics, scroll
+  progress, story-card timing, and progress bar are all 1:1.
+-->
+
+<style>
+/* Fonts — paths rewritten from the original "fonts/Harmond - Free For
+   Personal Use/..." to flat ./assets/fonts/ filenames; the space-in-path
+   URL was tripping urlopen during scrape, and a flat path is the same
+   visual result. */
+@font-face { font-family: Harmond;
+  src: url("assets/fonts/Harmond-ExtraBoldExpanded.otf") format("opentype");
+  font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: Harmond;
+  src: url("assets/fonts/Harmond-ExtBdItaExp.otf") format("opentype");
+  font-weight: 800; font-style: italic; font-display: swap; }
+@font-face { font-family: Harmond;
+  src: url("assets/fonts/Harmond-SemiBoldCondensed.otf") format("opentype");
+  font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: Harmond;
+  src: url("assets/fonts/Harmond-SemBdItaCond.otf") format("opentype");
+  font-weight: 600; font-style: italic; font-display: swap; }
+@font-face { font-family: NotoJP;
+  src: url("assets/fonts/NotoSansJP-subset.woff2") format("woff2");
+  font-weight: 300 900; font-style: normal; font-display: swap; }
+@font-face { font-family: Ranade;
+  src: url("assets/fonts/Ranade-Variable.woff2") format("woff2");
+  font-weight: 100 700; font-style: normal; font-display: swap; }
+
+/* Design tokens — verbatim from live :root */
+:root {
+  --bg: #0a0a0a;
+  --surface: #1a1a1a;
+  --primary: #8b0f1d;
+  --highlight: #b91729;
+  --shadow: #5a0711;
+  --ink: #f3ede3;
+  --text: #ececec;
+  --text-dim: #ececec8c;
+  --text-faint: #ececec47;
+  --f-display: "Harmond", ui-sans-serif, system-ui, sans-serif;
+  --f-body: "Ranade", ui-sans-serif, system-ui, sans-serif;
+  --f-mono: "Harmond", ui-monospace, "SF Mono", monospace;
+  --f-jp: "NotoJP", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+}
+
+html, body { margin: 0; padding: 0; }
+html { background: var(--bg); color-scheme: dark; overflow-x: clip; }
+body {
+  width: 100%;
+  max-width: 100vw;
+  min-height: 100lvh;
+  font-family: var(--f-body);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  line-height: 1.55;
+  overflow-x: clip;
+}
+.sr-only {
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  width: 1px; height: 1px; margin: -1px; padding: 0;
+  position: absolute; overflow: hidden;
+}
+
+/* Countries section — 100% lifted from live CSS */
+.chapter {
+  isolation: isolate;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.ch-countries {
+  min-height: unset;
+  background: var(--bg);
+  color: var(--text);
+  padding: 0;
+  position: relative;
+  overflow: visible;
+}
+.countries-runway { width: 100%; height: 400vh; position: relative; }
+.countries-stick {
+  isolation: isolate;
+  background: var(--bg);
+  width: 100%;
+  height: 100lvh;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+.countries-cultural-bg { z-index: 0; pointer-events: none; position: absolute; inset: 0; overflow: hidden; }
+.cultural-bg-layer {
+  opacity: 0;
+  mix-blend-mode: screen;
+  will-change: opacity;
+  width: 100%; height: 100%;
+  position: absolute; inset: 0;
+  -webkit-mask-image: linear-gradient(#000 0% 34%, #0000 52%);
+          mask-image: linear-gradient(#000 0% 34%, #0000 52%);
+}
+
+.countries-bg-topo { z-index: 0; opacity: .32; pointer-events: none; position: absolute; inset: 0; }
+.countries-bg-topo svg { width: 100%; height: 100%; display: block; }
+.countries-bg-seam {
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: linear-gradient(#0000 0%, #b9172900 8%, #b9172973 38%, #b9172999 50%, #b9172973 62%, #b9172900 92%, #0000 100%);
+  width: 2px;
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  transform: translate(-50%);
+}
+
+.countries-head {
+  font-family: var(--f-mono);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  z-index: 5;
+  border-bottom: 1px dashed #b9172952;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding-bottom: 12px;
+  font-size: 11px;
+  display: flex;
+  position: absolute;
+  top: clamp(68px, 8vh, 104px);
+  left: clamp(28px, 6vw, 120px);
+  right: clamp(28px, 6vw, 120px);
+}
+.countries-head .jp { color: var(--highlight); font-family: var(--f-jp); letter-spacing: .02em; margin-right: .55em; }
+.countries-head .kicker { color: var(--text); }
+.countries-head .meta { color: var(--text-faint); }
+
+.countries-stage { z-index: 4; pointer-events: none; position: absolute; inset: 0; }
+.countries-stage canvas,
+.countries-stage .countries-fallback {
+  width: 100%; height: 100%; position: absolute; inset: 0;
+}
+.countries-stage canvas { z-index: 2; }
+.countries-stage .countries-fallback { z-index: 1; }
+.countries-stage.webgl-on .countries-fallback { opacity: calc(1 - var(--shader, 1)); }
+.countries-fallback__img {
+  object-fit: contain;
+  object-position: center bottom;
+  opacity: 0;
+  width: 100%; height: 100%;
+  transition: opacity .52s var(--ease-out-expo);
+  will-change: opacity;
+  position: absolute; inset: 0;
+}
+.countries-fallback__img.is-active { opacity: 1; }
+
+.countries-stories { z-index: 3; pointer-events: none; position: absolute; inset: 0; }
+.country-story {
+  opacity: 0;
+  will-change: opacity, filter;
+  max-width: min(32rem, 38vw);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: opacity .35s var(--ease-out-expo);
+}
+.country-story[data-side=left]  { text-align: left;  left:  clamp(28px, 6vw, 96px); }
+.country-story[data-side=right] { text-align: right; right: clamp(28px, 6vw, 96px); }
+.country-story[data-side=right] .country-story__meta { justify-content: flex-end; }
+.country-story[data-side=right] .country-story__body { margin-left: auto; }
+.country-story__meta {
+  font-family: var(--f-mono);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 18px;
+  font-size: 11px;
+  display: flex;
+}
+.country-story__kanji {
+  font-family: var(--f-jp);
+  color: var(--highlight);
+  letter-spacing: 0;
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1;
+}
+.country-story__title {
+  font-family: var(--f-display);
+  letter-spacing: -.02em;
+  color: var(--ink);
+  text-transform: uppercase;
+  hyphens: none;
+  margin: 0 0 14px;
+  font-size: clamp(56px, 9vw, 128px);
+  font-weight: 800;
+  line-height: .88;
+  display: block;
+}
+.country-story__title .country-story__year {
+  font-family: var(--f-mono);
+  letter-spacing: .32em;
+  color: var(--highlight);
+  margin-top: 18px;
+  font-size: clamp(12px, 1.1vw, 14px);
+  display: block;
+}
+.country-story__body {
+  font-family: var(--f-body);
+  color: var(--text-dim);
+  max-width: 28ch;
+  margin: 0;
+  font-size: clamp(14px, 1.1vw, 17px);
+  line-height: 1.55;
+}
+
+.countries-progress {
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0;
+  height: 3px;
+  transition: opacity .32s var(--ease-out-expo);
+  position: fixed;
+  top: 0; left: 0; right: 0;
+}
+.countries-progress.is-visible { opacity: 1; }
+.countries-progress__track {
+  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(90deg, #0a0a0ad9, #1a060ad9 50%, #0a0a0ad9);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.countries-progress__fill {
+  width: calc(var(--progress, 0) * 100%);
+  background: linear-gradient(90deg, #5a0711 0%, #8b0f1d 45%, #b91729 80%, #e2293c 100%);
+  transition: width .14s linear;
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  box-shadow: 0 0 10px #b91729a6, 0 0 22px #b9172959;
+}
+.countries-progress__fill::after {
+  content: "";
+  filter: blur(1px);
+  opacity: .9;
+  background: linear-gradient(90deg, #0000, #e2293c);
+  width: 14px;
+  position: absolute; top: 0; bottom: 0; right: 0;
+}
+.countries-progress__mark {
+  pointer-events: none;
+  background: #ececec42;
+  width: 1px;
+  position: absolute; top: 0; bottom: 0;
+}
+.countries-progress__mark--1 { left: 33.333%; }
+.countries-progress__mark--2 { left: 66.666%; }
+
+@media (max-width: 860px) {
+  .countries-runway { height: 360vh; }
+  .countries-bg-seam { display: none; }
+  .countries-head { top: clamp(24px, 3.5vh, 52px); }
+  .country-story {
+    width: 100%; max-width: 92vw;
+    top: clamp(88px, 11vh, 128px); bottom: auto;
+    transform: translate(-50%);
+    text-align: left !important;
+    left: 50% !important; right: auto !important;
+  }
+  .country-story[data-side=right] .country-story__meta { justify-content: flex-start; }
+  .country-story[data-side=right] .country-story__body { margin-left: 0; }
+  .country-story__meta { gap: 10px; margin-bottom: 10px; font-size: 10px; }
+  .country-story__kanji { font-size: clamp(18px, 2.6vw, 24px); }
+  .country-story__title { word-break: normal; margin: 0 0 8px; font-size: clamp(32px, 9.2vw, 52px); line-height: .9; }
+  .country-story__title .country-story__year { letter-spacing: .28em; margin-top: 8px; font-size: clamp(10px, .9vw, 12px); }
+  .country-story__body { max-width: 52ch; font-size: clamp(13px, 1vw, 15px); line-height: 1.45; }
+  .countries-stage { top: max(46vh, 320px); bottom: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countries-runway { height: auto; }
+  .countries-stick { height: auto; padding: 80px 6vw 120px; position: static; }
+  .countries-fallback__img { opacity: 1; transition: none; }
+  .countries-stories { gap: 80px; display: grid; position: relative; inset: auto; }
+  .country-story { opacity: 1; filter: none; max-width: 60ch; margin: 0 auto; position: static; transform: none; }
+  .countries-progress { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="countries-progress" id="countries-progress" aria-hidden="true">
+  <div class="countries-progress__track">
+    <div class="countries-progress__fill"></div>
+    <span class="countries-progress__mark countries-progress__mark--1"></span>
+    <span class="countries-progress__mark countries-progress__mark--2"></span>
+  </div>
+</div>
+
+<section class="chapter ch-countries" id="ch-countries" aria-labelledby="countries-title">
+  <div class="countries-runway">
+    <div class="countries-stick">
+
+      <div class="countries-cultural-bg" aria-hidden="true">
+        <svg class="cultural-bg-layer" data-country="anubis"
+             xmlns="http://www.w3.org/2000/svg"
+             preserveAspectRatio="xMidYMid slice"
+             viewBox="0 0 1920 1080">
+          <defs>
+            <pattern id="ci-hieroglyph" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+              <g fill="none" stroke="#8B0F1D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="46" cy="34" r="12" />
+                <path d="M 46 46 L 46 88 M 32 58 L 60 58" />
+                <path d="M 108 34 Q 138 18 168 36 Q 138 52 108 34 Z" />
+                <circle cx="138" cy="34" r="4.5" fill="#8B0F1D" />
+                <path d="M 162 42 L 176 58 M 138 52 L 130 70" />
+                <polyline points="22,124 38,138 54,124 70,138 86,124 102,138" />
+                <polyline points="22,150 38,164 54,150 70,164 86,150 102,164" />
+                <circle cx="150" cy="140" r="13" />
+                <path d="M 137 140 Q 150 126 163 140" />
+                <path d="M 150 153 L 150 178" />
+                <path d="M 132 168 L 168 168" />
+              </g>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#ci-hieroglyph)" />
+        </svg>
+
+        <svg class="cultural-bg-layer" data-country="liberty"
+             xmlns="http://www.w3.org/2000/svg"
+             preserveAspectRatio="xMidYMid slice"
+             viewBox="0 0 1920 1080">
+          <defs>
+            <pattern id="ci-stars" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
+              <g fill="#8B0F1D">
+                <path d="M 80 22 L 87 47 L 113 47 L 92 63 L 100 88 L 80 72 L 60 88 L 68 63 L 47 47 L 73 47 Z" />
+                <path d="M 20 104 L 23 114 L 34 114 L 25 120 L 28 130 L 20 124 L 12 130 L 15 120 L 6 114 L 17 114 Z" />
+                <path d="M 140 104 L 143 114 L 154 114 L 145 120 L 148 130 L 140 124 L 132 130 L 135 120 L 126 114 L 137 114 Z" />
+              </g>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#ci-stars)" />
+        </svg>
+
+        <svg class="cultural-bg-layer" data-country="kangaroo"
+             xmlns="http://www.w3.org/2000/svg"
+             preserveAspectRatio="xMidYMid slice"
+             viewBox="0 0 1920 1080">
+          <defs>
+            <pattern id="ci-kangaroo" x="0" y="0" width="96" height="96" patternUnits="userSpaceOnUse">
+              <svg x="10" y="10" width="76" height="76" viewBox="0 0 548.604 548.604"
+                   preserveAspectRatio="xMidYMid meet">
+                <path fill="#8B0F1D" fill-opacity="0.72" d="M533.131,0.622c-8.98,6.369-16.703,14.088-23.799,22.473c-6.561,7.752-9.155,17.095-10.999,26.781c-0.874,4.59-2.734,5.904-7.761,5.753c-3.374-0.102-5.006-1.942-5.639-5.981c-1.705-10.906-6.81-19.792-16.002-26.075c-9.057-6.193-17.939-12.562-25.365-20.751c-0.914-1.008-2.269-1.624-3.316-2.35c-4.256,3.974-3.04,8.972-3.142,13.231c-0.232,9.621,2.256,18.801,6.907,27.356c3.758,6.912,7.923,13.815,15.198,17.062c5.324,2.375,6.45,5.565,5.634,10.469c-0.236,1.428-0.881,2.787-1.187,4.207c-1.114,5.214-2.501,10.4-3.146,15.675c-0.645,5.268,0.951,10.657-0.779,15.961c-0.819,2.518-1.064,5.227-1.534,7.858c-1.269,7.103-4.034,13.525-9.021,18.792c-6.43,6.797-15.088,9.673-23.492,12.962c-11.343,4.439-21.959,10.074-31.343,17.997c-7.218,6.095-14.312,12.538-22.289,17.491c-11.478,7.128-23.705,13.044-35.606,19.49c-17.246,9.339-31.628,22.024-43.889,37.263c-8.968,11.146-15.54,23.656-21.395,36.593c-5.284,11.673-9.213,23.869-11.126,36.484c-1.689,11.146-2.048,22.416-1.171,33.827c0.979,12.75,0.722,25.655,0.143,38.454c-0.526,11.628-3.909,22.795-8.262,33.579c-6.561,16.246-15.647,30.93-27.136,44.206c-12.631,14.595-27.421,26.328-44.521,35.239c-14.9,7.765-31.293,9.829-47.495,12.648c-10.702,1.864-21.44,3.513-32.138,5.405c-7.324,1.294-14.594,2.901-21.91,4.252c-11.041,2.04-22.089,4.011-33.15,5.94c-4.798,0.836-9.657,1.358-14.439,2.272c-6.785,1.293-13.893,1.819-19.809,7.552c2.436,0.498,4.48,1.281,6.516,1.261c5.782-0.057,11.559-0.665,17.336-0.641c8.132,0.033,16.263,0.706,24.391,0.637c36.083-0.298,72.179,1.028,108.25-1.293c8.825-0.567,17.532-1.196,26.259-2.897c10.061-1.958,19.413-5.581,28.274-10.367c21.069-11.379,37.516-28.136,51.849-46.92c9.71-12.726,18.502-26.148,27.573-39.355c1.701-2.48,3.104-1.995,4.635-0.257c1.13,1.281,2.003,2.799,2.913,4.255c3.207,5.137,7.748,9.548,8.878,15.818c1.229,6.834,2.66,13.66,3.379,20.555c0.656,6.316,1.403,12.86,0.465,19.054c-2.036,13.469-4.904,26.806-3.799,40.547c0.257,3.187,1.354,6.594,4.505,7.394c4.169,1.061,8.67,1.326,12.998,1.154c8.267-0.33,16.418-3.239,24.811-0.954c4.333,1.183,8.748,2.085,13.04,3.39c4.921,1.498,10.082,1.465,15.022,3.652c3.513,1.554,8.299,0.526,12.473,0.159c2.085-0.184,4.725-0.927,5.969-2.392c2.697-3.17,5.357-5.022,9.548-3.325c0.317,0.131,0.738,0.009,1.105,0.021c6.527,0.237,13.056,0.494,19.588,0.702c1.281,0.041,2.566-0.114,4.737-0.221c-4.346-8.653-10.535-14.116-18.752-16.699c-10.641-3.342-21.465-5.948-32.689-7.038c-10.808-1.049-21.501-3.293-32.252-4.945c-4.031-0.62-7.389-4.834-6.516-8.878c2.064-9.555,5.051-18.756,10.612-26.989c2.436-3.606,4.577-7.475,6.372-11.444c5.227-11.555,10.188-23.215,17.654-33.61c1.714-2.387,3.195-2.481,4.468-0.417c3.685,5.985,7.862,11.856,10.339,18.353c3.799,9.955,6.847,20.281,9.192,30.678c1.118,4.948,0.244,10.469-0.376,15.65c-0.615,5.178-2.293,10.232-2.949,15.41c-0.18,1.412,1.276,3.672,2.623,4.496c2.207,1.354,4.888,2.081,7.458,2.664c7.018,1.6,14.076,3.012,21.131,4.443c1.918,0.388,4.002,0.245,5.785,0.931c12.595,4.839,25.749,5.858,39.029,5.679c3.276-0.045,6.789-0.473,9.245-3.472c0.547-0.669,2.004-0.938,2.991-0.853c8.413,0.75,16.813,1.623,25.218,2.468c1.024,0.103,2.045,0.282,3.428,0.478c-0.236-4.3-2.713-6.434-5.487-8.303c-2.334-1.57-5.296-2.546-7.047-4.586c-6.034-7.046-14.067-8.25-22.521-8.678c-4.312-0.217-8.629-0.433-12.934-0.771c-11.856-0.938-23.7-2.081-35.565-2.84c-3.937-0.253-6.087-2.031-7.16-5.545c-3.55-11.587-0.8-22.623,4.108-32.958c4.762-10.017,8.246-20.277,10.024-31.159c1.935-11.807,3.831-23.623,5.569-35.459c1.049-7.128,2.31-14.296,2.473-21.469c0.176-7.585-0.751-15.202-1.362-22.791c-0.453-5.614-0.845-11.265-1.856-16.789c-1.583-8.638-3.819-17.152-5.423-25.786c-0.384-2.056,0.041-4.765,1.146-6.499c3.488-5.455,7.356-10.686,11.384-15.761c0.726-0.914,3.472-1.465,4.324-0.853c9.408,6.772,13.647,13.676,8.119,26.242c-1.485,3.378-2.036,6.279,0.114,9.204c1.881,2.559,4.149,4.831,6.279,7.201c0.229,0.253,0.686,0.515,0.976,0.461c4.268-0.804,8.571-1.489,12.754-2.627c0.975-0.266,1.815-2.016,2.207-3.244c2.525-7.964,2.126-15.602-2.51-22.864c-6.238-9.779-12.346-19.641-18.384-29.547c-0.738-1.212-1.379-3.203-0.886-4.305c1.542-3.435,3.611-6.634,5.549-9.886c1.392-2.334,2.317-2.118,3.844,0.249c3.108,4.81,6.438,9.531,10.155,13.88c2.786,3.26,6.353,5.847,9.519,8.793c7.156,6.65,7.499,18.188,1.306,25.585c-1.804,2.15-3.31,5.59-3.02,8.229c0.555,5.088,2.893,9.89,7.136,13.158c1.126,0.869,3.729,1.253,4.773,0.551c4.35-2.934,7.871-6.838,7.838-12.465c-0.062-9.249-0.416-18.502-0.856-27.743c-0.144-3.016-0.176-6.427-1.575-8.915c-3.02-5.374-6.72-10.4-10.461-15.325c-3.509-4.623-7.141-9.212-7.769-15.133c-0.682-6.43-0.89-12.921-1.02-19.392c-0.103-5.063-0.29-10.245,4.189-14.068c0.946-0.808,1.437-2.232,1.954-3.452c4.093-9.567,6.981-19.474,7.826-29.874c0.922-11.355-0.103-22.562-2.982-33.607c-0.266-1.028,0.452-2.31,0.718-3.477c0.367-0.085,0.738-0.171,1.105-0.253c4.725,5.822,10.987,5.455,17.328,4.705c5.985-0.71,10.767-7.385,9.494-13.228c-0.49-2.244-1.188-4.451-1.526-6.716c-0.689-4.594-1.42-9.205-1.733-13.835c-0.575-8.466-1.375-16.973-1.053-25.423c0.159-4.218,0.448-8.217-0.963-12.219c-0.485-1.379-1.424-2.779-1.375-4.142c0.257-7.503-4.035-12.17-9.735-15.863c-2.921-1.893-2.876-3.476-0.596-5.798c5.811-5.916,10.441-12.485,12.179-20.881c1.33-6.414,2.759-12.901,5.129-18.972c1.383-3.542,2.028-6.867,1.812-10.482C538.211,0.736,535.432-1.01,533.131,0.622z"/>
+              </svg>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#ci-kangaroo)" />
+        </svg>
+      </div>
+
+      <div class="countries-bg-topo" aria-hidden="true">
+        <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" fill="none" stroke="#5A0711" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M-100 180 C 280 120, 620 280, 940 240 S 1480 120, 1820 240 S 2140 380, 2240 320" opacity="0.7" />
+          <path d="M-120 320 C 300 260, 660 420, 980 380 S 1520 260, 1860 380 S 2160 520, 2260 460" opacity="0.55" />
+          <path d="M-140 460 C 320 400, 700 560, 1020 520 S 1560 400, 1900 520 S 2180 660, 2280 600" opacity="0.45" />
+          <path d="M-160 600 C 340 540, 740 700, 1060 660 S 1600 540, 1940 660 S 2200 800, 2300 740" opacity="0.55" />
+          <path d="M-180 740 C 360 680, 780 840, 1100 800 S 1640 680, 1980 800 S 2220 940, 2320 880" opacity="0.4" />
+          <path d="M-200 880 C 380 820, 820 980, 1140 940 S 1680 820, 2020 940 S 2240 1080, 2340 1020" opacity="0.3" />
+        </svg>
+      </div>
+      <div class="countries-bg-seam" aria-hidden="true"></div>
+
+      <div class="countries-head">
+        <span class="kicker"><span class="jp">国</span> · THE COUNTRIES</span>
+        <span class="meta">THREE LANDS · THREE MASKS</span>
+      </div>
+
+      <h2 id="countries-title" class="sr-only">Countries I've worked in — Egypt, USA, Australia</h2>
+
+      <div class="countries-stage" id="countries-stage">
+        <!-- WebGL canvas (z-index 2) — when the shader is up, .webgl-on CSS
+             rule fades down .countries-fallback so the shader is the only
+             portrait surface. Fallback <img> layer (z-index 1) stays in
+             place as graceful degradation. -->
+        <canvas id="countries-fx" aria-hidden="true"></canvas>
+        <div class="countries-fallback" aria-hidden="false">
+          <img class="countries-fallback__img is-active"
+               src="assets/anubis.webp"
+               alt="Anubis — portrait representing Egypt."
+               width="768" height="1024" decoding="async" />
+          <img class="countries-fallback__img"
+               src="assets/liberty.webp"
+               alt="Statue of Liberty — portrait representing the United States."
+               width="768" height="1024" decoding="async" />
+          <img class="countries-fallback__img"
+               src="assets/kangaro.webp"
+               alt="A red kangaroo — portrait representing Australia."
+               width="768" height="1024" decoding="async" />
+        </div>
+      </div>
+
+      <div class="countries-stories" aria-label="Stories from each country">
+
+        <article class="country-story" data-country="anubis" data-side="left">
+          <div class="country-story__meta">
+            <span class="country-story__kanji jp">埃及</span>
+            <span>CHAPTER · ONE</span>
+          </div>
+          <h3 class="country-story__title">
+            Egypt
+            <span class="country-story__year">M.22 · WHERE IT BEGAN</span>
+          </h3>
+          <p class="country-story__body">
+            Cairo taught me discipline.
+            Long nights, small screens, a craft forged under pressure.
+            The first lines of code I wrote looked like prayers.
+          </p>
+        </article>
+
+        <article class="country-story" data-country="liberty" data-side="right">
+          <div class="country-story__meta">
+            <span>CHAPTER · TWO</span>
+            <span class="country-story__kanji jp">米国</span>
+          </div>
+          <h3 class="country-story__title">
+            United States
+            <span class="country-story__year">M.24 · THE EXPOSURE</span>
+          </h3>
+          <p class="country-story__body">
+            The U.S. opened the room.
+            New standards, sharper mentors, a culture that ships.
+            I didn't just learn the stack — I learned the tempo.
+          </p>
+        </article>
+
+        <article class="country-story" data-country="kangaroo" data-side="left">
+          <div class="country-story__meta">
+            <span class="country-story__kanji jp">豪州</span>
+            <span>CHAPTER · THREE</span>
+          </div>
+          <h3 class="country-story__title">
+            Australia
+            <span class="country-story__year">M.25 · THE WILD YEAR</span>
+          </h3>
+          <p class="country-story__body">
+            Australia was the wild one —
+            rough edges, blunt feedback, ideas that bite.
+            I came back leaner, louder, harder to knock off course.
+          </p>
+        </article>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Fragment + vertex shaders — verbatim from live's main bundle's
+     COUNTRIES section (`y=...` template literal + `vertex:` literal in
+     main-CEYqTp0L.js). Loaded as <script> tags with non-JS type so the
+     browser doesn't execute them; we read .textContent from JS below.
+     Two template placeholders (${h} precision, ${m} fbm octave count)
+     are substituted at runtime via .replace() before compile.
+     ============================================================ -->
+<script id="countries-frag" type="x-shader/x-fragment">
+            precision ${h} float;
+
+            uniform sampler2D uTexA;
+            uniform sampler2D uTexB;
+            uniform sampler2D uDepthA;
+            uniform sampler2D uDepthB;
+            uniform float uAspectA;
+            uniform float uAspectB;
+            uniform float uDepthAspectA;
+            uniform float uDepthAspectB;
+            uniform float uHasDepthA;
+            uniform float uHasDepthB;
+            uniform float uZoomA;
+            uniform float uZoomB;
+            uniform float uMix;
+            uniform vec2  uMouse;
+            uniform float uHover;
+            uniform float uAspect;
+            uniform float uTime;
+            uniform vec2  uResolution;
+
+            varying vec2 vUv;
+
+            vec2 fitUV(vec2 uv, float imgAspect, out float inside) {
+              vec2 scale = vec2(1.0);
+              if (uAspect > imgAspect) {
+                scale.x = uAspect / imgAspect;
+              } else {
+                scale.y = imgAspect / uAspect;
+              }
+              vec2 iuv = (uv - vec2(0.5, 0.0)) * scale + vec2(0.5, 0.0);
+              vec2 edge = step(vec2(0.0), iuv) * step(iuv, vec2(1.0));
+              inside = edge.x * edge.y;
+              return clamp(iuv, 0.0, 1.0);
+            }
+
+            float hash(vec2 p) {
+              highp float d = dot(p, vec2(12.9898, 78.233));
+              return fract(sin(d) * 43758.5453);
+            }
+
+            float noise(vec2 p) {
+              vec2 i = floor(p);
+              vec2 f = fract(p);
+              float a = hash(i);
+              float b = hash(i + vec2(1.0, 0.0));
+              float c = hash(i + vec2(0.0, 1.0));
+              float d = hash(i + vec2(1.0, 1.0));
+              vec2 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+              return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+            }
+
+            float fbm(vec2 p) {
+              float v = 0.0;
+              float a = 0.55;
+              for (int i = 0; i < ${m}; i++) {
+                v += a * noise(p);
+                p = p * 2.07 + vec2(17.3, 9.1);
+                a *= 0.55;
+              }
+              return v;
+            }
+
+            vec4 samplePortrait(sampler2D tex, sampler2D depthTex,
+                                float imgAspect, float depthAspect,
+                                float hasDepth, vec2 uv,
+                                out vec2 outUvT, out float outInT) {
+              float inD;
+              vec2 uvD = fitUV(uv, depthAspect, inD);
+              float depth = texture2D(depthTex, uvD).r * inD;
+
+              vec2 cursor = (uMouse - vec2(0.5, 0.5)) * uHover;
+              vec2 off = cursor * (depth - 0.5) * hasDepth * 0.025;
+
+              vec2 uvT = fitUV(uv - off, imgAspect, outInT);
+              outUvT = uvT;
+              vec4 t = texture2D(tex, uvT);
+              return vec4(t.rgb * t.a, t.a) * outInT;
+            }
+
+            vec4 finalize(vec4 col, vec2 uv) {
+              float grain = hash(uv * uResolution * 0.5 + uTime * 60.0);
+              col.rgb += (grain - 0.5) * 0.05 * col.a;
+
+              float smoke = smoothstep(0.22, 0.0, uv.y);
+              if (uv.y < 0.48) {
+                vec2  wispUV    = uv * vec2(2.4, 1.7) + vec2(uTime * 0.05, -uTime * 0.07);
+                float wisp      = fbm(wispUV);
+                wisp            = smoothstep(0.44, 0.82, wisp);
+                float wispReach = smoothstep(0.48, 0.02, uv.y);
+                smoke           = clamp(smoke + wisp * wispReach * 0.8, 0.0, 1.0);
+              }
+              col.rgb *= (1.0 - smoke * 0.96);
+              col.a   *= (1.0 - smoke * 0.88);
+              return col;
+            }
+
+            void main() {
+              vec2 uv = vUv;
+              vec4 col;
+
+              if (uMix < 0.002) {
+                vec2 uvTa; float inTa;
+                col = samplePortrait(uTexA, uDepthA, uAspectA, uDepthAspectA,
+                                     uHasDepthA, uv, uvTa, inTa);
+              } else if (uMix > 0.998) {
+                vec2 uvTb; float inTb;
+                col = samplePortrait(uTexB, uDepthB, uAspectB, uDepthAspectB,
+                                     uHasDepthB, uv, uvTb, inTb);
+              } else {
+                vec2 p = uv;
+                p.x *= uAspect;
+                vec2 flow = vec2(0.0, -uTime * 0.18);
+                vec2 pn = vec2(p.x * 0.95, p.y * 0.72);
+
+                vec2 q = vec2(
+                  fbm(pn * 1.6 + flow),
+                  fbm(pn * 1.6 + flow + vec2(5.2, 1.3))
+                );
+                vec2 r = vec2(
+                  fbm(pn * 1.6 + 3.6 * q + flow),
+                  fbm(pn * 1.6 + 3.6 * q + flow + vec2(8.3, 2.8))
+                );
+
+                float t_p = (1.0 - uv.x)
+                          + 0.26 * (r.x - 0.5)
+                          + 0.12 * (r.y - 0.5);
+
+                float w = 0.16 * smoothstep(0.0, 0.15, uMix) * smoothstep(1.0, 0.85, uMix) + 0.02;
+                float paddedMix = mix(-0.25, 1.25, uMix);
+
+                float mask = smoothstep(t_p - w, t_p + w, paddedMix);
+
+                float envelope = smoothstep(0.0, 0.08, uMix) * smoothstep(1.0, 0.92, uMix);
+                float edgeBand = 4.0 * mask * (1.0 - mask) * envelope;
+
+                vec2 uvTa, uvTb; float inTa, inTb;
+                vec4 colA = samplePortrait(uTexA, uDepthA, uAspectA, uDepthAspectA,
+                                           uHasDepthA, uv, uvTa, inTa);
+                vec4 colB = samplePortrait(uTexB, uDepthB, uAspectB, uDepthAspectB,
+                                           uHasDepthB, uv, uvTb, inTb);
+
+                if (edgeBand > 0.01) {
+                  float chroma = 0.009 * edgeBand;
+                  vec2 dir = vec2(1.0, 0.0);
+                  vec4 aR = texture2D(uTexA, uvTa + dir * chroma);
+                  vec4 aB = texture2D(uTexA, uvTa - dir * chroma);
+                  vec4 bR = texture2D(uTexB, uvTb + dir * chroma);
+                  vec4 bB = texture2D(uTexB, uvTb - dir * chroma);
+                  colA.r = aR.r * aR.a * inTa;
+                  colA.b = aB.b * aB.a * inTa;
+                  colB.r = bR.r * bR.a * inTb;
+                  colB.b = bB.b * bB.a * inTb;
+                }
+
+                col = mix(colA, colB, mask);
+
+                float silhouette = max(colA.a, colB.a);
+
+                float glow = pow(edgeBand, 2.0);
+                float glowAlpha = glow * 0.6;
+                col.rgb += vec3(0.73, 0.09, 0.11) * glowAlpha;
+                col.rgb += vec3(0.73, 0.09, 0.11) * glow * 0.3 * silhouette;
+                col.a = max(col.a, glowAlpha);
+
+                float leading = step(0.5, mask) * edgeBand;
+                float luma = dot(colA.rgb, vec3(0.299, 0.587, 0.114));
+                vec3 ghost = mix(vec3(luma), colA.rgb, 0.35) * 0.55;
+                col.rgb = mix(col.rgb, ghost, leading * 0.28);
+              }
+
+              gl_FragColor = finalize(col, uv);
+            }
+</script>
+
+<script id="countries-vert" type="x-shader/x-vertex">
+            precision mediump float;
+            attribute vec2 uv;
+            attribute vec2 position;
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = vec4(position, 0.0, 1.0);
+            }
+</script>
+
+<script type="module">
+/* COUNTRIES section controller. Two layers:
+
+   1. Scroll/timing controller — same as before. Computes scroll progress,
+      decides which segment + mix, computes per-card story opacity via the
+      wipe-horizon smoothstep formula, computes cultural-bg crossfade,
+      updates the top progress bar. Always runs (CSS fallback baseline).
+
+   2. WebGL shader pipeline — if OGL + GL2 succeed, mounts an OGL Renderer
+      on #countries-fx canvas, loads all 6 textures (3 portraits + 3 depth
+      maps), builds a Program from the shader source <script> blocks above,
+      and renders the fbm-domain-warped wipe + vermillion edge glow + ghost
+      halo + cursor-driven depth parallax + grain + smoke wisp. uMix is
+      driven by segment mix with .18 lerp (matches live's K.mix); uMouse
+      smoothed at .14; uHover at .08. After 1.2s of pointer idle, switches
+      to a slow ambient drift so the parallax keeps breathing.
+
+   Failure modes are graceful: if OGL or any texture fails, the canvas
+   stays empty and the .countries-fallback <img> layer (always present)
+   shows the static crossfade-by-class-toggle. `.webgl-on` class is only
+   set after first successful render frame, so the CSS rule that fades
+   out the fallback layer only kicks in once the shader is producing. */
+
+import { Renderer, Program, Mesh, Triangle, Texture }
+  from './lib/ogl-wrapper.js';
+
+const section  = document.getElementById('ch-countries');
+const stick    = section && section.querySelector('.countries-stick');
+const stage    = document.getElementById('countries-stage');
+const canvas   = document.getElementById('countries-fx');
+const progress = document.getElementById('countries-progress');
+const fill     = progress && progress.querySelector('.countries-progress__fill');
+const stories  = section ? Array.from(section.querySelectorAll('.country-story')) : [];
+const imgs     = stage ? Array.from(stage.querySelectorAll('.countries-fallback__img')) : [];
+const bgLayers = section ? Array.from(section.querySelectorAll('.cultural-bg-layer')) : [];
+
+const TRANSITIONS = [
+  { fromIdx: 0, toIdx: 1, startP: 0.0, endP: 0.5 },
+  { fromIdx: 1, toIdx: 2, startP: 0.5, endP: 1.0 },
+];
+const HALF_BAND = 0.12;
+const PORTRAITS = [
+  { name: 'anubis',   img: 'assets/anubis.webp',   depth: 'assets/anubis-depthmap.webp' },
+  { name: 'liberty',  img: 'assets/liberty.webp',  depth: 'assets/liberty-depthmap.webp' },
+  { name: 'kangaroo', img: 'assets/kangaro.webp',  depth: 'assets/kangaro-depthmap.webp' },
+];
+
+/* ---- scroll / timing ---- */
+
+let sectionRect = section.getBoundingClientRect();
+let viewH = window.innerHeight;
+const storyCenter = new Float32Array(stories.length).fill(0.5);
+
+function recalcMetrics() {
+  sectionRect = section.getBoundingClientRect();
+  viewH = window.innerHeight;
+  const stageRect = stage.getBoundingClientRect();
+  if (stageRect.width > 0) {
+    for (let i = 0; i < stories.length; i++) {
+      const r = stories[i].getBoundingClientRect();
+      storyCenter[i] = (r.left + r.width / 2 - stageRect.left) / stageRect.width;
+    }
+  }
+}
+function scrollProgress() {
+  const range = sectionRect.height - viewH;
+  if (range <= 0) return 0;
+  return Math.max(0, Math.min(1, -sectionRect.top / range));
+}
+function transitionFor(p) {
+  const t = p >= 0.5 ? 1 : 0;
+  const seg = TRANSITIONS[t];
+  const mix = Math.max(0, Math.min(1, (p - seg.startP) / (seg.endP - seg.startP)));
+  return { transIdx: t, fromIdx: seg.fromIdx, toIdx: seg.toIdx, mix };
+}
+function smoothstep(e0, e1, x) {
+  const t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0)));
+  return t * t * (3 - 2 * t);
+}
+function setActive(idx) {
+  for (let i = 0; i < imgs.length; i++) imgs[i].classList.toggle('is-active', i === idx);
+}
+function setBgOpacities(fromIdx, toIdx, mix) {
+  for (let i = 0; i < bgLayers.length; i++) {
+    let o = 0;
+    if (i === fromIdx && i === toIdx) o = 1;
+    else if (i === fromIdx) o = 1 - mix;
+    else if (i === toIdx)   o = mix;
+    bgLayers[i].style.opacity = (o * 0.16).toFixed(3);
+  }
+}
+function setStoryOpacities(fromIdx, toIdx, mix) {
+  const horizon = -0.25 + 1.5 * mix;
+  for (let i = 0; i < stories.length; i++) {
+    let n = 0;
+    if (i === fromIdx && i === toIdx) n = 1;
+    else if (i === fromIdx) {
+      const x = 1 - storyCenter[i];
+      n = 1 - smoothstep(x - HALF_BAND, x + HALF_BAND, horizon);
+    } else if (i === toIdx) {
+      const x = 1 - storyCenter[i];
+      n = smoothstep(x - HALF_BAND, x + HALF_BAND, horizon);
+    }
+    stories[i].style.opacity = n.toFixed(3);
+  }
+}
+function setProgressBar(p, visible) {
+  progress.classList.toggle('is-visible', visible);
+  fill.parentElement.style.setProperty('--progress', Math.max(0, Math.min(1, p)).toFixed(4));
+}
+
+/* ---- WebGL pipeline (async, with graceful fallback) ---- */
+
+function loadTexture(gl, src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const tex = new Texture(gl, { image: img, generateMipmaps: false });
+      tex.aspect = img.naturalWidth / img.naturalHeight;
+      resolve(tex);
+    };
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+let shaderApi = null;  // populated on successful init
+
+async function initShader() {
+  if (!canvas) return false;
+  // Bail on no-WebGL devices.
+  const probe = canvas.getContext('webgl', { failIfMajorPerformanceCaveat: false })
+              || canvas.getContext('experimental-webgl');
+  if (!probe) return false;
+
+  const renderer = new Renderer({
+    canvas,
+    alpha: true,
+    dpr: Math.min(window.devicePixelRatio, 2),
+    powerPreference: 'high-performance',
+  });
+  const gl = renderer.gl;
+  gl.clearColor(0, 0, 0, 0);
+
+  // load portrait + depth pairs
+  const data = await Promise.all(PORTRAITS.map(async (p) => {
+    const [tex, depth] = await Promise.all([loadTexture(gl, p.img), loadTexture(gl, p.depth)]);
+    return { tex, depth };
+  }));
+  if (data.some(d => !d.tex)) {
+    console.warn('[countries] portrait texture missing — CSS fallback retained');
+    return false;
+  }
+
+  // Shader source is in <script type="x-shader/...">; substitute the two
+  // template placeholders (precision + octave count) before compile.
+  const frag = document.getElementById('countries-frag').textContent
+    .replace('${h}', 'highp').replace('${m}', '4');
+  const vert = document.getElementById('countries-vert').textContent;
+
+  const geometry = new Triangle(gl);
+  const program = new Program(gl, {
+    vertex: vert,
+    fragment: frag,
+    uniforms: {
+      uTexA:         { value: data[0].tex },
+      uTexB:         { value: data[1].tex },
+      uDepthA:       { value: data[0].depth || data[0].tex },
+      uDepthB:       { value: data[1].depth || data[1].tex },
+      uAspectA:      { value: data[0].tex.aspect },
+      uAspectB:      { value: data[1].tex.aspect },
+      uDepthAspectA: { value: (data[0].depth || data[0].tex).aspect },
+      uDepthAspectB: { value: (data[1].depth || data[1].tex).aspect },
+      uHasDepthA:    { value: data[0].depth ? 1 : 0 },
+      uHasDepthB:    { value: data[1].depth ? 1 : 0 },
+      uZoomA:        { value: 1.0 },
+      uZoomB:        { value: 1.0 },
+      uMix:          { value: 0 },
+      uMouse:        { value: [0.5, 0.5] },
+      uHover:        { value: 0 },
+      uAspect:       { value: 1 },
+      uTime:         { value: 0 },
+      uResolution:   { value: [1, 1] },
+    },
+    transparent: true,
+  });
+  const mesh = new Mesh(gl, { geometry, program });
+
+  let stageRect = stage.getBoundingClientRect();
+  function onResize() {
+    stageRect = stage.getBoundingClientRect();
+    if (stageRect.width <= 0 || stageRect.height <= 0) return;
+    renderer.setSize(stageRect.width, stageRect.height);
+    program.uniforms.uResolution.value = [stageRect.width, stageRect.height];
+    program.uniforms.uAspect.value = stageRect.width / stageRect.height;
+  }
+  window.addEventListener('resize', onResize);
+  try { new ResizeObserver(onResize).observe(stage); } catch {}
+  onResize();
+
+  // pointer tracking — same dampened formula as live
+  let mouseTx = 0.5, mouseTy = 0.5, mouseX = 0.5, mouseY = 0.5;
+  let hoverTarget = 0, hoverT = 0;
+  let lastPointer = 0;
+  const HOVER_IDLE = 0.6;
+  window.addEventListener('pointermove', (e) => {
+    lastPointer = performance.now();
+    const tx = (e.clientX - stageRect.left) / stageRect.width;
+    const ty = (e.clientY - stageRect.top)  / stageRect.height;
+    mouseTx = 0.5 + (tx - 0.5) * 0.55;
+    mouseTy = 1 - (0.5 + (ty - 0.5) * 0.55);
+    hoverTarget = (tx > -0.15 && tx < 1.15 && ty > -0.15 && ty < 1.15) ? 1 : 0;
+  }, { passive: true });
+
+  // mix + slot state — match live's bookkeeping
+  let bound = { A: -1, B: -1 };
+  let mixCurr = 0, mixTarget = 0;
+  let currentTrans = -1;
+
+  function setSlot(which, idx) {
+    const d = data[idx];
+    if (which === 'A') {
+      program.uniforms.uTexA.value = d.tex;
+      program.uniforms.uDepthA.value = d.depth || d.tex;
+      program.uniforms.uAspectA.value = d.tex.aspect;
+      program.uniforms.uDepthAspectA.value = (d.depth || d.tex).aspect;
+      program.uniforms.uHasDepthA.value = d.depth ? 1 : 0;
+      bound.A = idx;
+    } else {
+      program.uniforms.uTexB.value = d.tex;
+      program.uniforms.uDepthB.value = d.depth || d.tex;
+      program.uniforms.uAspectB.value = d.tex.aspect;
+      program.uniforms.uDepthAspectB.value = (d.depth || d.tex).aspect;
+      program.uniforms.uHasDepthB.value = d.depth ? 1 : 0;
+      bound.B = idx;
+    }
+  }
+
+  let firstRendered = false;
+  function tick(now) {
+    // ambient drift when idle (pointer untouched for >1.2s)
+    if (performance.now() - lastPointer > 1200) {
+      const t = now * 0.001;
+      mouseTx = 0.5 + 0.22 * Math.sin(t * 0.48);
+      mouseTy = 0.55 + 0.14 * Math.sin(t * 0.71 + 1.1);
+      hoverTarget = HOVER_IDLE;
+    }
+    mouseX += (mouseTx - mouseX) * 0.14;
+    mouseY += (mouseTy - mouseY) * 0.14;
+    hoverT += (hoverTarget - hoverT) * 0.08;
+    mixCurr += (mixTarget - mixCurr) * 0.18;
+    if (mixTarget === 0 && mixCurr < 0.0015) mixCurr = 0;
+    if (mixTarget === 1 && mixCurr > 0.9985) mixCurr = 1;
+
+    program.uniforms.uMouse.value[0] = mouseX;
+    program.uniforms.uMouse.value[1] = mouseY;
+    program.uniforms.uHover.value = hoverT;
+    program.uniforms.uMix.value = mixCurr;
+    program.uniforms.uTime.value = now * 0.001;
+
+    // 3D tilt on the stage — same magnitude as live (1.2deg X, 1.8deg Y)
+    const tilt = (mouseY - 0.5) * 1.2 * hoverT;
+    const yaw  = (mouseX - 0.5) * -1.8 * hoverT;
+    stage.style.transform = `perspective(900px) rotateX(${tilt.toFixed(3)}deg) rotateY(${yaw.toFixed(3)}deg)`;
+
+    renderer.render({ scene: mesh });
+    if (!firstRendered) {
+      firstRendered = true;
+      stage.classList.add('webgl-on');
+      stage.style.setProperty('--shader', '1');
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  shaderApi = {
+    setTransition(fromIdx, toIdx, mix, transIdx) {
+      if (bound.A !== fromIdx) setSlot('A', fromIdx);
+      if (bound.B !== toIdx)   setSlot('B', toIdx);
+      if (currentTrans !== transIdx) {
+        mixCurr = mix;   // snap when segment boundary crosses, like live
+        currentTrans = transIdx;
+      }
+      mixTarget = mix;
+    },
+  };
+  return true;
+}
+
+/* ---- main paint hook called by scroll + demo cycle ---- */
+
+function paint(p) {
+  const tr = transitionFor(p);
+  // For CSS fallback only: pick the dominant img as is-active.
+  setActive(tr.mix > 0.5 ? tr.toIdx : tr.fromIdx);
+  setBgOpacities(tr.fromIdx, tr.toIdx, tr.mix);
+  setStoryOpacities(tr.fromIdx, tr.toIdx, tr.mix);
+  if (shaderApi) shaderApi.setTransition(tr.fromIdx, tr.toIdx, tr.mix, tr.transIdx);
+}
+
+let rafScheduled = false;
+function onScroll() {
+  if (rafScheduled) return;
+  rafScheduled = true;
+  requestAnimationFrame(() => {
+    rafScheduled = false;
+    recalcMetrics();
+    const p = scrollProgress();
+    paint(p);
+    setProgressBar(p, p > -0.02 && p < 1.02);
+  });
+}
+
+const previewMode = new URLSearchParams(location.search).get('demo') === 'preview';
+if (previewMode) {
+  // Gallery thumbnail iframe can't scroll; cycle 0 → 1 → 0 over 12s.
+  let t0 = performance.now();
+  function tickPreview(now) {
+    const cyc = ((now - t0) / 6000) % 2;
+    const p = cyc < 1 ? cyc : 2 - cyc;
+    paint(p);
+    setProgressBar(p, true);
+    requestAnimationFrame(tickPreview);
+  }
+  requestAnimationFrame(tickPreview);
+} else {
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', () => { recalcMetrics(); onScroll(); }, { passive: true });
+  window.addEventListener('load', onScroll);
+  onScroll();
+}
+
+// Kick off shader init in parallel (non-blocking).
+initShader().catch(err => console.warn('[countries] shader init failed:', err));
+</script>
+
+</body>
+</html>
