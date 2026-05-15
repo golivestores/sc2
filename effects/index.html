@@ -71,6 +71,11 @@
   .panel-row {
     display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
   }
+  .panel-row--alt {
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
   .panel-row__label {
     font-size: 11px; letter-spacing: .14em;
     color: var(--fg-dim);
@@ -287,6 +292,16 @@
         <button class="chip" data-filter="关于">关于</button>
         <button class="chip" data-filter="联系">联系</button>
         <button class="chip" data-filter="页脚">页脚</button>
+      </div>
+      <!-- 触发轴（axis 3）—— 跟 4 个板块组并列，方便"按动画类型"筛而不限定板块。
+           视觉用 dashed divider 跟上面 4 行分开，说明这不是板块。 -->
+      <div class="panel-row panel-row--alt">
+        <span class="panel-row__label">动画</span>
+        <button class="chip" data-filter="入场">入场</button>
+        <button class="chip" data-filter="滚动">滚动</button>
+        <button class="chip" data-filter="悬停">悬停</button>
+        <button class="chip" data-filter="点击">点击</button>
+        <button class="chip" data-filter="自动播放">自动播放</button>
       </div>
     </div>
   </div>
