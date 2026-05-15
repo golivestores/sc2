@@ -16,19 +16,14 @@
 
 ## 同事开荒：5 分钟跑起来
 
-```powershell
-# Windows
-cd c:\path\to\sc2
-python -m http.server 8080
-```
-
 ```bash
-# macOS / Linux
-cd /path/to/sc2
-python3 -m http.server 8080
+cd /path/to/sc2           # 进项目根
+python serve.py           # 启动本地 server，默认 8080，自动开浏览器到 /effects/
 ```
 
-浏览器开 <http://localhost:8080/designs/>，能看到镜像卡片就说明 OK。
+`serve.py` 会自动在浏览器打开 effects 画廊。第一次点某个 effect 的 📦 zip / 📋 源码 按钮时会 lazy 打包对应那一个（几秒），之后磁盘已经有了就秒回——所以 clone 完不需要先跑 `finalize.py --package` 预热全部 19 个 zip。
+
+也可以手动开 <http://localhost:8080/designs/> 看镜像导航。
 
 **第一次还要装两个工具**（只装一次，以后不用管）：
 
@@ -111,16 +106,19 @@ scrape 末尾会打印：
 ### 第 4 步 · 收尾 + 验证 effect
 
 ```powershell
-python finalize.py                              # 三件套：rebuild + package + inject-overlay
+python finalize.py                              # rebuild + inject-overlay（不打 zip）
+python finalize.py --package                    # 加上 --package 才会预打全部 19 个 zip
 ```
 
-`finalize.py` 会跑完：
+`finalize.py` 默认行为：
 
-| 步骤 | 产物 | 用途 |
-|---|---|---|
-| `rebuild-index.py` | `effects/effects.{js,json}` + `designs/designs.{js,json}` + `effects/tag-axis.js` | 让画廊看见新卡片 |
-| `package-effects.py` | `effects/NNN/<NNN>.zip` + `source-bundle.js` | 卡片下载按钮 + viewer paste 块 |
-| `inject-overlay.py` | 每个 `effects/NNN/index.html` 底部注入浮动 overlay | demo 单页右上角的 📦 zip + 📋 源码 按钮 |
+| 步骤 | 产物 | 用途 | 默认？ |
+|---|---|---|---|
+| `rebuild-index.py` | `effects.{js,json}` + `designs.{js,json}` + `tag-axis.js` | 让画廊看见新卡片 | ✅ |
+| `inject-overlay.py` | 每个 `effects/NNN/index.html` 底部注入浮动 overlay | demo 单页右上角 📦 zip + 📋 源码 按钮 | ✅ |
+| `package-effects.py` | `effects/NNN/<NNN>.zip` + `source-bundle.js` | 卡片下载按钮 + viewer paste 块 | ❌ 默认跳过 |
+
+zip 和 source-bundle.js 默认不预打，由 `serve.py` 在第一次点对应按钮时 lazy 打。想一次全打就 `--package`，CI 之类的场景用。
 
 **自查清单**（每次交付前必走一遍）：
 
@@ -171,14 +169,15 @@ sc2/
 │       ├── source-bundle.js   ← package-effects.py 生成（gitignored）
 │       └── NNN-短名.zip       ← package-effects.py 生成（gitignored）
 │
+├── serve.py                   ← 日常入口：本地 HTTP server + lazy zip/source-bundle 打包（默认 8080，自动开浏览器）
 ├── scrape-url.py              ← URL → designs/<NNN>/ 离线镜像（含 auto-rebuild + headless verify）
+├── nuxt-spa-fixup.py          ← 对已抓的 Nuxt SPA 镜像后补 5 步 recipe（独立入口）
 ├── new-effect.py              ← 新建 effects/<NNN-slug>/ 骨架文件
-├── finalize.py                ← 三步打包脚本：rebuild + package + inject-overlay
-├── rebuild-index.py           ← 扫两个目录重建 designs.js / effects.js / tag-axis.js（被 finalize.py 调用）
-├── package-effects.py         ← 给每个 effect 生成 source-bundle.js + zip
+├── finalize.py                ← 收尾脚本：默认 rebuild + inject-overlay；--package 加打 zip
+├── rebuild-index.py           ← 扫两个目录重建 designs.js / effects.js / tag-axis.js
+├── package-effects.py         ← 给单个或全部 effect 生成 source-bundle.js + zip（--only / --bundle-only）
 ├── inject-overlay.py          ← 把浮动下载/源码 overlay 注入每个 effect 的 index.html
-├── reencode-mp4.py            ← 批量 ffmpeg 重压 mp4 到 1.5-2 Mbps（瘦体积用）
-└── finalize.py                ← 一键：rebuild + package + inject-overlay
+└── reencode-mp4.py            ← 批量 ffmpeg 重压 mp4 到 1.5-2 Mbps（瘦体积用）
 ```
 
 ---
@@ -187,13 +186,15 @@ sc2/
 
 | 脚本 | 何时用 | 关键参数 |
 |---|---|---|
+| `python serve.py` | 日常打开画廊（默认 8080 + 自动开浏览器 + lazy 打 zip） | `[PORT]` `--no-open` |
 | `python scrape-url.py URL NNN-slug "Title"` | 抓新站 | `--no-rebuild` `--no-verify` `--nuxt-spa-fixup` |
 | `python new-effect.py <slug>` | 新建 effect 骨架 | `--num NNN` `--title` `--source-url` `--mirror` |
-| `python finalize.py` | 改完 effect 一键收尾 | `--skip-rebuild` `--skip-package` `--skip-overlay` |
+| `python finalize.py` | 改完 effect 一键收尾（rebuild + overlay，默认不打 zip） | `--package` `--skip-rebuild` `--skip-overlay` |
 | `python reencode-mp4.py` | 批量压视频（CRF 27 H.264） | （无参数，会自动跳过已经低码率/太小的） |
-| `python package-effects.py` | （finalize 内部调用，可单独跑） | `--bundle-only` 跳过 zip |
+| `python package-effects.py` | （serve.py / finalize.py 调用；可手跑） | `--bundle-only` `--only SLUG` |
 | `python inject-overlay.py` | （finalize 内部调用，可单独跑） | 无 |
 | `python rebuild-index.py` | （finalize 内部调用，可单独跑） | 无 |
+| `python nuxt-spa-fixup.py FOLDER` | 对已抓的 Nuxt SPA 镜像后补 5 步 recipe | `--url URL` |
 
 ---
 
@@ -379,7 +380,8 @@ sc2/
 
 1. `git clone`（或拷整个文件夹）
 2. `pip install playwright && playwright install chromium`（一次性）
-3. `cd sc2 && python -m http.server 8080`
-4. 开 <http://localhost:8080/designs/> 或 <http://localhost:8080/effects/>
+3. `cd sc2 && python serve.py`（自动开浏览器到 /effects/，默认端口 8080）
 
 Mac/Linux 与 Windows 等价：所有脚本都是 Python，没有 PowerShell 依赖。
+
+`serve.py` 是 `python -m http.server` 的 drop-in 替代——多做一件事：拦截 `effects/<slug>/<slug>.zip` 和 `source-bundle.js` 请求，文件不在磁盘上就实时调 `package-effects.py --only <slug>` 打包出来再 serve。这样 clone 完不需要先跑一遍 `python finalize.py --package` 预热 19 个 zip（zip 在 `.gitignore` 里，git 仓库不带它们）。

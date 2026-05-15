@@ -319,7 +319,10 @@
 
 <footer>
   <p>
-    👉 新增 effect：在 <code>effects/</code> 下建 <code>NNN-短名/</code>，包含 <code>index.html</code> + <code>meta.json</code>，再跑一次 <code>python finalize.py</code> 即可（会重建索引、打 zip、注入 overlay）。
+    👉 新增 effect：在 <code>effects/</code> 下建 <code>NNN-短名/</code>，包含 <code>index.html</code> + <code>meta.json</code>，再跑一次 <code>python finalize.py</code>（重建索引 + 注入 overlay）。
+  </p>
+  <p>
+    📦 zip 和 📋 源码 按钮的文件是 <b>lazy 打包</b> 的：第一次点会调 <code>package-effects.py --only &lt;slug&gt;</code> 实时生成（几秒），之后磁盘有了就秒回。前提是用 <code>python serve.py</code> 启动（默认 8080）；直接 <code>python -m http.server</code> 没拦截，按钮会 404。
   </p>
   <p>
     每张卡片用 iframe 以 50% 缩放显示动态预览，鼠标可以直接 hover 触发预览里的交互。<br>

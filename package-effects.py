@@ -537,6 +537,13 @@ def main():
         help="regenerate only source-bundle.js, skip the .zip (use during effect "
              "iteration when zip downloads aren't needed yet).",
     )
+    parser.add_argument(
+        "--only",
+        metavar="SLUG",
+        help="package only this one effect folder (e.g. 001-talamus-card-grid). "
+             "Used by serve.py to build a zip on demand when the gallery's "
+             "📦 zip button is clicked, avoiding pre-building all 19.",
+    )
     args = parser.parse_args()
 
     if not EFFECTS_DIR.exists():
@@ -545,6 +552,11 @@ def main():
 
     targets = [d for d in sorted(EFFECTS_DIR.iterdir())
                if d.is_dir() and (d / "index.html").exists()]
+    if args.only:
+        targets = [d for d in targets if d.name == args.only]
+        if not targets:
+            print(f"--only={args.only!r}: no such effect folder", file=sys.stderr)
+            sys.exit(1)
     if not targets:
         print("no effect folders found (expected effects/NNN-name/index.html)")
         return

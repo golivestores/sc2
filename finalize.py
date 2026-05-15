@@ -1,17 +1,22 @@
 """
-finalize.py — one-shot wrapper that runs the three post-edit steps so any
-change to an effect (new folder, edited index.html, replaced asset) flows
-through to all the things that depend on it:
+finalize.py — one-shot wrapper that runs the post-edit steps so any change
+to an effect (new folder, edited index.html, replaced asset) flows through
+to the things that depend on it:
 
   1. rebuild-index.py         → effects/effects.{js,json} + designs/designs.{js,json}
                                 + effects/tag-axis.js (from /tag-axis.json)
-  2. package-effects.py       → effects/NNN/<NNN>.zip + source-bundle.js
-  3. inject-overlay.py        → re-stamps the floating overlay block in each demo
+  2. inject-overlay.py        → re-stamps the floating overlay block in each demo
+  3. package-effects.py       → effects/NNN/<NNN>.zip + source-bundle.js
+                                (opt-in via --package; otherwise serve.py
+                                builds these on demand when the gallery's
+                                zip / 源码 button is clicked)
 
 Idempotent — safe to run as many times as you want.
 
 Usage:
-    python finalize.py [--skip-rebuild] [--skip-package] [--skip-overlay]
+    python finalize.py                   # rebuild + overlay (fast)
+    python finalize.py --package         # also pre-build all 19 zips
+    python finalize.py --skip-rebuild --skip-overlay   # selectively
 """
 import sys, io, subprocess, argparse
 from pathlib import Path
@@ -43,27 +48,38 @@ def run_py(name: str) -> int:
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--skip-rebuild", action="store_true")
-    ap.add_argument("--skip-package", action="store_true")
-    ap.add_argument("--skip-overlay", action="store_true")
+    ap.add_argument("--skip-rebuild", action="store_true",
+                    help="don't regenerate effects.js / designs.js / tag-axis.js")
+    ap.add_argument("--skip-overlay", action="store_true",
+                    help="don't re-inject the floating overlay block in demos")
+    ap.add_argument("--package", action="store_true",
+                    help="also pre-build all 19 effect zips + source-bundle.js. "
+                         "Default is to skip — serve.py builds them on demand "
+                         "when a gallery button is clicked, which keeps the "
+                         "working tree small.")
     args = ap.parse_args()
 
     failures = 0
     if not args.skip_rebuild:
-        print("[1/3] rebuilding indexes (designs.js + effects.js + tag-axis.js)")
+        print("[1] rebuilding indexes (designs.js + effects.js + tag-axis.js)")
         failures += bool(run_py("rebuild-index.py"))
-    if not args.skip_package:
-        print("\n[2/3] packaging effects (zip + source-bundle.js)")
-        failures += bool(run_py("package-effects.py"))
     if not args.skip_overlay:
-        print("\n[3/3] injecting demo overlay (zip + 源码 buttons)")
+        print("\n[2] injecting demo overlay (zip + 源码 buttons)")
         failures += bool(run_py("inject-overlay.py"))
+    if args.package:
+        print("\n[3] packaging effects (zip + source-bundle.js)")
+        failures += bool(run_py("package-effects.py"))
 
     print()
     if failures:
         print(f"finalize: {failures} step(s) had problems — see messages above.")
         return 1
-    print("finalize: done. open http://localhost:8080/effects/ to verify.")
+    if args.package:
+        msg = "finalize: done (with --package). open http://localhost:8080/effects/ to verify."
+    else:
+        msg = ("finalize: done. start the dev server with `python serve.py` — "
+               "zips and source-bundle.js will be built lazily on first click.")
+    print(msg)
     return 0
 
 

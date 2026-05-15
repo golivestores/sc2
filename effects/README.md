@@ -136,7 +136,7 @@ effects/
 
 ## 打开方式
 
-- **双击 [`effects/index.html`](index.html)**：纯 CSS / 原生 JS 的 demo 正常显示。`effects.js` 通过 `<script>` 加载所以数据本身没问题
-- **`http://localhost:8000/effects/`**（先在 sc2 根目录跑 `python -m http.server 8000`）：内部用 `fetch` / GLTF / Lottie / 跨文件资源的 demo 也能跑全套
+- **`http://localhost:8080/effects/`**（在 sc2 根目录跑 `python serve.py`，自动开浏览器）：完整功能 — 点 📦 zip / 📋 源码 时 serve.py 会 lazy 调 `package-effects.py --only <slug>` 实时打包。**推荐这条**。
+- **双击 [`effects/index.html`](index.html)**：纯 CSS / 原生 JS 的 demo 能看，但 📦 zip / 📋 源码 按钮会 404（file:// 触发不了 lazy build；用 `fetch` / GLTF / Lottie / 跨文件资源的 demo 也跑不全）。
 
 iframe 缩放为 50%，鼠标可以**直接在预览里互动**触发 hover / cursor 等效果。
