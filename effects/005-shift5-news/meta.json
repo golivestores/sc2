@@ -4,7 +4,7 @@
   "description": "Shift5 的 newsroom 区：左侧黑底特色文章面板（图片 + 标题 + 日期 + 描述 + READ MORE 按钮）做 sticky；右侧灰底 2 列 grid 排 12 篇文章卡片，鼠标 hover 卡片整体翻转成黑底浅字（0.4s ease-in-out）。原版用 JS scroll listener + transform 实现 sticky，我们用 CSS position: sticky 等价替换。每张卡片用 absolute 定位的细线（item-line[data-line=x|y]）拼出格子边框。",
   "tech": "CSS Grid + position: sticky",
   "tags": [
-    "新闻",
+    "案例动态",
     "文字段",
     "滚动",
     "逐字出场",

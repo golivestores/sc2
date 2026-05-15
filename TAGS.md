@@ -32,11 +32,9 @@
 | `导航` | 顶 bar、header、菜单系统 |
 | `产品` | 商品列表 / 产品卡片 |
 | `分类` | 品类导航 / collection grid |
-| `服务` | 业务能力 / features / capabilities |
-| `流程` | 操作步骤 / how-it-works / 原理介绍 |
+| `介绍` | 业务能力 / features / how-it-works / 流程说明 |
 | `评价` | 用户评价 / testimonials |
-| `新闻` | 新闻 / 博客 / 文章列表 |
-| `案例` | 作品集 / portfolio / 项目展示 |
+| `案例动态` | 作品集 / portfolio / 案例 / 新闻 / 博客 |
 | `CTA` | 行动召唤区块 |
 | `关于` | 公司/品牌介绍段 |
 | `联系` | 联系表单 / 地图 / 客服入口 |

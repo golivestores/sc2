@@ -4,7 +4,7 @@
   "description": "Armateurs de France 中段「Nos domaines d'intervention」区：深蓝 #001060 圆角容器，里面铺一张大船海面照片做背景；顶部巨大白色 UPPERCASE 标题，下方 12 列 grid 排 6 张玻璃质感卡（rgba(255,255,255,0.10) + backdrop-filter:blur(5px)，aspect 208/230），每卡含分类名 + 圆形白边箭头按钮。卡片 hover 时整张上浮 (translateY(-1rem))，圆形按钮翻成白底深蓝箭头。",
   "tech": "CSS Grid + backdrop-filter + :has() hover",
   "tags": [
-    "服务",
+    "介绍",
     "网格",
     "悬停",
     "多态切换",

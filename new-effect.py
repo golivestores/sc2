@@ -86,7 +86,7 @@ META_TEMPLATE = {
     "description": "",
     "tech": "",
     # tags follow the 5-axis taxonomy from TAGS.md:
-    #   axis 1 板块     required exactly 1 of: 首屏/导航/产品/分类/服务/流程/评价/新闻/案例/CTA/关于/联系/页脚
+    #   axis 1 板块     required exactly 1 of: 首屏/导航/产品/分类/介绍/评价/案例动态/CTA/关于/联系/页脚
     #   axis 2 形态     optional 0-1 of:       网格/轮播/滑块/跑马灯/顶栏/横幅/文字段/列表
     #   axis 3 触发     required exactly 1 of: 入场/滚动/悬停/点击/自动播放
     #   axis 4 技术     optional 0-3 of:       形变/路径裁切/逐字出场/视差/交叉淡入/多态切换/遮罩/文字滚动/响应式/键盘

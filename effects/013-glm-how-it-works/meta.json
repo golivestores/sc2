@@ -4,7 +4,7 @@
   "description": "Good Life Meds 首页流程区：底图 howitworks-cover 用 object-position:right center 锚到右侧让绿色药盒留在右边（不再全屏铺平），左→右深色渐变蒙层让左半侧的标题/卡片读得清、右半侧药盒完全可见；**右中位置叠一段真 Lottie 盒子打开循环（GoodLife_Box_03_1x_02.json，70 帧 60fps，约 1.16s 一循环），用 lottie-web light 渲染，替代原版本地缺失的 Bunny HLS 视频做「盒子打开」核心动画**。左上小段说明 + 巨号「How it works」标题（IO fade+lift 入场），底部 12 列 grid 布 3 张玻璃卡（rgba 0.10 + backdrop-filter:blur(16px) + 1px 边），第二张 align-self:end + translateY(48px) 形成 top-bottom-top zig-zag，配两条 dasharray 2 4 SVG 折角虚线连接。移动端 picture 切到竖版 howitworks-mobile + 3 张卡堆叠并隐藏连接线。",
   "tech": "CSS Grid zig-zag + lottie-web Box-opening loop + backdrop-filter + IO fade",
   "tags": [
-    "流程",
+    "介绍",
     "滚动",
     "逐字出场",
     "健康"

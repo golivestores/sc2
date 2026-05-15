@@ -82,7 +82,7 @@
         "description":  "Shift5 的 newsroom 区：左侧黑底特色文章面板（图片 + 标题 + 日期 + 描述 + READ MORE 按钮）做 sticky；右侧灰底 2 列 grid 排 12 篇文章卡片，鼠标 hover 卡片整体翻转成黑底浅字（0.4s ease-in-out）。原版用 JS scroll listener + transform 实现 sticky，我们用 CSS position: sticky 等价替换。每张卡片用 absolute 定位的细线（item-line[data-line=x|y]）拼出格子边框。",
         "tech":  "CSS Grid + position: sticky",
         "tags":  [
-                     "新闻",
+                     "案例动态",
                      "文字段",
                      "滚动",
                      "逐字出场",
@@ -101,7 +101,7 @@
         "description":  "Armateurs de France 首页中段新闻区：12 列 grid 拆 4+3+5，每列一张卡（图 + 标题 + 日期 + 箭头），2/3 列开头加左侧细线 separator。卡片 hover 时图片 scale(1.05)。第一列顶部带「Nos actualités」红色 small-caps 标签 + 「+ Voir toutes les actualités」CTA（hover 时下划线从右滑到左切换为红色）。",
         "tech":  "CSS Grid + transition",
         "tags":  [
-                     "新闻",
+                     "案例动态",
                      "轮播",
                      "自动播放",
                      "交叉淡入",
@@ -120,7 +120,7 @@
         "description":  "Armateurs de France 中段「Nos domaines d\u0027intervention」区：深蓝 #001060 圆角容器，里面铺一张大船海面照片做背景；顶部巨大白色 UPPERCASE 标题，下方 12 列 grid 排 6 张玻璃质感卡（rgba(255,255,255,0.10) + backdrop-filter:blur(5px)，aspect 208/230），每卡含分类名 + 圆形白边箭头按钮。卡片 hover 时整张上浮 (translateY(-1rem))，圆形按钮翻成白底深蓝箭头。",
         "tech":  "CSS Grid + backdrop-filter + :has() hover",
         "tags":  [
-                     "服务",
+                     "介绍",
                      "网格",
                      "悬停",
                      "多态切换",
@@ -234,7 +234,7 @@
         "description":  "Good Life Meds 首页流程区：底图 howitworks-cover 用 object-position:right center 锚到右侧让绿色药盒留在右边（不再全屏铺平），左→右深色渐变蒙层让左半侧的标题/卡片读得清、右半侧药盒完全可见；**右中位置叠一段真 Lottie 盒子打开循环（GoodLife_Box_03_1x_02.json，70 帧 60fps，约 1.16s 一循环），用 lottie-web light 渲染，替代原版本地缺失的 Bunny HLS 视频做「盒子打开」核心动画**。左上小段说明 + 巨号「How it works」标题（IO fade+lift 入场），底部 12 列 grid 布 3 张玻璃卡（rgba 0.10 + backdrop-filter:blur(16px) + 1px 边），第二张 align-self:end + translateY(48px) 形成 top-bottom-top zig-zag，配两条 dasharray 2 4 SVG 折角虚线连接。移动端 picture 切到竖版 howitworks-mobile + 3 张卡堆叠并隐藏连接线。",
         "tech":  "CSS Grid zig-zag + lottie-web Box-opening loop + backdrop-filter + IO fade",
         "tags":  [
-                     "流程",
+                     "介绍",
                      "滚动",
                      "逐字出场",
                      "健康"
@@ -332,7 +332,7 @@
         "description":  "obsidianassembly.com /#places 段的核心交互：7 张房间图全部同时在画面上，1 张占中心大区（slot 0，约 55%×72% 居中），其它 6 张作为小卫星缩略图分布四周（slot 1-6 是 6 个固定位置）。点 next / prev：当前活动图缩回它的目标小位置、新活动图从它的小位置放大到中心，所有 7 张同时以 transform translate+scale 平滑过渡（1.15s cubic-bezier(0.19,1,0.22,1)）。\\n\\n核心机制 = slot 轮转：slide 索引 N 是当前活动时，slot k 装的就是 slide (N+k)%7。点 next 时 N→N+1，所有 data-slot 重新映射，CSS transition 自动跑出「小图→大图」的放大效果。点 prev 同理反向。\\n\\n额外：键盘 ←→ 切换；点任意卫星图也直接切到它；?demo=preview 自动 1.7s 一切（缩略图也能看到这个 zoom 效果）；标题用 Cormorant Garamond 斜体覆盖活动区中心、X/7 计数器在活动区右下角、上方小标题 「Explore Places · Not Everything is Visible」 与原站一致；点活动图不会触发任何动作。",
         "tech":  "CSS transform interpolation + JS slot rotation",
         "tags":  [
-                     "案例",
+                     "案例动态",
                      "滑块",
                      "滚动",
                      "形变",
