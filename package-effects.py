@@ -48,6 +48,13 @@ GENERATED_NAMES = {"source-bundle.js"}
 # downloaded artifact contains only the runnable demo (index.html + assets + lib).
 ZIP_EXCLUDE_NAMES = {"meta.json"}
 
+# Local-only work directories never to be included in the zip or bundle.
+# `source-media/` holds raw mp4/jpg pulled from the original site for later
+# re-encoding — kept on disk for the author but useless to a downstream
+# consumer, and can be 100+ MB. effect 014 once ballooned the zip to 130 MB
+# because its source-media was bundled in.
+ZIP_EXCLUDE_DIRS = {"source-media"}
+
 
 def is_generated(p: Path, effect_dir: Path) -> bool:
     """Files this script writes (zip and bundle) — exclude when packaging."""
@@ -74,6 +81,10 @@ def collect_files(effect_dir: Path) -> list[Path]:
         if not p.is_file():
             continue
         if is_generated(p, effect_dir):
+            continue
+        # Skip files inside any ZIP_EXCLUDE_DIRS (e.g. source-media/) so the
+        # zip + bundle stay lean even if the author keeps raw source on disk.
+        if any(part in ZIP_EXCLUDE_DIRS for part in p.relative_to(effect_dir).parts[:-1]):
             continue
         files.append(p)
     files.sort()
