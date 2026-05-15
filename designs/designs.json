@@ -1,144 +1,129 @@
 [
-    {
-        "folder":  "001-talamus",
-        "title":  "Talamus",
-        "description":  "",
-        "sourceUrl":  "https://talamus.pro/",
-        "savedAt":  "2026-05-06",
-        "tags":  [
-
-                 ],
-        "href":  "001-talamus/index.html",
-        "preview":  ""
-    },
-    {
-        "folder":  "002-shift5",
-        "title":  "Shift5",
-        "description":  "",
-        "sourceUrl":  "https://shift5.io/",
-        "savedAt":  "2026-05-06",
-        "tags":  [
-
-                 ],
-        "href":  "002-shift5/index.html",
-        "preview":  ""
-    },
-    {
-        "folder":  "003-armateursdefrance",
-        "title":  "Armateurs de France",
-        "description":  "",
-        "sourceUrl":  "https://www.armateursdefrance.org/",
-        "savedAt":  "2026-05-06",
-        "tags":  [
-
-                 ],
-        "href":  "003-armateursdefrance/index.html",
-        "preview":  ""
-    },
-    {
-        "folder":  "004-omrbeauty",
-        "title":  "OMR Beauty",
-        "description":  "",
-        "sourceUrl":  "https://omrbeauty.com/",
-        "savedAt":  "2026-05-07",
-        "tags":  [
-
-                 ],
-        "href":  "004-omrbeauty/index.html",
-        "preview":  ""
-    },
-    {
-        "folder":  "005-goodlifemeds",
-        "title":  "Good Life Meds",
-        "description":  "",
-        "sourceUrl":  "https://www.goodlifemeds.com/",
-        "savedAt":  "2026-05-07",
-        "tags":  [
-
-                 ],
-        "href":  "005-goodlifemeds/index.html",
-        "preview":  ""
-    },
-    {
-        "folder":  "006-flowerknows",
-        "title":  "Flower Knows",
-        "description":  "",
-        "sourceUrl":  "https://flowerknows.co/",
-        "savedAt":  "2026-05-09",
-        "tags":  [
-
-                 ],
-        "href":  "006-flowerknows/index.html",
-        "preview":  ""
-    },
-    {
-        "folder":  "007-fluidglass",
-        "title":  "Fluid Glass",
-        "description":  "",
-        "sourceUrl":  "https://fluid.glass/",
-        "savedAt":  "2026-05-09",
-        "tags":  [
-
-                 ],
-        "href":  "007-fluidglass/index.html",
-        "preview":  ""
-    },
-    {
-        "folder":  "008-donmolinico",
-        "title":  "Don Molinico",
-        "description":  "Nuxt 2 客户端路由 SPA。镜像只能用来取源/抽块——预览界面会显示 PAGE NOT FOUND，因为 Vue Router 按 location.pathname 配路由，本地 URL 对不上 /products。HTML 骨架 + 65 个 JS chunk + 字体都在本地。",
-        "sourceUrl":  "https://www.donmolinico.es/products/",
-        "savedAt":  "2026-05-14",
-        "tags":  [
-                     "spa",
-                     "nuxt",
-                     "reference-only"
-                 ],
-        "href":  "008-donmolinico/index.html",
-        "preview":  "008-donmolinico/preview.png"
-    },
-    {
-        "folder":  "009-obsidianassembly",
-        "title":  "Obsidian Assembly",
-        "description":  "Nuxt 3 SPA。镜像本身可以正常渲染（含 hero blur 字 + nav + 多个 placeholder section），用了 5 步手工补救：补抓 7 个 CSS chunk、复制 images/fonts 目录到镜像根、JS/CSS 里 /images/ → ./images/ 路径改写、注入 \u003cbase href=/designs/009.../\u003e 锁定 Nuxt history.replaceState 后的相对路径基准、补抓 35 张 lazy 图。",
-        "sourceUrl":  "https://obsidianassembly.com/",
-        "savedAt":  "2026-05-14",
-        "tags":  [
-                     "spa",
-                     "nuxt",
-                     "experimental-effects"
-                 ],
-        "href":  "009-obsidianassembly/index.html",
-        "preview":  "009-obsidianassembly/preview.png"
-    },
-    {
-        "folder":  "010-fluid-folding-door",
-        "title":  "Fluid Glass - Fluid Folding Door",
-        "description":  "fluid.glass /collection/fluid-folding-door 产品详情页：左侧大幅产品图 + 右侧粘性 sidebar（产品标签 / 标题 / 介绍 / GET A QUOTE CTA）。开屏 splash 动画淡出后呈现 hero；下方依次为 BENEFITS / INFORMATION / CONFIGURATIONS 三段 anchor 切换的产品信息。配色：奶白底 #f1ede6 + 深灰文字，serif + sans 混排，整体克制、画廊感强",
-        "sourceUrl":  "https://fluid.glass/collection/fluid-folding-door",
-        "savedAt":  "2026-05-14",
-        "tags":  [
-                     "product-detail",
-                     "luxury",
-                     "sticky-sidebar",
-                     "splash-intro",
-                     "nuxt3"
-                 ],
-        "href":  "010-fluid-folding-door/index.html",
-        "preview":  "010-fluid-folding-door/preview.png"
-    },
-    {
-        "folder":  "011-donmolinico-home",
-        "title":  "Don Molinico — homepage",
-        "description":  "Nuxt 2 客户端路由 SPA 主页镜像。HTML 骨架 + _nuxt 入口 chunks + 字体已下载，缺失的 f47fb2f.js 和 super-med 字体从 008-donmolinico 复用。预览仍会显示 PAGE NOT FOUND——Vue Router 按 location.pathname 匹配 /，本地 URL 是 /designs/011-... 对不上。镜像只能用来取源码/抽 hero 块。",
-        "sourceUrl":  "https://www.donmolinico.es/",
-        "savedAt":  "2026-05-14",
-        "tags":  [
-                     "spa",
-                     "nuxt",
-                     "reference-only"
-                 ],
-        "href":  "011-donmolinico-home/index.html",
-        "preview":  "011-donmolinico-home/preview.png"
-    }
+  {
+    "folder": "001-talamus",
+    "title": "Talamus",
+    "description": "",
+    "sourceUrl": "https://talamus.pro/",
+    "savedAt": "2026-05-06",
+    "tags": [],
+    "href": "001-talamus/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "002-shift5",
+    "title": "Shift5",
+    "description": "",
+    "sourceUrl": "https://shift5.io/",
+    "savedAt": "2026-05-06",
+    "tags": [],
+    "href": "002-shift5/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "003-armateursdefrance",
+    "title": "Armateurs de France",
+    "description": "",
+    "sourceUrl": "https://www.armateursdefrance.org/",
+    "savedAt": "2026-05-06",
+    "tags": [],
+    "href": "003-armateursdefrance/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "004-omrbeauty",
+    "title": "OMR Beauty",
+    "description": "",
+    "sourceUrl": "https://omrbeauty.com/",
+    "savedAt": "2026-05-07",
+    "tags": [],
+    "href": "004-omrbeauty/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "005-goodlifemeds",
+    "title": "Good Life Meds",
+    "description": "",
+    "sourceUrl": "https://www.goodlifemeds.com/",
+    "savedAt": "2026-05-07",
+    "tags": [],
+    "href": "005-goodlifemeds/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "006-flowerknows",
+    "title": "Flower Knows",
+    "description": "",
+    "sourceUrl": "https://flowerknows.co/",
+    "savedAt": "2026-05-09",
+    "tags": [],
+    "href": "006-flowerknows/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "007-fluidglass",
+    "title": "Fluid Glass",
+    "description": "",
+    "sourceUrl": "https://fluid.glass/",
+    "savedAt": "2026-05-09",
+    "tags": [],
+    "href": "007-fluidglass/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "008-donmolinico",
+    "title": "Don Molinico",
+    "description": "Nuxt 2 客户端路由 SPA。镜像只能用来取源/抽块——预览界面会显示 PAGE NOT FOUND，因为 Vue Router 按 location.pathname 配路由，本地 URL 对不上 /products。HTML 骨架 + 65 个 JS chunk + 字体都在本地。",
+    "sourceUrl": "https://www.donmolinico.es/products/",
+    "savedAt": "2026-05-14",
+    "tags": [
+      "spa",
+      "nuxt",
+      "reference-only"
+    ],
+    "href": "008-donmolinico/index.html",
+    "preview": "008-donmolinico/preview.png"
+  },
+  {
+    "folder": "009-obsidianassembly",
+    "title": "Obsidian Assembly",
+    "description": "Nuxt 3 SPA。镜像本身可以正常渲染（含 hero blur 字 + nav + 多个 placeholder section），用了 5 步手工补救：补抓 7 个 CSS chunk、复制 images/fonts 目录到镜像根、JS/CSS 里 /images/ → ./images/ 路径改写、注入 <base href=/designs/009.../> 锁定 Nuxt history.replaceState 后的相对路径基准、补抓 35 张 lazy 图。",
+    "sourceUrl": "https://obsidianassembly.com/",
+    "savedAt": "2026-05-14",
+    "tags": [
+      "spa",
+      "nuxt",
+      "experimental-effects"
+    ],
+    "href": "009-obsidianassembly/index.html",
+    "preview": "009-obsidianassembly/preview.png"
+  },
+  {
+    "folder": "010-fluid-folding-door",
+    "title": "Fluid Glass - Fluid Folding Door",
+    "description": "fluid.glass /collection/fluid-folding-door 产品详情页：左侧大幅产品图 + 右侧粘性 sidebar（产品标签 / 标题 / 介绍 / GET A QUOTE CTA）。开屏 splash 动画淡出后呈现 hero；下方依次为 BENEFITS / INFORMATION / CONFIGURATIONS 三段 anchor 切换的产品信息。配色：奶白底 #f1ede6 + 深灰文字，serif + sans 混排，整体克制、画廊感强",
+    "sourceUrl": "https://fluid.glass/collection/fluid-folding-door",
+    "savedAt": "2026-05-14",
+    "tags": [
+      "product-detail",
+      "luxury",
+      "sticky-sidebar",
+      "splash-intro",
+      "nuxt3"
+    ],
+    "href": "010-fluid-folding-door/index.html",
+    "preview": "010-fluid-folding-door/preview.png"
+  },
+  {
+    "folder": "011-donmolinico-home",
+    "title": "Don Molinico — homepage",
+    "description": "Nuxt 2 客户端路由 SPA 主页镜像。按 nuxt-spa-mirror recipe 修活：injected <base href>、改 webpack publicPath f.p / __NUXT__.basePath / assetsPath、补 10 个 lazy chunk、改 url(/fonts/...) → url(./fonts/...)。本地 server 渲染与原站一致。",
+    "sourceUrl": "https://www.donmolinico.es/",
+    "savedAt": "2026-05-15",
+    "tags": [
+      "spa",
+      "nuxt"
+    ],
+    "href": "011-donmolinico-home/index.html",
+    "preview": "011-donmolinico-home/preview.png"
+  }
 ]

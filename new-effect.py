@@ -98,6 +98,9 @@ META_TEMPLATE = {
     "sourceUrl": "",
     "localMirror": "",
     "order": 9999,
+    # savedAt is the scaffold date; filled in by main() with today's ISO date.
+    # Same convention as designs/*/meta.json so gallery can show 抓取时间.
+    "savedAt": "",
 }
 
 
@@ -155,6 +158,7 @@ def main():
     if args.mirror:
         meta["localMirror"] = args.mirror
     meta["order"] = int(num)
+    meta["savedAt"] = date.today().isoformat()
     (folder / "meta.json").write_text(
         json.dumps(meta, indent=2, ensure_ascii=False) + "\n", encoding="utf-8",
     )

@@ -60,12 +60,14 @@ python scrape-url.py https://example.com/ 008-example "Readable Title"
 2. 重写 HTML / CSS 里的链接到本地路径
 3. 注入"path shim"——hook `fetch` / `XHR`，把 `/api/...` 这类根绝对路径自动改成相对，让镜像在 navigator iframe 里也能跑
 4. 自动复制 `_nuxt/` `_astro/` `_next/` `_app/` `_svelte/` 等框架目录到镜像根——Nuxt/Astro/Next/SvelteKit 这些站运行时会拼根绝对路径取 manifest（如 `/_nuxt/builds/meta/<buildId>.json`），不复制就 404
-5. 跑一次 `rebuild-index.ps1` 让 `designs/index.html` 认识新卡片
+5. 跑一次 `python finalize.py --skip-package --skip-overlay`（内部调 `rebuild-index.py`）让 `designs/index.html` 认识新卡片
 6. 用 Playwright 加载本地镜像、报 console errors / 404 / 截一张 `preview.png`
 
 如果不需要自动验证：`python scrape-url.py URL 名字 --no-verify`。如果不需要自动 rebuild：`--no-rebuild`。
 
-**抓 Nuxt 3 SPA**（如 obsidianassembly、donmolinico 之类用 Vue Router 客户端路由的站）：加 `--nuxt-spa-fixup` 一并跑下 5 步补救（补 CSS chunks、复制 images/fonts 到根、`/images/` → `./images/`、注入 `<base href>`、补 lazy 图）。详见 memory [nuxt3-spa-mirror-recipe.md](.claude/projects/c--Users-EDY-Documents-sc2/memory/nuxt3-spa-mirror-recipe.md)。
+**抓 Nuxt SPA**（如 obsidianassembly、donmolinico 之类用 Vue Router 客户端路由的站）：加 `--nuxt-spa-fixup` 一并跑下 5 步补救（补 CSS chunks、复制 images/fonts 到根、`/images/` → `./images/`、注入 `<base href>`、补 lazy 图）。Nuxt 2 多两步：改写内联 `__NUXT__.basePath` 让 Vue Router 路由匹配本地路径、改写 webpack `f.p="/_nuxt/"` 让 lazy chunks 走 base href。详见 memory [nuxt3-spa-mirror-recipe.md](.claude/projects/c--Users-EDY-Documents-sc2/memory/nuxt3-spa-mirror-recipe.md)。
+
+对已经抓回来但忘了加 `--nuxt-spa-fixup` 的镜像，可以事后再跑：`python nuxt-spa-fixup.py designs/NNN-slug`（幂等；从该 folder 的 `meta.json.sourceUrl` 反推原 host）。
 
 抓完去 <http://localhost:8080/designs/>，新卡片就在那。
 
@@ -116,7 +118,7 @@ python finalize.py                              # 三件套：rebuild + package 
 
 | 步骤 | 产物 | 用途 |
 |---|---|---|
-| `rebuild-index.ps1` | `effects/effects.{js,json}` | 让画廊看见新卡片 |
+| `rebuild-index.py` | `effects/effects.{js,json}` + `designs/designs.{js,json}` + `effects/tag-axis.js` | 让画廊看见新卡片 |
 | `package-effects.py` | `effects/NNN/<NNN>.zip` + `source-bundle.js` | 卡片下载按钮 + viewer paste 块 |
 | `inject-overlay.py` | 每个 `effects/NNN/index.html` 底部注入浮动 overlay | demo 单页右上角的 📦 zip + 📋 源码 按钮 |
 
@@ -172,8 +174,7 @@ sc2/
 ├── scrape-url.py              ← URL → designs/<NNN>/ 离线镜像（含 auto-rebuild + headless verify）
 ├── new-effect.py              ← 新建 effects/<NNN-slug>/ 骨架文件
 ├── finalize.py                ← 三步打包脚本：rebuild + package + inject-overlay
-├── rebuild-index.ps1          ← 扫两个目录重建 designs.js / effects.js（被 finalize.py 调用）
-├── rebuild-index.bat          ← 双击启动 ps1
+├── rebuild-index.py           ← 扫两个目录重建 designs.js / effects.js / tag-axis.js（被 finalize.py 调用）
 ├── package-effects.py         ← 给每个 effect 生成 source-bundle.js + zip
 ├── inject-overlay.py          ← 把浮动下载/源码 overlay 注入每个 effect 的 index.html
 ├── reencode-mp4.py            ← 批量 ffmpeg 重压 mp4 到 1.5-2 Mbps（瘦体积用）
@@ -192,7 +193,7 @@ sc2/
 | `python reencode-mp4.py` | 批量压视频（CRF 27 H.264） | （无参数，会自动跳过已经低码率/太小的） |
 | `python package-effects.py` | （finalize 内部调用，可单独跑） | `--bundle-only` 跳过 zip |
 | `python inject-overlay.py` | （finalize 内部调用，可单独跑） | 无 |
-| `powershell -File rebuild-index.ps1` | （finalize 内部调用） | 无 |
+| `python rebuild-index.py` | （finalize 内部调用，可单独跑） | 无 |
 
 ---
 
@@ -326,7 +327,7 @@ effect 的 index.html 里仅为 demo 展示而加（不属于 block 本体）的
 
 ### scrape 后 navigator 上看不到新卡片
 
-跑过 `scrape-url.py` 后应该自动 rebuild 了。如果你用了 `--no-rebuild`，跑一下 `powershell -File rebuild-index.ps1`（或双击 `rebuild-index.bat`），刷新 navigator。
+跑过 `scrape-url.py` 后应该自动 rebuild 了。如果你用了 `--no-rebuild`，跑一下 `python finalize.py --skip-package --skip-overlay`（或直接 `python finalize.py`），刷新 navigator。
 
 ### scrape 后页面打开是白屏
 
@@ -367,8 +368,8 @@ effect 的 index.html 里仅为 demo 展示而加（不属于 block 本体）的
 sc2/
 ├── README.md
 ├── .gitignore
-├── scrape-url.py / new-effect.py / finalize.py
-├── rebuild-index.ps1 / rebuild-index.bat / package-effects.py / inject-overlay.py / reencode-mp4.py
+├── scrape-url.py / new-effect.py / finalize.py / nuxt-spa-fixup.py
+├── rebuild-index.py / package-effects.py / inject-overlay.py / reencode-mp4.py
 ├── designs/index.html               ← 镜像导航
 └── effects/
     ├── index.html                   ← 画廊
@@ -381,4 +382,4 @@ sc2/
 3. `cd sc2 && python -m http.server 8080`
 4. 开 <http://localhost:8080/designs/> 或 <http://localhost:8080/effects/>
 
-Mac/Linux：`rebuild-index.bat` 用不了，装 `pwsh` 直接 `pwsh -File rebuild-index.ps1`（或把 ps1 翻译成 bash，逻辑就是扫文件夹写 JSON）。
+Mac/Linux 与 Windows 等价：所有脚本都是 Python，没有 PowerShell 依赖。

@@ -2,7 +2,7 @@
 
 可复用的小型 demo 库。每个子文件夹是一个独立自包含的效果。
 
-画廊页 [`index.html`](index.html) 由数据驱动渲染（数据源是 [`effects.js`](effects.js) / [`effects.json`](effects.json)，由根目录 [`rebuild-index.ps1`](../rebuild-index.ps1) 扫描各子文件夹的 `meta.json` 自动生成）。**新增 / 改 / 删 effect 时不要手动改 `index.html` 里的卡片列表。**
+画廊页 [`index.html`](index.html) 由数据驱动渲染（数据源是 [`effects.js`](effects.js) / [`effects.json`](effects.json)，由根目录 [`finalize.py`](../finalize.py) 扫描各子文件夹的 `meta.json` 自动生成）。**新增 / 改 / 删 effect 时不要手动改 `index.html` 里的卡片列表。**
 
 每张卡片下方有三个按钮：
 - **`📋 源码`** → 打开 [`view.html`](view.html)，可以逐文件复制 HTML/CSS/JS，或下载整体 zip

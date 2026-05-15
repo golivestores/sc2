@@ -158,8 +158,10 @@
   </section>
 </main>
 
-<!-- effects.js (rebuild-generated metadata) loaded for fallback meta lookup -->
+<!-- effects.js (rebuild-generated metadata) loaded for fallback meta lookup.
+     tag-axis.js sets window.TAG_AXIS + window.AXIS_ORDER — shared with index.html. -->
 <script src="effects.js"></script>
+<script src="tag-axis.js"></script>
 
 <script>
 const escapeHTML = s => String(s ?? '').replace(/[&<>"']/g, c =>
@@ -191,7 +193,7 @@ function findMetaFromBundleOrEffects(folder, bundle) {
       } catch {}
     }
   }
-  // 2) fall back to effects.js (rebuild-index.ps1 output)
+  // 2) fall back to effects.js (rebuild-index.py output)
   if (Array.isArray(window.__EFFECTS__)) {
     const m = window.__EFFECTS__.find(e => e.folder === folder);
     if (m) return m;
@@ -235,13 +237,9 @@ function renderHeader(meta) {
   // 5-axis tag taxonomy — keep in sync with effects/index.html + TAGS.md +
   // package-effects.py. Each tag is rendered with axis-specific styling so
   // 板块 / 触发 / 形态 / 技术 / 产品类型 don't blur into one undifferentiated blob.
-  const TAG_AXIS = {};
-  for (const t of ['首屏','导航','产品','分类','介绍','评价','案例动态','CTA','关于','联系','页脚']) TAG_AXIS[t] = 'bankuai';
-  for (const t of ['网格','轮播','滑块','跑马灯','顶栏','横幅','文字段','列表']) TAG_AXIS[t] = 'xingtai';
-  for (const t of ['入场','滚动','悬停','点击','自动播放']) TAG_AXIS[t] = 'chufa';
-  for (const t of ['形变','路径裁切','逐字出场','视差','交叉淡入','多态切换','遮罩','文字滚动','响应式','键盘']) TAG_AXIS[t] = 'jishu';
-  for (const t of ['美妆','食品','健康','时尚','B2B服务','工业安防','协会组织','设计建筑','科技','教育','金融','房产','生活方式']) TAG_AXIS[t] = 'chanpin';
-  const AXIS_ORDER = { bankuai: 0, chufa: 1, xingtai: 2, jishu: 3, chanpin: 4, _other: 9 };
+  // 5-axis taxonomy from tag-axis.js (single source: /tag-axis.json)
+  const TAG_AXIS   = window.TAG_AXIS || {};
+  const AXIS_ORDER = window.AXIS_ORDER || { _other: 9 };
 
   const tags = document.getElementById('tags');
   const techTag = meta.tech ? `<span class="tag tag--tech">${escapeHTML(meta.tech)}</span>` : '';

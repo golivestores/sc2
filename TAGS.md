@@ -2,6 +2,8 @@
 
 每个 `effects/NNN-name/meta.json` 的 `tags` 字段必须按下面的**五轴分类**填，由 `package-effects.py` 校验。违反就 fail-fast，新 effect 进不了画廊。
 
+> **`designs/` 不走这个规范。** 设计镜像是整站抓回的 SPA，"首屏 / CTA / 顶栏"这类轴对整页没意义；那边的 `tags` 是自由词（如 `["spa","nuxt","reference-only"]`），仅供搜索用，不被任何 validator 检查。5 轴只对**切片**性质的 effects 强制。
+
 ---
 
 ## 规则速查

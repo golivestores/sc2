@@ -300,7 +300,7 @@ def main():
     import argparse
     p = argparse.ArgumentParser(
         description="Scrape a webpage into designs/<folder>/ with all assets.",
-        epilog="After scraping, the script auto-runs rebuild-index.ps1 and "
+        epilog="After scraping, the script auto-runs rebuild-index.py and "
                "headless-renders the local mirror to spot console errors / 404s. "
                "Disable with --no-rebuild and/or --no-verify.",
     )
@@ -308,7 +308,7 @@ def main():
     p.add_argument("folder")
     p.add_argument("title", nargs="?", default=None)
     p.add_argument("--no-rebuild", action="store_true",
-                   help="skip auto-running rebuild-index.ps1 at the end")
+                   help="skip auto-running rebuild-index.py at the end")
     p.add_argument("--no-verify", action="store_true",
                    help="skip headless render check of the local mirror")
     p.add_argument("--nuxt-spa-fixup", action="store_true",
@@ -835,10 +835,56 @@ def apply_nuxt_spa_fixup(mirror_dir: Path, original_url: str):
     else:
         new_h, n = re.subn(r"(<head\b[^>]*>)", lambda m: m.group(1) + base_tag, h, count=1, flags=re.I)
         if n:
-            index_html.write_text(new_h, encoding="utf-8")
+            h = new_h
+            index_html.write_text(h, encoding="utf-8")
             print(f"  step 4: injected <base href=\"{base_href}\">")
         else:
             print(f"  step 4: no <head> found, base href not injected")
+
+    # === step 4b: Nuxt 2 specific — patch inline __NUXT__ config ===
+    # Nuxt 2 emits `window.__NUXT__={config:{_app:{basePath:"/",assetsPath:"/_nuxt/",...}}}`
+    # before the entry scripts. Vue Router strips basePath from location.pathname
+    # before matching routes. Under file:// or http://host/designs/NNN/, the live
+    # basePath "/" makes the router compare "designs/NNN/" against route table
+    # entries like "/" and find nothing — renders PAGE NOT FOUND. We rewrite the
+    # basePath to match the actual served path, and switch assetsPath from
+    # absolute "/_nuxt/" to "./_nuxt/" so Nuxt's runtime asset URLs resolve via
+    # the just-injected <base href>. Idempotent: skips if already patched.
+    if "window.__NUXT__" in h:
+        nuxt_patches = 0
+        new_h = h
+        nh = re.sub(r'(__NUXT__\s*=\s*\{[^}]*basePath:\s*)"/"',
+                    rf'\1"{base_href}"', new_h, count=1)
+        if nh != new_h:
+            nuxt_patches += 1
+            new_h = nh
+        nh = re.sub(r'(__NUXT__[^}]*assetsPath:\s*)"/(_nuxt/)"',
+                    r'\1"./\2"', new_h, count=1)
+        if nh != new_h:
+            nuxt_patches += 1
+            new_h = nh
+        if nuxt_patches:
+            index_html.write_text(new_h, encoding="utf-8")
+            print(f"  step 4b: patched __NUXT__ config ({nuxt_patches} field(s))")
+        else:
+            print(f"  step 4b: __NUXT__ config already patched or shape unrecognized")
+
+    # === step 4c: Nuxt 2 specific — patch webpack publicPath f.p="/_nuxt/" ===
+    # Nuxt 2's webpack runtime hard-codes __webpack_public_path__ to "/_nuxt/".
+    # Lazy chunks are loaded by `script.src = f.p + chunkId + ".js"` so absolute
+    # path requests bypass <base href> and 404 under /designs/NNN/. Rewrite to
+    # relative so chunks resolve via base href. Search ALL js (both _nuxt/
+    # copies in case of duplicate mirror tree). Idempotent.
+    fp_patched = 0
+    fp_pat = re.compile(r'(\b[a-zA-Z_$]\.p\s*=\s*)"/(_nuxt/)"')
+    for f in mirror_dir.rglob("*.js"):
+        text = f.read_text(encoding="utf-8", errors="replace")
+        new = fp_pat.sub(r'\1"./\2"', text)
+        if new != text:
+            f.write_text(new, encoding="utf-8")
+            fp_patched += 1
+    if fp_patched:
+        print(f"  step 4c: rewrote webpack publicPath in {fp_patched} JS file(s)")
 
     # === step 5: headless scroll + fetch lazy assets ===
     try:
@@ -908,35 +954,27 @@ def apply_nuxt_spa_fixup(mirror_dir: Path, original_url: str):
 
 
 def run_rebuild_index(root: Path):
-    """Invoke rebuild-index.ps1 so the new mirror appears in designs/designs.js.
+    """Invoke rebuild-index.py so the new mirror appears in designs/designs.js.
 
-    Best-effort: prints the failure but doesn't stop the scrape if PowerShell
-    isn't available (non-Windows). The user can run rebuild-index.* by hand.
+    Best-effort: prints any failure but doesn't stop the scrape.
     """
-    script = root / "rebuild-index.ps1"
+    script = root / "rebuild-index.py"
     if not script.exists():
         return
-    print("\n[rebuild] regenerating designs.js + effects.js")
-    candidates = [["pwsh", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script)],
-                  ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script)]]
-    for cmd in candidates:
-        try:
-            r = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
-            if r.returncode == 0:
-                # surface the "Indexed N design(s)" line so the user sees what happened
-                for line in r.stdout.splitlines():
-                    if line.strip():
-                        print(f"  {line}")
-                return
-            else:
-                print(f"  rebuild stderr: {r.stderr.strip()[:200]}")
-                return
-        except FileNotFoundError:
-            continue
-        except Exception as e:
-            print(f"  rebuild failed: {e}")
-            return
-    print("  no powershell/pwsh found — run rebuild-index.ps1 (or .bat) manually")
+    print("\n[rebuild] regenerating designs.js + effects.js + tag-axis.js")
+    try:
+        r = subprocess.run([sys.executable, str(script)],
+                           capture_output=True, text=True, timeout=60)
+        if r.returncode == 0:
+            for line in r.stdout.splitlines():
+                if line.strip():
+                    print(f"  {line}")
+        else:
+            print(f"  rebuild exited {r.returncode}")
+            if r.stderr.strip():
+                print(f"  stderr: {r.stderr.strip()[:200]}")
+    except Exception as e:
+        print(f"  rebuild failed: {e}")
 
 
 def verify_mirror_headless(mirror_dir: Path, original_url: str):
