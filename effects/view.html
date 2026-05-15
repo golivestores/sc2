@@ -51,8 +51,13 @@
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .tag { font-size: 10.5px; padding: 3px 8px; border-radius: 3px;
          background: #f3efd6; color: var(--fg-dim); letter-spacing: .02em; }
-  .tag--tech { background: #e8e4c7; color: #4a4725; }
-  .tag--category { background: #dde6ff; color: #2b3d73; font-weight: 600; }
+  /* Tag colors per 5-axis taxonomy — keep in sync with effects/index.html + TAGS.md */
+  .tag--tech    { background: #e8e4c7; color: #4a4725; }
+  .tag--bankuai { background: #dde6ff; color: #2b3d73; font-weight: 600; }
+  .tag--chufa   { background: #d6ecd3; color: #2c5026; font-weight: 600; }
+  .tag--xingtai { background: #ede4d3; color: #5a4f3b; }
+  .tag--jishu   { background: #f3efd6; color: #6b6b6b; }
+  .tag--chanpin { background: #fde4e4; color: #7a2e2e; font-weight: 600; }
 
   main { padding: 28px 40px 60px; }
   section + section { margin-top: 36px; }
@@ -227,19 +232,25 @@ function renderHeader(meta) {
     }).catch(() => {});
   }
 
-  // Localize chip-category tags to match the gallery's display. Keep this map
-  // in sync with the chips defined in effects/index.html .toolbar.
-  const CATEGORY_LABELS = {
-    animation: '动画', typography: '文字', interaction: '交互',
-    intro: '入场', scroll: '滚动', hero: '首屏',
-  };
+  // 5-axis tag taxonomy — keep in sync with effects/index.html + TAGS.md +
+  // package-effects.py. Each tag is rendered with axis-specific styling so
+  // 板块 / 触发 / 形态 / 技术 / 产品类型 don't blur into one undifferentiated blob.
+  const TAG_AXIS = {};
+  for (const t of ['首屏','导航','产品','分类','服务','流程','评价','新闻','案例','CTA','关于','联系','页脚']) TAG_AXIS[t] = 'bankuai';
+  for (const t of ['网格','轮播','滑块','跑马灯','顶栏','横幅','文字段','列表']) TAG_AXIS[t] = 'xingtai';
+  for (const t of ['入场','滚动','悬停','点击','自动播放']) TAG_AXIS[t] = 'chufa';
+  for (const t of ['形变','路径裁切','逐字出场','视差','交叉淡入','多态切换','遮罩','文字滚动','响应式','键盘']) TAG_AXIS[t] = 'jishu';
+  for (const t of ['美妆','食品','健康','时尚','B2B服务','工业安防','协会组织','设计建筑','科技','教育','金融','房产','生活方式']) TAG_AXIS[t] = 'chanpin';
+  const AXIS_ORDER = { bankuai: 0, chufa: 1, xingtai: 2, jishu: 3, chanpin: 4, _other: 9 };
+
   const tags = document.getElementById('tags');
   const techTag = meta.tech ? `<span class="tag tag--tech">${escapeHTML(meta.tech)}</span>` : '';
-  const ts = (meta.tags || []).map(t => {
-    if (CATEGORY_LABELS[t]) {
-      return `<span class="tag tag--category">${escapeHTML(CATEGORY_LABELS[t])}</span>`;
-    }
-    return `<span class="tag">${escapeHTML(t)}</span>`;
+  const ts = (meta.tags || []).slice().sort((a, b) => {
+    return AXIS_ORDER[TAG_AXIS[a] || '_other'] - AXIS_ORDER[TAG_AXIS[b] || '_other'];
+  }).map(t => {
+    const axis = TAG_AXIS[t];
+    const cls = axis ? `tag tag--${axis}` : 'tag';
+    return `<span class="${cls}">${escapeHTML(t)}</span>`;
   }).join('');
   tags.innerHTML = techTag + ts;
 
