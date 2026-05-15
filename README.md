@@ -165,7 +165,7 @@ sc2/
 │       ├── index.html         ← demo 主体（自包含！底部 sc2-overlay 由 inject-overlay.py 注入）
 │       ├── meta.json          ← 卡片元数据（schema 见下）
 │       ├── assets/            ← demo 私有资源
-│       ├── lib/               ← demo 自带的第三方 JS 副本（不引 ../../vendor/）
+│       ├── lib/               ← demo 自带的第三方 JS 副本（不跨 effect 引用兄弟资源）
 │       ├── source-bundle.js   ← package-effects.py 生成（gitignored）
 │       └── NNN-短名.zip       ← package-effects.py 生成（gitignored）
 │
@@ -177,9 +177,7 @@ sc2/
 ├── package-effects.py         ← 给每个 effect 生成 source-bundle.js + zip
 ├── inject-overlay.py          ← 把浮动下载/源码 overlay 注入每个 effect 的 index.html
 ├── reencode-mp4.py            ← 批量 ffmpeg 重压 mp4 到 1.5-2 Mbps（瘦体积用）
-│
-├── builds/                    ← 改动测试 / 一次性产出（与本流程无关）
-└── vendor/                    ← 旧版共享库。新 effect 不引用它，遵循自包含约定
+└── finalize.py                ← 一键：rebuild + package + inject-overlay
 ```
 
 ---
@@ -278,7 +276,7 @@ scrape 自动写好；只有 description / tags 可能要你手填。
 
 每个 `effects/NNN-名字/` 文件夹完全自包含：
 
-- ❌ 不引 `../../vendor/`、不引兄弟 effect 的资源
+- ❌ 不引兄弟 effect 的资源（每个 effect 单独打 zip，跨引用会导致解压后丢文件）
 - ✅ 用到的库（GSAP / Three / splitting.js…）下载到自己的 `lib/`
 - ✅ 图/视频/字体放自己的 `assets/`
 - ✅ Google Fonts 等在线 CDN 允许（在线 fallback；离线落系统字体）
