@@ -385,5 +385,26 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://mina-massoud.com/",
     "localMirror": "../designs/012-minamassoud/index.html",
     "order": 20
+  },
+  {
+    "num": "021",
+    "folder": "021-floema-collections-scroll",
+    "title": "Floema · COLLECTIONS CTA",
+    "subtitle": "900vh sticky scroll, 5 collections clip-path reveal",
+    "description": "Floema 官网首屏之后的产品分类入场板块——`<section data-component=\"collections-cta\" style=\"height:900vh\">` 容器内两层 sticky：上层 `.line-wrapper` 是 z-index:100 的 100vh overlay，负责贯穿视口的 1px 白色 progress 进度线 + 左侧 'Made to Last' 标签 + 左下角 'Scroll to Explore ↓'（带 2 秒 ease-in-out bob）；下层 `.collections-wrapper` 是 `height:101vh; margin-top:-100vh` 的 sticky 容器，里面 5 个 `.collection` 通过 `position:absolute` 完全叠层。每个 collection 用 `clip-path: inset(var(--reveal) 0 0 0)` 揭开图片——`--reveal` 从 100% → 0% 时背景图从底向上 wipe 覆盖前一张。`.media-inner` 套了 `--bleed:10vh` 上下溢出，配 ease-in-out-cubic 缓动的 ±10vh translateY 做视差且不露边。文案块（编号 / 类目药丸 / 大标题 / 'See ... Products' 白底按钮 / 右下 Catalogue 卡片）跟随 slot 进度 fade-in 前 20% / 满显中段 / fade-out 后 20%。类目药丸用 `--tag-bg` 变量切色：Urban `#f76c46` / Nature `#c6af88` / RePlastic `#85a1c5` / Golf `#bacfa3` / Details `#d2cdc4`，背景颜色透过 `.bg` 子层做 0.5s cubic-bezier(.075,.82,.165,1) 过渡。原站用 GSAP ScrollTrigger pin 驱动；本切片去 GSAP 化，直接 `getBoundingClientRect()` 算进度，监听 scroll/resize 写 CSS 变量。SSR HTML + Nuxt _nuxt/*.css 1:1 提取（保留全部 data-v-435ca9aa / ad5c0564 / 05bb6279 / 0ce8c5d4 / 78ec613b scope）。资源：5 张 Sanity CDN 原图（Lisbon Rossio 广场 / Bussaco 国家森林 / RePlastic 灰墙 / 高尔夫球场 / 木工细节）+ 3 张 brochure 卡装饰图 + Zimula Variable TTF 字体。",
+    "tech": "sticky scroll · clip-path inset reveal · CSS var driven · vanilla rAF",
+    "tags": [
+      "介绍",
+      "滚动",
+      "sticky",
+      "clip-path",
+      "进度条",
+      "多态切换",
+      "案例动态"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://www.floema.com/en",
+    "localMirror": "../designs/Floema/index.html",
+    "order": 21
   }
 ];

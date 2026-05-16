@@ -146,5 +146,23 @@ window.__DESIGNS__ = [
     "tags": [],
     "href": "013-more-nutrition/index.html",
     "preview": "013-more-nutrition/preview.png"
+  },
+  {
+    "folder": "Floema",
+    "title": "Floema — Spaces for people, made for life",
+    "description": "Sustainable signage & equipment brand. Pixi.js scattered-objects hero, scroll-driven photo collages, audio-driven micro-interactions. Homepage captured as full-page PNG (homepage-full.png) because the live site is a Nuxt SPA with Sanity-CMS images served via /_ipx/ proxy — interactive mirror keeps hero + nav but sub-page CSS chunks are absent.",
+    "sourceUrl": "https://www.floema.com/en",
+    "savedAt": "2026-05-16",
+    "tags": [
+      "pixi",
+      "nuxt",
+      "sanity",
+      "scroll-animation",
+      "minimal",
+      "editorial",
+      "brand"
+    ],
+    "href": "Floema/index.html",
+    "preview": "Floema/preview.png"
   }
 ];
