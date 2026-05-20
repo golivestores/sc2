@@ -1,0 +1,18 @@
+{
+  "title": "Sun Metalon · Blurred-glow Hero",
+  "subtitle": "金属球底下那团暖光只是一个 158px 模糊半径的 div",
+  "description": "sunmetalon.com 首页 hero 整屏复刻——铝罐俯视 PNG + 'Turn your metal waste / into revenue' 跨屏标题 + 大字 'Sun Metalon' 矢量 wordmark。看似 3D 的金属光影实际上不是 WebGL / video / sequence，而是一个单独的 `<div class=\"glow\">`：50vw × 25vh 半透明铜色矩形 (`#d9683366`) 钉在底部居中，套一句 `filter: blur(158px)` 散成弥漫的橙色光晕——`z-index:0` 沉在金属图层 (z:4) 和 SVG wordmark 之下，模拟金属背后被夕阳/熔炉照亮的氛围光。金属本身的高光/阴影是 PNG 自带（Sanity 上传的 1020×954 渲染图，原 srcset 6 档），不依赖任何 GPU。入场 timeline 用 GSAP 1:1 移植自 `_nuxt/B-7h_iCS.js`：chars stagger fade → SVG wordmark paths 从右到左 stagger（each .075，axis x，from end）→ glow opacity 0→1（duration 1.65, power3.inOut）→ graphic 中线 width 0→auto（cubic.inOut）→ figure opacity + scale .98→1 + rotateZ 5°→0（power3.out）。滚动联动：`figure.rotateZ = clamp(-15, 15, scrollY * -0.01)` —— 每 100 px 滚 1°，±15° 钳制。GSAP 走 CDN 3.12.5（原站 cubic.inOut 自定义 ease 在公共 GSAP 用 power3.inOut 替代，bezier 几乎重合）；其他全本地（puck PNG + 4 个 woff2 字体 Bastardo Light/Regular/Semibold + RectorWeb Light）。",
+  "tech": "CSS filter: blur · GSAP timeline · GSAP utils.clamp · 静态 PNG (Sanity)",
+  "tags": [
+    "介绍",
+    "全屏",
+    "光影",
+    "字体动画",
+    "B2B服务"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://sunmetalon.com/",
+  "localMirror": "../designs/019-sunmetalon/index.html",
+  "order": 26,
+  "savedAt": "2026-05-20"
+}

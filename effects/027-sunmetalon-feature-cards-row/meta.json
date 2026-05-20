@@ -1,0 +1,19 @@
+{
+  "title": "Sun Metalon · Feature Cards Sticky Row",
+  "subtitle": "4 张 100vh 卡片横向铺开，sticky 后每张独立 clamp 流向等距位置",
+  "description": "sunmetalon.com 首页 `.feature-cards` 段：4 张 100vh × 0.882-aspect 卡片用 `display:flex; width:max-content; position:sticky; top:0` 横向铺成长条，配 wrapper.height = `cards.scrollWidth - (innerWidth - cardW)/2` 让 sticky 拿到足够纵向滚动余量。滚动联动用 GSAP `quickTo(card, 'x')` 给每张卡片独立做 translateX：每张目标 `T = (innerWidth - cardW) / (cards.length-1) * h`，每帧 `y = clamp(T - offsetLeft, 0, -scrollPastWrapper)`。结果是所有卡片同步向左滑（共享 `-d`），但各自在自己的 `T-offsetLeft` 下限处停下——卡片不是 row 整体平移，而是错位、逐张到位，最终 4 张等距铺满 viewport。卡片 0 是 `Introducing Venus` 文字卡（白底放黑字 + 'Product Specifications' 链接），1-3 是 sanity 上传的全屏图（On-site Venus-L6 机械臂 / Dry briquette 金属球 / Zero-CO₂ 云朵）+ 顶部/底部 `<p class='small'>` 标签（圆点 bullet 用 `&:before` 伪元素生成）。GSAP 走 CDN 3.12.5，素材本地（3 张 1411×1703 PNG + Bastardo Regular/Semibold + Rector Light 字体）。",
+  "tech": "CSS position: sticky · GSAP quickTo · GSAP utils.clamp · width: max-content flex row",
+  "tags": [
+    "卡片",
+    "滚动驱动",
+    "sticky",
+    "横向滚动",
+    "全屏",
+    "B2B服务"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://sunmetalon.com/",
+  "localMirror": "../designs/019-sunmetalon/index.html",
+  "order": 27,
+  "savedAt": "2026-05-20"
+}

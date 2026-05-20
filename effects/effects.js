@@ -406,5 +406,168 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://www.floema.com/en",
     "localMirror": "../designs/Floema/index.html",
     "order": 21
+  },
+  {
+    "num": "022",
+    "folder": "022-lab46-sticky-bestseller-grid",
+    "title": "LAB46 · Sticky bestseller + product grid",
+    "subtitle": "Single sticky hero card + 2-col scroll-by grid",
+    "description": "LAB46 首页 ‘featured product grid’ 整段：左列固定一张大方图 hero 卡片（Bestseller 'Get Ready Drops'，h3 Times Now 大标题 + h6 N27 phase/price + 价格右挤、Buy now 长 pill 按钮），右列 2 列 × 2 行四张次级卡片（Bright Berry Bleach / Sweet Flow Pills · Sold out / PrepTect Shield / Soothing Smash Lube，9:10 aspect-ratio 封面 + 同款 hover scale 1.05 transition .6s ease-in-out + 同款 hover-填黑 buy now 按钮）。左侧用 `position: sticky; top: 24px` 钉在视口顶部不动，右侧滑过时形成 ‘bestseller 永远在身边、其他在动’ 的对照阅读节奏；md 以下退化为单列堆叠（hero 卡 sticky 取消，纯文档流）。 ‘Bestseller’ 和 ‘Sold out’ 是 .tag pill，前者 slate-blue/40 半透 + 深蓝字 + 2rem backdrop-blur，后者直接黑底白字；Sweet Flow Pills 整张图额外加 opacity:.64 灰显，对应原站 ‘已售罄’ 的视觉降权。每张 article 都用 IntersectionObserver 复刻 data-sal=slide-up + data-sal-delay-auto=200，对应原站从下往上 fade-in stagger（0/200/400/600ms）。md 横向 gap 32px，lg 直接拉到 120px——这是原站的 lg:gap-[120px] 让 hero 卡片左右气场拉满的关键。",
+    "tech": "position: sticky · CSS grid 2-col · IntersectionObserver slide-up · aspect-ratio 9/10",
+    "tags": [
+      "产品",
+      "网格",
+      "悬停",
+      "图片缩放",
+      "字体动画",
+      "滚动",
+      "健康"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://lab46.de/en",
+    "localMirror": "../designs/015-lab46/index.html",
+    "order": 22
+  },
+  {
+    "num": "023",
+    "folder": "023-theunknown-illuminate-hero",
+    "title": "THE UN KNOWN · ILLUMINATE THE UNKNOWN hero",
+    "subtitle": "WebGL aurora + parallax-depth mountain + 3D-ring landing hero",
+    "description": "theunknown.tv 首页满屏 landing hero 整体搬运：dark/light 两套色板的 OGL fbm shader `<c-aurora>` 渲染中央 teal/orange 大色块；`<c-parallax-depth>` 用 mountain.webp + depth.png 跑鼠标视差 3D 山景；`<c-ring>` 走 SVG 路径 + opacity-60 形成发光环；大标题 `ILLUMINATE THE UNKNOWN. TRANSFORM THE KNOWN.` 用 Lemon 可变字体 + GSAP 逐字 font-variation-settings(wght 300, Wide 10) tween；右下 `<c-video-modal>`、右上 LET'S TALK c-css-button 方括号按钮、左上 THE UN KNOWN logo 全套保留。整套 Astro `1_landing.astro` 入口 + 共享 `file-input.astro_*.js` bundle（157KB UMD，里面定义所有 `<c-aurora>`/`<c-ring>`/`<c-parallax-depth>`/`<c-css-button>`/`<c-video-modal>`/`<c-liquid-cursor-area>` 自定义元素）+ vendor 三件套（ogl 56KB、gsap 70KB、libs 38KB、petit-kit 8KB）直接打到 `./js/`。**两处必坑**：(1) Vite preload-helper 默认把 dep 路径前缀 `/` 写死，scrape-pitfalls.md 已经记的那条，`sed s|return\"/\"+l|return\"./\"+l|` 改两份。(2) 共享 bundle 的 `ready` store 默认 `false`，要 `import { r as ready }` 后 `ready.set(true)` 才会跳过加载页 overlay 直接进 post-load 态，否则 1_landing 的 `M()` 看到 ready=false 直接 return，c-aurora/c-ring/c-parallax-depth 永远不挂载。Bundle 里还硬编码 `images/mountain-Bav45N-m.webp`、`images/depth-CrAbJ0nd.png`、`images/video-thumb.png` 等带 hash 文件名，要原名落到 `./images/` 才不 404。",
+    "tech": "Astro · OGL WebGL · GSAP · Lemon variable font · custom elements bundle",
+    "tags": [
+      "介绍",
+      "全屏",
+      "3D",
+      "WebGL",
+      "字体动画",
+      "鼠标跟随",
+      "agency"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://theunknown.tv/en",
+    "localMirror": "../designs/016-theunknown/index.html",
+    "order": 23
+  },
+  {
+    "num": "024",
+    "folder": "024-theunknown-store",
+    "title": "THE UN KNOWN · THE STORE",
+    "subtitle": "Scroll-pinned merch stage: 6 t-shirts rise + scale through viewport; last pair settles wide flanking the character, small purple sphere bounces in, then DISCOVER_ALL appears",
+    "description": "theunknown.tv `#section__merch` 段，scroll-pinned 完整重做版。原站走 OGL `<c-gradient>` + `<c-star>` + Lenis 平滑滚动 + libs.js page-controller 串起 5000px 长舞台，但那一坨 framework 把 `<body>` 锁成 `position: fixed; transform: translate3d(...)` 来模拟虚拟视口，单 section 抽出来 page-controller 立不起来；这版用普通 scroll + `position: sticky` 干净复刻全部 scroll 行为，不带 framework。机制（按 Playwright 5% 步进采样原站行为反推）：(a) section 高 540vh、内层 `.store__stage` `position: sticky; top: 0` 钉满 100vh；(b) bg 是 16s 循环的 CSS 三层青→紫→深蓝 radial+linear gradient（拟 `<c-gradient>` fbm shader）+ 内嵌 SVG 72 根 #009286 teal 射线 `mix-blend-mode: screen`（拟 `<c-star>`）；(c) `THE STORE` Lemon wide-bold 巨字 translateY 110%→0% 入场固定在顶部；(d) 6 张 t-shirt 卡 alternating L/R 排列（cards 1,3 左、2,4 右、5,6 是 pair 近 ±18vh 两侧贴脸），每张套半透明 cream 圆角框 (`linear-gradient(#fff6f159, #fff6f1cf)`)，所有 cards 共享一个由滚动进度驱动的 `shift` 变量，actualY = baseY - shift，逐帧给 outer 设 top（vh）；**关键**：每张卡的 inner div 单独 scale，按 viewport-Y 中心位置分段 (0..35%: 0.5→1, 35-65%: 1, 65-100%: 1→0.5) — 复刻原站 `S(x.top+x.height*.5, [0, vh*.35, vh*.65, vh], [.5,1,1,.5])` 这条曲线；(e) cards 1-4 是 fly-through，从下方升起→穿过视口中心→从上方飞出；cards 5,6 (pair) shift 有上限（capped at baseY - PAIR_REST_Y），到达 restY 后 freeze 不动，所以最后视觉上只剩 pair 小尺寸停在 character 头部两侧；(f) progress > 0.55 给 `.store` 加 `.is-reveal`：DISCOVER_ALL 红字 translateY 110%→0% 升起 + baseline `Gear up. Wear the unknown.` 淡入；(g) progress 0.50-0.75 一颗 ~9vh 紫色 sphere（radial gradient + 高光 + inset shadow，3D 球体效果）从上方下落，damped sine 2 次反弹定在 character 胸口位置；之后 idle 上下漂浮；(h) DISCOVER_ALL 每个字母 hover 时各自 rotateX(-90°)+opacity 0、letter-bottom 同步 rotateX(0)+opacity 1，按字位 0.04s 错峰，点一下 `window.open('https://store.theunknown.tv/')`；(i) `.section__merch__items_clickable:hover img scale(1.15)` 保留。Lemon-VF.ttf + AlteHaasGroteskRegular.woff2 + character.webp + 6 张 tshirt webp 自带。",
+    "tech": "CSS position: sticky · scroll-driven JS · CSS gradient · inline SVG rays · 3D letter flip · web font (Lemon VF)",
+    "tags": [
+      "产品",
+      "全屏",
+      "滚动",
+      "字体动画",
+      "标题动画",
+      "悬停",
+      "agency"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://theunknown.tv/en",
+    "localMirror": "../designs/016-theunknown/index.html",
+    "order": 24
+  },
+  {
+    "num": "025",
+    "folder": "025-innocean-capsule-pile",
+    "title": "INNOCEAN BERLIN · Footer 3D Capsule Pile",
+    "subtitle": "R3F + Rapier 物理胶囊堆，鼠标推搡可交互",
+    "description": "innoceanberlin.com 页面底部满屏 3D 胶囊（橙/银/黑/白印 BLN logo）堆——鼠标移动时附近胶囊会被推开，是整站最招牌的交互。技术栈：`@react-three/fiber` 渲染 + `@react-three/rapier` (Rapier WASM 物理) + `InstancedRigidBodies` 把 100+ 颗胶囊压成一个 `InstancedMesh` 一次 draw call，pill_mesh.glb（来自 cdn-arkx CDN，每颗胶囊共享同 geometry）+ studio_small_08_1k.hdr studio 灯光做 PBR 反射。Bundle 里能看到 `applyImpulse (7)`/`setLinvel (3)`/`wakeUp (1)`：鼠标 pointer 拖一个 invisible kinematic cursor body 在场景中游走，碰撞触发 impulse 把附近 rigid body 弹开。整套是 Vite + React Router SPA bundle (3.8MB) 的一部分——为保 1:1 保真直接连同主 bundle/CSS/字体一起拷过来，在 index.html 顶部插了 history.replaceState 让 Router 误以为 pathname='/' 才会挂载主路由子树，再在 load 后自动 scrollTo `docH-900`（grid_projects 是 `min-h-[300vh]` 所以 docH 会从 6375 扩到 ~8639；目标位置在 work grid 之下、footer 文字之上，画布只剩纯胶囊堆）。需要 CDN 在线（pill_mesh.glb + HDR 从 cdn-arkx.sfo3.cdn.digitaloceanspaces.com 拉）。",
+    "tech": "React · @react-three/fiber · @react-three/rapier · Three.js · InstancedRigidBodies · Vite",
+    "tags": [
+      "页脚",
+      "悬停",
+      "形变",
+      "视差",
+      "B2B服务"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://innoceanberlin.com/",
+    "localMirror": "../designs/017-innoceanberlin/index.html",
+    "order": 25
+  },
+  {
+    "num": "026",
+    "folder": "026-sunmetalon-blurred-glow-hero",
+    "title": "Sun Metalon · Blurred-glow Hero",
+    "subtitle": "金属球底下那团暖光只是一个 158px 模糊半径的 div",
+    "description": "sunmetalon.com 首页 hero 整屏复刻——铝罐俯视 PNG + 'Turn your metal waste / into revenue' 跨屏标题 + 大字 'Sun Metalon' 矢量 wordmark。看似 3D 的金属光影实际上不是 WebGL / video / sequence，而是一个单独的 `<div class=\"glow\">`：50vw × 25vh 半透明铜色矩形 (`#d9683366`) 钉在底部居中，套一句 `filter: blur(158px)` 散成弥漫的橙色光晕——`z-index:0` 沉在金属图层 (z:4) 和 SVG wordmark 之下，模拟金属背后被夕阳/熔炉照亮的氛围光。金属本身的高光/阴影是 PNG 自带（Sanity 上传的 1020×954 渲染图，原 srcset 6 档），不依赖任何 GPU。入场 timeline 用 GSAP 1:1 移植自 `_nuxt/B-7h_iCS.js`：chars stagger fade → SVG wordmark paths 从右到左 stagger（each .075，axis x，from end）→ glow opacity 0→1（duration 1.65, power3.inOut）→ graphic 中线 width 0→auto（cubic.inOut）→ figure opacity + scale .98→1 + rotateZ 5°→0（power3.out）。滚动联动：`figure.rotateZ = clamp(-15, 15, scrollY * -0.01)` —— 每 100 px 滚 1°，±15° 钳制。GSAP 走 CDN 3.12.5（原站 cubic.inOut 自定义 ease 在公共 GSAP 用 power3.inOut 替代，bezier 几乎重合）；其他全本地（puck PNG + 4 个 woff2 字体 Bastardo Light/Regular/Semibold + RectorWeb Light）。",
+    "tech": "CSS filter: blur · GSAP timeline · GSAP utils.clamp · 静态 PNG (Sanity)",
+    "tags": [
+      "介绍",
+      "全屏",
+      "光影",
+      "字体动画",
+      "B2B服务"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://sunmetalon.com/",
+    "localMirror": "../designs/019-sunmetalon/index.html",
+    "order": 26
+  },
+  {
+    "num": "027",
+    "folder": "027-sunmetalon-feature-cards-row",
+    "title": "Sun Metalon · Feature Cards Sticky Row",
+    "subtitle": "4 张 100vh 卡片横向铺开，sticky 后每张独立 clamp 流向等距位置",
+    "description": "sunmetalon.com 首页 `.feature-cards` 段：4 张 100vh × 0.882-aspect 卡片用 `display:flex; width:max-content; position:sticky; top:0` 横向铺成长条，配 wrapper.height = `cards.scrollWidth - (innerWidth - cardW)/2` 让 sticky 拿到足够纵向滚动余量。滚动联动用 GSAP `quickTo(card, 'x')` 给每张卡片独立做 translateX：每张目标 `T = (innerWidth - cardW) / (cards.length-1) * h`，每帧 `y = clamp(T - offsetLeft, 0, -scrollPastWrapper)`。结果是所有卡片同步向左滑（共享 `-d`），但各自在自己的 `T-offsetLeft` 下限处停下——卡片不是 row 整体平移，而是错位、逐张到位，最终 4 张等距铺满 viewport。卡片 0 是 `Introducing Venus` 文字卡（白底放黑字 + 'Product Specifications' 链接），1-3 是 sanity 上传的全屏图（On-site Venus-L6 机械臂 / Dry briquette 金属球 / Zero-CO₂ 云朵）+ 顶部/底部 `<p class='small'>` 标签（圆点 bullet 用 `&:before` 伪元素生成）。GSAP 走 CDN 3.12.5，素材本地（3 张 1411×1703 PNG + Bastardo Regular/Semibold + Rector Light 字体）。",
+    "tech": "CSS position: sticky · GSAP quickTo · GSAP utils.clamp · width: max-content flex row",
+    "tags": [
+      "卡片",
+      "滚动驱动",
+      "sticky",
+      "横向滚动",
+      "全屏",
+      "B2B服务"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://sunmetalon.com/",
+    "localMirror": "../designs/019-sunmetalon/index.html",
+    "order": 27
+  },
+  {
+    "num": "028",
+    "folder": "028-sunmetalon-stacking-cards-3d-fold",
+    "title": "Sun Metalon · Stacking Cards 3D Fold",
+    "subtitle": "3 张 Benefits 卡片 sticky 叠加，下一张推上来时上一张缩小 / 透明 / X+Y 倾斜",
+    "description": "sunmetalon.com 首页 `.stacking-cards` 段：3 张 Benefits 卡片（01 Your Metal / 02 Your Independence / 03 Your World）走 `position: sticky; top:0; transform-origin: center bottom`，父容器 `perspective: 50em` 让子卡片的 rotateX/rotateY 有立体景深。每帧 scroll：对每张卡片 t，算 `r = clamp(0, 1, nextCard.getBoundingClientRect().top / t.clientHeight)`——即下一张距离当前张顶部的归一化比例（1 = 下一张还在视口外，0 = 下一张完全盖住当前张）。然后 `gsap.set(t, { scale: 0.8 + 0.2*r, opacity: r, rotateX: 15-15*r, rotateY: 15-15*r })`，并在 `r<1` 时挂 `.falling` 类（这时 CSS 给卡片切回完整圆角 + 边框，把先前用 clip-path 切掉的首尾 24px 复原）。容器本身有大量 CSS 细节：clip-path polygon 把右上和左下两角削成 20×20 斜边，`:before`/`:after` 用 45° linear-gradient 给斜边补 1 px 描边色，给人 'metal-cut card' 的工业感。背景两张 steel-brick PNG（一张挂右上、一张挂左下偏中）走 GSAP scrollTrigger scrub-2 timeline：上方 yPercent -100 + rotate -25，下方 yPercent 100 + rotateZ 50，整段进出视口时缓慢飘移旋转。GSAP + ScrollTrigger 走 CDN 3.12.5；本地素材 steel-brick PNG + Bastardo Regular/Semibold + Rector Light（Rector 是大数字 01/02/03 的金色字体 `#cdb379`）。",
+    "tech": "CSS position: sticky · CSS perspective + clip-path polygon · GSAP set scale/rotateX/Y · GSAP ScrollTrigger scrub",
+    "tags": [
+      "卡片",
+      "滚动驱动",
+      "sticky",
+      "3D",
+      "层叠",
+      "B2B服务"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://sunmetalon.com/",
+    "localMirror": "../designs/019-sunmetalon/index.html",
+    "order": 28
+  },
+  {
+    "num": "029",
+    "folder": "029-lab46-phase-cards-hero",
+    "title": "LAB46 · Prepare / Play / Protect",
+    "subtitle": "3-column phase hero with embedded 3D phase icons",
+    "description": "LAB46 首页中段那块满屏深蓝色 ‘Prepare / Play / Protect’ 三栏入口：背景是 LAB46-Pills-On-Plate-Darker.jpg 全幅图 + 黑色 15%→48% top-to-bottom 渐变，前景三等分列每格中央放一个 Times Now 衬线 H3 大标题 + 一个 200×200 的 model-viewer 3D 图标（coi-prepare.glb / coi-play.glb / coi-protect.glb，三圈 ‘fidget spinner’），再在每列底部挂一个 LAB46 标志性的 `[ SHOP NOW ]` 方括号按钮（.button.-primary 通过 clip-path 把 1px 白边只在左右各保留 .25rem，hover 时 ::after 用 scaleY(0→1) 填白底黑字）。列之间以 1px 白线分隔，移动端改成顶部边线、上下堆叠。标题用 IntersectionObserver 复刻 sal slide-up，三列分别 0/200/400ms stagger。**coiIcon Alpine 组件完整移植**（原 chunk 346 webpack URL 为 `assets/346.5d88d7f29a1dc591.chunk.min.js`，scrape 一开始猜错了路径所以漏掉）：(a) model 加载完把所有材质改成 RGB(201,211,219) 银灰 + metallicFactor 0.3 + roughnessFactor 0.2，再淡入；(b) 鼠标停在整个 `<li>` 上时按 `θ = -30°·((x-left)/w·2-1)` / `φ = 90°-20°·((y-top)/h·2-1)` 驱动 cameraOrbit，覆盖到 ±30° × 70°-110° 范围，touch 事件同步走 touches[0]；(c) 离开后 cameraOrbit 回 `0deg 90deg 100%` 并启动自动摇摆：随机 2-8s 延迟后跑 `24°·sin(t/6s·2π)` 的正弦慢摇；(d) 只在 `pointer: fine` 设备绑定 hover 事件，resize 和 pointer-fine 媒体查询变化都重新 init。深蓝 #355672、字体 Times Now / N27 / TWK Lausanne 三套 woff2 子集随 lib 自带，model-viewer 3.5.0 UMD 也打到 lib/。",
+    "tech": "model-viewer 3.5.0 · IntersectionObserver slide-up · mouse-tracked cameraOrbit + sine auto-sway · CSS clip-path bracket button",
+    "tags": [
+      "介绍",
+      "网格",
+      "3D",
+      "Web Component",
+      "字体动画",
+      "悬停",
+      "鼠标跟随",
+      "健康"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://lab46.de/en",
+    "localMirror": "../designs/015-lab46/index.html",
+    "order": 29
   }
 ];

@@ -18,3 +18,11 @@ designs/*/preview.png
 __pycache__/
 *.pyc
 OPEN.command
+
+# Local-only mirrors that opt out of the shared gallery via a `.skip-index`
+# sentinel inside the folder. rebuild-index.py also reads `.skip-index` and
+# omits these from designs.json / effects.json. Used when a remote teammate
+# already pushed a better version of the same site (e.g. our local
+# designs/014-floema is superseded by designs/Floema in 5f12f62).
+designs/014-floema/
+.skip-index

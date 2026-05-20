@@ -1,0 +1,223 @@
+/* === fonts (lifted from sunmetalon.com _nuxt CSS, paths now local) === */
+@font-face {
+  font-display: swap;
+  font-family: Bastardo;
+  font-style: normal;
+  font-weight: 300;
+  src: url(../fonts/BastardoGrotesk-Light.woff2) format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: Bastardo;
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/BastardoGrotesk-Regular.woff2) format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: Bastardo;
+  font-style: normal;
+  font-weight: 600;
+  src: url(../fonts/BastardoGrotesk-Semibold.woff2) format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: Rector;
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/RectorWeb-Light.woff2) format("woff2");
+}
+
+/* === base (matches the global rules that hero depends on) === */
+html, body {
+  margin: 0;
+  background-color: #1b170f;
+  font-kerning: none;
+  font-family: Bastardo, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+body * { box-sizing: border-box; }
+
+.white { color: #ece7e2; }
+.pre-anim { visibility: hidden; }   /* GSAP onStart flips this off */
+
+/* Trailing scroll room — purely so wheel-scrolling past the hero has
+   somewhere to go and the scroll-linked figure rotate has range. */
+.hero-trailer { height: 200vh; background-color: #1b170f; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+figure { margin: 0; position: relative; }
+figure img {
+  display: block; height: 100%; width: 100%; margin: 0;
+  transition: opacity .55s cubic-bezier(.33, 1, .68, 1) 0s;
+}
+figure.contain > img {
+  font-family: "object-fit: contain";
+  -o-object-fit: contain; object-fit: contain;
+  -o-object-position: center center; object-position: center center;
+}
+
+/* === typography (h5 only — used by hero) === */
+h5 {
+  font-family: Rector, sans-serif;
+  font-size: 1.5454545455rem;    /* 22 * 1.545 ~ 34px */
+  font-weight: 300;
+  line-height: 120%;
+  margin: 0;
+}
+
+/* === hero === */
+section.page-header {
+  background-color: #1b170f;
+  min-height: 100dvh;
+  overflow: hidden;
+  position: relative;
+  width: 100vw;
+}
+section.page-header.homepage {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+section.page-header.homepage figure {
+  align-items: flex-end;
+  display: flex;
+  justify-content: center;
+  margin-bottom: -5vh;
+  position: relative;
+  width: 49.4444444444vw;
+  z-index: 4;
+}
+section.page-header.homepage figure img {
+  aspect-ratio: calc(var(--width) / var(--height));
+  height: 60vh;
+  max-width: 700px;
+}
+
+section.page-header.homepage div.text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-100%);
+  width: 95.5555555556vw;
+  z-index: 3;
+}
+section.page-header.homepage div.text h5 {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+section.page-header.homepage div.text h5 > span.left { margin-right: 6.4px; }
+section.page-header.homepage div.text div.graphic {
+  flex: 0;
+  height: 14px;
+  overflow: hidden;
+  position: relative;
+  width: 0;     /* GSAP grows this to "auto" with flex:1 during entry */
+}
+section.page-header.homepage div.text div.graphic svg {
+  height: 14px; width: 14px;
+  left: 24px;
+  position: absolute;
+  top: 50%;
+  transform: translate3d(-50%, calc(-50% + .5px), 0);
+  vertical-align: middle;
+}
+section.page-header.homepage div.text div.graphic svg:last-of-type {
+  left: auto; right: 24px;
+  transform: translate3d(50%, calc(-50% + .5px), 0);
+}
+section.page-header.homepage div.text div.graphic div.line {
+  background-color: #3e3a33;
+  height: 1px; left: 24px; right: 24px;
+  position: absolute;
+  top: 50%;
+}
+
+section.page-header.homepage svg.large-logo {
+  height: auto;
+  margin-bottom: 24px;
+  padding-left: 2.2222222222vw;
+  padding-right: 2.2222222222vw;
+  position: relative;
+  width: 100vw;
+}
+section.page-header.homepage svg.large-logo path { fill: #ece7e2; }
+
+/* THE light: a half-opaque copper rectangle, blurred 158px.
+   That single declaration is the entire "lighting" effect. */
+section.page-header.homepage div.glow {
+  background: #d9683366;          /* rgba(217, 104, 51, 0.4) — Sun Metalon copper */
+  filter: blur(158px);
+  bottom: 0;
+  height: 25vh;
+  left: 50%;
+  position: absolute;
+  transform: translate3d(-50%, 0, 0);
+  width: 50vw;
+  z-index: 0;
+}
+
+/* === responsive (matches the original's 939px breakpoint) === */
+@media screen and (max-width: 939px) {
+  section.page-header.homepage {
+    align-items: center;
+    display: grid;
+    grid-template-rows: 1fr auto;
+  }
+  section.page-header.homepage figure {
+    margin-bottom: 0;
+    margin-top: 48px;
+    width: 87.2vw;
+  }
+  section.page-header.homepage figure img {
+    height: 50vh;
+    max-width: 500px;
+  }
+  section.page-header.homepage div.text {
+    height: 100%;
+    padding-bottom: 12vh;
+    padding-top: 48px;
+    top: 0;
+    transform: translateY(0);
+    width: 100vw;
+  }
+  section.page-header.homepage div.text h5 {
+    flex-direction: column;
+    height: 100%;
+  }
+  section.page-header.homepage div.text div.graphic {
+    height: unset;
+    width: 14px;
+  }
+  section.page-header.homepage div.text div.graphic div.line {
+    background-color: #3e3a33;
+    bottom: 24px;
+    height: auto;
+    left: 50%;
+    right: unset;
+    top: 24px;
+    width: 1px;
+  }
+  section.page-header.homepage div.text div.graphic svg {
+    left: 0;
+    top: 24px;
+    transform: translate3d(.5px, -50%, 0);
+  }
+  section.page-header.homepage div.text div.graphic svg:last-of-type {
+    bottom: 24px;
+    right: unset;
+    top: unset;
+    transform: translate3d(.5px, 50%, 0);
+  }
+  section.page-header.homepage svg.large-logo {
+    padding-left: 6.4vw;
+    padding-right: 6.4vw;
+  }
+}

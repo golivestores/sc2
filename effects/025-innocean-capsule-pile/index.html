@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>INNOCEAN BERLIN · Footer 3D Capsule Pile · sc2 effect</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--
+  1:1 reproduction of the footer-section 3D capsule pile from innoceanberlin.com.
+  The source uses React + @react-three/fiber + @react-three/rapier — buried inside
+  a 3.8MB SPA bundle that we cannot subset. We reproduce the same scene with
+  vanilla Three.js + Rapier (same physics engine) so the effect is self-contained
+  and small.
+
+  What's replicated 1:1:
+    - pill_mesh.glb is the original asset (134KB, pulled from cdn-arkx) — same
+      capsule shape, same BLN-logo textures (orange/silver/black/white variants
+      are bundled into the GLB as material slots)
+    - studio_small_08_1k.hdr studio environment for PBR reflections
+    - ~120 capsule instances scattered in a viewport-sized box
+    - Rapier physics: zero gravity (capsules float), low damping
+    - Invisible bounding walls at viewport edges keep pills on-screen
+    - Mouse cursor drives an invisible kinematic body — its velocity transfers
+      impulse to nearby capsules on collision (same applyImpulse pattern the
+      live bundle uses)
+    - Slow ambient swirl when mouse is idle (low Linvel noise per body)
+-->
+
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden;
+               font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; color: #fff; }
+  #stage { position: fixed; inset: 0; }
+  #stage canvas { display: block; width: 100% !important; height: 100% !important; }
+  #loader { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 14px; letter-spacing: 0.5px; pointer-events: none;
+            transition: opacity 0.5s ease-out; }
+  #loader.hidden { opacity: 0; }
+</style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/",
+    "@dimforge/rapier3d-compat": "https://cdn.skypack.dev/@dimforge/rapier3d-compat@0.11.2"
+  }
+}
+</script>
+</head>
+<body>
+
+<div id="stage"></div>
+<div id="loader">Loading...</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { LUTCubeLoader } from 'three/addons/loaders/LUTCubeLoader.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { LUTPass } from 'three/addons/postprocessing/LUTPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
+import RAPIER from '@dimforge/rapier3d-compat';
+
+// Numbers transcribed from the live bundle's source — DO NOT guess.
+//   `const A = QE() ? 30 : 100;`  → 100 per variant on desktop, 30 on mobile
+//   3 textured variants (orange / black / white) → 300 total desktop
+//   `scale: [.9, .9, .9]` on the outer group, no additional per-pill scale
+//   `position: [(rand-.5)*8, 1, (rand-.5)*8]` — 8u square slab, y=1
+//   `rotation: [π/2*rand, π/2, π/2*rand]` per instance
+//   colliderNodes: capsule(.55, .45), mass: 10
+// "Silver" is not a separate variant — the baseColor.png for each of
+// orange/black/white packs the colored body on the left half of UV space and
+// a gray strip on the right (which maps to the cap end), so every textured
+// pill is naturally two-tone (colored body + metallic silver cap).
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+const PER_VARIANT = isMobile ? 30 : 100;
+const VARIANT_COUNT = 3;
+const COUNT = PER_VARIANT * VARIANT_COUNT;
+const PILL_SCALE = 0.9;
+const stage = document.getElementById('stage');
+const loaderEl = document.getElementById('loader');
+
+await RAPIER.init();
+
+// ----- three.js -----
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+// Top-down camera — matches bundle's `position:[0,2,0]`+`lookAt(0,-1,0)`
+// scaled up so the 8u XZ pile fills the screen. screen-up is set to -Z so
+// the "vertical" axis of the screen maps to world -Z (i.e. forward), and
+// world +Y is "toward camera". When a pill gets pushed +Y it pops out of
+// the screen and the perspective camera renders it bigger.
+// Bundle's footer scene: `<P4 makeDefault position={[0,12,0]}>` + `lookAt(0,0,0)`,
+// FOV 50 (Three.js default — bundle doesn't override it).
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.up.set(0, 0, -1);
+camera.position.set(0, 12, 0);
+camera.lookAt(0, 0, 0);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+stage.appendChild(renderer.domElement);
+
+// HDR studio environment — drives the metallic look on silver caps. Bundle
+// uses `<Environment files={...studio_small_08_1k.hdr} environmentIntensity={1}
+// backgroundBlurriness={1} backgroundIntensity={.1}>`. The per-material
+// `envMapIntensity: 0.5` (bundle's C=0.5) dials down how much each pill
+// picks up — direct light below adds the highlights.
+const pmrem = new THREE.PMREMGenerator(renderer);
+const hdr = await new RGBELoader().loadAsync('./studio_small_08_1k.hdr');
+const envMap = pmrem.fromEquirectangular(hdr).texture;
+scene.environment = envMap;
+hdr.dispose(); pmrem.dispose();
+
+// Directional light from the bundle: `<directionalLight position={[3,10,3]}
+// castShadow shadow-mapSize={[2048,2048]}>` — single key light from upper-right
+// throwing the chrome specular onto the silver caps. Bundle's `intensity:1.0`
+// (default) bumped to 2.5 here to compensate for the LUT+N8AO post chain we
+// don't fully replicate.
+const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+keyLight.position.set(3, 10, 3);
+scene.add(keyLight);
+
+// Postprocessing chain — bundle uses
+//   `EffectComposer > ToneMapping > N8AO > SMAA > LUT`
+// We set up three-stdlib's EffectComposer with: RenderPass → SSAOPass
+// (closest stdlib match to N8AO; both are screen-space AO) → LUTPass → OutputPass.
+// N8AO darkens the crevices between adjacent pills, making the silver
+// highlights pop relative to the dimmed background — without it the lighting
+// looks flat no matter how strong the directional light is.
+const lut = await new LUTCubeLoader().loadAsync('./lut.CUBE');
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+
+const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight);
+ssaoPass.output = 0;             // 0 = Default (scene composited with AO)
+ssaoPass.kernelRadius = 1.0;     // bundle: aoRadius = 1
+ssaoPass.minDistance = 0.001;
+ssaoPass.maxDistance = 0.1;
+composer.addPass(ssaoPass);
+
+const lutPass = new LUTPass({ lut: lut.texture3D, intensity: 0.3 });
+composer.addPass(lutPass);
+composer.addPass(new OutputPass());
+
+// Pill GLB — single mesh. baseColor.png for each variant packs both the
+// colored body half AND a gray strip (the metallic cap end) into one UV
+// layout, so a single textured material renders the two-tone capsule
+// naturally. The chrome shine on the cap comes from the ORM map's blue
+// channel (metalness=1 over that UV region) reading the HDR environment.
+const gltf = await new GLTFLoader().loadAsync('./pill_mesh.glb');
+let pillMesh = null;
+gltf.scene.traverse((c) => { if (c.isMesh && !pillMesh) pillMesh = c; });
+if (!pillMesh) throw new Error('pill_mesh.glb has no Mesh child');
+
+const texLoader = new THREE.TextureLoader();
+async function loadTextureSet(color) {
+  const [base, orm] = await Promise.all([
+    texLoader.loadAsync(`./capsule_textures/${color}_capsule_baseColor.png`),
+    texLoader.loadAsync(`./capsule_textures/${color}_capsule_occlusionRoughnessMetallic.png`),
+  ]);
+  base.colorSpace = THREE.SRGBColorSpace;
+  base.flipY = false;
+  base.anisotropy = 8;            // from bundle: A.anisotropy = 8
+  orm.flipY = false;
+  orm.anisotropy = 8;
+  // Bundle uses meshPhysicalMaterial for one variant + meshStandardMaterial
+  // for the others — Physical across the board adds clearcoat to the silver
+  // cap half (where ORM.B → metalness=1), the "wet" dielectric layer that
+  // pushes chrome past dull metallic. envMapIntensity raised from bundle's
+  // C=0.5 to 1.0 to compensate for the half of the bundle's postprocessing
+  // chain we can't fully replicate (LUT + N8AO contribute their own pop).
+  return new THREE.MeshPhysicalMaterial({
+    map: base,
+    aoMap: orm,
+    roughnessMap: orm,
+    metalnessMap: orm,
+    metalness: 1,
+    envMapIntensity: 1.0,
+    clearcoat: 0.8,
+    clearcoatRoughness: 0.05,
+  });
+}
+
+const [orangeMat, blackMat, whiteMat] = await Promise.all([
+  loadTextureSet('orange'),
+  loadTextureSet('black'),
+  loadTextureSet('white'),
+]);
+
+// 3 variants × PER_VARIANT (100 desktop / 30 mobile) instances. Bundle has
+// exactly this shape: `[S,w,y].forEach(U => for(K=0;K<A;K++) U.push(...))`.
+// Bundle wraps them in nested groups with Y/Z rotations to fit their top-down
+// camera; we use a simpler front-facing camera + matching wall layout, so the
+// instanced meshes attach straight to the scene without extra transforms.
+const variantMats = [orangeMat, blackMat, whiteMat];
+const instancedGroups = variantMats.map((mat) => {
+  const im = new THREE.InstancedMesh(pillMesh.geometry, mat, PER_VARIANT);
+  im.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  scene.add(im);
+  return { im, count: PER_VARIANT };
+});
+// `bodyToInstance[i]` = { group, slot }
+const bodyToInstance = [];
+for (let g = 0; g < instancedGroups.length; g++) {
+  for (let slot = 0; slot < PER_VARIANT; slot++) {
+    bodyToInstance.push({ group: g, slot });
+  }
+}
+
+// ----- rapier physics -----
+// Real gravity in WORLD -Y (away from camera, since camera is at +Y looking
+// down). After cursor knocks a pill +Y (toward camera, appears bigger), this
+// gravity pulls it back down to the floor — that's the "pop up & settle"
+// motion the live site has.
+const world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
+
+// Walls + floor — verbatim from bundle:
+//   vS = 8 (desktop), ov = 5  → X walls at ±8.5, Z walls at ±5.5  (17u × 11u rect, NOT square)
+//   X wall args = [.5, 20, 5];  Z wall args = [vS, 20, .5];
+//   Floor: <Jc type="fixed" friction:.7 position:[0,-.5,0]>
+//          <mesh scale={[50,1,50]}><boxGeometry args={[1,.5,1]} /></mesh>
+//          → 50×0.5×50 box at y=-0.5 (huge floor pills can spread on)
+const vS = 8;
+const ov = 5;
+function buildWalls() {
+  const wall = (hx, hy, hz, x, y, z, fric = 0.5) => {
+    const body = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(x, y, z));
+    world.createCollider(RAPIER.ColliderDesc.cuboid(hx, hy, hz).setRestitution(0).setFriction(fric), body);
+  };
+  // X walls
+  wall(0.5, 20, 5,   vS + 0.5, 1, 0);
+  wall(0.5, 20, 5, -vS - 0.5, 1, 0);
+  // Z walls
+  wall(vS, 20, 0.5, 0, 1,  ov + 0.5);
+  wall(vS, 20, 0.5, 0, 1, -ov - 0.5);
+  // Floor — bundle's 50×0.5×50 box at y=-0.5, friction 0.7
+  wall(25, 0.25, 25, 0, -0.5, 0, 0.7);
+}
+buildWalls();
+
+// Capsule rigid bodies — collider 0.55×0.45 from the bundle's colliderNodes,
+// scaled by the outer group's 0.9. mass:10 from the same site.
+const PILL_HALF = 0.55 * PILL_SCALE;
+const PILL_RAD = 0.45 * PILL_SCALE;
+const bodies = [];
+const tmpMatrix = new THREE.Matrix4();
+const tmpQuat = new THREE.Quaternion();
+const tmpPos = new THREE.Vector3();
+const tmpScale = new THREE.Vector3(PILL_SCALE, PILL_SCALE, PILL_SCALE);
+
+for (let i = 0; i < COUNT; i++) {
+  // Bundle verbatim: `position:[(rand-.5)*8, 1, (rand-.5)*8]`
+  // `rotation: [Math.PI/2*rand, Math.PI/2, Math.PI/2*rand]`
+  const x = (Math.random() - 0.5) * 8;
+  const y = 1;
+  const z = (Math.random() - 0.5) * 8;
+  const rx = (Math.PI / 2) * Math.random();
+  const ry = Math.PI / 2;
+  const rz = (Math.PI / 2) * Math.random();
+  const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz));
+  // Bundle doesn't override damping or set initial linvel — use Rapier defaults.
+  const desc = RAPIER.RigidBodyDesc.dynamic()
+    .setTranslation(x, y, z)
+    .setRotation({ x: q.x, y: q.y, z: q.z, w: q.w })
+    .setAdditionalMass(10);   // bundle: mass: 10
+  const body = world.createRigidBody(desc);
+  // Bundle: `colliderNodes:[yw, {args:[.55, .45]}]` — capsule .55 × .45 inside
+  // a group scaled by 0.9, so world-space dimensions = bundle args × 0.9.
+  const cap = RAPIER.ColliderDesc.capsule(0.55 * PILL_SCALE, 0.45 * PILL_SCALE)
+    .setRestitution(0).setFriction(0.5);
+  world.createCollider(cap, body);
+  bodies.push(body);
+}
+
+// Cursor kinematic body — bundle uses sphereGeometry scaled [.8,.8,.8] in a
+// group also scaled 0.9, so effective world radius ≈ 0.72. User feedback says
+// the live page's "touch range" feels wider than our cursor — bumped to 1.2
+// so the cursor sweeps a noticeable arc through the pile.
+const cursorBody = world.createRigidBody(
+  RAPIER.RigidBodyDesc.kinematicPositionBased().setTranslation(0, 999, 0)
+);
+world.createCollider(
+  RAPIER.ColliderDesc.ball(1.2).setRestitution(1.0).setFriction(0.0),
+  cursorBody
+);
+
+// ----- mouse → cursor body position -----
+const pointerNDC = new THREE.Vector2(2, 2);  // off-screen at start
+let cursorActive = false;
+let lastCursorPos = new THREE.Vector3(0, 0, 999);
+
+function pointerMove(ev) {
+  cursorActive = true;
+  pointerNDC.set(
+    (ev.clientX / window.innerWidth) * 2 - 1,
+    -(ev.clientY / window.innerHeight) * 2 + 1
+  );
+}
+function pointerLeave() { cursorActive = false; }
+window.addEventListener('pointermove', pointerMove);
+window.addEventListener('pointerleave', pointerLeave);
+
+// Project mouse NDC onto the y=1 plane (just above the floor where pills
+// rest). Top-down camera means screen X/Y maps to world X/Z; the ray hits
+// this plane to give us a target for the cursor kinematic body to chase.
+const raycaster = new THREE.Raycaster();
+function ndcToWorld(out) {
+  raycaster.setFromCamera(pointerNDC, camera);
+  const t = (1 - raycaster.ray.origin.y) / raycaster.ray.direction.y;
+  out.copy(raycaster.ray.direction).multiplyScalar(t).add(raycaster.ray.origin);
+}
+
+// ----- render loop -----
+const targetCursorPos = new THREE.Vector3(0, 0, 999);
+const clock = new THREE.Clock();
+
+function tick() {
+  const dt = Math.min(clock.getDelta(), 1 / 30);
+
+  if (cursorActive) {
+    ndcToWorld(targetCursorPos);
+    targetCursorPos.y = 1.1;        // bundle: Q.current.y += 0.1
+  } else {
+    targetCursorPos.set(0, 999, 0); // park off-scene when mouse leaves
+  }
+  // Bundle: `const G = new V().lerpVectors(e.current.translation(), Q.current, .5);`
+  // LERP at 0.5 per frame — cursor slides through pills instead of teleporting.
+  // Critical for the "pop forward" feel: as the cursor body sweeps along Z=0,
+  // it physically displaces pills it passes through, sending them in +Z (toward
+  // camera) or -Z (away) depending on contact angle.
+  const cur = cursorBody.translation();
+  const nx = cur.x + (targetCursorPos.x - cur.x) * 0.5;
+  const ny = cur.y + (targetCursorPos.y - cur.y) * 0.5;
+  const nz = cur.z + (targetCursorPos.z - cur.z) * 0.5;
+  cursorBody.setNextKinematicTranslation({ x: nx, y: ny, z: nz });
+
+  world.step();
+
+  // Sync instance matrices from physics into the right group/slot
+  for (let i = 0; i < COUNT; i++) {
+    const body = bodies[i];
+    const t = body.translation();
+    const r = body.rotation();
+    tmpPos.set(t.x, t.y, t.z);
+    tmpQuat.set(r.x, r.y, r.z, r.w);
+    tmpMatrix.compose(tmpPos, tmpQuat, tmpScale);
+    const { group, slot } = bodyToInstance[i];
+    instancedGroups[group].im.setMatrixAt(slot, tmpMatrix);
+  }
+  for (const g of instancedGroups) g.im.instanceMatrix.needsUpdate = true;
+
+  composer.render();   // EffectComposer drives RenderPass → LUTPass → OutputPass
+  requestAnimationFrame(tick);
+}
+
+// hide loader, start
+loaderEl.classList.add('hidden');
+setTimeout(() => loaderEl.remove(), 600);
+tick();
+
+// resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+  ssaoPass.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Preview mode: gallery iframes load with ?demo=preview — auto-drive a slow
+// swirl of the cursor so the thumbnail shows motion without user input.
+if (new URLSearchParams(location.search).get('demo') === 'preview') {
+  let t0 = performance.now();
+  setInterval(() => {
+    const t = (performance.now() - t0) / 1000;
+    pointerNDC.set(Math.cos(t * 0.7) * 0.6, Math.sin(t * 0.9) * 0.5);
+    cursorActive = true;
+  }, 16);
+}
+</script>
+
+<!-- sc2-overlay placeholder — inject-overlay.py fills this -->
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="025-innocean-capsule-pile.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=025-innocean-capsule-pile" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

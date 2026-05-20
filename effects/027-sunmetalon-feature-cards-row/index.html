@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="./">
+<title>Sun Metalon · Feature Cards Sticky Row · sc2 effect</title>
+
+<!--
+  Sticky horizontal scroll-row of 4 cards from sunmetalon.com/?ref=siteinspire
+  ( "Introducing Venus" + 3 image-cards: On-site Units / Dry Briquettes /
+  Zero-CO2 ). Source: designs/019-sunmetalon, section.feature-cards.
+
+  Mechanic (ported 1:1 from _nuxt/B63jgYxe.js FeatureCards module):
+    Layout
+      - .cards is a flex row of 4 cards (each height:100vh, aspect 750/850).
+      - .cards has  position: sticky; top: 0;  width: max-content;
+      - On resize, the JS measures cards.scrollWidth and sets
+            wrapper.style.height = cards.scrollWidth - (innerWidth - cardW)/2
+        so the parent .wrapper is tall enough that sticky has room to
+        keep .cards pinned for the whole horizontal travel distance.
+
+    Per-card translate-x (independent quickTo on each card):
+      - sticky starts when .cards.getBoundingClientRect().top <= 0
+      - d = window.scrollY - wrapper.offsetTop   (positive once sticky)
+      - For each card index h in [0..3]:
+            k = innerWidth - card.clientWidth         // total travel range
+            T = k / (cards.length - 1) * h            // final equidistant x
+            y = clamp(T - card.offsetLeft, 0, -d)
+            quickTo(card, "x", y, duration: 0.15)
+      - Card 0 has T=0, offsetLeft=0  -> never moves
+      - Cards 1..3 share the same scrolled value -d, but each clamps at
+        its own bottom  T - offsetLeft. So they all start sliding left in
+        lockstep, then "fall off" one by one as each hits its target.
+      - Final state: 4 cards spread evenly across the viewport.
+-->
+
+<link rel="stylesheet" href="css/feature-cards.css">
+</head>
+<body>
+
+<section class="feature-cards">
+  <div class="wrapper" id="wrapper">
+    <div class="cards" id="cards">
+
+      <div class="card card-text color-white">
+        <div class="block-text white">
+          <h2>Introducing Venus</h2>
+          <p>A metal recycling technology that transforms contaminated, low-value swarf into pristine, high-value metal.</p>
+        </div>
+        <p class="small bottom"><b>Product Specifications</b></p>
+      </div>
+
+      <div class="card card-image color-white">
+        <p class="small top"><b>On-site Units</b></p>
+        <p class="small bottom"><b>The six-furnace Venus-L6 hits the sweet spot for many foundries and machine shops.</b></p>
+        <figure class="portrait cover" style="--bg-color:#483a29;--width:1411;--height:1703;">
+          <img class="cover" src="images/card-1-onsite-unit.png" alt="On-site Venus unit">
+        </figure>
+      </div>
+
+      <div class="card card-image color-black">
+        <p class="small top"><b>Dry Briquettes Produced</b></p>
+        <p class="small bottom"><b>Contaminated metal pucks are recycled into clean, dry pucks, composed of the original alloy, that are ready for the melt pool.</b></p>
+        <figure class="portrait cover" style="--bg-color:#c4bcb4;--width:1409;--height:1700;">
+          <img class="cover" src="images/card-3-dry-briquette.png" alt="Recycled metal puck">
+        </figure>
+      </div>
+
+      <div class="card card-image color-black">
+        <p class="small top"><b>Zero-CO<i>2</i> emissions processing</b></p>
+        <p class="small bottom"><b>Sun Metalon's metal recycling process produces zero CO<i>2</i> emissions.</b></p>
+        <figure class="portrait cover" style="--bg-color:#6381b4;--width:1409;--height:1700;">
+          <img class="cover" src="images/card-4-zero-co2.png" alt="Blue sky with cloud">
+        </figure>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Spacer below so you can scroll past the sticky and see it release. -->
+<div style="height:50vh;background:#1b170f"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/feature-cards.js"></script>
+</body>
+</html>

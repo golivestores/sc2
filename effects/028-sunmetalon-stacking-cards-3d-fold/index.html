@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="./">
+<title>Sun Metalon · Stacking Cards 3D Fold · sc2 effect</title>
+
+<!--
+  3-step "Benefits" stacking-cards section from sunmetalon.com.
+  Source: designs/019-sunmetalon, section.stacking-cards.
+
+  Layout (CSS only):
+    - .cards container has chamfered corners via clip-path polygon,
+      plus :before / :after diagonal-gradient fills to color the
+      top-left and bottom-right cut corners. perspective: 50em on the
+      container is what makes the inner card rotateX/rotateY look 3D.
+    - Each .card has  position: sticky; top: 0;  transform-origin: center bottom;
+      so successive cards stick to the top one after the other.
+    - Two floating <figure.briquette> images (steel-brick PNG) drift
+      through the section while scrolling.
+
+  Per-card scrub (ported 1:1 from _nuxt/ktxii4yA.js):
+    For every tick of scroll, for each card t:
+      a = t.nextElementSibling
+      f = t.clientHeight
+      B = a.getBoundingClientRect().top
+      r = clamp(0, 1, B / f)                  // 1 -> next card untouched
+                                              // 0 -> next card fully covers
+      if (r < 1) t.classList.add('falling') else remove
+      gsap.set(t, {
+        scale:   0.8 + 0.2 * r,                // 1.0 -> 0.8
+        opacity: 1 * r,                        // 1.0 -> 0
+        rotateX: 15 - 15 * r,                  // 0   -> 15deg
+        rotateY: 15 - 15 * r                   // 0   -> 15deg
+      })
+
+  Briquette scrollTrigger (linked to section bounds):
+    timeline {
+      start: 'top bottom', end: 'bottom top', scrub: 2
+    }
+    brick1 (upper):  yPercent: -100, rotate: -25
+    brick2 (lower):  yPercent:  100, rotateZ: 50
+-->
+
+<link rel="stylesheet" href="css/stacking-cards.css">
+</head>
+<body>
+
+<!-- A bit of room above so the section enters from below the viewport
+     and scrollTrigger has a clean fade-in for the briquette tweens. -->
+<div style="height:40vh"></div>
+
+<section class="stacking-cards" id="section">
+  <div class="header white"><h2>Benefits</h2></div>
+
+  <figure class="briquette" id="brick1">
+    <img class="contain" src="images/steel-brick.png" alt="">
+  </figure>
+
+  <div class="cards white" id="cards">
+
+    <div class="card">
+      <div class="number"><span class="h0">01</span></div>
+      <div class="block-text">
+        <h2>Your Metal</h2>
+        <p>You pay for all the metal used in your manufacturing process. But a surprising amount of that metal winds up as scrap, in waste bins, or in landfills. Stop tossing profit out the window – recapture and recycle your metal waste, and bolster your bottom line in the process.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="number"><span class="h0">02</span></div>
+      <div class="block-text">
+        <h2>Your Independence</h2>
+        <p>Finally, you can control your own destiny when it comes to dealing with rapidly fluctuating steel and aluminum costs. Sun Metalon's proprietary technology allows you to recapture, recycle, and reuse your metal waste on-site and on your schedule, and with zero compromise in metal chemistry.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="number"><span class="h0">03</span></div>
+      <div class="block-text">
+        <h2>Your World</h2>
+        <p>Allowing the metal you buy to go to waste isn't just bad for business, it's bad for the planet. But it doesn't have to be that way. With Sun Metalon's CO<i class="sub">2</i>-free recycling technology, you can keep contaminated metal swarf out of landfills – and keep more money in your pocket – while giving Mother Earth a much-needed break.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <figure class="briquette lower" id="brick2">
+    <img class="contain" src="images/steel-brick.png" alt="">
+  </figure>
+</section>
+
+<div style="height:40vh"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/stacking-cards.js"></script>
+</body>
+</html>

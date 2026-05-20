@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="./">
+<title>Sun Metalon · Blurred-glow Hero · sc2 effect</title>
+
+<!--
+  1:1 reproduction of the homepage hero on https://sunmetalon.com/
+  ("Turn your metal waste / into revenue" + Aluminum Puck + Sun Metalon
+  wordmark). Source: designs/019-sunmetalon.
+
+  The "lighting" everyone notices is faked with ONE element:
+      <div class="glow"></div>
+  styled as a 50vw x 25vh rect of half-opaque copper (#d9683366),
+  pinned bottom-center, then blurred to a 158-px-radius halo:
+      filter: blur(158px);
+  Layered z-index:0 behind the puck PNG (z:4) and SVG wordmark — gives
+  the impression of a copper light source glowing up from below the
+  metal briquette. There is no canvas/video/3D — just a blurred div.
+
+  Entry timeline (GSAP, ported 1:1 from the original Nuxt bundle):
+    chars (Turn your metal waste / into revenue):
+          opacity 0 -> 1, stagger .005, duration .75, cubic.inOut
+    SVG  large-logo paths:
+          opacity 0 -> 1, duration 1.25, cubic.inOut,
+          stagger { each:.075, from:"end", axis:"x" }   @ "<30%"
+    .glow:
+          opacity 0 -> 1, duration 1.65, cubic.inOut    @ "SVG+=50%"
+    graphic line (between left/right span):
+          width 0 -> auto, flex 1, duration 1.25, cubic.inOut @ "SVG+=10%"
+    figure (puck):
+          opacity 0 -> 1, duration .35                  @ "<60%"
+          scale  .98 -> 1, rotateZ 5 -> 0, duration .95, cubic.out @ "<"
+
+  Scroll-linked: figure.rotateZ = clamp(-15, 15, scrollY * -0.01)
+  (1 deg per 100 px of scroll, clamped to +/-15)
+-->
+
+<link rel="stylesheet" href="css/hero.css">
+</head>
+<body>
+
+<section class="page-header homepage">
+
+  <h1 class="sr-only">Turn your metal waste into revenue</h1>
+
+  <div class="text white">
+    <h5 class="pre-anim" id="h5">
+      <span class="left">Turn your metal waste</span>
+      <div class="graphic">
+        <div class="line"></div>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 1L1 13" stroke="#3E3A33"></path>
+          <path d="M1 1L13 13" stroke="#3E3A33"></path>
+        </svg>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 1L1 13" stroke="#3E3A33"></path>
+          <path d="M1 1L13 13" stroke="#3E3A33"></path>
+        </svg>
+      </div>
+      <span class="right">into revenue</span>
+    </h5>
+  </div>
+
+  <figure class="landscape contain pre-anim" id="figure"
+          style="--bg-color:#9d806a;--width:1020;--height:954;">
+    <img src="images/aluminum-puck.png"
+         alt="Aluminum puck straight down on metal surface"
+         data-ratio="landscape"
+         sizes="100vw">
+  </figure>
+
+  <div class="glow pre-anim" id="glow"></div>
+
+  <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1257.98 158.41" class="pre-anim large-logo"><path d="M1224.15,42.46c-17.2,0-35.45,9.47-35.45,29.57h-3.97v-26.86h-41.75v109.58h41.75v-49.28c0-21.07,7.73-31.31,18.36-31.31,6.76,0,13.14,4.25,13.14,15.27v65.32h41.75v-74.02c0-25.32-12.56-38.27-33.82-38.27h-.01Z"></path><path d="M1089.99,42.11c-16.76-2.57-31.99,5.71-35.03,23.02,29.85-8.29,62.78,24.28,53.71,54.15,20.1-3.91,27.45-22.22,21.95-40.94-5.18-17.61-22.34-33.42-40.63-36.23Z"></path><path d="M1045.51,56.55c-26.15,4.48-34.64,34.65-28.17,59.1,4.63,17.5,21.64,36.01,45.25,40.17,21.65,3.81,46.51-5.23,50.94-27.57-38.92,9.88-80.63-33.27-68.03-71.7h.01Z"></path><path d="M1007.47,3.87h-41.75v150.75h41.75V3.87Z"></path><path d="M914.72,71.42h-4.04s-.33-13.67-7.48-20.44c-5.57-5.27-14.44-7.29-20.49-8.06-1.77-.27-3.64-.42-5.62-.46-.6-.02-.95-.02-.95-.02-26.49,0-44.14,22.84-44.14,57s17.66,57.77,44.34,57.77c2.63,0,5.08-.21,7.35-.6,6.11-.8,14.44-2.64,18.46-6.88,5.57-5.89,7.51-15.46,8.18-21.5h4.4v26.1h41.46V45.7h-41.46v25.72h-.01ZM893.99,125.54c-12.67,0-20.54-9.79-20.54-25.72s7.87-25.72,20.54-25.72,20.73,9.79,20.73,25.72-7.87,25.72-20.73,25.72Z"></path><path d="M748.63,18.81L789.97,0v45.23h36.52v32.47h-47.3v3.65s.01.83.04.83h4.85c3.44,0,6.23,2.81,6.2,6.25l-.03,6.53c.01.15.03.29.04.45l-.15,13.93c.94,8.37,5.69,12.83,14.13,12.83h22.23v32.47h-34.79c-28.02,0-43.29-15.85-43.29-45.04V45.23l.21-26.42Z"></path><path d="M680.91,41.37c-39.04,0-63.01,22.61-63.01,59.33s23.97,57.59,62.82,57.59c25.12,0,44.26-9.28,54.49-26.87,0,0,3.35-6.48,4.28-9.91l1.26-3.84h-40.86c-.4,2.25-1.18,3.51-1.36,3.79-.01.02-.02.03-.03.04v.02c-4.31,5.12-10.35,7.78-17.98,7.78-15.36,0-23.47-9.68-23.76-28.49h4.54c2.11,6.65,7.22,8.77,17.49,8.77l4.5.03h58.22v.36h.09c4.83-42.13-18.17-68.61-60.69-68.61h0ZM658.1,88.13c2.91-11.21,10.63-16.81,22.62-16.81,13.52,0,21.06,6.38,22.03,16.81h-44.65Z"></path><path d="M533.89,64.72c-7.36,18.8-9.93,30.24-9.93,49.85v3.68h-8.01v-4.09c0-20.02-2.04-31.67-8.99-50.06l-19.21-52.51h-61.19v143.02h43.93V48.38h3.99v19.82c0,20.02,2.25,31.46,9.6,49.65l14.51,36.77h41.11l14.3-36.57c7.36-18.79,9.4-30.24,9.4-49.85v-19.82h4.02v106.24h43.72V11.6h-56.94l-20.3,53.12h-.01Z"></path><path d="M343.94,45.04c-16.76,0-31.64,9.23-31.64,28.81h-3.74v-26.17h-40.68v106.78h40.68v-48.02c0-20.53,7.53-30.51,17.89-30.51,6.59,0,12.81,4.14,12.81,14.88v63.65h40.68v-72.13c0-24.67-15.28-37.29-36-37.29Z"></path><path d="M217.92,95.89c0,20.53-7.53,30.51-17.89,30.51-6.59,0-12.81-4.14-12.81-14.88v-63.65h-40.68v72.13c0,24.67,15.06,37.29,35.77,37.29,16.76,0,31.64-9.23,31.64-28.81h3.96v26.18h40.68V47.87h-40.68v48.02h0Z"></path><path d="M74.01,68.77c-18.64-.19-25.99-.57-25.99-7.91,0-6.03,6.59-10.36,21.47-10.36,13.75,0,26.74,5.65,31.07,16.38l38.23-19.59c-10.36-16.76-35.59-29.38-68.36-29.38S6.22,32.99,6.22,64.82c0,37.48,45.2,38.04,62.52,38.23,19.02.19,29.38.94,29.38,10.74,0,6.78-8.85,12.43-25.05,12.43s-32.77-6.21-37.1-23.35L0,126.77c12.24,19.77,36.35,31.64,71.94,31.64s69.49-17.7,69.49-48.59c0-40.11-45.57-40.87-67.42-41.05Z"></path></svg>
+</section>
+
+<!-- Spacer below hero. Matches the live page's behaviour: on the real
+     site the next sections continue below the hero, so wheel-scrolling
+     keeps going AND the figure rotates per the scroll-linked
+     `figure.rotateZ = clamp(-15, 15, scrollY * -0.01)`. Without this
+     spacer the effect demo maxes out near scrollY=0 and the tilt never
+     shows. 200vh is enough to drive the rotation to its -15deg clamp
+     at scrollY=1500. -->
+<div class="hero-trailer" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<!-- Lenis powers the smooth-wheel scroll the live site uses. Without it,
+     the figure rotate snaps to native scrollY on every wheel notch and
+     feels harsher than the source page. -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/hero-anim.js"></script>
+</body>
+</html>

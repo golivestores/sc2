@@ -1,0 +1,20 @@
+{
+  "title": "THE UN KNOWN · ILLUMINATE THE UNKNOWN hero",
+  "subtitle": "WebGL aurora + parallax-depth mountain + 3D-ring landing hero",
+  "description": "theunknown.tv 首页满屏 landing hero 整体搬运：dark/light 两套色板的 OGL fbm shader `<c-aurora>` 渲染中央 teal/orange 大色块；`<c-parallax-depth>` 用 mountain.webp + depth.png 跑鼠标视差 3D 山景；`<c-ring>` 走 SVG 路径 + opacity-60 形成发光环；大标题 `ILLUMINATE THE UNKNOWN. TRANSFORM THE KNOWN.` 用 Lemon 可变字体 + GSAP 逐字 font-variation-settings(wght 300, Wide 10) tween；右下 `<c-video-modal>`、右上 LET'S TALK c-css-button 方括号按钮、左上 THE UN KNOWN logo 全套保留。整套 Astro `1_landing.astro` 入口 + 共享 `file-input.astro_*.js` bundle（157KB UMD，里面定义所有 `<c-aurora>`/`<c-ring>`/`<c-parallax-depth>`/`<c-css-button>`/`<c-video-modal>`/`<c-liquid-cursor-area>` 自定义元素）+ vendor 三件套（ogl 56KB、gsap 70KB、libs 38KB、petit-kit 8KB）直接打到 `./js/`。**两处必坑**：(1) Vite preload-helper 默认把 dep 路径前缀 `/` 写死，scrape-pitfalls.md 已经记的那条，`sed s|return\"/\"+l|return\"./\"+l|` 改两份。(2) 共享 bundle 的 `ready` store 默认 `false`，要 `import { r as ready }` 后 `ready.set(true)` 才会跳过加载页 overlay 直接进 post-load 态，否则 1_landing 的 `M()` 看到 ready=false 直接 return，c-aurora/c-ring/c-parallax-depth 永远不挂载。Bundle 里还硬编码 `images/mountain-Bav45N-m.webp`、`images/depth-CrAbJ0nd.png`、`images/video-thumb.png` 等带 hash 文件名，要原名落到 `./images/` 才不 404。",
+  "tech": "Astro · OGL WebGL · GSAP · Lemon variable font · custom elements bundle",
+  "tags": [
+    "介绍",
+    "全屏",
+    "3D",
+    "WebGL",
+    "字体动画",
+    "鼠标跟随",
+    "agency"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://theunknown.tv/en",
+  "localMirror": "../designs/016-theunknown/index.html",
+  "order": 23,
+  "savedAt": "2026-05-18"
+}

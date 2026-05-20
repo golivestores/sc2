@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="./">
+<title>THE UN KNOWN · ILLUMINATE THE UNKNOWN hero · sc2 effect</title>
+
+<!--
+  Self-contained reproduction of the landing/hero section from
+  https://theunknown.tv/en — the dark "ILLUMINATE THE UNKNOWN. TRANSFORM
+  THE KNOWN." page with WebGL aurora + ring + parallax-depth mountain.
+
+  Mechanics (replicated 1:1 from the original Astro page):
+    - JS entry `lib/js/1_landing.astro_..._-CWIZEA.js` runs on load. It:
+        1. Removes any pre-existing <c-aurora>/<c-parallax-depth>/<c-ring>
+        2. Builds a <c-aurora> with palette
+             dark : ["#08345D","#009286","#1F0237","#54DBB0","#08345D"]
+             light: ["#FF5462","#C138EB","#FF5462","#FFB61E","#E6349A"]
+           scale=.48, frequency=20.3, rads=0, speed=2.91, amplitude=2.43
+           and appends it inside #home__background. This is the OGL fbm
+           shader that paints the teal-blue blob behind the text.
+        3. Builds a <c-parallax-depth> (the mountain landscape — uses
+           mountain.webp + depth.png to fake 3D parallax on mouse) and
+           appends it inside #section__landing.
+        4. Builds a <c-ring> (the glowing yellow ring orb) and appends it
+           inside #home__cover-ring. CSS classes slide it into place
+           1550ms after a 1800ms wait via a transition on `top`.
+        5. Animates the H1 title character-by-character with GSAP, using
+           font-variation-settings (wght 300, Wide 10) tweens.
+    - <c-aurora>, <c-parallax-depth>, <c-ring>, <c-css-button>,
+      <c-video-modal>, <c-liquid-cursor-area> are defined in the shared
+      `lib/js/file-input.astro_..._-CJVABS5o.js` bundle (157 KB UMD,
+      consumes ogl + gsap + libs + petit-kit which are also bundled).
+
+  Header (logo + LET'S TALK + hamburger) is replicated as a thin static
+  bar — only the visual layout is 1:1, not the menu drawer / mode toggle.
+-->
+
+<link rel="stylesheet" href="css/index-BDm80wvX.css">
+<link rel="stylesheet" href="css/components-B2lIcGuT.css">
+
+<style>
+  /* Static header — purely visual, matches lab46.tv top bar layout.
+     The live site's hamburger opens a full nav drawer & dark/light mode
+     toggle; out of scope for this gallery effect — we keep just the
+     chrome so the hero composition matches the screenshot. */
+  .demo-header {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 60px);
+    max-width: 1920px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 0 30px;
+    pointer-events: none;
+  }
+  @media (min-width: 1024px) { .demo-header { padding-left: 85px; padding-right: 85px; } }
+
+  .demo-logo {
+    pointer-events: auto;
+    display: inline-flex;
+    background: var(--color-dark, #04001e);
+    color: var(--color-white, #fff);
+    font-family: 'Lemon', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 9px 13px;
+    line-height: 1;
+    text-decoration: none;
+    border-radius: 0;
+  }
+  .demo-logo > span { display: block; }
+  .demo-logo .left { padding-right: 10px; border-right: 1px solid currentColor; }
+  .demo-logo .right { padding-left: 10px; }
+  .demo-logo .stacked { display: flex; flex-direction: column; gap: 3px; }
+  .demo-logo .stacked b { display: block; font-weight: 700; }
+
+  .demo-actions { display: inline-flex; align-items: center; gap: 20px; pointer-events: auto; }
+
+  .demo-hamburger {
+    width: 28px; height: 28px;
+    position: relative;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  .demo-hamburger::before,
+  .demo-hamburger::after {
+    content: "";
+    position: absolute;
+    left: 4px; right: 4px;
+    height: 2px;
+    background: var(--color-white, #fff);
+  }
+  .demo-hamburger::before { top: 9px; }
+  .demo-hamburger::after  { top: 17px; }
+</style>
+</head>
+<body style="will-change: transform; margin: 0;">
+
+<!-- minimal header (logo / LET'S TALK / hamburger) -->
+<div class="demo-header">
+  <a class="demo-logo" href="#">
+    <span class="left">THE</span>
+    <span class="right stacked"><b>UN</b><b>KNOWN</b></span>
+  </a>
+  <div class="demo-actions">
+    <c-css-button id="lets-talk-btn" mini="true" content="Let's talk"></c-css-button>
+    <button class="demo-hamburger" aria-label="Menu"></button>
+  </div>
+</div>
+
+<!-- ============== landing section, lifted from live HTML ============== -->
+<section id="section__landing" class="relative w-screen h-screen flex flex-col items-center justify-center overflow-hidden">
+  <div id="home__background"
+       class="absolute top-0 left-0 w-full h-[300vh] z-0 pointer-events-none"
+       style="transition: height 1350ms cubic-bezier(0.77, 0, 0.175, 1); transition-delay: 0ms; will-change: height;">
+    <!-- <c-aurora> injected here at runtime by 1_landing.js -->
+  </div>
+
+  <div id="home__cover" class="absolute top-0 left-0 w-full h-full z-1">
+    <div id="home__cover-ring" class="relative w-full h-full">
+      <!-- <c-ring> injected here at runtime by 1_landing.js -->
+      <img src="assets/ring.webp" alt="" loading="lazy" decoding="async" width="643" height="761"
+           class="absolute top-1/2 left-1/2 w-[50vw] h-full object-cover block md:hidden -translate-x-1/2 -translate-y-1/2 blur-[2px]">
+    </div>
+    <div class="absolute h-[calc(305px)] bottom-0 block md:hidden">
+      <img src="assets/mountain-mobile.webp" alt="" loading="lazy" decoding="async" width="1080" height="384"
+           class="h-full w-full object-cover">
+    </div>
+    <!-- <c-parallax-depth> injected here at runtime by 1_landing.js -->
+  </div>
+
+  <div class="container relative w-full max-w-[1920px] mx-auto flex flex-col items-center justify-center">
+    <div class="z-11 w-full max-w-[1100px] drop-shadow-sm hidden sm:block">
+      <div id="home__title__desktop" role="heading" aria-level="1" class="text-center w-full leading-[100%] flex flex-col justify-center items-center">
+        <span class="!text-[clamp(1.2rem,9vw,200px)] font-[Lemon] text-[130px] uppercase block"> ILLUMINATE </span>
+        <span class="flex">
+          <span data-index="0" class="!text-[clamp(1.2rem,9vw,200px)] font-[Lemon] text-[130px] uppercase"> THE&nbsp; </span>
+          <span data-index="1" class="!text-[clamp(1.2rem,9vw,200px)] font-[Lemon] text-[130px] uppercase font-bold font-alt-set"> UNKNOWN.&nbsp; </span>
+          <span data-index="2" class="!text-[clamp(1.2rem,9vw,200px)] font-[Lemon] text-[130px] uppercase"> TRANSFORM&nbsp; </span>
+        </span>
+        <span class="!text-[clamp(1.2rem,9vw,200px)] font-[Lemon] text-[130px] uppercase block"> THE KNOWN. </span>
+      </div>
+    </div>
+    <div class="z-11 w-full max-w-[1100px] drop-shadow-sm sm:hidden" aria-hidden="true">
+      <p id="home__title__mobile" role="presentation" class="font-[Lemon] text-[70px] leading-[80%] text-center w-full flex flex-col justify-center items-center">
+        <span class="block overflow-hidden" style="font-variation-settings: 'wght' 300, 'Wide' 10;">
+          <span class="block translate-y-[100%]"> ILLUMINATE </span>
+        </span>
+        <span class="block overflow-hidden">
+          <span class="inline-block translate-y-[100%]" style="font-variation-settings: 'wght' 300, 'Wide' 10;"> THE </span>
+          <span class="inline-block font-alt-set font-bold translate-y-[100%]"> UNKNOWN. </span>
+        </span>
+        <span class="block overflow-hidden">
+          <span class="inline-block translate-y-[100%]"> TRANSFORM </span>
+        </span>
+        <span class="block overflow-hidden" style="font-variation-settings: 'wght' 300, 'Wide' 10;">
+          <span class="inline-block translate-y-[100%]"> THE KNOWN. </span>
+        </span>
+      </p>
+    </div>
+
+    <div id="home__baseline" class="top-1/2 left-1/2 w-full max-w-[1100px] flex flex-col items-center justify-between mt-[80px] sm:mt-[30px] md:mt-[80px] opacity-0 transition-opacity duration-300 will-change-[opacity] px-0 sm:px-20 sm:flex-row sm:items-center sm:justify-between z-20">
+      <p role="heading" aria-level="2" class="font-['Alte-Haas-Grotesk'] not-italic font-normal text-[16px] sm:text-[18.6667px] leading-[120%] text-center sm:text-left w-[300px] sm:w-[477.33px] mb-[20px] sm:mb-0">
+        A next-generation creative agency &amp; consultancy based in Montreal. We connect strategy, creative development, production, advertising &amp; AI tech into one system, so every decision your brand makes compounds growth.
+      </p>
+      <div>
+        <c-css-button id="home__cta" content="ANSWER THE CALL"></c-css-button>
+      </div>
+    </div>
+  </div>
+
+  <div id="home__video-modal" class="absolute bottom-1/2 translate-y-1/2 right-10 z-10">
+    <c-video-modal id="0-g8zec89bE" classNames="w-[225px] h-[125px] bg-gray-500"></c-video-modal>
+  </div>
+
+  <div id="home__cursor__area" class="absolute bottom-0 left-0 w-full h-[150px] z-15">
+    <c-liquid-cursor-area content="Scroll"></c-liquid-cursor-area>
+  </div>
+</section>
+
+<!-- bundled scripts: vendor chunks + the actual landing entry.
+     1_landing imports preload-helper, file-input (defines c-aurora, c-ring,
+     c-parallax-depth, c-css-button, c-video-modal, c-liquid-cursor-area),
+     libs, gsap, ogl, petit-kit, ClientRouter — all are present in lib/js/
+     so the dynamic import preloader resolves them under <base href="./">. -->
+<script type="module" src="js/1_landing.astro_astro_type_script_index_0_lang-Cu-WIZEA.js"></script>
+
+<!--
+  The shared file-input bundle exports a "ready" store (named `r` here)
+  that defaults to false. The live page only flips it to true once its
+  loading overlay (#loading) finishes its fade-out transition; we don't
+  ship the loading overlay in this effect, so the flag stays false and
+  M() bails early — leaving the page with text but no WebGL background.
+  Force-flip it shortly after the bundle is parsed to skip straight to
+  the post-load state. 50ms is enough for 1_landing.js's subscribe()
+  to have registered.
+-->
+<script type="module">
+  import { r as ready } from "./js/file-input.astro_astro_type_script_index_0_lang-CJVABS5o.js";
+  setTimeout(() => ready.set(true), 50);
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="023-theunknown-illuminate-hero.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=023-theunknown-illuminate-hero" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

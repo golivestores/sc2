@@ -1,0 +1,21 @@
+{
+  "title": "LAB46 · Prepare / Play / Protect",
+  "subtitle": "3-column phase hero with embedded 3D phase icons",
+  "description": "LAB46 首页中段那块满屏深蓝色 ‘Prepare / Play / Protect’ 三栏入口：背景是 LAB46-Pills-On-Plate-Darker.jpg 全幅图 + 黑色 15%→48% top-to-bottom 渐变，前景三等分列每格中央放一个 Times Now 衬线 H3 大标题 + 一个 200×200 的 model-viewer 3D 图标（coi-prepare.glb / coi-play.glb / coi-protect.glb，三圈 ‘fidget spinner’），再在每列底部挂一个 LAB46 标志性的 `[ SHOP NOW ]` 方括号按钮（.button.-primary 通过 clip-path 把 1px 白边只在左右各保留 .25rem，hover 时 ::after 用 scaleY(0→1) 填白底黑字）。列之间以 1px 白线分隔，移动端改成顶部边线、上下堆叠。标题用 IntersectionObserver 复刻 sal slide-up，三列分别 0/200/400ms stagger。**coiIcon Alpine 组件完整移植**（原 chunk 346 webpack URL 为 `assets/346.5d88d7f29a1dc591.chunk.min.js`，scrape 一开始猜错了路径所以漏掉）：(a) model 加载完把所有材质改成 RGB(201,211,219) 银灰 + metallicFactor 0.3 + roughnessFactor 0.2，再淡入；(b) 鼠标停在整个 `<li>` 上时按 `θ = -30°·((x-left)/w·2-1)` / `φ = 90°-20°·((y-top)/h·2-1)` 驱动 cameraOrbit，覆盖到 ±30° × 70°-110° 范围，touch 事件同步走 touches[0]；(c) 离开后 cameraOrbit 回 `0deg 90deg 100%` 并启动自动摇摆：随机 2-8s 延迟后跑 `24°·sin(t/6s·2π)` 的正弦慢摇；(d) 只在 `pointer: fine` 设备绑定 hover 事件，resize 和 pointer-fine 媒体查询变化都重新 init。深蓝 #355672、字体 Times Now / N27 / TWK Lausanne 三套 woff2 子集随 lib 自带，model-viewer 3.5.0 UMD 也打到 lib/。",
+  "tech": "model-viewer 3.5.0 · IntersectionObserver slide-up · mouse-tracked cameraOrbit + sine auto-sway · CSS clip-path bracket button",
+  "tags": [
+    "介绍",
+    "网格",
+    "3D",
+    "Web Component",
+    "字体动画",
+    "悬停",
+    "鼠标跟随",
+    "健康"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://lab46.de/en",
+  "localMirror": "../designs/015-lab46/index.html",
+  "order": 29,
+  "savedAt": "2026-05-18"
+}

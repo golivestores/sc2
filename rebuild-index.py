@@ -71,6 +71,12 @@ def rebuild_designs(root: Path) -> int:
     for d in sorted(p for p in designs_dir.iterdir() if p.is_dir()):
         if not (d / "index.html").exists():
             continue
+        # `.skip-index` opts a local-only mirror out of the gallery — used
+        # when a remote teammate already published a better mirror of the
+        # same site and we want to keep the local capture as a personal
+        # archive without polluting the shared index.
+        if (d / ".skip-index").exists():
+            continue
         meta = _load_meta(d)
         # href + preview are relative to designs/ (where the .json/.js live),
         # so designs/index.html can <iframe> them without a designs/ prefix.
@@ -104,6 +110,8 @@ def rebuild_effects(root: Path) -> int:
     effects = []
     for d in sorted(p for p in effects_dir.iterdir() if p.is_dir()):
         if not (d / "index.html").exists():
+            continue
+        if (d / ".skip-index").exists():
             continue
         meta = _load_meta(d)
         m = re.match(r"^(\d+)-", d.name)

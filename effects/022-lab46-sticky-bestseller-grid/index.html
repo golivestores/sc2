@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LAB46 · Sticky bestseller + product grid · sc2 effect</title>
+
+<!--
+  Self-contained reproduction of the "featured product grid" section from
+  https://lab46.de/en. The layout pins a single hero product card on the
+  left ("Get Ready Drops" — the bestseller) while a 2-column grid of four
+  secondary product cards scrolls past on the right:
+
+    +----------------------+--------+--------+
+    |                      | berry  | sweet  |
+    |  Get Ready Drops     +--------+--------+
+    |  (sticky)            | shield | lube   |
+    +----------------------+--------+--------+
+
+  Replicated 1:1:
+    - md+ : grid-cols-2 with 32px gap, lg+ 120px gap (original uses md:gap-32,
+      lg:gap-120). Below md it stacks 1-col, 56px row gap.
+    - left article: position: sticky (top: header-sticky → 0 here, with a 24px
+      buffer); aspect-square cover image; transition: scale(1) → scale(1.05)
+      on hover (duration .6s ease-in-out group-hover); "Bestseller" tag
+      pinned bottom-center of image (translucent backdrop-blur pill).
+    - right cards: aspect 9/10 cover images, same hover scale; same tag
+      treatment ("Sold out" on Sweet Flow Pills uses bg-black/text-white
+      variant + the image gets opacity-64 to match live).
+    - typography: title h3 (Times Now serif) for the hero; h5 for grid cards;
+      h6 (N27 uppercase) for the phase label ("Prepare/Play/Protect/€price").
+    - description in para-s/m below; "Buy now" pill button is a thin rounded
+      border that hover-fills to black-bg + white-text.
+    - data-sal slide-up on each article with a 200ms stagger (right grid has
+      data-sal-delay-auto="200" → IntersectionObserver below replicates).
+-->
+
+<style>
+/* ---- lab46 typography subset ---- */
+@font-face { font-family: "Times Now"; font-display: swap; font-style: normal; font-weight: 400;
+  src: url("lib/fonts/times-now-subset.woff2") format("woff2"); }
+@font-face { font-family: "N27"; font-display: swap; font-style: normal; font-weight: 400;
+  src: url("lib/fonts/n27-regular-subset.woff2") format("woff2"); }
+@font-face { font-family: "TWK Lausanne"; font-display: swap; font-style: normal; font-weight: 400;
+  src: url("lib/fonts/twk-lausanne-400-subset.woff2") format("woff2"); }
+@font-face { font-family: "TWK Lausanne"; font-display: swap; font-style: normal; font-weight: 700;
+  src: url("lib/fonts/twk-lausanne-700-subset.woff2") format("woff2"); }
+
+:root {
+  --color-black:           #0b0c0f;
+  --color-white:           #fff;
+  --color-deep-blue:       #355672;
+  --color-slate-blue:      #7791a5;
+  --color-slate-blue-40:   #c9d3db;
+  --color-slight-grey:     #c6c7c6;
+  --color-slight-grey-24:  #f1f2f1;
+
+  --font-heading: "Times Now", "Times New Roman", serif;
+  --font-body:    "TWK Lausanne", Arial, sans-serif;
+  --font-accent:  "N27", Arial, sans-serif;
+
+  --Fonts-H3:           1.75rem;
+  --Fonts-H5:           1.25rem;
+  --Fonts-H6:           0.75rem;
+  --Fonts-Para-M:       0.875rem;
+  --Fonts-Para-S:       0.813rem;
+  --Fonts-Caption-N27:  0.656rem;
+
+  --Spacing-Margins: 1rem;
+  --Spacing-L:    3.5rem;
+  --Spacing-XXL:  5.5rem;
+  --Spacing-XXS:  1rem;
+  --Spacing-XXXS: 0.75rem;
+
+  --ease-figma: cubic-bezier(.15, .85, .35, 1);
+}
+@media (min-width: 48rem) { /* md */
+  :root {
+    --Fonts-H3:           2.5rem;
+    --Fonts-H5:           1.5rem;
+    --Fonts-H6:           0.875rem;
+    --Fonts-Para-M:       1rem;
+    --Fonts-Para-S:       0.875rem;
+    --Fonts-Caption-N27:  0.719rem;
+
+    --Spacing-Margins: 1.5rem;
+    --Spacing-L:    5rem;
+    --Spacing-XXL:  8.75rem;
+    --Spacing-XXS:  1.5rem;
+    --Spacing-XXXS: 1rem;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  color: var(--color-black);
+  background: var(--color-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+/* ---------- typography classes ---------- */
+.h3 {
+  font-family: var(--font-heading);
+  font-size: var(--Fonts-H3);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+.h5 {
+  font-family: var(--font-heading);
+  font-size: var(--Fonts-H5);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.97;
+  margin: 0;
+}
+.h6 {
+  font-family: var(--font-accent);
+  font-size: var(--Fonts-H6);
+  font-weight: 400;
+  letter-spacing: 0.035em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  margin: 0;
+}
+.para-m  { font-size: var(--Fonts-Para-M); line-height: 1.5; }
+.para-s  { font-size: var(--Fonts-Para-S); line-height: 1.5; }
+.caption-n27 {
+  font-family: var(--font-accent);
+  font-size: var(--Fonts-Caption-N27);
+  letter-spacing: 0.035em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- the section ---------- */
+.featured-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 56px;
+  padding:
+    var(--Spacing-L)
+    var(--Spacing-Margins)
+    var(--Spacing-XXL);
+}
+@media (min-width: 48rem) {
+  .featured-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+@media (min-width: 64rem) { /* lg */
+  .featured-grid { gap: 120px; }
+}
+
+/* hero (sticky) card */
+.hero-card {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* slide-up reveal */
+  opacity: 0;
+  transform: translateY(20%);
+  transition: opacity .8s ease-out, transform .8s var(--ease-figma);
+}
+.hero-card.is-revealed { opacity: 1; transform: none; }
+
+.hero-card__title { margin-top: var(--Spacing-XXS); }
+.hero-card__title a { display: inline; }
+
+.hero-card__media {
+  position: relative;
+  order: -2;
+  aspect-ratio: 1 / 1;
+  overflow: clip;
+  background: color-mix(in oklab, var(--color-slight-grey) 24%, transparent);
+}
+.hero-card__media img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: color-mix(in oklab, var(--color-slight-grey) 24%, transparent);
+  transition: transform .6s ease-in-out;
+}
+.hero-card:hover .hero-card__media img { transform: scale(1.05); }
+
+.media-tags {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 12px;
+}
+@media (min-width: 48rem) {
+  .media-tags { padding: 12px; }
+}
+
+.tag {
+  font-family: var(--font-accent);
+  font-size: var(--Fonts-Caption-N27);
+  letter-spacing: 0.035em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  padding: 0.188rem 1rem 0.25rem;
+  border-radius: 100vw;
+  background: var(--color-slate-blue-40);
+  color: var(--color-deep-blue);
+  backdrop-filter: blur(2rem);
+  -webkit-backdrop-filter: blur(2rem);
+}
+.tag--soldout {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.hero-card__meta {
+  order: -1;
+  margin-top: var(--Spacing-XXXS);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 8px;
+}
+
+.hero-card__body {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+}
+@media (min-width: 48rem) {
+  .hero-card__body { margin-top: 8px; }
+}
+.hero-card__desc {
+  margin-top: 2px;
+  flex-grow: 999;
+  flex-basis: 300px;
+}
+@media (min-width: 48rem) {
+  .hero-card__desc { margin-top: 8px; }
+}
+.hero-card__desc > div > p { margin: 0; }
+
+/* "Buy now" pill button — thin border, hover fills to black */
+.btn-pill {
+  min-width: 167px;
+  flex-grow: 1;
+  padding: 9px;
+  border: 1px solid currentColor;
+  border-radius: 9999px;
+  text-align: center;
+  transition: border-color .25s var(--ease-figma),
+              background-color .25s var(--ease-figma),
+              color .25s var(--ease-figma);
+}
+.hero-card:hover .btn-pill,
+.grid-card:hover .btn-pill {
+  border-color: var(--color-black);
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+/* ---------- right side: 2-col card grid ---------- */
+.card-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 16px;
+  row-gap: 2.5rem; /* gap-y-m */
+}
+@media (min-width: 64rem) {
+  .card-grid { column-gap: 32px; }
+}
+
+.card-grid > li { display: flex; }
+
+.grid-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* slide-up reveal */
+  opacity: 0;
+  transform: translateY(20%);
+  transition: opacity .8s ease-out, transform .8s var(--ease-figma);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.grid-card.is-revealed { opacity: 1; transform: none; }
+
+.grid-card__title { margin-top: var(--Spacing-XXXS); }
+.grid-card__title a { display: inline; }
+
+.grid-card__media {
+  position: relative;
+  order: -2;
+  aspect-ratio: 9 / 10;
+  overflow: clip;
+  background: color-mix(in oklab, var(--color-slight-grey) 24%, transparent);
+}
+.grid-card__media img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: color-mix(in oklab, var(--color-slight-grey) 24%, transparent);
+  transition: transform .6s ease-in-out;
+}
+.grid-card:hover .grid-card__media img { transform: scale(1.05); }
+.grid-card__media.is-soldout img { opacity: 0.64; }
+
+.grid-card__meta {
+  order: -1;
+  margin-top: var(--Spacing-XXXS);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 8px;
+}
+
+.grid-card__desc {
+  margin-top: 2px;
+}
+@media (min-width: 48rem) {
+  .grid-card__desc { margin-top: 8px; }
+}
+.grid-card__desc > div > p { margin: 0; }
+
+.grid-card__action {
+  margin-top: auto;
+}
+.grid-card__action > .btn-pill {
+  margin-top: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* mobile: hero-card cannot be sticky inside its own grid column when the
+   grid is single-column anyway; cancel sticky to avoid weird offsets */
+@media (max-width: 47.99rem) {
+  .hero-card { position: relative; top: 0; }
+}
+
+/* tiny demo framing */
+.demo-frame {
+  padding: 56px 32px;
+  background: #fafafa;
+  color: #888;
+  font-size: 13px;
+  text-align: center;
+  font-family: var(--font-body);
+}
+.demo-frame strong { color: #222; font-weight: 500; }
+</style>
+</head>
+
+<body>
+
+<div class="demo-frame">
+  <strong>LAB46 · featured product grid</strong> — sticky bestseller pairs with a 2-col card grid; scroll to see the pin
+</div>
+
+<section class="featured-grid" aria-label="LAB46 featured products">
+
+  <!-- LEFT: sticky hero card (bestseller) -->
+  <div>
+    <article class="hero-card">
+      <h2 class="h3 hero-card__title">
+        <a href="#get-ready-drops">Get Ready Drops</a>
+      </h2>
+
+      <div class="hero-card__media">
+        <img src="assets/get-ready-drops.png" alt="Get Ready Drops bottle and packaging"
+             width="3475" height="4470" loading="lazy" decoding="async">
+        <span class="media-tags">
+          <span class="tag">Bestseller</span>
+        </span>
+      </div>
+
+      <div class="hero-card__meta">
+        <span class="h6">Prepare</span>
+        <span class="h6">€34,99</span>
+      </div>
+
+      <div class="hero-card__body">
+        <div class="para-m hero-card__desc">
+          <div><p>Eases preparation</p></div>
+        </div>
+        <div class="caption-n27 btn-pill">Buy now</div>
+      </div>
+    </article>
+  </div>
+
+  <!-- RIGHT: 2-col card grid -->
+  <ul class="card-grid" role="list">
+
+    <li>
+      <article class="grid-card" style="--reveal-delay: 0ms">
+        <h2 class="h5 grid-card__title">
+          <a href="#berry-bleach">Bright Berry Bleach</a>
+        </h2>
+
+        <div class="grid-card__media">
+          <img src="assets/bright-berry-bleach.jpg" alt="Bright Berry Bleach product"
+               width="2401" height="3000" loading="lazy" decoding="async">
+          <span class="media-tags"></span>
+        </div>
+
+        <div class="grid-card__meta">
+          <span class="h6">Prepare</span>
+          <span class="h6">€39,99</span>
+        </div>
+
+        <div class="para-s grid-card__desc">
+          <div><p>Gently and effectively brightens</p></div>
+        </div>
+
+        <div class="grid-card__action">
+          <div class="caption-n27 btn-pill">Buy now</div>
+        </div>
+      </article>
+    </li>
+
+    <li>
+      <article class="grid-card" style="--reveal-delay: 200ms">
+        <h2 class="h5 grid-card__title">
+          <a href="#sweet-flow-pills">Sweet Flow Pills</a>
+        </h2>
+
+        <div class="grid-card__media is-soldout">
+          <img src="assets/sweet-flow-pills.jpg" alt="Sweet Flow Pills product"
+               width="2401" height="3000" loading="lazy" decoding="async">
+          <span class="media-tags">
+            <span class="tag tag--soldout">Sold out</span>
+          </span>
+        </div>
+
+        <div class="grid-card__meta">
+          <span class="h6">Play</span>
+          <span class="h6">34,99</span>
+        </div>
+
+        <div class="para-s grid-card__desc">
+          <div><p>Sweetens your finale</p></div>
+        </div>
+
+        <div class="grid-card__action">
+          <div class="caption-n27 btn-pill">Buy now</div>
+        </div>
+      </article>
+    </li>
+
+    <li>
+      <article class="grid-card" style="--reveal-delay: 400ms">
+        <h2 class="h5 grid-card__title">
+          <a href="#preptect-shield">PrepTect Shield</a>
+        </h2>
+
+        <div class="grid-card__media">
+          <img src="assets/preptect-shield.jpg" alt="PrepTect Shield product"
+               width="2401" height="3000" loading="lazy" decoding="async">
+          <span class="media-tags"></span>
+        </div>
+
+        <div class="grid-card__meta">
+          <span class="h6">Protect</span>
+          <span class="h6">€39,99</span>
+        </div>
+
+        <div class="para-s grid-card__desc">
+          <div><p>Completes your prep routine</p></div>
+        </div>
+
+        <div class="grid-card__action">
+          <div class="caption-n27 btn-pill">Buy now</div>
+        </div>
+      </article>
+    </li>
+
+    <li>
+      <article class="grid-card" style="--reveal-delay: 600ms">
+        <h2 class="h5 grid-card__title">
+          <a href="#soothing-smash">Soothing Smash Lube</a>
+        </h2>
+
+        <div class="grid-card__media">
+          <img src="assets/soothing-smash-lube.png" alt="Soothing Smash Lube product"
+               width="2401" height="3000" loading="lazy" decoding="async">
+          <span class="media-tags"></span>
+        </div>
+
+        <div class="grid-card__meta">
+          <span class="h6">Play</span>
+          <span class="h6">24,99</span>
+        </div>
+
+        <div class="para-s grid-card__desc">
+          <div><p>Calms with CBD</p></div>
+        </div>
+
+        <div class="grid-card__action">
+          <div class="caption-n27 btn-pill">Buy now</div>
+        </div>
+      </article>
+    </li>
+
+  </ul>
+</section>
+
+<div class="demo-frame">
+  (extra scroll space so the sticky pin has somewhere to stick to)
+  <div style="height: 50vh;"></div>
+</div>
+
+<script>
+  // slide-up reveal — mirrors data-sal="slide-up" + data-sal-delay-auto="200"
+  // by giving each grid card a staggered transition-delay (already set
+  // inline) and toggling .is-revealed on first viewport entry.
+  (() => {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-revealed');
+          io.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.hero-card, .grid-card').forEach(el => io.observe(el));
+  })();
+</script>
+
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="022-lab46-sticky-bestseller-grid.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=022-lab46-sticky-bestseller-grid" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

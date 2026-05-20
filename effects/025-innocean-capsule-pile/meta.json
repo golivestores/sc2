@@ -1,0 +1,18 @@
+{
+  "title": "INNOCEAN BERLIN · Footer 3D Capsule Pile",
+  "subtitle": "R3F + Rapier 物理胶囊堆，鼠标推搡可交互",
+  "description": "innoceanberlin.com 页面底部满屏 3D 胶囊（橙/银/黑/白印 BLN logo）堆——鼠标移动时附近胶囊会被推开，是整站最招牌的交互。技术栈：`@react-three/fiber` 渲染 + `@react-three/rapier` (Rapier WASM 物理) + `InstancedRigidBodies` 把 100+ 颗胶囊压成一个 `InstancedMesh` 一次 draw call，pill_mesh.glb（来自 cdn-arkx CDN，每颗胶囊共享同 geometry）+ studio_small_08_1k.hdr studio 灯光做 PBR 反射。Bundle 里能看到 `applyImpulse (7)`/`setLinvel (3)`/`wakeUp (1)`：鼠标 pointer 拖一个 invisible kinematic cursor body 在场景中游走，碰撞触发 impulse 把附近 rigid body 弹开。整套是 Vite + React Router SPA bundle (3.8MB) 的一部分——为保 1:1 保真直接连同主 bundle/CSS/字体一起拷过来，在 index.html 顶部插了 history.replaceState 让 Router 误以为 pathname='/' 才会挂载主路由子树，再在 load 后自动 scrollTo `docH-900`（grid_projects 是 `min-h-[300vh]` 所以 docH 会从 6375 扩到 ~8639；目标位置在 work grid 之下、footer 文字之上，画布只剩纯胶囊堆）。需要 CDN 在线（pill_mesh.glb + HDR 从 cdn-arkx.sfo3.cdn.digitaloceanspaces.com 拉）。",
+  "tech": "React · @react-three/fiber · @react-three/rapier · Three.js · InstancedRigidBodies · Vite",
+  "tags": [
+    "页脚",
+    "悬停",
+    "形变",
+    "视差",
+    "B2B服务"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://innoceanberlin.com/",
+  "localMirror": "../designs/017-innoceanberlin/index.html",
+  "order": 25,
+  "savedAt": "2026-05-20"
+}

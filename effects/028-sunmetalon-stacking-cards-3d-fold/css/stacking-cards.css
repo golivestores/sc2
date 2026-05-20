@@ -1,0 +1,186 @@
+/* fonts ------------------------------------------------------------- */
+@font-face {
+  font-display: swap; font-family: Bastardo; font-style: normal; font-weight: 400;
+  src: url(../fonts/BastardoGrotesk-Regular.woff2) format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: Bastardo; font-style: normal; font-weight: 600;
+  src: url(../fonts/BastardoGrotesk-Semibold.woff2) format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: Rector; font-style: normal; font-weight: 300;
+  src: url(../fonts/RectorWeb-Light.woff2) format("woff2");
+}
+
+/* base -------------------------------------------------------------- */
+html, body {
+  margin: 0;
+  background-color: #1b170f;
+  color: #ece7e2;
+  font-family: Bastardo, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+body * { box-sizing: border-box; }
+
+h2 {
+  font-family: Bastardo, sans-serif;
+  font-size: 3.6111111111vw;
+  font-weight: 400;
+  letter-spacing: -1.04px;
+  line-height: 100%;
+  margin: 0 0 24px;
+}
+p {
+  font-family: Bastardo, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: -.22px;
+  line-height: 140%;
+  margin: 0;
+}
+
+/* "h0" = Rector Light, very large for 01/02/03 numbers. */
+.h0 {
+  font-family: Rector, sans-serif;
+  font-size: 15.2777777778vw;
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: -2.2px;
+  line-height: 90%;
+}
+
+figure { margin: 0; position: relative; }
+figure > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+.white { color: #ece7e2; }
+i.sub { font-size: .65em; vertical-align: sub; font-style: normal; }
+
+/* stacking-cards ----------------------------------------------------- */
+section.stacking-cards {
+  margin-bottom: 32px;
+  padding-left: 2.2222222222vw;
+  padding-right: 2.2222222222vw;
+  position: relative;
+}
+section.stacking-cards .header {
+  padding: 32px 0;
+}
+section.stacking-cards .header h2 {
+  font-size: 2.3611111111vw;
+  font-family: Rector, sans-serif;
+  font-weight: 300;
+}
+
+/* The chamfered-corner container.
+   clip-path slices the top-left and bottom-right corners off; the
+   :before / :after add a 45-degree gradient so the cut shows the
+   #3e3a33 hairline border that wraps the rest of the box. */
+section.stacking-cards div.cards {
+  --b: 1px;
+  --c: 20px;
+  background-color: #1b170f;
+  border: 1px solid #3e3a33;
+  border-radius: 0 16px;
+  clip-path: polygon(
+    100% 0,
+    var(--c) 0,
+    0 var(--c),
+    0 100%,
+    calc(100% - var(--c)) 100%,
+    100% calc(100% - var(--c))
+  );
+  perspective: 50em;       /* makes the inner rotateX/Y look 3D */
+  position: relative;
+  z-index: 1;
+}
+section.stacking-cards div.cards:before {
+  background:
+    linear-gradient(to bottom right, #3e3a33 50%, #1b170f 50%)
+    0 0 / calc(var(--c) - var(--b)*.3) calc(var(--c) - var(--b)*.3) no-repeat;
+  content: ""; inset: 0; position: absolute; z-index: -1;
+}
+section.stacking-cards div.cards:after {
+  background:
+    linear-gradient(to top left, #3e3a33 50%, #1b170f 50%)
+    100% 100% / calc(var(--c) - var(--b)*.3) calc(var(--c) - var(--b)*.3) no-repeat;
+  content: ""; inset: 0; position: absolute; z-index: -1;
+}
+
+/* Each card sticks individually; transform-origin: center bottom
+   makes the rotate/scale "fall" downward like a flipped page. */
+section.stacking-cards div.card {
+  background-color: #1b170f;
+  border-top: 1px solid #3e3a33;
+  column-gap: 11.5277777778vw;
+  display: grid;
+  grid-template-columns: 35.6944444444vw 1fr;
+  margin: 32px 0;
+  padding-top: 32px;
+  position: sticky;
+  top: 0;
+  transform-origin: center bottom;
+}
+section.stacking-cards div.card:first-child {
+  border-top: 0;
+  clip-path: inset(24px 0 0 0);
+  margin-top: 0;
+}
+section.stacking-cards div.card:last-child {
+  border-bottom: 0;
+  clip-path: inset(0 0 24px 0);
+}
+/* JS flips this on once the next card starts covering it — at this
+   moment the card's clip-path is reset so the border can be rendered
+   in full as the previous one tilts away. */
+section.stacking-cards div.card.falling {
+  border: 1px solid #3e3a33 !important;
+  border-radius: 12px;
+  clip-path: inset(0 0 0 0);
+}
+
+section.stacking-cards div.card div.block-text {
+  padding-bottom: 96px;
+  padding-right: 8.0555555556vw;
+  padding-top: 96px;
+}
+section.stacking-cards div.card div.number {
+  align-items: center;
+  border-right: 1px solid #3e3a33;
+  color: #cdb379;
+  display: grid;
+  justify-content: center;
+}
+
+/* Two floating briquette images that GSAP tweens in/out of view. */
+section.stacking-cards figure.briquette {
+  height: 250px; width: 250px;
+  pointer-events: none;
+  position: absolute;
+  right: 0; top: 0;
+  transform: translate3d(-50%, 0, 0);
+  z-index: 1;
+}
+section.stacking-cards figure.briquette.lower {
+  bottom: 50px; right: 25%; top: unset;
+  height: 150px; width: 150px;
+}
+
+@media screen and (max-width: 939px) {
+  section.stacking-cards { padding-left: 6.4vw; padding-right: 6.4vw; }
+  section.stacking-cards div.card { display: flex; flex-direction: column; padding: 16px; }
+  section.stacking-cards div.card div.block-text { padding: 16px 0; }
+  section.stacking-cards div.card div.number {
+    align-items: flex-start;
+    border-right: 0;
+    justify-content: flex-start;
+  }
+  section.stacking-cards div.card div.number span { font-size: 29.3333333333vw; }
+  section.stacking-cards div.card.falling { border-radius: 8px; }
+  section.stacking-cards figure.briquette { height: 150px; width: 150px; }
+  section.stacking-cards figure.briquette.lower {
+    height: 100px; width: 100px; right: 50%;
+  }
+}

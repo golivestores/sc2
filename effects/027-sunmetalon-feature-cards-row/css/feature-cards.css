@@ -1,0 +1,126 @@
+/* fonts ------------------------------------------------------------- */
+@font-face {
+  font-display: swap; font-family: Bastardo; font-style: normal; font-weight: 400;
+  src: url(../fonts/BastardoGrotesk-Regular.woff2) format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: Bastardo; font-style: normal; font-weight: 600;
+  src: url(../fonts/BastardoGrotesk-Semibold.woff2) format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: Rector; font-style: normal; font-weight: 300;
+  src: url(../fonts/RectorWeb-Light.woff2) format("woff2");
+}
+
+/* base -------------------------------------------------------------- */
+html, body {
+  margin: 0;
+  background-color: #1b170f;
+  color: #ece7e2;
+  font-family: Bastardo, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+body * { box-sizing: border-box; }
+
+h2 {
+  font-family: Bastardo, sans-serif;
+  font-size: 3.6111111111vw;
+  font-weight: 400;
+  letter-spacing: -1.04px;
+  line-height: 100%;
+  margin: 0 0 24px;
+}
+p {
+  font-family: Bastardo, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: -.22px;
+  line-height: 140%;
+  margin: 0;
+}
+p.small { font-size: .7272727273rem; letter-spacing: -.16px; }
+
+figure { margin: 0; position: relative; }
+figure > img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center center;
+}
+figure.cover > img { object-fit: cover; }
+
+.white { color: #ece7e2; }
+
+/* feature-cards ------------------------------------------------------ */
+section.feature-cards { overflow-x: clip; }
+section.feature-cards div.wrapper { position: relative; }
+
+/* The flex row of cards — sticks to the top of the viewport for the
+   full scroll-range of `wrapper`. width: max-content lets it grow as
+   wide as its 4 children together. */
+section.feature-cards div.cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  position: sticky;
+  top: 0;
+  width: max-content;
+}
+
+/* Each card is a 100vh column with the studio's 750x850 aspect. */
+section.feature-cards div.cards div.card {
+  aspect-ratio: 750 / 850;
+  background-color: #1b170f;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+  left: 0;
+  padding: 32px;
+  position: relative;
+  will-change: transform;
+}
+section.feature-cards div.cards div.card.card-text { padding-top: 56px; }
+section.feature-cards div.cards div.card.card-image.color-black p { color: #1b170f; }
+section.feature-cards div.cards div.card.card-image.color-black p:before { background-color: #1b170f; }
+
+/* The image fills the card, sitting behind the small top/bottom labels. */
+section.feature-cards div.cards div.card > figure {
+  inset: 0;
+  position: absolute;
+  z-index: 0;
+}
+
+section.feature-cards div.cards div.card div.block-text { max-width: 500px; }
+
+/* small labels with a bullet — the dot is a 8px circle absolutely
+   positioned 16px to the left of the text. */
+section.feature-cards div.cards div.card > p {
+  color: #ece7e2;
+  margin: 0 0 0 16px;
+  max-width: 450px;
+  position: relative;
+  z-index: 1;
+}
+section.feature-cards div.cards div.card > p i { font-size: .8em; font-style: normal; }
+section.feature-cards div.cards div.card > p:before {
+  background-color: #ece7e2;
+  border-radius: 2rem;
+  content: "";
+  height: 8px; width: 8px;
+  left: 0;
+  position: absolute;
+  top: .45rem;
+  transform: translate3d(-16px, -50%, 0);
+}
+section.feature-cards div.cards div.card > p:last-of-type { max-width: 600px; }
+
+@media screen and (max-width: 766px) {
+  section.feature-cards div.cards div.card {
+    aspect-ratio: unset;
+    height: 100dvh;
+    width: 100vw;
+  }
+}

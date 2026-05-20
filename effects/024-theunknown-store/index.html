@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE UN KNOWN · THE STORE · sc2 effect</title>
+
+<!--
+  Self-contained reproduction of the "THE STORE" / merch section from
+  https://theunknown.tv/en.
+
+  Live mechanics (verified by stepping through the live page at 5%
+  scroll increments via Playwright):
+    - section is 5000px tall (~5.5 viewports of scroll).
+    - <#section__merch__bg> is sticky-pinned by libs.js for the full
+      scroll duration; we replicate with `position: sticky` on a 100vh
+      inner stage.
+    - 6 t-shirt cards are stacked top-to-bottom in the bg layer with
+      ~37vh vertical spacing. As the page scrolls, libs sets each
+      card's `style.top` to follow the bg's running scroll offset
+      (`bb.top`), which visually translates all cards UPWARD together.
+    - Each card's INNER div has its `scale` set via a piecewise map
+      based on the card's viewport-Y center:
+            y ∈ [0, .35*vh]   → scale 0.5 → 1   (rising into center)
+            y ∈ [.35*vh, .65*vh] → scale 1     (in center band)
+            y ∈ [.65*vh, vh]  → scale 1 → 0.5  (climbing past center)
+      So cards are small when entering from below or exiting above,
+      and full-size when crossing the middle.
+    - The LAST TWO cards (the "stable pair") have a hard cap on their
+      vertical motion: once their `bb.top` would push them above their
+      target rest position, `style.top` stops updating — they pin at
+      a fixed small size near the upper-center of the character.
+    - Title #section__merch__top__title (THE STORE) rises from
+      translateY(110%) → 0 once scroll progress > 0.
+    - Title #section__merch__bottom__title (DISCOVER_ALL) rises once
+      progress > 0.5.
+    - Baseline tagline opacity ramps in past 0.15.
+    - DISCOVER_ALL is per-letter 3D rotateX hover-flip (letter-top
+      rotates -90°, letter-bottom rotates back to 0, staggered 0.04s).
+    - Bottom-title click → window.open('https://store.theunknown.tv/').
+-->
+
+<style>
+  @font-face {
+    font-family: 'Lemon';
+    src: url('fonts/Lemon-VF.ttf') format('truetype');
+    font-weight: 100 900;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Alte-Haas-Grotesk';
+    src: url('fonts/AlteHaasGroteskRegular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  :root {
+    --c-bg-a: #08BEEC;
+    --c-bg-b: #2A82BD;
+    --c-bg-c: #403777;
+    --c-rays: #009286;
+    --c-white: #FFF6F1;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--c-bg-a);
+    color: white;
+    font-family: 'Alte-Haas-Grotesk', system-ui, sans-serif;
+    overflow-x: clip;
+  }
+
+  /* ============== section (scroll runway) ============== */
+  /* 540vh of scroll = ~4.4 viewports past the entry, matching the live
+     5000px section on a 900-1000px viewport. Slower than my earlier
+     320vh attempt — the user reported "速度太快" (too fast). */
+  .store {
+    position: relative;
+    width: 100%;
+    height: 540vh;
+    overflow: visible;
+  }
+  .store__stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* ============== animated gradient bg ============== */
+  .store__gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 80% 40%, var(--c-bg-a) 0%, transparent 55%),
+      radial-gradient(circle at 15% 75%, var(--c-bg-c) 0%, transparent 60%),
+      linear-gradient(120deg, var(--c-bg-b) 0%, var(--c-bg-a) 50%, var(--c-bg-c) 100%);
+    background-size: 220% 220%, 220% 220%, 200% 200%;
+    background-position: 0% 0%, 100% 100%, 0% 50%;
+    animation: gradient-shift 16s ease-in-out infinite;
+    z-index: 1;
+  }
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 0%,   100% 100%, 0%   50%; }
+    50%      { background-position: 100% 100%, 0% 0%,    100% 50%; }
+  }
+
+  /* ============== radiating rays ============== */
+  .store__rays {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    width: 200vmax;
+    height: 200vmax;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  .store__rays svg { width: 100%; height: 100%; display: block; }
+  .store__rays line {
+    stroke: var(--c-rays);
+    stroke-width: 4;
+    opacity: 0.55;
+  }
+
+  /* ============== "THE STORE" top title ============== */
+  .store__title {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    padding: 0 40px;
+    text-align: center;
+    z-index: 11;
+    font-family: 'Lemon', sans-serif;
+    font-weight: 700;
+    font-variation-settings: 'Wide' 10, 'wght' 700;
+    /* Live title is huge: at 1920×1080 it spans ~280px font-height. */
+    font-size: clamp(80px, 18vw, 320px);
+    line-height: 75%;
+    color: var(--c-white);
+    margin: 0;
+    overflow: hidden;
+  }
+  @media (min-width: 768px) { .store__title { top: 100px; } }
+  .store__title-inner {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 1s ease-in-out;
+  }
+  .store.is-titled .store__title-inner { transform: translateY(0%); }
+
+  /* ============== character (always centered, doesn't move) ============== */
+  .store__character {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 85vh;
+    width: calc(689 / 720 * 85vh);
+    transform: translateX(-50%);
+    z-index: 13;
+    pointer-events: none;
+  }
+  .store__character img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  .store__character::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 20%;
+    height: 25%;
+    border-radius: 50%;
+    transform: translate(-43%, 35%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    pointer-events: none;
+  }
+
+  /* ============== t-shirt cards ============== */
+  /* Cards float in the rays in front of the character. Each card is a
+     translucent cream-tinted frame; its INNER div holds the image and
+     receives the per-frame scale. JS sets `top` (vh) on the outer and
+     `scale` on the inner. */
+  .store__items {
+    position: absolute;
+    inset: 0;
+    z-index: 14;
+    pointer-events: none;
+  }
+  .store__item {
+    position: absolute;
+    left: 50%;
+    width: 22vh;
+    height: 30vh;
+    margin-left: -11vh;
+    transform-origin: center center;
+    pointer-events: auto;
+    will-change: top, transform;
+  }
+  .store__item-inner {
+    position: absolute;
+    inset: 0;
+    border-radius: 17px;
+    overflow: hidden;
+    background-image: linear-gradient(to bottom, #fff6f159, #fff6f1cf);
+    background-color: rgba(255, 246, 241, 0.03);
+    transform-origin: center center;
+    transform: scale(0.5);
+    transition: background-color 3s ease-in-out, transform 0s linear;
+    will-change: transform;
+  }
+  .store__item--click .store__item-inner { cursor: pointer; }
+  .store__item--click:hover .store__item-inner {
+    background-color: rgba(255, 246, 241, 0.30);
+  }
+  .store__item img {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: auto;
+    transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .store__item--click:hover img {
+    transform: translateX(-50%) scale(1.15);
+  }
+
+  /* Horizontal X offset per card (alternating L-R, mirrors live A() output
+     which uses 125+0..50 px from center × scale curve based on viewport
+     width — gives ±115%..±161% of card-width on 1280+ screens, i.e.
+     roughly ±25-35vh for a 22vh-wide card). Cards 1-4 fly-through with
+     varied offsets so they don't stack in a tight column. The PAIR (5, 6)
+     pins at ±105% (~±22vh) per the live `p >= n.length - 2` branch. */
+  /* X offsets reverse-engineered from live A() formula
+     `_ * 295/m * s` with `_ = 125 + rand*50`, m=1280, s=4 →
+     ±115%..±161% of card-width. For 22vh card width that's ±25-35vh.
+     Vertical baseY spacing is widened to 60vh so each card has its
+     own window — fixes the "too close in time" stacking. */
+  .store__item:nth-child(1) { --x: -28vh; --base-y: 100vh; }
+  .store__item:nth-child(2) { --x:  33vh; --base-y: 160vh; }
+  .store__item:nth-child(3) { --x: -25vh; --base-y: 220vh; }
+  .store__item:nth-child(4) { --x:  30vh; --base-y: 280vh; }
+  .store__item:nth-child(5) { --x: -22vh; --base-y: 340vh; --pair: 1; }
+  .store__item:nth-child(6) { --x:  22vh; --base-y: 340vh; --pair: 1; }
+
+  /* Mobile: drop the outer pair (4,5,6 stay; 1,2,3 visible) and tighten */
+  @media (max-width: 767px) {
+    .store__item { width: 127px; height: 170px; margin-left: -63.5px; }
+    .store__item:nth-child(1) { --x: -90px; }
+    .store__item:nth-child(2) { --x:  90px; }
+    .store__item:nth-child(3) { --x: -120px; }
+    .store__item:nth-child(4) { --x:  120px; }
+    .store__item:nth-child(5) { --x: -75px; }
+    .store__item:nth-child(6) { --x:  75px; }
+  }
+
+  /* ============== bouncing bubble ============== */
+  /* Small pale-blue glass bubble that drops in between the pair settling
+     and DISCOVER_ALL appearing. Floats to the LEFT of the character at
+     chest level (matches the live page where a small light-blue orb
+     sits roughly at viewport (30%, 50%)). Glassy radial highlight, very
+     subtle — not a heavy purple ball. */
+  .store__sphere {
+    position: absolute;
+    bottom: 47vh;
+    left: 50%;
+    width: 4vh;
+    height: 4vh;
+    margin-left: -38vh;        /* outside the left t-shirt, in the empty
+                                  space between it and the viewport edge */
+    border-radius: 50%;
+    /* Glassy soap-bubble — pale blue/white with a bright top-left
+       highlight and a soft rim, no dark fill. Matches the small floating
+       orb visible on the live page next to the character. */
+    background:
+      radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 1.00) 0%,
+                                          rgba(255, 255, 255, 0.55) 18%,
+                                          rgba(220, 240, 255, 0.30) 50%,
+                                          rgba(160, 210, 240, 0.18) 100%);
+    box-shadow:
+      0 6px 18px rgba(180, 220, 255, 0.45),
+      inset -2px -3px 6px rgba(40, 100, 180, 0.22),
+      inset  2px  2px 4px rgba(255, 255, 255, 0.65);
+    z-index: 15;       /* above character so it's never hidden */
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(30vh) scale(0.5);
+    will-change: transform, opacity;
+  }
+
+  /* ============== DISCOVER_ALL bottom title ============== */
+  .store__discover-wrap {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    /* IN FRONT of the character (z-13) and the cards (z-14) so the
+       text wraps around the body — matches the live final composition
+       where DISCOVER_ALL overlays the character from waist down. */
+    z-index: 16;
+    overflow: hidden;
+    padding: 0 20px;
+    pointer-events: none;        /* text is decorative, only the inner
+                                    h2 gets click events */
+  }
+  @media (max-width: 1024px) { .store__discover-wrap { bottom: 100px; } }
+  .store__discover {
+    cursor: pointer;
+    pointer-events: auto;
+    font-family: 'Lemon', sans-serif;
+    font-weight: 700;
+    font-variation-settings: 'Wide' 10, 'wght' 700;
+    /* Big enough to wrap around the character but not viewport-blowing.
+       Live caps the visible letter height ~230-260px on a 1920 viewport. */
+    font-size: clamp(80px, 16vw, 290px);
+    line-height: 100%;
+    letter-spacing: -0.01em;
+    color: #F23A54;
+    margin: 0;
+    overflow: visible;
+    transform: translateY(110%);
+    transition: transform 1s cubic-bezier(.16,.84,.44,1);
+  }
+  .store.is-reveal .store__discover { transform: translateY(0%); }
+  @media (max-width: 1024px) { .store__discover { font-size: clamp(80px, 20vw, 220px); } }
+  @media (max-width: 640px)  { .store__discover { font-size: 80px; line-height: 130%; } }
+
+  .store__discover-letter {
+    display: inline-block;
+    position: relative;
+    perspective: 600px;
+    transform-style: preserve-3d;
+    line-height: 78%;
+    vertical-align: top;
+  }
+  .store__discover-letter span {
+    display: inline-block;
+    backface-visibility: hidden;
+    transition: transform .75s cubic-bezier(.34, 1.56, .64, 1),
+                opacity   .35s ease;
+  }
+  .store__discover-letter .top    { transform: rotateX(0); }
+  .store__discover-letter .bottom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: white;
+    opacity: 0;
+    transform: rotateX(90deg);
+  }
+  .store__discover:hover .store__discover-letter .top    { transform: rotateX(-90deg); opacity: 0; }
+  .store__discover:hover .store__discover-letter .bottom { transform: rotateX(0);      opacity: 1; }
+  .store__discover-letter--delay-1  span { transition-delay: 0.04s; }
+  .store__discover-letter--delay-2  span { transition-delay: 0.08s; }
+  .store__discover-letter--delay-3  span { transition-delay: 0.12s; }
+  .store__discover-letter--delay-4  span { transition-delay: 0.16s; }
+  .store__discover-letter--delay-5  span { transition-delay: 0.20s; }
+  .store__discover-letter--delay-6  span { transition-delay: 0.24s; }
+  .store__discover-letter--delay-7  span { transition-delay: 0.28s; }
+  .store__discover-letter--delay-8  span { transition-delay: 0.32s; }
+  .store__discover-letter--delay-9  span { transition-delay: 0.36s; }
+  .store__discover-letter--delay-10 span { transition-delay: 0.40s; }
+  .store__discover-letter--delay-11 span { transition-delay: 0.44s; }
+  .store__discover-letter--delay-12 span { transition-delay: 0.48s; }
+
+  /* ============== baseline tagline ============== */
+  .store__baseline {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 920px;
+    z-index: 12;
+    text-align: center;
+    color: white;
+    font-size: 18.6667px;
+    line-height: 120%;
+    padding: 0 20px;
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+  }
+  .store.is-tagline .store__baseline { opacity: 1; }
+  @media (max-width: 640px) { .store__baseline { font-size: 16px; bottom: 60px; } }
+  @media (min-width: 1025px) { .store__baseline { bottom: 60px; } }
+
+  /* ============== demo spacers ============== */
+  .demo-spacer {
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    background: #fafafa;
+    color: #888;
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-spacer">scroll down ↓</div>
+
+<section class="store" aria-label="THE STORE">
+  <div class="store__stage">
+    <div class="store__gradient" aria-hidden="true"></div>
+
+    <div class="store__rays" aria-hidden="true">
+      <svg viewBox="-1000 -1000 2000 2000" preserveAspectRatio="xMidYMid meet">
+        <g id="store-rays"></g>
+      </svg>
+    </div>
+
+    <h2 class="store__title">
+      <span class="store__title-inner">THE&nbsp; STORE</span>
+    </h2>
+
+    <div class="store__character">
+      <img src="assets/character.webp" alt="THE UN KNOWN character" width="1920" height="1080">
+    </div>
+
+    <!-- small bouncing sphere — drops in after pair settles, before DISCOVER_ALL -->
+    <div class="store__sphere" id="store-sphere" aria-hidden="true"></div>
+
+    <div class="store__items" aria-label="Merch products">
+      <div class="store__item store__item--click"><div class="store__item-inner"><img src="assets/tshirt-1.webp" alt="product 1" loading="lazy" decoding="async"></div></div>
+      <div class="store__item store__item--click"><div class="store__item-inner"><img src="assets/tshirt-2.webp" alt="product 2" loading="lazy" decoding="async"></div></div>
+      <div class="store__item store__item--click"><div class="store__item-inner"><img src="assets/tshirt-3.webp" alt="product 3" loading="lazy" decoding="async"></div></div>
+      <div class="store__item store__item--click"><div class="store__item-inner"><img src="assets/tshirt-4.webp" alt="product 4" loading="lazy" decoding="async"></div></div>
+      <div class="store__item store__item--click"><div class="store__item-inner"><img src="assets/tshirt-5.webp" alt="product 5" loading="lazy" decoding="async"></div></div>
+      <div class="store__item store__item--click"><div class="store__item-inner"><img src="assets/tshirt-6.webp" alt="product 6" loading="lazy" decoding="async"></div></div>
+    </div>
+
+    <div class="store__discover-wrap">
+      <h2 class="store__discover" id="store-discover"></h2>
+    </div>
+
+    <div class="store__baseline">Gear up. Wear the unknown.</div>
+  </div>
+</section>
+
+<div class="demo-spacer">end of section</div>
+
+<script>
+  // Inline SVG ray field, 72 lines at 5° spacing with length jitter.
+  (() => {
+    const g = document.getElementById('store-rays');
+    if (!g) return;
+    let svg = '';
+    for (let i = 0; i < 72; i++) {
+      const angle = (i * 5) * Math.PI / 180;
+      const len = 900 + (i % 5) * 30;
+      svg += `<line x1="0" y1="0" x2="${(Math.cos(angle)*len).toFixed(1)}" y2="${(Math.sin(angle)*len).toFixed(1)}"/>`;
+    }
+    g.innerHTML = svg;
+  })();
+
+  // Split DISCOVER ALL into per-letter spans for the rotate-on-hover flip.
+  (() => {
+    const root = document.getElementById('store-discover');
+    if (!root) return;
+    const word = 'DISCOVER ALL';
+    root.innerHTML = [...word].map((ch, i) => {
+      const display = ch === ' ' ? ' ' : ch;
+      return `<span class="store__discover-letter store__discover-letter--delay-${i + 1}">
+        <span class="top">${display}</span>
+        <span class="bottom">${display}</span>
+      </span>`;
+    }).join('');
+    root.addEventListener('click', () => {
+      window.open('https://store.theunknown.tv/', '_blank', 'noopener,noreferrer');
+    });
+  })();
+
+  // Scroll-driven animation — same shape as the live page:
+  //   All cards share a single `shift` driven by scroll progress.
+  //   Card.actualY = baseY - shift.
+  //   PAIR (cards 5, 6) caps its shift so they freeze at restY.
+  //   Each card's inner div is scaled by viewport-Y center
+  //   (.5 at edges, 1 across the middle 30%).
+  (() => {
+    const sec = document.querySelector('.store');
+    const sphere = document.getElementById('store-sphere');
+    if (!sec) return;
+    const itemEls = [...document.querySelectorAll('.store__item')];
+    const cards = itemEls.map((el) => {
+      const cs = getComputedStyle(el);
+      return {
+        el,
+        inner: el.querySelector('.store__item-inner'),
+        x:      cs.getPropertyValue('--x').trim() || '0',
+        baseY:  parseFloat(cs.getPropertyValue('--base-y')) || 0,   // vh
+        pair:   parseFloat(cs.getPropertyValue('--pair')) === 1,
+      };
+    });
+
+    const clamp01 = (v) => Math.max(0, Math.min(1, v));
+
+    // Pair lands so its top edge is ~22vh, putting card center at ~37vh
+    // (just below THE STORE title) and bottom at ~52vh. This keeps the
+    // huge DISCOVER_ALL text (which starts around y=52vh on a 1080
+    // viewport) clear of the t-shirts — matching the live composition
+    // where pair sits above the red text, not under it.
+    const PAIR_REST_Y = 22;  // vh — top of card in viewport
+
+    // Total shift across full scroll runway = enough to push card 4
+    // (baseY=280vh) past the top by ~80vh. Increased to 440vh to match
+    // the new wider baseY spacing.
+    const MAX_SHIFT = 440;   // vh
+
+    // Scale curve from live: 0.5 ↔ 1 piecewise through viewport.
+    const scaleAtY = (centerVh) => {
+      const t = centerVh / 100;          // viewport fraction
+      if (t < 0.35)      return 0.5 + (t / 0.35) * 0.5;          // 0..0.35: 0.5 → 1
+      if (t < 0.65)      return 1;                                // 0.35..0.65: full
+      if (t < 1)         return 1 - ((t - 0.65) / 0.35) * 0.5;    // 0.65..1: 1 → 0.5
+      return 0.5;
+    };
+
+    const frame = () => {
+      const r = sec.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = sec.offsetHeight - vh;
+      const scrolled = Math.max(0, -r.top);
+      const progress = clamp01(scrolled / total);
+
+      // shared shift, eased so cards rise a bit faster near the start
+      // (matches live where most card motion is in the first ~50% of scroll)
+      const ease = Math.pow(progress, 0.85);
+      const shift = ease * MAX_SHIFT;
+
+      cards.forEach(({ el, inner, x, baseY, pair }) => {
+        let actualY;
+        if (pair) {
+          // pair freezes at restY once they reach it
+          actualY = Math.max(PAIR_REST_Y, baseY - shift);
+        } else {
+          actualY = baseY - shift;
+        }
+        el.style.top = actualY.toFixed(2) + 'vh';
+        el.style.transform = `translateX(${x})`;
+
+        // scale by where card's CENTER sits in the viewport
+        const cardHeightVh = parseFloat(getComputedStyle(el).height) / vh * 100;
+        const centerVh = actualY + cardHeightVh * 0.5;
+        const s = scaleAtY(centerVh);
+        inner.style.transform = `scale(${s.toFixed(3)})`;
+
+        // hide cards entirely above/below the viewport so they don't
+        // catch hover on empty space
+        const visible = centerVh > -20 && centerVh < 120;
+        el.style.opacity = visible ? '1' : '0';
+      });
+
+      // Bouncing bubble — drops in around p=0.50 once pair has settled,
+      // does a damped 2-bounce, idles briefly, then fades out as
+      // DISCOVER_ALL takes over the final composition.
+      if (sphere) {
+        if (progress < 0.50) {
+          sphere.style.opacity = 0;
+          sphere.style.transform = 'translateY(30vh) scale(0.5)';
+        } else if (progress < 0.72) {
+          // bounce in
+          const sp = (progress - 0.50) / 0.22;
+          const bounceY = -22 * Math.exp(-3.5 * sp) * Math.cos(2 * Math.PI * 2.2 * sp);
+          const scale = 0.5 + 0.5 * (1 - Math.pow(1 - sp, 3));
+          sphere.style.opacity = Math.min(1, sp * 4).toFixed(3);
+          sphere.style.transform = `translateY(${bounceY.toFixed(2)}vh) scale(${scale.toFixed(3)})`;
+        } else if (progress < 0.85) {
+          // idle hover then start fading out as DISCOVER_ALL rises
+          const sp = (progress - 0.72) / 0.13;
+          const hover = Math.sin(sp * Math.PI * 4) * 0.6;
+          const fade = 1 - sp * 0.7;       // 1 → 0.3
+          sphere.style.opacity = fade.toFixed(3);
+          sphere.style.transform = `translateY(${hover.toFixed(2)}vh) scale(1)`;
+        } else {
+          sphere.style.opacity = 0;
+          sphere.style.transform = 'translateY(0) scale(1)';
+        }
+      }
+
+      sec.classList.toggle('is-titled',  progress > 0.02);
+      sec.classList.toggle('is-tagline', progress > 0.55);
+      sec.classList.toggle('is-reveal',  progress > 0.55);
+    };
+
+    window.addEventListener('scroll', frame, { passive: true });
+    window.addEventListener('resize', frame);
+    requestAnimationFrame(frame);
+    setTimeout(frame, 200);
+    setTimeout(frame, 800);
+  })();
+</script>
+
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="024-theunknown-store.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=024-theunknown-store" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

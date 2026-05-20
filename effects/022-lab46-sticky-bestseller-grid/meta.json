@@ -1,0 +1,20 @@
+{
+  "title": "LAB46 · Sticky bestseller + product grid",
+  "subtitle": "Single sticky hero card + 2-col scroll-by grid",
+  "description": "LAB46 首页 ‘featured product grid’ 整段：左列固定一张大方图 hero 卡片（Bestseller 'Get Ready Drops'，h3 Times Now 大标题 + h6 N27 phase/price + 价格右挤、Buy now 长 pill 按钮），右列 2 列 × 2 行四张次级卡片（Bright Berry Bleach / Sweet Flow Pills · Sold out / PrepTect Shield / Soothing Smash Lube，9:10 aspect-ratio 封面 + 同款 hover scale 1.05 transition .6s ease-in-out + 同款 hover-填黑 buy now 按钮）。左侧用 `position: sticky; top: 24px` 钉在视口顶部不动，右侧滑过时形成 ‘bestseller 永远在身边、其他在动’ 的对照阅读节奏；md 以下退化为单列堆叠（hero 卡 sticky 取消，纯文档流）。 ‘Bestseller’ 和 ‘Sold out’ 是 .tag pill，前者 slate-blue/40 半透 + 深蓝字 + 2rem backdrop-blur，后者直接黑底白字；Sweet Flow Pills 整张图额外加 opacity:.64 灰显，对应原站 ‘已售罄’ 的视觉降权。每张 article 都用 IntersectionObserver 复刻 data-sal=slide-up + data-sal-delay-auto=200，对应原站从下往上 fade-in stagger（0/200/400/600ms）。md 横向 gap 32px，lg 直接拉到 120px——这是原站的 lg:gap-[120px] 让 hero 卡片左右气场拉满的关键。",
+  "tech": "position: sticky · CSS grid 2-col · IntersectionObserver slide-up · aspect-ratio 9/10",
+  "tags": [
+    "产品",
+    "网格",
+    "悬停",
+    "图片缩放",
+    "字体动画",
+    "滚动",
+    "健康"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://lab46.de/en",
+  "localMirror": "../designs/015-lab46/index.html",
+  "order": 22,
+  "savedAt": "2026-05-18"
+}

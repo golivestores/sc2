@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LAB46 · Prepare / Play / Protect hero · sc2 effect</title>
+
+<!--
+  Self-contained reproduction of the "Prepare / Play / Protect" full-bleed
+  3-column phase hero from https://lab46.de/en. Each column holds a
+  <model-viewer> 3D web component (.glb file) of a 3-ring "fidget spinner"
+  icon (coi = "circles of intimacy"), with a centered serif H3 title and a
+  bracket-style [ SHOP NOW ] button that fills in on hover.
+
+  Replicated 1:1:
+    - dark blue (#355672) base with full-bleed pills-on-plate photo and a
+      black 15% → 48% top-to-bottom gradient overlay
+    - 3 equal columns separated by white 1px verticals (right border on each
+      <li>, the 4th edge falls off the section); on mobile they stack with a
+      top border instead
+    - title in Times Now serif (var(--Fonts-H3) = 1.75rem mobile / 2.5rem md)
+    - 3D model sized 56px on mobile, 200px desktop, vertically centered on
+      desktop, top-right on mobile
+    - SHOP NOW = .button.-primary — clip-path keeps only the left/right
+      0.25rem strips of a 1px white border visible, producing the [ ] bracket
+      look; ::after fills the button on hover/group-hover with a scaleY tween
+    - on-scroll slide-up on each title with 0ms / 200ms / 400ms stagger
+      (original uses sal.js; here a small IntersectionObserver toggles the
+      `.in` class once)
+    - text fades in on column enter (model-viewer's :class="opacity-0:!loaded"
+      mirrored as opacity-0 → 1 when model-viewer fires its first 'load')
+
+  The 3D models do not auto-rotate on the live site (coiIcon.js chunk 404s
+  even there); model-viewer renders them static, front-facing, matching
+  what visitors actually see.
+-->
+
+<style>
+/* ---- lab46 typography subset ---- */
+@font-face { font-family: "Times Now"; font-display: swap; font-style: normal; font-weight: 400;
+  src: url("lib/fonts/times-now-subset.woff2") format("woff2"); }
+@font-face { font-family: "N27"; font-display: swap; font-style: normal; font-weight: 400;
+  src: url("lib/fonts/n27-regular-subset.woff2") format("woff2"); }
+@font-face { font-family: "TWK Lausanne"; font-display: swap; font-style: normal; font-weight: 400;
+  src: url("lib/fonts/twk-lausanne-400-subset.woff2") format("woff2"); }
+@font-face { font-family: "TWK Lausanne"; font-display: swap; font-style: normal; font-weight: 700;
+  src: url("lib/fonts/twk-lausanne-700-subset.woff2") format("woff2"); }
+
+/* ---- lab46 design tokens (verbatim subset from live :root) ---- */
+:root {
+  --color-black: #0b0c0f;
+  --color-white: #fff;
+  --color-deep-blue: #355672;
+
+  --font-heading: "Times Now", "Times New Roman", serif;
+  --font-body:    "TWK Lausanne", Arial, sans-serif;
+  --font-accent:  "N27", Arial, sans-serif;
+
+  /* mobile font sizes */
+  --Fonts-H3: 1.75rem;
+  --Fonts-Button: 0.75rem;
+
+  /* mobile spacing */
+  --Spacing-Margins: 1rem;
+
+  --ease-figma: cubic-bezier(.15, .85, .35, 1);
+}
+@media (min-width: 48rem) { /* md = 768px */
+  :root {
+    --Fonts-H3: 2.5rem;
+    --Fonts-Button: 0.813rem;
+    --Spacing-Margins: 1.5rem;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  color: var(--color-black);
+  background: #fafafa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Section: phase-cards hero ---------- */
+.phase-hero {
+  background: var(--color-deep-blue);
+  position: relative;
+  isolation: isolate;
+  z-index: 0;
+  display: flex;
+  overflow: clip;
+  color: var(--color-white);
+}
+@media (min-width: 48rem) {
+  .phase-hero { min-height: 80vh; }
+}
+
+.phase-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+/* top-to-bottom black gradient overlay — from-black/15 to-black/48 */
+.phase-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #0b0c0f26 0%, #0b0c0f7a 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.phase-hero__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
+  width: 100%;
+}
+@media (min-width: 48rem) {
+  .phase-hero__list { grid-template-columns: repeat(3, 1fr); }
+}
+
+.phase-hero__cell {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px var(--Spacing-Margins) 32px;
+  border-top: 1px solid #ffffff;
+}
+.phase-hero__cell:first-child { border-top: 0; }
+@media (min-width: 48rem) {
+  .phase-hero__cell {
+    flex-direction: column;
+    padding: 64px var(--Spacing-Margins);
+    text-align: center;
+    border-top: 0;
+    border-right: 1px solid #ffffff;
+  }
+  /* 4th edge falls off — last column keeps its right border to match live */
+}
+
+.phase-hero__title {
+  font-family: var(--font-heading);
+  font-size: var(--Fonts-H3);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+.phase-hero__title a {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+.phase-hero__title a::before {
+  /* full-cell click area (box-link pattern in source) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+/* slide-up reveal — replicates data-sal="slide-up" with IO trigger */
+.phase-hero__title-text {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20%);
+  transition: opacity .8s ease-out, transform .8s var(--ease-figma);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.phase-hero .is-revealed .phase-hero__title-text {
+  opacity: 1;
+  transform: none;
+}
+
+/* 3D model layer */
+.phase-hero__model-wrap {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 16px;
+  transition: opacity .7s ease-out;
+}
+.phase-hero__model-wrap:not(.is-loaded) { opacity: 0; }
+@media (min-width: 48rem) {
+  .phase-hero__model-wrap {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+}
+.phase-hero__model {
+  width: 56px;
+  height: 56px;
+  --poster-color: transparent;
+}
+@media (min-width: 48rem) {
+  .phase-hero__model { width: 200px; height: 200px; }
+}
+
+.phase-hero__action {
+  pointer-events: none;
+  min-height: 49px;
+  width: 100%;
+  margin-top: 0;
+  position: relative;
+  z-index: 2;
+}
+@media (max-width: 47.99rem) {
+  .phase-hero__action { margin-top: 69px; }
+}
+
+/* ---- .button.-primary (theme-light → dark bg variant) ---- */
+/* On the hero (dark bg), the button uses dark text on white fill once
+   filled, and white text on transparent before. Matches the live theme
+   variant when bg-deep-blue + theme-light is in effect. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-accent);
+  font-size: var(--Fonts-Button);
+  letter-spacing: .035em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  user-select: none;
+}
+.button.-primary {
+  --btn-text:        var(--color-white);
+  --btn-bg:          transparent;
+  --btn-hover-text:  var(--color-black);
+  --btn-hover-bg:    var(--color-white);
+  --_btn-bg:         var(--btn-hover-bg);
+  --_btn-text:       var(--btn-text);
+  color: var(--_btn-text);
+  position: relative;
+  overflow: clip;
+  padding: 1rem 2.25rem;
+}
+.button.-primary::before {
+  /* the [ ] bracket — clip-path keeps only the left/right ~0.25rem strips
+     of a 1px border; the middle is invisible */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 0.063rem solid var(--_btn-bg);
+  clip-path: polygon(
+    -10% -10%, 0.25rem -10%, 0.25rem 110%,
+    calc(100% - 0.25rem) 110%, calc(100% - 0.25rem) -10%,
+    110% -10%, 110% 110%, -10% 110%
+  );
+  transform: scaleY(.8);
+  transition: transform .45s var(--ease-figma);
+}
+.button.-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--_btn-bg);
+  transform: scaleY(0);
+  transition: transform .45s var(--ease-figma);
+}
+.button.-primary > * {
+  position: relative;
+  z-index: 1;
+  transition: color .45s var(--ease-figma);
+}
+.phase-hero__cell:hover .button.-primary.-group-hover,
+.button.-primary:hover {
+  --_btn-text: var(--btn-hover-text);
+}
+.phase-hero__cell:hover .button.-primary.-group-hover::before,
+.phase-hero__cell:hover .button.-primary.-group-hover::after,
+.button.-primary:hover::before,
+.button.-primary:hover::after {
+  transform: scaleY(1);
+}
+
+/* model-viewer cursor affordance */
+model-viewer { display: block; }
+
+/* sr-only utility */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* a thin demo strip above + below the section so the effect is framed in
+   the gallery — keep neutral and unobtrusive */
+.demo-frame {
+  padding: 56px 32px;
+  background: #fafafa;
+  color: #888;
+  font-size: 13px;
+  font-family: var(--font-body);
+  text-align: center;
+}
+.demo-frame strong { color: #222; font-weight: 500; }
+</style>
+</head>
+
+<body>
+
+<div class="demo-frame">
+  <strong>LAB46 · Prepare / Play / Protect</strong> — full-bleed phase hero with 3D phase icons
+</div>
+
+<section class="phase-hero" aria-label="LAB46 phases">
+  <picture>
+    <source media="(min-width:1500px)"
+            srcset="assets/bg.jpg">
+    <source media="(min-width:1000px)"
+            srcset="assets/bg-1200.jpg">
+    <source media="(min-width:700px)"
+            srcset="assets/bg-1000.jpg">
+    <img class="phase-hero__bg" src="assets/bg-700.jpg" alt="" loading="eager" decoding="async" width="2667" height="4000">
+  </picture>
+  <div class="phase-hero__overlay"></div>
+
+  <ul class="phase-hero__list" role="list">
+
+    <li class="phase-hero__cell" data-reveal-delay="0">
+      <h2 class="phase-hero__title">
+        <a href="#prepare">
+          <span class="phase-hero__title-text">Prepare</span>
+        </a>
+      </h2>
+
+      <div class="phase-hero__model-wrap" data-model="prepare">
+        <model-viewer
+          class="phase-hero__model"
+          src="assets/coi-prepare.glb"
+          alt="Prepare phase icon"
+          camera-orbit="0deg 90deg 100%"
+          shadow-intensity="0"
+          shadow-softness="0"
+          exposure="1"
+          environment-image="neutral"
+          interaction-prompt="none"
+          touch-action="pan"
+          disable-zoom
+          disable-pan
+          tabindex="-1"
+        ></model-viewer>
+      </div>
+
+      <div class="phase-hero__action">
+        <span class="button -primary -group-hover">
+          <span>Shop now</span>
+        </span>
+      </div>
+    </li>
+
+    <li class="phase-hero__cell" data-reveal-delay="200">
+      <h2 class="phase-hero__title">
+        <a href="#play">
+          <span class="phase-hero__title-text">Play</span>
+        </a>
+      </h2>
+
+      <div class="phase-hero__model-wrap" data-model="play">
+        <model-viewer
+          class="phase-hero__model"
+          src="assets/coi-play.glb"
+          alt="Play phase icon"
+          camera-orbit="0deg 90deg 100%"
+          shadow-intensity="0"
+          shadow-softness="0"
+          exposure="1"
+          environment-image="neutral"
+          interaction-prompt="none"
+          touch-action="pan"
+          disable-zoom
+          disable-pan
+          tabindex="-1"
+        ></model-viewer>
+      </div>
+
+      <div class="phase-hero__action">
+        <span class="button -primary -group-hover">
+          <span>Shop now</span>
+        </span>
+      </div>
+    </li>
+
+    <li class="phase-hero__cell" data-reveal-delay="400">
+      <h2 class="phase-hero__title">
+        <a href="#protect">
+          <span class="phase-hero__title-text">Protect</span>
+        </a>
+      </h2>
+
+      <div class="phase-hero__model-wrap" data-model="protect">
+        <model-viewer
+          class="phase-hero__model"
+          src="assets/coi-protect.glb"
+          alt="Protect phase icon"
+          camera-orbit="0deg 90deg 100%"
+          shadow-intensity="0"
+          shadow-softness="0"
+          exposure="1"
+          environment-image="neutral"
+          interaction-prompt="none"
+          touch-action="pan"
+          disable-zoom
+          disable-pan
+          tabindex="-1"
+        ></model-viewer>
+      </div>
+
+      <div class="phase-hero__action">
+        <span class="button -primary -group-hover">
+          <span>Shop now</span>
+        </span>
+      </div>
+    </li>
+
+  </ul>
+</section>
+
+<div class="demo-frame">
+  (continued page content would follow)
+</div>
+
+<!-- @google/model-viewer 3.5.0 (UMD) -->
+<script type="module" src="lib/model-viewer.min.js"></script>
+
+<script>
+  // sal slide-up: reveal each cell's title once it enters the viewport,
+  // honoring the per-cell --reveal-delay (0 / 200 / 400 ms)
+  (() => {
+    const cells = document.querySelectorAll('.phase-hero__cell');
+    cells.forEach(c => {
+      const d = c.dataset.revealDelay || '0';
+      c.style.setProperty('--reveal-delay', d + 'ms');
+    });
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-revealed');
+          io.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.15 });
+    cells.forEach(c => io.observe(c));
+  })();
+
+  // coiIcon — 1:1 port of the Alpine.js coiIcon component from lab46:
+  //   • on model-viewer 'load', tint materials to silvery #C9D3DB w/
+  //     metallic 0.3 / roughness 0.2 and reveal the icon (loaded→opacity 1)
+  //   • when no hover, slowly sway the camera in θ via 24°·sin(t/6s·2π)
+  //     starting after a randomized 2–8s delay (matches `6e3 * Math.random()
+  //     + 2e3` in the source)
+  //   • when hovering the *whole cell* (li), drive cameraOrbit from cursor:
+  //       θ = -30° · ((x-left)/width  * 2 - 1)   // -30°..+30°
+  //       φ =  90° - 20° · ((y-top)/height * 2 - 1)   // 70°..110°
+  //     touch passes through clientX/Y from touches[0]; mouseleave restores
+  //     defaults and resumes the auto-sway
+  //   • only attaches pointer listeners under matchMedia('(pointer: fine)')
+  //     so phones don't spin the icon under a stray touch; re-evaluates on
+  //     resize and on pointer-fine media-query change (1:1 with source)
+  (() => {
+    const DEFAULT_ORBIT = '0deg 90deg 100%';
+    const DEFAULT_COLOR = [201 / 255, 211 / 255, 219 / 255, 1];
+    const METAL = 0.3, ROUGH = 0.2;
+
+    const cells = document.querySelectorAll('.phase-hero__cell');
+
+    cells.forEach((cell) => {
+      const wrap = cell.querySelector('.phase-hero__model-wrap');
+      const mv   = cell.querySelector('model-viewer');
+      if (!mv || !wrap) return;
+
+      const reveal = () => wrap.classList.add('is-loaded');
+
+      // hard timeout fallback so a stalled model never blocks the icon
+      setTimeout(reveal, 3000);
+
+      let rafId = null, animating = false, t0 = null;
+
+      function startAuto() {
+        if (animating) return;
+        animating = true;
+        // randomized 2–8s start offset — matches Math.random()*6000+2000
+        const delay = 6000 * Math.random() + 2000;
+        t0 = null;
+        const tick = (now) => {
+          if (!t0) t0 = now;
+          const elapsed = now - t0 + delay;
+          const theta = 24 * Math.sin((elapsed / 6000) * Math.PI * 2);
+          mv.cameraOrbit = `${theta.toFixed(2)}deg 90.00deg 100%`;
+          rafId = requestAnimationFrame(tick);
+        };
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function stopAuto() {
+        if (!animating) return;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+        animating = false;
+        t0 = null;
+        mv.cameraOrbit = DEFAULT_ORBIT;
+      }
+
+      const onMove = (ev) => {
+        const r = cell.getBoundingClientRect();
+        let x, y;
+        if (ev.touches && ev.touches.length) {
+          x = ev.touches[0].clientX;
+          y = ev.touches[0].clientY;
+        } else {
+          x = ev.clientX;
+          y = ev.clientY;
+        }
+        const theta = 30 * -(((x - r.left) / r.width)  * 2 - 1);
+        const phi   = 90 - 20 * (((y - r.top)  / r.height) * 2 - 1);
+        mv.cameraOrbit = `${theta.toFixed(2)}deg ${phi.toFixed(2)}deg 100%`;
+      };
+
+      const onEnter = () => {
+        stopAuto();
+        cell.addEventListener('mousemove', onMove);
+        cell.addEventListener('touchmove', onMove, { passive: false });
+      };
+      const onLeave = () => {
+        cell.removeEventListener('mousemove', onMove);
+        cell.removeEventListener('touchmove', onMove, { passive: false });
+        mv.cameraOrbit = DEFAULT_ORBIT;
+        startAuto();
+      };
+
+      function bind() {
+        stopAuto();
+        if (window.matchMedia('(pointer: fine)').matches) {
+          cell.addEventListener('mouseenter', onEnter);
+          cell.addEventListener('mouseleave', onLeave);
+          cell.addEventListener('touchstart', onEnter, { passive: true });
+          cell.addEventListener('touchend',   onLeave);
+          startAuto();
+        } else {
+          // coarse pointer: no hover binding, still auto-sway
+          startAuto();
+        }
+      }
+      function unbind() {
+        cell.removeEventListener('mouseenter', onEnter);
+        cell.removeEventListener('mouseleave', onLeave);
+        cell.removeEventListener('touchstart', onEnter);
+        cell.removeEventListener('touchend',   onLeave);
+      }
+
+      // wait for the model to load, then recolor + start
+      const onLoad = () => {
+        try {
+          if (mv.model && mv.model.materials) {
+            mv.model.materials.forEach((m) => {
+              if (m.pbrMetallicRoughness) {
+                m.pbrMetallicRoughness.setBaseColorFactor(DEFAULT_COLOR);
+                m.pbrMetallicRoughness.setMetallicFactor(METAL);
+                m.pbrMetallicRoughness.setRoughnessFactor(ROUGH);
+              }
+            });
+          }
+        } catch (e) { /* model not yet exposed — best-effort */ }
+        reveal();
+        // model-visible always snaps to default — match source behavior
+        mv.addEventListener('model-visible', () => {
+          if (!animating && !mv.matches(':hover')) mv.cameraOrbit = DEFAULT_ORBIT;
+        });
+        bind();
+      };
+      mv.addEventListener('load', onLoad, { once: true });
+      if (mv.loaded) onLoad();
+
+      // re-evaluate on viewport resize and pointer-mode change (matches the
+      // resize + matchMedia('(pointer: fine)') change listeners in source)
+      window.addEventListener('resize', () => { unbind(); bind(); });
+      const mq = window.matchMedia('(pointer: fine)');
+      const onMq = () => { unbind(); bind(); };
+      if (mq.addEventListener) mq.addEventListener('change', onMq);
+      else if (mq.addListener) mq.addListener(onMq);
+    });
+  })();
+</script>
+
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="021-lab46-phase-cards-hero.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=021-lab46-phase-cards-hero" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

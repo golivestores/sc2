@@ -1,0 +1,19 @@
+{
+  "title": "Sun Metalon · Stacking Cards 3D Fold",
+  "subtitle": "3 张 Benefits 卡片 sticky 叠加，下一张推上来时上一张缩小 / 透明 / X+Y 倾斜",
+  "description": "sunmetalon.com 首页 `.stacking-cards` 段：3 张 Benefits 卡片（01 Your Metal / 02 Your Independence / 03 Your World）走 `position: sticky; top:0; transform-origin: center bottom`，父容器 `perspective: 50em` 让子卡片的 rotateX/rotateY 有立体景深。每帧 scroll：对每张卡片 t，算 `r = clamp(0, 1, nextCard.getBoundingClientRect().top / t.clientHeight)`——即下一张距离当前张顶部的归一化比例（1 = 下一张还在视口外，0 = 下一张完全盖住当前张）。然后 `gsap.set(t, { scale: 0.8 + 0.2*r, opacity: r, rotateX: 15-15*r, rotateY: 15-15*r })`，并在 `r<1` 时挂 `.falling` 类（这时 CSS 给卡片切回完整圆角 + 边框，把先前用 clip-path 切掉的首尾 24px 复原）。容器本身有大量 CSS 细节：clip-path polygon 把右上和左下两角削成 20×20 斜边，`:before`/`:after` 用 45° linear-gradient 给斜边补 1 px 描边色，给人 'metal-cut card' 的工业感。背景两张 steel-brick PNG（一张挂右上、一张挂左下偏中）走 GSAP scrollTrigger scrub-2 timeline：上方 yPercent -100 + rotate -25，下方 yPercent 100 + rotateZ 50，整段进出视口时缓慢飘移旋转。GSAP + ScrollTrigger 走 CDN 3.12.5；本地素材 steel-brick PNG + Bastardo Regular/Semibold + Rector Light（Rector 是大数字 01/02/03 的金色字体 `#cdb379`）。",
+  "tech": "CSS position: sticky · CSS perspective + clip-path polygon · GSAP set scale/rotateX/Y · GSAP ScrollTrigger scrub",
+  "tags": [
+    "卡片",
+    "滚动驱动",
+    "sticky",
+    "3D",
+    "层叠",
+    "B2B服务"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://sunmetalon.com/",
+  "localMirror": "../designs/019-sunmetalon/index.html",
+  "order": 28,
+  "savedAt": "2026-05-20"
+}
