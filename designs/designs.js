@@ -148,6 +148,66 @@ window.__DESIGNS__ = [
     "preview": "013-more-nutrition/preview.png"
   },
   {
+    "folder": "015-lab46",
+    "title": "LAB46: Intimate Science",
+    "description": "",
+    "sourceUrl": "https://lab46.de/en",
+    "savedAt": "2026-05-18",
+    "tags": [],
+    "href": "015-lab46/index.html",
+    "preview": "015-lab46/preview.png"
+  },
+  {
+    "folder": "016-theunknown",
+    "title": "THE UN KNOWN · Creative Agency Montreal",
+    "description": "",
+    "sourceUrl": "https://theunknown.tv/en",
+    "savedAt": "2026-05-18",
+    "tags": [],
+    "href": "016-theunknown/index.html",
+    "preview": "016-theunknown/preview.png"
+  },
+  {
+    "folder": "017-innoceanberlin",
+    "title": "017-innoceanberlin",
+    "description": "",
+    "sourceUrl": "https://innoceanberlin.com/?ref=siteinspire",
+    "savedAt": "2026-05-20",
+    "tags": [],
+    "href": "017-innoceanberlin/index.html",
+    "preview": "017-innoceanberlin/preview.png"
+  },
+  {
+    "folder": "018-viture-beast",
+    "title": "018-viture-beast",
+    "description": "",
+    "sourceUrl": "https://www.viture.jp/beast",
+    "savedAt": "2026-05-20",
+    "tags": [],
+    "href": "018-viture-beast/index.html",
+    "preview": "018-viture-beast/preview.png"
+  },
+  {
+    "folder": "019-sunmetalon",
+    "title": "Sun Metalon",
+    "description": "",
+    "sourceUrl": "https://sunmetalon.com/",
+    "savedAt": "2026-05-20",
+    "tags": [],
+    "href": "019-sunmetalon/index.html",
+    "preview": "019-sunmetalon/preview.png"
+  },
+  {
+    "folder": "020-fromanother",
+    "title": "From Another",
+    "description": "",
+    "sourceUrl": "https://www.fromanother.love/",
+    "savedAt": "2026-05-21",
+    "tags": [],
+    "href": "020-fromanother/index.html",
+    "preview": "020-fromanother/preview.png"
+  },
+  {
     "folder": "Floema",
     "title": "Floema — Spaces for people, made for life",
     "description": "Sustainable signage & equipment brand. Pixi.js scattered-objects hero, scroll-driven photo collages, audio-driven micro-interactions. Homepage captured as full-page PNG (homepage-full.png) because the live site is a Nuxt SPA with Sanity-CMS images served via /_ipx/ proxy — interactive mirror keeps hero + nav but sub-page CSS chunks are absent.",
@@ -163,6 +223,6 @@ window.__DESIGNS__ = [
       "brand"
     ],
     "href": "Floema/index.html",
-    "preview": "Floema/preview.png"
+    "preview": ""
   }
 ];

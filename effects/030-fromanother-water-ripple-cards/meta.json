@@ -1,0 +1,21 @@
+{
+  "title": "fromanother · Featured Work water-ripple cards",
+  "subtitle": "6-cover stack with mouse-driven 2D wave simulation + circular-ripple cross-fade",
+  "description": "fromanother.love 首页 Featured Work 那块的核心交互：6 张项目封面叠在中央，鼠标移过去画面像水面被指尖划过、跟着鼠标轨迹起波；点左侧 1‑6 索引（或按 ←/→ 方向键）切到下一张，触发从中心向外扩散的圆形涟漪，老图和新图在涟漪边缘 mix。整段视觉来自两段 verbatim 抠出的 GLSL：\n\n(1) **SIM PASS** — 64×64 RGBA-Half RT 双缓冲 ping-pong。.r 通道存 height、.y 存 velocity；每帧 `velocity += (4-邻居平均 − height) * 0.5`（拉普拉斯算子模拟弹性恢复力）、`velocity *= dissipation`、`height += velocity`，再在鼠标位置用 `smoothstep(uBrushRadius, 0.0, distance) * uVelocity` 圆形 brush 注入能量，全局 `* 0.98` 阻尼。鼠标 UV/frame 平移量当 uVelocity，鼠标越快波越大。\n\n(2) **DISPLAY PASS** — 全画幅 quad 贴当前 cover。用中心差分采样 height map 4 邻居得到 2D normal `(hL−hR, hT−hB)`，把这个 normal 当 UV offset 扭曲图像采样位置 → 就是水面波纹。切换时 `uProgress` GSAP-style 0→1 跑 1.2s，`rippleRadius = smoothstep(0,1,uProgress)`，`mask = smoothstep(rippleRadius − 0.15, rippleRadius, distToCenter)`，`finalColor = mix(texNext, texCurrent, mask)`，再叠一层 `sin((dist − rippleRadius) * 8.0) * intensity * 0.15` 的径向次级波纹和 normal-based 明暗压暗。\n\n背景排版（顶部 fromanother / 左侧 1‑6 索引/Featured work 高亮 / 右侧服务列表 / 大标题 H2）按截图复刻；six covers 直接复用从 designs/020-fromanother/assets/image.mux.com/ 拿到的 8 张 Mux 缩略图里挑 6 张当占位（原站 cover 在 Prismic CMS，自托管不实际）。three.js 走 importmap 拉 0.158.0，全文件自包含，无 GSAP / R3F / lenis 等依赖 —— React 那一层在原站只是把 shader uniforms 接到 ScrollTrigger / mouse listener，shader 数学跟这里完全一致。",
+  "tech": "three.js r158 · GPGPU ping-pong (RGBA-Half 64×64 RT) · 2D wave-equation discrete integration · circular-ripple smoothstep cross-fade · ortho camera + plane quad",
+  "tags": [
+    "WebGL",
+    "Shader",
+    "悬停",
+    "鼠标跟随",
+    "图片画廊",
+    "切换",
+    "水波",
+    "GLSL"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://www.fromanother.love/",
+  "localMirror": "../designs/020-fromanother/index.html",
+  "order": 30,
+  "savedAt": "2026-05-21"
+}
