@@ -1,0 +1,1 @@
+import{c as o,b as t,e as s}from"./CQrTCadM.js";const r={viewBox:"0 0 31 32",fill:"none",xmlns:"http://www.w3.org/2000/svg"};function n(l,e){return t(),o("svg",r,e[0]||(e[0]=[s("path",{class:"stroke",d:"M0 16L31 16",stroke:"#072C3E"},null,-1),s("path",{class:"stroke",d:"M15.5 31.5V0.5",stroke:"#072C3E"},null,-1)]))}const c={render:n};export{c as I};

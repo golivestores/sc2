@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["js/file-input.astro_astro_type_script_index_0_lang-CJVABS5o.js","js/libs-CFvlTRJz.js","js/petit-kit-DNrI3lPJ.js","js/ogl-DYa94y7C.js","js/gsap-Bc2aDPd5.js","js/ClientRouter.astro_astro_type_script_index_0_lang-CUYf2et0.js"])))=>i.map(i=>d[i]);
+import{_ as o}from"./preload-helper-BlTxHScW.js";o(()=>import("./file-input.astro_astro_type_script_index_0_lang-CJVABS5o.js").then(_=>_.a),__vite__mapDeps([0,1,2,3,4,5]));

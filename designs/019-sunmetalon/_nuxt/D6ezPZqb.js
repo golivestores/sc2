@@ -1,0 +1,1 @@
+import{am as n,c as s,b as t,ac as c}from"./CQrTCadM.js";const r={},a={class:"underline"};function o(e,l){return t(),s("span",a,[c(e.$slots,"default")])}const d=n(r,[["render",o]]);export{d as default};

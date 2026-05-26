@@ -63,12 +63,96 @@ def _write_json_and_js(json_path: Path, js_path: Path, var_name: str, data: list
     _write_text(js_path, f"{GEN_HEADER}\nwindow.{var_name} = {body};\n")
 
 
+WACZ_VIEWER_MARKER = "<!-- auto-generated WACZ viewer — rebuild-index.py regenerates this -->"
+
+
+def _generate_wacz_viewer(folder: Path, wacz_filename: str, title: str, source_url: str) -> None:
+    """Emit folder/index.html that mounts <replay-web-page> over the WACZ archive.
+
+    Triggered when a folder contains *.wacz but no hand-written index.html (or one
+    that still carries the auto-marker). Regenerating is idempotent — same content
+    is written each run so git diffs stay clean.
+
+    Service workers can't register under file://, so the viewer only works when sc2
+    is served via a local http.server. The replay-web-page library is self-hosted at
+    designs/_replay/ (shared across all wacz designs) — CDN-hosted SW is blocked by
+    cross-origin SW registration restrictions.
+    """
+    safe_title = title.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    safe_src   = source_url.replace('"', "&quot;")
+    safe_wacz  = wacz_filename.replace('"', "&quot;")
+    html = f"""<!doctype html>
+<html lang="en">
+<head>
+{WACZ_VIEWER_MARKER}
+<meta charset="utf-8">
+<title>{safe_title} — WACZ replay</title>
+<style>
+  html, body {{ margin: 0; height: 100%; background: #000; color: #ddd;
+                font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }}
+  replay-web-page {{ display: block; width: 100%; height: 100vh; }}
+  .hint {{ position: fixed; top: 8px; left: 8px; right: 8px; padding: 10px 14px;
+           background: rgba(20,22,30,.9); border: 1px solid #2a2d38; border-radius: 8px;
+           font-size: 12px; line-height: 1.5; z-index: 1; }}
+  .hint code {{ background: #262a36; padding: 1px 6px; border-radius: 4px; font-size: 11.5px; }}
+  .hint a {{ color: #7aa2f7; }}
+  body.ready .hint {{ display: none; }}
+</style>
+</head>
+<body>
+<div class="hint">
+  WACZ replay 需要本地 HTTP 服务（不能 file://）。
+  在 sc2 根目录跑 <code>python -m http.server</code>，
+  然后通过 <code>http://localhost:8000/designs/{folder.name}/index.html</code> 打开。
+</div>
+<replay-web-page
+  source="{safe_wacz}"
+  url="{safe_src}"
+  embed="replayonly"
+  replayBase="../_replay/replay/"
+></replay-web-page>
+<script src="../_replay/ui.js"></script>
+<script>
+  // hide the hint once replay-web-page successfully mounts
+  customElements.whenDefined && customElements.whenDefined('replay-web-page')
+    .then(() => document.body.classList.add('ready'));
+</script>
+</body>
+</html>
+"""
+    (folder / "index.html").write_text(html, encoding="utf-8")
+
+
+def _maybe_generate_wacz_viewer(folder: Path, meta: dict) -> bool:
+    """If folder has a .wacz and the index.html is either missing or auto-generated,
+    (re)write the viewer. Returns True if a viewer was emitted (so the caller knows
+    an index.html now exists)."""
+    wacz_files = sorted(folder.glob("*.wacz"))
+    if not wacz_files:
+        return False
+    index = folder / "index.html"
+    can_overwrite = (not index.exists()) or (WACZ_VIEWER_MARKER in
+                                              index.read_text(encoding="utf-8", errors="ignore"))
+    if not can_overwrite:
+        # user hand-wrote an index.html — respect it
+        return False
+    title = meta.get("title") or folder.name
+    source_url = meta.get("sourceUrl") or ""
+    _generate_wacz_viewer(folder, wacz_files[0].name, title, source_url)
+    return True
+
+
 def rebuild_designs(root: Path) -> int:
     """Index designs/ — return the count of mirrors written."""
     designs_dir = root / "designs"
     designs_dir.mkdir(exist_ok=True)
     designs = []
     for d in sorted(p for p in designs_dir.iterdir() if p.is_dir()):
+        meta = _load_meta(d)
+        # WACZ folders: auto-generate the viewer index.html before the existence
+        # check below. This is what lets `.wacz`-only folders show up in the
+        # navigator without any per-folder hand-writing.
+        _maybe_generate_wacz_viewer(d, meta)
         if not (d / "index.html").exists():
             continue
         # `.skip-index` opts a local-only mirror out of the gallery — used
@@ -77,7 +161,6 @@ def rebuild_designs(root: Path) -> int:
         # archive without polluting the shared index.
         if (d / ".skip-index").exists():
             continue
-        meta = _load_meta(d)
         # href + preview are relative to designs/ (where the .json/.js live),
         # so designs/index.html can <iframe> them without a designs/ prefix.
         preview = f"{d.name}/preview.png" if (d / "preview.png").exists() else ""

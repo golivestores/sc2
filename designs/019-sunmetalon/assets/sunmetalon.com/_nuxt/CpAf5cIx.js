@@ -1,0 +1,1 @@
+import{am as t,c as s,b as c,ac as a}from"./CQrTCadM.js";const o={},n={class:"highlight"};function r(e,l){return c(),s("span",n,[a(e.$slots,"default")])}const i=t(o,[["render",r]]);export{i as default};

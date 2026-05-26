@@ -1,0 +1,7 @@
+{
+  "title": "CRAV — Artisan Smashed Burgers",
+  "description": "Next.js 15 App Router (Turbopack) site. py + SingleFile both froze on the loader; this is a WACZ replay archive captured via ArchiveWeb.page so React fully hydrates and the GSAP+Lenis interactions run.",
+  "sourceUrl": "https://www.cravburgers.shop/",
+  "savedAt": "2026-05-25",
+  "tags": ["wacz", "nextjs", "loader", "gsap"]
+}

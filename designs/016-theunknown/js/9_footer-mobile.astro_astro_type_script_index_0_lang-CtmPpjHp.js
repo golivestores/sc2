@@ -1,0 +1,1 @@
+import{a as o}from"./libs-CFvlTRJz.js";import"./petit-kit-DNrI3lPJ.js";import"./ogl-DYa94y7C.js";let e;const r=()=>{e&&e.disconnect(),e=new ResizeObserver(o().forceResize),e.observe(document.body)};document.addEventListener("astro:page-load",()=>{r()});

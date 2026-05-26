@@ -1,0 +1,4 @@
+{ "name": "Lab46", "icons": [ { "src": "//lab46.de/cdn/shop/t/110/assets/android-192x192.png?v=103546701052494777801771930111", "sizes": "192x192", "type":
+"image/png" }, { "src": "//lab46.de/cdn/shop/t/110/assets/android-512x512.png?v=59843162107877951351771930112", "sizes": "512x512", "type": "image/png" }, { "src": "//lab46.de/cdn/shop/t/110/assets/android-192x192.png?v=103546701052494777801771930111", "sizes": "192x192", "type": "image/png", "purpose": "maskable" }, { "src": "//lab46.de/cdn/shop/t/110/assets/android-512x512.png?v=59843162107877951351771930112",
+"sizes": "512x512", "type": "image/png", "purpose": "maskable" } ], "display": "standalone", "theme_color": "#7791a5",
+"background_color": "#ffffff" }

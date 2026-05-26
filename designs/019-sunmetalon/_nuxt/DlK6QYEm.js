@@ -1,0 +1,1 @@
+import{c as a,b as s,ac as l}from"./CQrTCadM.js";const o={class:"global-label"},n={__name:"LabelSpan",props:["children"],setup(t){return(e,r)=>(s(),a("span",o,[l(e.$slots,"default")]))}};export{n as default};

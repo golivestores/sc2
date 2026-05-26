@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- auto-generated WACZ viewer — rebuild-index.py regenerates this -->
+<meta charset="utf-8">
+<title>CRAV — Artisan Smashed Burgers — WACZ replay</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; color: #ddd;
+                font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }
+  replay-web-page { display: block; width: 100%; height: 100vh; }
+  .hint { position: fixed; top: 8px; left: 8px; right: 8px; padding: 10px 14px;
+           background: rgba(20,22,30,.9); border: 1px solid #2a2d38; border-radius: 8px;
+           font-size: 12px; line-height: 1.5; z-index: 1; }
+  .hint code { background: #262a36; padding: 1px 6px; border-radius: 4px; font-size: 11.5px; }
+  .hint a { color: #7aa2f7; }
+  body.ready .hint { display: none; }
+</style>
+</head>
+<body>
+<div class="hint">
+  WACZ replay 需要本地 HTTP 服务（不能 file://）。
+  在 sc2 根目录跑 <code>python -m http.server</code>，
+  然后通过 <code>http://localhost:8000/designs/021-cravburgers/index.html</code> 打开。
+</div>
+<replay-web-page
+  source="cravburgers.wacz"
+  url="https://www.cravburgers.shop/"
+  embed="replayonly"
+  replayBase="../_replay/replay/"
+></replay-web-page>
+<script src="../_replay/ui.js"></script>
+<script>
+  // hide the hint once replay-web-page successfully mounts
+  customElements.whenDefined && customElements.whenDefined('replay-web-page')
+    .then(() => document.body.classList.add('ready'));
+</script>
+</body>
+</html>
