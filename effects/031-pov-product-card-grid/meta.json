@@ -1,0 +1,23 @@
+{
+  "title": "POV Beauty · 产品卡片网格 + Swiper 翻页",
+  "subtitle": "horizontal swiper of product cards with NEW/SAVE/AWARD badges, hover-reveal ADD TO CART button, dual-line sale pricing",
+  "description": "povbeauty.com 首页 'it starts with great skin prep' 的一行可横滑产品卡，1:1 还原原站行为：\n\n· 卡片视觉：超大左对齐 '小写无衬线' 产品名 (chill it / dew it light / renew it light / drench it / snatch it eye serum / drip it / glaze it / amp it)，下方 sub-heading（PLUMPING WATER-GEL / LIGHTWEIGHT, PRO-LEVEL SKIN PREP …）+ 一行 · 分隔的卖点 chip (hydrates · weightless · non-pilling)，浅灰底产品 silo 图，底部一行 加粗当前价 + 划线划价。\n· 右上荧光黄底 .badge 角标支持多状态：NEW / SAVE 10% / AWARD-WINNING / PDRN-POWERED 等。\n· hover 交互：鼠标进入卡时产品图区域底部弹出黑色圆角胶囊「ADD TO CART – $XX」按钮（CSS transition + JS quick-add 模块），按钮覆盖在产品图上但不挤压价格行。\n· Swiper 横滑：右下角的左右圆形箭头按钮 (.swiper-button-prev / .swiper-button-next) 点击触发 swiper.slideTo，一次切 1 张；当前张数也会同步底部 .swiper-pagination 圆点。\n· 移动端：单张卡铺满屏宽，pagination 圆点在底部，箭头隐藏。\n\n以 designs/023-povbeauty 镜像为资源宿主：effect index.html 用 `<base href=\"../../designs/023-povbeauty/\">` 复用整套 Shopify Dawn 主题资源（base.css / component-card.css / component-price.css / quick-add.css / swiper-bundle.js / product-form.js / theme custom.js 全套），visit 时直接吃同样的 stylesheet 和 init 脚本，所以 hover / swiper / quick-add 三套行为完整保真。",
+  "tech": "Shopify Dawn theme (Liquid output)  ·  Swiper.js 11  ·  quick-add module  ·  product-form module  ·  CSS hover-reveal transitions  ·  component-card/price BEM",
+  "tags": [
+    "电商",
+    "产品",
+    "网格",
+    "卡片",
+    "横滑",
+    "悬停",
+    "价格",
+    "角标",
+    "Swiper",
+    "Shopify"
+  ],
+  "previewHref": "",
+  "sourceUrl": "https://povbeauty.com/",
+  "localMirror": "../designs/023-povbeauty/index.html",
+  "order": 31,
+  "savedAt": "2026-05-26"
+}

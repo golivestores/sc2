@@ -207,6 +207,41 @@
     "preview": "020-fromanother/preview.png"
   },
   {
+    "folder": "021-cravburgers",
+    "title": "CRAV — Artisan Smashed Burgers",
+    "description": "Next.js 15 App Router (Turbopack) site. py + SingleFile both froze on the loader; this is a WACZ replay archive captured via ArchiveWeb.page so React fully hydrates and the GSAP+Lenis interactions run.",
+    "sourceUrl": "https://www.cravburgers.shop/",
+    "savedAt": "2026-05-25",
+    "tags": [
+      "wacz",
+      "nextjs",
+      "loader",
+      "gsap"
+    ],
+    "href": "021-cravburgers/index.html",
+    "preview": "021-cravburgers/preview.png"
+  },
+  {
+    "folder": "022-ukbathroomstore",
+    "title": "UK Bathroom Store",
+    "description": "",
+    "sourceUrl": "https://ukbathroomstore.co.uk/",
+    "savedAt": "2026-05-25",
+    "tags": [],
+    "href": "022-ukbathroomstore/index.html",
+    "preview": "022-ukbathroomstore/preview.png"
+  },
+  {
+    "folder": "023-povbeauty",
+    "title": "POV Beauty",
+    "description": "",
+    "sourceUrl": "https://povbeauty.com/",
+    "savedAt": "2026-05-25",
+    "tags": [],
+    "href": "023-povbeauty/index.html",
+    "preview": "023-povbeauty/preview.png"
+  },
+  {
     "folder": "Floema",
     "title": "Floema — Spaces for people, made for life",
     "description": "Sustainable signage & equipment brand. Pixi.js scattered-objects hero, scroll-driven photo collages, audio-driven micro-interactions. Homepage captured as full-page PNG (homepage-full.png) because the live site is a Nuxt SPA with Sanity-CMS images served via /_ipx/ proxy — interactive mirror keeps hero + nav but sub-page CSS chunks are absent.",

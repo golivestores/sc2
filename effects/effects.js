@@ -591,5 +591,52 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://www.fromanother.love/",
     "localMirror": "../designs/020-fromanother/index.html",
     "order": 30
+  },
+  {
+    "num": "031",
+    "folder": "031-pov-product-card-grid",
+    "title": "POV Beauty · 产品卡片网格 + Swiper 翻页",
+    "subtitle": "horizontal swiper of product cards with NEW/SAVE/AWARD badges, hover-reveal ADD TO CART button, dual-line sale pricing",
+    "description": "povbeauty.com 首页 'it starts with great skin prep' 的一行可横滑产品卡，1:1 还原原站行为：\n\n· 卡片视觉：超大左对齐 '小写无衬线' 产品名 (chill it / dew it light / renew it light / drench it / snatch it eye serum / drip it / glaze it / amp it)，下方 sub-heading（PLUMPING WATER-GEL / LIGHTWEIGHT, PRO-LEVEL SKIN PREP …）+ 一行 · 分隔的卖点 chip (hydrates · weightless · non-pilling)，浅灰底产品 silo 图，底部一行 加粗当前价 + 划线划价。\n· 右上荧光黄底 .badge 角标支持多状态：NEW / SAVE 10% / AWARD-WINNING / PDRN-POWERED 等。\n· hover 交互：鼠标进入卡时产品图区域底部弹出黑色圆角胶囊「ADD TO CART – $XX」按钮（CSS transition + JS quick-add 模块），按钮覆盖在产品图上但不挤压价格行。\n· Swiper 横滑：右下角的左右圆形箭头按钮 (.swiper-button-prev / .swiper-button-next) 点击触发 swiper.slideTo，一次切 1 张；当前张数也会同步底部 .swiper-pagination 圆点。\n· 移动端：单张卡铺满屏宽，pagination 圆点在底部，箭头隐藏。\n\n以 designs/023-povbeauty 镜像为资源宿主：effect index.html 用 `<base href=\"../../designs/023-povbeauty/\">` 复用整套 Shopify Dawn 主题资源（base.css / component-card.css / component-price.css / quick-add.css / swiper-bundle.js / product-form.js / theme custom.js 全套），visit 时直接吃同样的 stylesheet 和 init 脚本，所以 hover / swiper / quick-add 三套行为完整保真。",
+    "tech": "Shopify Dawn theme (Liquid output)  ·  Swiper.js 11  ·  quick-add module  ·  product-form module  ·  CSS hover-reveal transitions  ·  component-card/price BEM",
+    "tags": [
+      "电商",
+      "产品",
+      "网格",
+      "卡片",
+      "横滑",
+      "悬停",
+      "价格",
+      "角标",
+      "Swiper",
+      "Shopify"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://povbeauty.com/",
+    "localMirror": "../designs/023-povbeauty/index.html",
+    "order": 31
+  },
+  {
+    "num": "032",
+    "folder": "032-pov-shop-by-step",
+    "title": "POV Beauty · Shop by Step 步骤切换面板",
+    "subtitle": "5-step left list with → indicator + active media panel + product mini-card; click/tap switches all three layers in sync",
+    "description": "povbeauty.com 首页 'shop by step' 那块（rich_text H2 + Index_tabs_products_lists_new bAPz6G），1:1 还原原站交互：\n\n· 顶部 'shop by step' 居中超大粗体 H2（rich-text section .rich-text__heading.hxxl），effect 把 rich_text 标题 section + 步骤 section 两块一起保留。\n· 桌面端左栏（Desktop_only_new）：5 个圆角矩形 step button，里面 01–05 手写斜体编号 + 'drench it / drip it / whip it / glaze it / amp it' 步骤名。active item：浅灰底 + 内嵌右边一张缩略产品瓶 + 外侧 → 箭头指向。点击任一 step：active class 跳到该项、外箭头跟着移动到对应行、内嵌缩略瓶切到该产品；同步右侧大图视频/图换成该步骤 hero，右下角 mini product card 更新为该产品（标题、副标题、ADD TO CART · $XX）。\n· 列表底部：'SHOP THE FULL ROUTINE' 圆角胶囊按钮（连到 routine 集合）。\n· 移动端（Mobile_only_new）：步骤列表退化成横向 swiper（每张面板等宽，独立 pagination 圆点）；右侧媒体改为竖直堆叠在底部，ADD TO CART 卡跨整宽。\n\n切换由 product-form.js + quick-add.js + theme tab show/hide class swap (.tab_information_*_open) 协同驱动。effect 通过 `<base href=\"../../designs/023-povbeauty/\">` 复用镜像里的 Shopify Dawn 全套 stylesheet + Swiper + product-form + quick-add JS，所以 step 切换、active 箭头跳转、移动端 swiper 全部保真。",
+    "tech": "Shopify Dawn theme (Liquid output)  ·  Swiper.js (mobile)  ·  product-form + quick-add JS modules  ·  show/hide tab class swap  ·  custom SVG → indicator",
+    "tags": [
+      "电商",
+      "步骤",
+      "切换",
+      "tab",
+      "面板",
+      "悬停",
+      "产品",
+      "Swiper",
+      "Shopify"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://povbeauty.com/",
+    "localMirror": "../designs/023-povbeauty/index.html",
+    "order": 32
   }
 ];

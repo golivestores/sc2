@@ -14,6 +14,14 @@
 
 ---
 
+## Claude Code 协作（不用 Claude 的同事可跳过）
+
+仓库根下的 [CLAUDE.md](CLAUDE.md) 是 Claude Code 的项目入口。同事 clone 后用 Claude Code 打开 sc2，会**自动**加载 CLAUDE.md，连带 `@docs/claude-memory/*.md` 的所有踩坑笔记 + 项目约定 + 验收清单一并注入到 Claude 的 context——零配置，开会话就有完整记忆。
+
+不用 Claude Code 的同事也可以直接读 [docs/claude-memory/](docs/claude-memory/)，每个 `.md` 都是独立的踩坑/约定/规则记录，文件名描述主题。
+
+---
+
 ## 同事开荒：5 分钟跑起来
 
 ```bash
@@ -60,7 +68,7 @@ python scrape-url.py https://example.com/ 008-example "Readable Title"
 
 如果不需要自动验证：`python scrape-url.py URL 名字 --no-verify`。如果不需要自动 rebuild：`--no-rebuild`。
 
-**抓 Nuxt SPA**（如 obsidianassembly、donmolinico 之类用 Vue Router 客户端路由的站）：加 `--nuxt-spa-fixup` 一并跑下 5 步补救（补 CSS chunks、复制 images/fonts 到根、`/images/` → `./images/`、注入 `<base href>`、补 lazy 图）。Nuxt 2 多两步：改写内联 `__NUXT__.basePath` 让 Vue Router 路由匹配本地路径、改写 webpack `f.p="/_nuxt/"` 让 lazy chunks 走 base href。详见 memory [nuxt3-spa-mirror-recipe.md](.claude/projects/c--Users-EDY-Documents-sc2/memory/nuxt3-spa-mirror-recipe.md)。
+**抓 Nuxt SPA**（如 obsidianassembly、donmolinico 之类用 Vue Router 客户端路由的站）：加 `--nuxt-spa-fixup` 一并跑下 5 步补救（补 CSS chunks、复制 images/fonts 到根、`/images/` → `./images/`、注入 `<base href>`、补 lazy 图）。Nuxt 2 多两步：改写内联 `__NUXT__.basePath` 让 Vue Router 路由匹配本地路径、改写 webpack `f.p="/_nuxt/"` 让 lazy chunks 走 base href。详见 memory [nuxt3-spa-mirror-recipe.md](docs/claude-memory/nuxt3-spa-mirror-recipe.md)。
 
 对已经抓回来但忘了加 `--nuxt-spa-fixup` 的镜像，可以事后再跑：`python nuxt-spa-fixup.py designs/NNN-slug`（幂等；从该 folder 的 `meta.json.sourceUrl` 反推原 host）。
 

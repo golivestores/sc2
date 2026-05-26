@@ -103,7 +103,15 @@ def looks_like_asset_url(v):
 
 
 def http_get(url):
-    req = Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
+    req = Request(url, headers={
+        "User-Agent": UA,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Upgrade-Insecure-Requests": "1",
+    })
     with urlopen(req, timeout=TIMEOUT) as r:
         data = r.read()
         ctype = r.headers.get("Content-Type", "")
