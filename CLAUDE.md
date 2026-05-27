@@ -10,6 +10,11 @@
 - `rebuild-index.py` 重建 `designs/designs.js` + `effects/effects.js`（这两个被前端 gallery 读）
 - `extract-effect-section.py` 从主题站镜像抽 effect 用（base-href 法）
 - `package-effects.py` 打 zip（不自动跑，等显式触发）
+- `gsap/` 自带 GSAP 3.13.0 全套（含原付费插件）+ AI 决策指南 + 代码片段 + effect 模板。详见 `gsap/README.md`（人）/ `gsap/CLAUDE.md`（AI）
+
+## GSAP 工具集（开箱即用）
+@gsap/CLAUDE.md
+@docs/claude-memory/effect-gsap-toolbox.md
 
 ## 项目格式锁定（不要改设计）
 @docs/claude-memory/sc2-navigator-format-locked.md

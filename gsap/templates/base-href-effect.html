@@ -1,0 +1,110 @@
+<!doctype html>
+<!--
+  sc2 effect template — base-href mode (复用 designs/<mirror>/ 里的 GSAP)
+  ===================================================================
+
+  适用场景：从主题站 (Shopify / Wix / Webflow / Astro / Next.js) 镜像里抽 effect
+  时，原站已经引了 GSAP，你不需要再 cp 一份到 effect lib/。
+
+  原理：<base href="../../designs/<mirror>/"> 让 effect 里所有相对路径都解析到
+  那个 mirror，effect 自然继承 mirror 的 GSAP 全局 + 主题 JS。
+
+  对比另一个模板 (effect-with-gsap.html)：那个是 self-contained，这个共享 mirror。
+
+  使用方法：
+    1. python extract-effect-section.py designs/<mirror>/index.html \
+         "<section_id>[,...]" effects/NNN-name "Title"
+       这条命令会自动生成符合本模板结构的 index.html。
+    2. 检查生成的 index.html 顶部有：
+         <base href="../../designs/<mirror>/">
+       以及 head 里完整保留了 mirror 的 GSAP / theme JS 引用。
+    3. 不需要在 effects/NNN-name/ 下建 lib/。GSAP 来自 mirror。
+
+  本模板只是参考结构，不是直接 cp 用的。看下方注释了解关键约定。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- 关键 1：base href 指回 mirror，让所有相对资源 URL 复用 mirror 的资产 -->
+<base href="../../designs/000-EXAMPLE-MIRROR/">
+
+<title>Section Effect — sc2</title>
+
+<!--
+  关键 2：保留 mirror 原 <head> 里的所有 <link>/<script>。
+  extract-effect-section.py 会自动把 mirror 的 head 整段复制过来。
+  这意味着 GSAP / ScrollTrigger / SplitText 等会通过原 mirror 的 <script> 加载。
+-->
+<!-- 例如：
+<link rel="stylesheet" href="cdn/shop/t/135/assets/base.css">
+<script src="cdn/shop/t/135/assets/gsap.min.js" defer></script>
+<script src="cdn/shop/t/135/assets/ScrollTrigger.min.js" defer></script>
+<script src="cdn/shop/t/135/assets/theme.js" defer></script>
+-->
+
+</head>
+<body class="template-index">
+
+<!--
+  关键 3：从 mirror 抽出来的 section HTML 放这里，外层包装不动。
+  extract-effect-section.py 会保留 leading drawer/header 容器 + section 主体
+  + trailing global script，让主题 JS 能找到它需要的 DOM。
+-->
+
+<!-- mirror 的 cart drawer / mobile menu 容器（保留） -->
+<!-- <cart-drawer ...></cart-drawer> -->
+<!-- <menu-drawer ...></menu-drawer> -->
+
+<!-- mirror 抽出来的 section -->
+<!--
+<section id="shopify-section-template--XXXXX__featured_collection" class="shopify-section">
+  <div class="collection ...">
+    ...原站 section 的完整 outerHTML...
+  </div>
+</section>
+-->
+
+<!--
+  关键 4：mirror 末尾的 global script（cart sync / theme init 等）保留。
+  这些 script 通常会绑定 ScrollTrigger / Observer / quick-add hover 等行为。
+-->
+<!-- <script src="cdn/shop/t/135/assets/init-shop-cart-sync.js"></script> -->
+
+<!--
+  关键 5（可选）：你自己的额外 GSAP 代码可以加在这里。
+  因为 mirror 已经把 GSAP 全局 register 好了，直接用 window.gsap / window.ScrollTrigger。
+-->
+<script>
+(function () {
+  const isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+
+  // 等 mirror 的 GSAP 加载完
+  function init() {
+    if (typeof gsap === 'undefined') {
+      return setTimeout(init, 50);
+    }
+
+    if (isPreview) {
+      // 卡片缩略图模式
+      return;
+    }
+
+    // 你的额外 GSAP 代码
+    // 例如：给 mirror 没动画的元素补上 ScrollTrigger
+    // gsap.from('.collection .card', { opacity: 0, y: 40, stagger: 0.05,
+    //   scrollTrigger: { trigger: '.collection', start: 'top 80%' }
+    // });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>
