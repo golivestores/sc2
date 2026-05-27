@@ -243,6 +243,16 @@ window.__DESIGNS__ = [
     "preview": "023-povbeauty/preview.png"
   },
   {
+    "folder": "024-lessestudio",
+    "title": "Lesse Studio",
+    "description": "",
+    "sourceUrl": "https://lessestudio.com/",
+    "savedAt": "2026-05-27",
+    "tags": [],
+    "href": "024-lessestudio/index.html",
+    "preview": "024-lessestudio/preview.png"
+  },
+  {
     "folder": "Floema",
     "title": "Floema — Spaces for people, made for life",
     "description": "Sustainable signage & equipment brand. Pixi.js scattered-objects hero, scroll-driven photo collages, audio-driven micro-interactions. Homepage captured as full-page PNG (homepage-full.png) because the live site is a Nuxt SPA with Sanity-CMS images served via /_ipx/ proxy — interactive mirror keeps hero + nav but sub-page CSS chunks are absent.",

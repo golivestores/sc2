@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Latest Work cards — lessestudio</title>
+<style>
+@font-face { font-family: "HostGrotesk"; src: url("assets/HostGrotesk.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "LaCerchia"; src: url("assets/LaCerchia.otf") format("opentype"); font-display: swap; }
+
+:root {
+  --bg: #050505;
+  --card-from: #0f0f0f;
+  --card-to: #090909;
+  --text: #ffffff;
+  --text-dim: #8d8d8d;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+
+/* Section frame -------------------------------------------------- */
+.section {
+  width: 100%;
+  padding: 5vw 5vw 7vw;
+}
+.section__label {
+  display: block;
+  font-size: 1vw;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+.section__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4vw;
+  margin-top: 1vw;
+}
+
+/* Mask-slide-text reveal (mst) ---------------------------------- */
+.mst {
+  display: block;
+  position: relative;
+}
+.mst__line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+}
+.mst__line > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.9s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--mst-d, 0s);
+  will-change: transform;
+}
+.revealed .mst__line > span { transform: translateY(0); }
+
+/* Card ----------------------------------------------------------- */
+.card {
+  display: flex;
+  flex-direction: row;
+  gap: 4vw;
+  padding: 1vw;
+  border-radius: 1vw;
+  background: linear-gradient(96deg, var(--card-from) 2.75%, var(--card-to) 98.47%);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  opacity: 0;
+  transform: translate3d(0, 200px, 0);
+  transition: opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+.card.revealed {
+  opacity: 1;
+  transform: none;
+}
+.card__media {
+  width: 50%;
+  height: 30vw;
+  border-radius: 0.6vw;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.6s cubic-bezier(.2,.7,.2,1);
+}
+.card:hover .card__media img { transform: scale(1.04); }
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 2vw;
+  padding: 1vw 1vw 0 0;
+}
+.card__title {
+  font-family: "LaCerchia", "HostGrotesk", serif;
+  font-weight: 400;
+  font-size: 3vw;
+  line-height: 1.05;
+}
+.card__desc {
+  color: #d6d6d6;
+  font-size: 1vw;
+  line-height: 1.45;
+}
+.card__desc p + p { margin-top: 1vw; }
+
+.card__meta-row {
+  display: flex;
+  gap: 4vw;
+  margin-top: auto;
+  padding-top: 2vw;
+}
+.card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4vw;
+}
+.card__meta h4 {
+  color: var(--text-dim);
+  font-weight: 400;
+  font-size: 0.9vw;
+}
+.card__meta span {
+  text-transform: uppercase;
+  font-size: 0.8vw;
+  letter-spacing: 0.04em;
+}
+
+.card__cta-row {
+  margin-top: 1vw;
+  display: flex;
+  justify-content: flex-end;
+}
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6vw;
+  padding: 0.8vw 1.5vw;
+  border-radius: 0.5vw;
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(1vw);
+  -webkit-backdrop-filter: blur(1vw);
+  font-size: 1vw;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+.card__cta:hover { background: rgba(255,255,255,0.55); }
+.card__cta-arrow {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-right: 1.5px solid currentColor;
+  border-top: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.3s;
+}
+.card__cta:hover .card__cta-arrow { transform: rotate(45deg) translate(2px,-2px); }
+
+/* Mobile --------------------------------------------------------- */
+@media (max-width: 768px) {
+  .section { padding: 8vw 5vw; }
+  .section__label { font-size: 3.4vw; }
+  .section__list { gap: 8vw; margin-top: 4vw; }
+  .card { flex-direction: column; padding: 3vw; border-radius: 3vw; gap: 4vw; }
+  .card__media { width: 100%; height: 70vw; border-radius: 2vw; }
+  .card__body { width: 100%; padding: 2vw; gap: 4vw; }
+  .card__title { font-size: 9vw; }
+  .card__desc { font-size: 3.6vw; }
+  .card__meta-row { gap: 8vw; padding-top: 4vw; }
+  .card__meta h4 { font-size: 3.2vw; }
+  .card__meta span { font-size: 3vw; }
+  .card__cta { font-size: 3.8vw; padding: 3vw 5vw; border-radius: 2vw; }
+}
+
+/* Intro hint (demo-only) ---------------------------------------- */
+.demo-intro {
+  text-align: center;
+  padding: 10vh 5vw 4vw;
+  color: var(--text-dim);
+  font-size: 0.95vw;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@media (max-width: 768px) { .demo-intro { font-size: 3vw; padding: 12vw 5vw 6vw; } }
+</style>
+</head>
+<body>
+
+<div class="demo-intro" data-demo-only>Scroll down — cards reveal with mask-slide text</div>
+
+<section class="section" aria-label="Latest Work">
+  <span class="section__label">Latest Work</span>
+
+  <div class="section__list">
+
+    <a class="card" href="#duo-nutrition" data-reveal>
+      <div class="card__media">
+        <img src="assets/duo.webp" alt="Project thumbnail for Duo Nutrition" />
+      </div>
+      <div class="card__body">
+        <h3 class="card__title mst"><span class="mst__line"><span style="--mst-d: 0.05s">Duo Nutrition</span></span></h3>
+        <div class="card__desc mst">
+          <p class="mst__line"><span style="--mst-d: 0.15s">DUO NUTRITION is a brand that redefines pet food as a celebration of the equal, unspoken partnership between humans and their dogs.</span></p>
+          <p class="mst__line"><span style="--mst-d: 0.25s">Our challenge was to translate philosophy into a logo that captures the essence of togetherness. The solution lies in the submark: a simple yet powerful oval, split evenly down the middle.</span></p>
+        </div>
+        <div class="card__meta-row">
+          <div class="card__meta">
+            <h4>Location</h4>
+            <span>Russia</span>
+          </div>
+          <div class="card__meta">
+            <h4>Industry</h4>
+            <span>Pets</span>
+          </div>
+        </div>
+        <div class="card__cta-row">
+          <span class="card__cta">View project <span class="card__cta-arrow"></span></span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="#everyday" data-reveal>
+      <div class="card__media">
+        <img src="assets/everyday.webp" alt="Project thumbnail for Everyday Sea Moss" />
+      </div>
+      <div class="card__body">
+        <h3 class="card__title mst"><span class="mst__line"><span style="--mst-d: 0.05s">Everyday</span></span></h3>
+        <div class="card__desc mst">
+          <p class="mst__line"><span style="--mst-d: 0.15s">Everyday Sea Moss is a premium wellness brand offering natural sea moss, rich in over 92 minerals and vitamins. The product is designed to effortlessly support energy, immunity, and glowing skin every day.</span></p>
+          <p class="mst__line"><span style="--mst-d: 0.25s">Our task was to create a brand identity, packaging design, web design, and photoshoot that bring a fresh perspective to sea moss — a bright yet minimalist visual language that repositions the product as modern, appealing, and seamlessly fitting into everyday life.</span></p>
+        </div>
+        <div class="card__meta-row">
+          <div class="card__meta">
+            <h4>Location</h4>
+            <span>Australia</span>
+          </div>
+          <div class="card__meta">
+            <h4>Industry</h4>
+            <span>Supplements</span>
+          </div>
+        </div>
+        <div class="card__cta-row">
+          <span class="card__cta">View project <span class="card__cta-arrow"></span></span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="#nymph" data-reveal>
+      <div class="card__media">
+        <img src="assets/nymph.webp" alt="Project thumbnail for Nymph Haircare" />
+      </div>
+      <div class="card__body">
+        <h3 class="card__title mst"><span class="mst__line"><span style="--mst-d: 0.05s">Nymph</span></span></h3>
+        <div class="card__desc mst">
+          <p class="mst__line"><span style="--mst-d: 0.15s">Nymph Haircare is a haircare brand that celebrates femininity, free spirit, and our deep connection with nature. Its philosophy is inspired by ancient Greek mythology: nymphs, divine spirits of nature, symbolize grace, beauty, and strength.</span></p>
+          <p class="mst__line"><span style="--mst-d: 0.25s">We created the brand identity and packaging design, capturing its mythological inspiration and the harmony between natural beauty and modern aesthetics.</span></p>
+        </div>
+        <div class="card__meta-row">
+          <div class="card__meta">
+            <h4>Location</h4>
+            <span>USA</span>
+          </div>
+          <div class="card__meta">
+            <h4>Industry</h4>
+            <span>Haircare</span>
+          </div>
+        </div>
+        <div class="card__cta-row">
+          <span class="card__cta">View project <span class="card__cta-arrow"></span></span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  var isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+
+  if (isPreview) {
+    // Card-thumbnail mode: skip the demo-only intro AND fast-forward all reveals
+    document.querySelectorAll('[data-demo-only]').forEach(function (el) { el.remove(); });
+    requestAnimationFrame(function () {
+      document.querySelectorAll('[data-reveal]').forEach(function (el) { el.classList.add('revealed'); });
+    });
+    return;
+  }
+
+  // Normal mode: IntersectionObserver-driven reveal, threshold ~0.15
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('revealed');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+</body>
+</html>

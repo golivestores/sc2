@@ -1,0 +1,1 @@
+import{w as a}from"./DdRwKem0.js";const n=a(!1);function o(){const e=window.matchMedia("(min-width: 768px)");n.set(e.matches);const t=s=>n.set(s.matches);return e.addEventListener("change",t),()=>e.removeEventListener("change",t)}export{n as a,o as i};

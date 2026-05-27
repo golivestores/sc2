@@ -637,5 +637,59 @@
     "sourceUrl": "https://povbeauty.com/",
     "localMirror": "../designs/023-povbeauty/index.html",
     "order": 32
+  },
+  {
+    "num": "033",
+    "folder": "033-lessestudio-latest-work-cards",
+    "title": "Latest Work — project cards",
+    "subtitle": "Reveal cards with mask-slide text",
+    "description": "Portfolio项目卡列表：每个卡片由 IntersectionObserver 触发整体进入（opacity 0→1 + translateY 200px→0），同时标题/描述用 overflow:hidden mask + translateY(105%→0) 做<em>mask-slide-text (mst)</em> 滑入。Reference: lessestudio.com 的 LATEST WORK section。",
+    "tech": "vanilla JS + CSS",
+    "tags": [
+      "intro",
+      "scroll",
+      "typography",
+      "animation"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://lessestudio.com/",
+    "localMirror": "../designs/024-lessestudio/index.html",
+    "order": 33
+  },
+  {
+    "num": "034",
+    "folder": "034-lessestudio-testimonials",
+    "title": "Testimonials — split layout with auto carousel",
+    "subtitle": "Heading reveal + vertical auto-rotating quote stack",
+    "description": "50/50 split：左侧 TESTIMONIALS pill + 标题（mask-slide 三行入场，后两行 opacity 20% 弱化）+ \"Let's work together\" CTA；右侧 vertical carousel，4 张引语卡每 5s 上滑切换，顶/底 gradient 30% 遮罩，最后克隆一张做无缝循环。Reference: lessestudio.com TESTIMONIALS section。",
+    "tech": "vanilla JS + CSS",
+    "tags": [
+      "interaction",
+      "typography",
+      "animation",
+      "intro"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://lessestudio.com/",
+    "localMirror": "../designs/024-lessestudio/index.html",
+    "order": 34
+  },
+  {
+    "num": "035",
+    "folder": "035-lessestudio-pinned-showcase",
+    "title": "Pinned showcase — sticky scroll card",
+    "subtitle": "Card grows + content crossfades + bg fades beige → black",
+    "description": "Sticky-pinned project showcase：section 高 200vh，内部 position:sticky 卡片随 scrollProgress (0→1) 同时增长（40vw×30vw → 100vw×100vh）+ 圆角收敛（1vw → 0）+ 内部 4 个图层按 0.25/0.5/0.75 边界 crossfade + 整体背景米色 → 黑色渐变。Reference: lessestudio.com 在 LATEST WORK 之上的大 showcase section（每个 stage 显示一个项目的代表图）。",
+    "tech": "vanilla JS + CSS",
+    "tags": [
+      "scroll",
+      "intro",
+      "animation",
+      "interaction"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://lessestudio.com/",
+    "localMirror": "../designs/024-lessestudio/index.html",
+    "order": 35
   }
 ]

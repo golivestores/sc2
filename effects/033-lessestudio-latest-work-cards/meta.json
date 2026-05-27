@@ -1,0 +1,10 @@
+{
+  "title": "Latest Work — project cards",
+  "subtitle": "Reveal cards with mask-slide text",
+  "description": "Portfolio项目卡列表：每个卡片由 IntersectionObserver 触发整体进入（opacity 0→1 + translateY 200px→0），同时标题/描述用 overflow:hidden mask + translateY(105%→0) 做<em>mask-slide-text (mst)</em> 滑入。Reference: lessestudio.com 的 LATEST WORK section。",
+  "tech": "vanilla JS + CSS",
+  "tags": ["intro", "scroll", "typography", "animation"],
+  "previewHref": "index.html",
+  "sourceUrl": "https://lessestudio.com/",
+  "localMirror": "../designs/024-lessestudio/index.html"
+}

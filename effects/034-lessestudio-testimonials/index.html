@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Testimonials — lessestudio</title>
+<style>
+@font-face { font-family: "HostGrotesk"; src: url("assets/HostGrotesk.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "LaCerchia"; src: url("assets/LaCerchia.otf") format("opentype"); font-display: swap; }
+
+:root {
+  --bg: #050505;
+  --card: #101010;
+  --pill: #000;
+  --text: #ffffff;
+  --text-dim: #A2A2A2;
+  --text-faint: rgba(255,255,255,0.5);
+  --transition: 0.9s cubic-bezier(.2,.7,.2,1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Section frame — matches original mt-[10vw] + px-[5vw] -------- */
+.section {
+  width: 100%;
+  padding: 0 5vw;
+  margin-top: 10vw;
+  margin-bottom: 7vw;
+}
+
+/* Block container: full 90vw width, 45vw tall, dark rounded ---- */
+.testimonials {
+  display: flex;
+  flex-direction: row;
+  background: var(--card);
+  border-radius: 1vw;
+  height: 45vw;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translate3d(0, 200px, 0);
+  transition: opacity var(--transition), transform var(--transition);
+  will-change: opacity, transform;
+}
+.testimonials.revealed { opacity: 1; transform: none; }
+
+/* LEFT column: TESTIMONIALS pill + heading + CTA --------------- */
+.testimonials__left {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 2vw;
+}
+.pill {
+  display: inline-block;
+  width: fit-content;
+  background: var(--pill);
+  color: var(--text-dim);
+  font-size: 1vw;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.5vw 1vw;
+  border-radius: 0.5vw;
+}
+.testimonials__heading {
+  font-family: "LaCerchia", "HostGrotesk", serif;
+  font-weight: 400;
+  font-size: 3vw;
+  line-height: 1.05;
+  margin-top: 1vw;
+  width: 66%;
+}
+.testimonials__heading .dim { color: rgba(255,255,255,0.2); }
+
+.mst__line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+}
+.mst__line > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.9s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--mst-d, 0s);
+  will-change: transform;
+}
+.revealed .mst__line > span { transform: translateY(0); }
+
+.cta-row {
+  margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+}
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6vw;
+  padding: 0.8vw 1.5vw;
+  border-radius: 0.5vw;
+  background: #d9d9d9;
+  color: #050505;
+  font-size: 1vw;
+  text-decoration: none;
+  transition: background 0.3s, transform 0.3s;
+}
+.cta:hover { background: #fff; transform: translateY(-0.2vw); }
+.cta__arrow {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-right: 1.5px solid currentColor;
+  border-top: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.3s;
+}
+.cta:hover .cta__arrow { transform: rotate(45deg) translate(2px,-2px); }
+
+/* RIGHT column: gradient-masked vertical scroller -------------- */
+.testimonials__right {
+  position: relative;
+  width: 50%;
+  padding: 1vw;
+}
+.carousel-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.carousel-frame::before,
+.carousel-frame::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  z-index: 10;
+  pointer-events: none;
+}
+.carousel-frame::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--card), transparent);
+}
+.carousel-frame::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--card), transparent);
+}
+.carousel-track {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+  /* Transform driven by JS rAF — no CSS transition for continuous motion */
+}
+
+.tcard {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2vw;
+  border-radius: 1vw;
+  background: #0c0c0c;
+  border: 1px solid rgba(255,255,255,0.04);
+  gap: 2vw;
+}
+.tcard__quote {
+  font-size: 1.05vw;
+  line-height: 1.55;
+  color: #e6e6e6;
+}
+.tcard__author {
+  display: flex;
+  align-items: center;
+  gap: 0.8vw;
+}
+.tcard__avatar {
+  width: 2.6vw;
+  height: 2.6vw;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #2a2a2a;
+  flex-shrink: 0;
+}
+.tcard__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.tcard__name {
+  font-size: 1vw;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tcard__role {
+  font-size: 0.8vw;
+  color: var(--text-faint);
+  margin-top: 0.15vw;
+}
+
+/* Mobile --------------------------------------------------------- */
+@media (max-width: 768px) {
+  .section { padding: 0 5vw; margin-top: 16vw; margin-bottom: 12vw; }
+  .testimonials {
+    flex-direction: column;
+    height: auto;
+    border-radius: 3vw;
+  }
+  .testimonials__left { width: 100%; padding: 5vw; }
+  .pill { font-size: 3.4vw; padding: 1.5vw 3vw; border-radius: 2vw; }
+  .testimonials__heading { font-size: 9vw; width: 100%; margin-top: 4vw; }
+  .cta-row { margin-top: 6vw; }
+  .cta { font-size: 3.8vw; padding: 3vw 5vw; border-radius: 2vw; }
+  .testimonials__right {
+    width: 100%;
+    padding: 0 5vw 5vw;
+    height: 110vw;
+  }
+  .carousel-track { gap: 4vw; }
+  .tcard { padding: 5vw; border-radius: 3vw; gap: 6vw; }
+  .tcard__quote { font-size: 4vw; line-height: 1.5; }
+  .tcard__avatar { width: 10vw; height: 10vw; }
+  .tcard__name { font-size: 3.6vw; }
+  .tcard__role { font-size: 3vw; }
+}
+
+/* Intro hint (demo-only) ---------------------------------------- */
+.demo-intro {
+  text-align: center;
+  padding: 10vh 5vw 4vw;
+  color: var(--text-dim);
+  font-size: 0.95vw;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@media (max-width: 768px) { .demo-intro { font-size: 3vw; padding: 12vw 5vw 6vw; } }
+</style>
+</head>
+<body>
+
+<div class="demo-intro" data-demo-only>Scroll down — testimonials reveal &amp; auto-scroll uniformly</div>
+
+<section class="section" aria-label="Testimonials">
+  <div class="testimonials" data-reveal>
+
+    <div class="testimonials__left">
+      <h2 class="pill">Testimonials</h2>
+      <h3 class="testimonials__heading">
+        <span class="mst__line"><span style="--mst-d: 0.1s">What our clients say</span></span>
+        <span class="mst__line"><span class="dim" style="--mst-d: 0.2s">about working with</span></span>
+        <span class="mst__line"><span class="dim" style="--mst-d: 0.3s">us.</span></span>
+      </h3>
+      <div class="cta-row">
+        <a href="#start" class="cta">Let's work together <span class="cta__arrow"></span></a>
+      </div>
+    </div>
+
+    <div class="testimonials__right">
+      <div class="carousel-frame">
+        <div class="carousel-track" id="track">
+          <!-- Group A: the 4 original testimonials -->
+          <article class="tcard" data-original>
+            <p class="tcard__quote">"You've created a true work of art that perfectly captures the idea of an emotional connection with the customer. Your work exceeded our expectations, and this was echoed by everyone on the team. Every element of the design reflects a genuine love for animals and a high level of professionalism."</p>
+            <div class="tcard__author">
+              <div class="tcard__avatar"><img src="assets/avatar-duo.svg" alt="Photo of Duo Nutrition" /></div>
+              <div>
+                <p class="tcard__name">Duo Nutrition</p>
+                <span class="tcard__role">Founder</span>
+              </div>
+            </div>
+          </article>
+          <article class="tcard" data-original>
+            <p class="tcard__quote">"We're glad we found you and waited for your availability, I'm sure we'll work together again soon. The process was smooth and you understood what we wanted to achieve, so we're really happy."</p>
+            <div class="tcard__author">
+              <div class="tcard__avatar"><img src="assets/avatar-miguel.svg" alt="Photo of Miguel" /></div>
+              <div>
+                <p class="tcard__name">Miguel</p>
+                <span class="tcard__role">Founder, Lunna</span>
+              </div>
+            </div>
+          </article>
+          <article class="tcard" data-original>
+            <p class="tcard__quote">"We wanted to sincerely thank you for being part of the birth and realization of our private spa project in Brussels. Your attention to detail was remarkable and, at times, felt like a real achievement! From our logo to our website and the entire branding experience, every element was thoughtfully crafted and aligned with what we had envisioned &amp; sometimes even better than we could have imagined ourselves."</p>
+            <div class="tcard__author">
+              <div class="tcard__avatar"><img src="assets/avatar-esra.svg" alt="Photo of Esra & Olivier" /></div>
+              <div>
+                <p class="tcard__name">Esra &amp; Olivier</p>
+                <span class="tcard__role">Founders, Neva Spa</span>
+              </div>
+            </div>
+          </article>
+          <article class="tcard" data-original>
+            <p class="tcard__quote">"LESSE Studio brings a rare mix of exceptional talent and true collaboration. Their design work is best-in-class, defined by sharp taste and a distinct point of view. Anastasiia has been a pleasure to work with and is a partner we're excited to keep building with."</p>
+            <div class="tcard__author">
+              <div class="tcard__avatar"><img src="assets/avatar-johnny.webp" alt="Photo of Johnny Tran" /></div>
+              <div>
+                <p class="tcard__name">Johnny Tran</p>
+                <span class="tcard__role">Founder, Vora</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  var isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+
+  if (isPreview) {
+    document.querySelectorAll('[data-demo-only]').forEach(function (el) { el.remove(); });
+    requestAnimationFrame(function () {
+      document.querySelectorAll('[data-reveal]').forEach(function (el) { el.classList.add('revealed'); });
+      // Park track at a position showing 1-2 cards mid-frame
+      var track = document.getElementById('track');
+      if (track) {
+        // Wait a tick for layout
+        requestAnimationFrame(function () {
+          var frame = track.parentElement;
+          var firstCard = track.querySelector('.tcard');
+          var y = -(firstCard.offsetTop - frame.clientHeight * 0.15);
+          track.style.transform = 'translateY(' + y + 'px)';
+        });
+      }
+    });
+    return;
+  }
+
+  // Reveal block when it enters viewport
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('revealed');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
+
+  // Continuous uniform vertical scroll, measured from mirror: ~53 px/s
+  var track = document.getElementById('track');
+  if (!track) return;
+
+  // Duplicate the original 4 cards once so we have 8 cards = seamless loop
+  var originals = Array.prototype.slice.call(track.querySelectorAll('[data-original]'));
+  originals.forEach(function (c) {
+    var clone = c.cloneNode(true);
+    clone.removeAttribute('data-original');
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('img').forEach(function (img) { img.alt = ''; });
+    track.appendChild(clone);
+  });
+
+  // Speed and state
+  var SPEED_PX_PER_SEC = 53;
+  var y = 0;            // current translateY (negative as we scroll up)
+  var lastT = null;
+  var loopHeight = 0;   // height of one original-set (4 cards + 4 gaps)
+  var paused = false;
+
+  function measureLoop() {
+    // height of all data-original cards plus the gap that follows them
+    var firstClone = track.querySelector('[aria-hidden="true"]');
+    if (!firstClone) {
+      loopHeight = track.scrollHeight / 2;
+    } else {
+      loopHeight = firstClone.offsetTop;  // distance from track top to first clone = length of one full loop
+    }
+  }
+  measureLoop();
+  window.addEventListener('resize', measureLoop);
+
+  function tick(now) {
+    if (paused) { lastT = now; requestAnimationFrame(tick); return; }
+    if (lastT != null) {
+      var dt = (now - lastT) / 1000;
+      y -= SPEED_PX_PER_SEC * dt;
+      if (loopHeight > 0 && -y >= loopHeight) {
+        y += loopHeight;  // snap forward by one loop, invisible because clones are identical
+      }
+      track.style.transform = 'translate3d(0,' + y + 'px,0)';
+    }
+    lastT = now;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  document.addEventListener('visibilitychange', function () {
+    paused = document.visibilityState !== 'visible';
+    lastT = null;
+  });
+})();
+</script>
+
+</body>
+</html>

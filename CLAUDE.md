@@ -26,6 +26,7 @@
 @docs/claude-memory/scrape-pitfalls.md
 @docs/claude-memory/nuxt3-spa-mirror-recipe.md
 @docs/claude-memory/nextjs-spa-mirror-recipe.md
+@docs/claude-memory/sveltekit-spa-mirror-recipe.md
 
 ## effect 实现规则
 @docs/claude-memory/effect-slider-collage-rules.md
@@ -39,3 +40,5 @@
 @docs/claude-memory/feedback-webgl-effect-mix-blend-rules.md
 @docs/claude-memory/feedback-no-auto-package.md
 @docs/claude-memory/feedback-no-auto-push.md
+@docs/claude-memory/feedback-error-postmortem-discipline.md
+@docs/claude-memory/feedback-motion-sampling-mandatory.md

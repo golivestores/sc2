@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pinned showcase — lessestudio</title>
+<style>
+@font-face { font-family: "HostGrotesk"; src: url("assets/HostGrotesk.ttf") format("truetype"); font-display: swap; }
+
+:root {
+  --bg-start: #d8d2c4;   /* beige at p=0 */
+  --bg-end:   #050505;   /* black at p=1 */
+  --text-dim: rgba(0,0,0,0.55);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: auto; }
+html, body {
+  background: var(--bg-start);
+  color: #0a0a0a;
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The scrolling section gives 200vh of runway for the sticky inner ----- */
+.showcase {
+  position: relative;
+  width: 100%;
+  height: 200vh;
+  background: var(--bg-start);
+  transition: background 0.6s cubic-bezier(.32,.7,.24,1);
+}
+
+/* The inner sticky frame stays pinned to the top while user scrolls --- */
+.showcase__frame {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* The card grows + corners shrink as --p moves from 0 to 1 ------------ */
+.showcase__card {
+  position: relative;
+  width: calc(40vw + 60vw * var(--p, 0));     /* 40vw → 100vw */
+  height: calc(30vw + (100vh - 30vw) * var(--p, 0));  /* 30vw → 100vh */
+  border-radius: calc(1vw * (1 - var(--p, 0))); /* 1vw → 0 */
+  overflow: hidden;
+  background: #1a1a1a;
+  box-shadow: 0 calc(2vw * (1 - var(--p, 0))) calc(6vw * (1 - var(--p, 0))) rgba(0,0,0,0.18);
+
+  opacity: 0;
+  transform: translate3d(0, 200px, 0);
+  transition: opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform, width, height;
+}
+.showcase.revealed .showcase__card {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stacked content layers — opacity computed per-frame from --p (continuous crossfade) */
+.showcase__layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: #eee;
+  will-change: opacity;
+}
+.showcase__layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Layer 1 (GIF): laptop / website mockup — letterbox on beige -------- */
+.showcase__layer--1 { background: #d8d2c4; }
+.showcase__layer--1 img {
+  object-fit: contain;
+  padding: 5%;
+}
+
+/* Layer captions (top-left label) ------------------------------------ */
+.showcase__caption {
+  position: absolute;
+  top: 1.2vw;
+  left: 1.5vw;
+  z-index: 5;
+  font-size: 0.85vw;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.35);
+  padding: 0.3vw 0.7vw;
+  border-radius: 0.4vw;
+  backdrop-filter: blur(0.5vw);
+  -webkit-backdrop-filter: blur(0.5vw);
+  opacity: var(--cap-opacity, 0);
+  transition: opacity 0.4s;
+}
+.showcase__layer--1 .showcase__caption { color: rgba(0,0,0,0.7); background: rgba(255,255,255,0.5); }
+
+/* Mobile -------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .showcase__card {
+    width: calc(75vw + 25vw * var(--p, 0));
+    height: calc(100vw + (100vh - 100vw) * var(--p, 0));
+    border-radius: calc(3vw * (1 - var(--p, 0)));
+  }
+  .showcase__caption { font-size: 3vw; padding: 1.2vw 2.5vw; border-radius: 1.5vw; top: 3vw; left: 3vw; }
+}
+
+/* Intro hint (demo-only) --------------------------------------------- */
+.demo-intro {
+  text-align: center;
+  padding: 10vh 5vw 4vw;
+  color: var(--text-dim);
+  font-size: 0.95vw;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@media (max-width: 768px) { .demo-intro { font-size: 3vw; padding: 12vw 5vw 6vw; } }
+</style>
+</head>
+<body>
+
+<div class="demo-intro" data-demo-only>Scroll down — card grows, content swaps, background fades to black</div>
+
+<section class="showcase" id="showcase" style="--p: 0;">
+  <div class="showcase__frame">
+    <div class="showcase__card">
+      <div class="showcase__layer showcase__layer--1 is-active">
+        <span class="showcase__caption">01 — Nymph Web</span>
+        <img src="assets/laptop.gif" alt="Nymph haircare website preview" />
+      </div>
+      <div class="showcase__layer showcase__layer--2">
+        <span class="showcase__caption">02 — Duo Nutrition</span>
+        <img src="assets/project-duo.webp" alt="Duo Nutrition packaging" />
+      </div>
+      <div class="showcase__layer showcase__layer--3">
+        <span class="showcase__caption">03 — Everyday Sea Moss</span>
+        <img src="assets/project-everyday.webp" alt="Everyday Sea Moss product photo" />
+      </div>
+      <div class="showcase__layer showcase__layer--4">
+        <span class="showcase__caption">04 — Nymph Haircare</span>
+        <img src="assets/project-nymph.webp" alt="Nymph haircare packaging" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var section = document.getElementById('showcase');
+  var layers = section.querySelectorAll('.showcase__layer');
+  var card = section.querySelector('.showcase__card');
+  var isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+
+  // ---- Helpers --------------------------------------------------------
+  function lerpColor(p) {
+    var c0 = [0xd8, 0xd2, 0xc4], c1 = [0x05, 0x05, 0x05]; // beige → black
+    var r = Math.round(c0[0] + (c1[0] - c0[0]) * p);
+    var g = Math.round(c0[1] + (c1[1] - c0[1]) * p);
+    var b = Math.round(c0[2] + (c1[2] - c0[2]) * p);
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+
+  // Triangular falloff: full opacity at center, zero at center ± half-window.
+  // window controls how wide each layer "owns" — wider = more overlap with neighbours.
+  function layerOpacity(p, center, half) {
+    var d = Math.abs(p - center);
+    if (d >= half) return 0;
+    var t = 1 - d / half;
+    // soften the curve so crossfade feels less linear
+    return t * t * (3 - 2 * t);
+  }
+
+  // Apply visual state from a given progress value p ∈ [0..1]
+  function apply(p) {
+    section.style.setProperty('--p', p.toFixed(4));
+
+    // 4 layers centered at 0.0, 0.33, 0.66, 1.0 with overlap window 0.42
+    // each layer's opacity is continuous in p → no stepping
+    var centers = [0.0, 0.33, 0.66, 1.0];
+    var half = 0.30;
+    for (var i = 0; i < layers.length; i++) {
+      var op = layerOpacity(p, centers[i], half);
+      layers[i].style.opacity = op.toFixed(3);
+      // caption: visible only while this layer is dominant (op > 0.6)
+      var capOp = op > 0.6 ? (op - 0.6) / 0.4 : 0;
+      layers[i].style.setProperty('--cap-opacity', capOp.toFixed(3));
+    }
+
+    var bg = lerpColor(p);
+    section.style.background = bg;
+    document.documentElement.style.background = bg;
+  }
+
+  // ---- Preview mode ---------------------------------------------------
+  if (isPreview) {
+    document.querySelectorAll('[data-demo-only]').forEach(function (el) { el.remove(); });
+    section.classList.add('revealed');
+    apply(0.4);
+    return;
+  }
+
+  // ---- Reveal IO ------------------------------------------------------
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        section.classList.add('revealed');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(section);
+
+  // ---- Scroll progress with rAF lerp smoothing -----------------------
+  // Read target progress every frame from scroll position; render currentP lerped toward target.
+  // This decouples render from scroll events — gives smooth visual update on Windows native scroll.
+  var targetP = 0;
+  var currentP = 0;
+  var LERP = 0.12;  // lower = smoother but more lag (Lenis-like easing)
+
+  function readTarget() {
+    var rect = section.getBoundingClientRect();
+    var sectionHeight = section.offsetHeight;
+    var viewportHeight = window.innerHeight;
+    var scrollable = sectionHeight - viewportHeight;
+    var scrolled = -rect.top;
+    return scrollable > 0 ? Math.max(0, Math.min(1, scrolled / scrollable)) : 0;
+  }
+
+  function loop() {
+    targetP = readTarget();
+    var dp = targetP - currentP;
+    // Snap when very close to avoid drifting math
+    if (Math.abs(dp) < 0.0005) {
+      currentP = targetP;
+    } else {
+      currentP += dp * LERP;
+    }
+    apply(currentP);
+    requestAnimationFrame(loop);
+  }
+  currentP = readTarget();
+  apply(currentP);
+  requestAnimationFrame(loop);
+
+  window.addEventListener('resize', function () {
+    // Re-snap so a resize during animation doesn't cause jump
+    targetP = readTarget();
+  });
+})();
+</script>
+
+</body>
+</html>

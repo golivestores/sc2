@@ -1,0 +1,1 @@
+import{g as d,an as n,ao as p,ap as u,aq as c}from"./jHxCVNxU.js";function y(s,o,r){d(()=>{var a=n(()=>o(s,r?.())||{});if(r&&a?.update){var t=!1,f={};p(()=>{var e=r();u(e),t&&c(f,e)&&(f=e,a.update(e))}),t=!0}if(a?.destroy)return()=>a.destroy()})}export{y as a};
