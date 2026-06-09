@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMX · Impacto (Stats Count-up)</title>
+<script src="lib/gsap.min.js"></script>
+<script src="lib/ScrollTrigger.min.js"></script>
+<style>
+@font-face{font-family:'Syncopate';src:url('lib/syncopate-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Syncopate';src:url('lib/syncopate-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Inter';src:url('lib/inter-400.woff2') format('woff2');font-weight:400;font-display:swap}
+:root{--gmx-blue:#00f2fe;--gmx-pink:#ff007f;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#f8f8f8}
+body{font-family:'Inter',sans-serif;color:#222;-webkit-font-smoothing:antialiased}
+
+.intro{height:42vh;display:flex;align-items:flex-end;justify-content:center;padding-bottom:30px}
+.intro span{font-family:'Syncopate',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:4px;color:#ccc;text-transform:uppercase}
+
+/* ============ CLIENT LOGOS STRIP (marquee) ============ */
+.client-logos-strip{width:100%;overflow:hidden;padding:3.5vh 0;background:#f8f8f8;border-top:1px solid rgba(0,0,0,.04);border-bottom:1px solid rgba(0,0,0,.04);position:relative;z-index:20}
+.logos-track{display:flex;width:max-content;gap:0;animation:logosScroll 30s linear infinite}
+.logo-text{font-family:'Syncopate',sans-serif;font-size:clamp(.65rem,1.1vw,.85rem);font-weight:700;letter-spacing:3px;color:rgba(0,0,0,.15);white-space:nowrap;padding:0 2vw;transition:color .4s ease}
+.client-logos-strip:hover .logo-text{color:rgba(0,0,0,.35)}
+.logo-divider{color:rgba(0,0,0,.08);font-size:.6rem;display:flex;align-items:center;padding:0 .5vw}
+@keyframes logosScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ============ IMPACTO / PROOF ============ */
+.gmx-proof-section{--section-accent:var(--gmx-blue);background:#f8f8f8;padding:9vh 5vw;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);position:relative;z-index:20;overflow:hidden}
+.gmx-proof-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,242,254,.04) 0%,transparent 70%);pointer-events:none;z-index:0}
+.proof-wrapper{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.2fr 1fr;gap:5vw;align-items:center;position:relative;z-index:1}
+.proof-tag{display:inline-block;font-family:'Syncopate',sans-serif;font-size:.8rem;letter-spacing:4px;color:var(--gmx-blue);margin-bottom:20px;text-transform:uppercase}
+.proof-copy h2{font-family:'Syncopate',sans-serif;font-size:clamp(2.2rem,4vw,3.4rem);margin-bottom:20px;color:#111;line-height:1.15;letter-spacing:-1px}
+.proof-copy p{color:#666;font-size:1.1rem;line-height:1.8}
+.proof-metrics{display:flex;flex-direction:column;gap:20px}
+.metric{padding:30px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(20px) saturate(130%);-webkit-backdrop-filter:blur(20px) saturate(130%);border:1px solid rgba(255,255,255,.5);box-shadow:0 6px 28px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.7);transition:all .5s cubic-bezier(.16,1,.3,1)}
+.metric:hover{border-color:var(--gmx-blue);background:rgba(0,242,254,.04);transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,242,254,.08)}
+.metric:nth-child(2):hover{border-color:var(--gmx-pink);background:rgba(255,0,127,.04);box-shadow:0 15px 40px rgba(255,0,127,.08)}
+.metric h3{font-family:'Syncopate',sans-serif;font-size:2.4rem;font-weight:700;background:linear-gradient(90deg,var(--gmx-blue),var(--gmx-pink));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:6px}
+.metric p{color:#666;margin-top:6px;font-size:1rem;line-height:1.7}
+
+@media (max-width:880px){.proof-wrapper{grid-template-columns:1fr;gap:40px}.intro{display:none}}
+@media (max-width:768px){.metric{padding:22px}.metric h3{font-size:1.8rem}}
+</style>
+</head>
+<body>
+<div class="intro" data-demo-only><span>scroll ↓</span></div>
+
+<div class="client-logos-strip" aria-label="Segmentos atendidos">
+  <div class="logos-track">
+    <span class="logo-text">ARQUITETURA PREMIUM</span><span class="logo-divider">•</span>
+    <span class="logo-text">AUTOMOTIVO DE LUXO</span><span class="logo-divider">•</span>
+    <span class="logo-text">INCORPORAÇÃO</span><span class="logo-divider">•</span>
+    <span class="logo-text">MODA PREMIUM</span><span class="logo-divider">•</span>
+    <span class="logo-text">INFOPRODUTOS</span><span class="logo-divider">•</span>
+    <span class="logo-text">TECH &amp; SAAS</span><span class="logo-divider">•</span>
+    <span class="logo-text">ARQUITETURA PREMIUM</span><span class="logo-divider">•</span>
+    <span class="logo-text">AUTOMOTIVO DE LUXO</span><span class="logo-divider">•</span>
+    <span class="logo-text">INCORPORAÇÃO</span><span class="logo-divider">•</span>
+    <span class="logo-text">MODA PREMIUM</span><span class="logo-divider">•</span>
+    <span class="logo-text">INFOPRODUTOS</span><span class="logo-divider">•</span>
+    <span class="logo-text">TECH &amp; SAAS</span><span class="logo-divider">•</span>
+  </div>
+</div>
+
+<section class="gmx-proof-section" id="impacto">
+  <div class="proof-wrapper">
+    <div class="proof-copy">
+      <span class="proof-tag">IMPACTO GMX</span>
+      <h2>Resultados que transformam percepção.</h2>
+      <p>Design não é estética. É decisão. Criamos sistemas visuais que aumentam valor percebido, aceleram conversão e sustentam preço premium.</p>
+    </div>
+    <div class="proof-metrics">
+      <div class="metric"><h3 data-count="+280%">+280%</h3><p>Elevação média de conversão em landing pages premium.</p></div>
+      <div class="metric"><h3 data-count="4x">4x</h3><p>Engajamento em campanhas com IA cinematográfica.</p></div>
+      <div class="metric"><h3 data-count="+65%">+65%</h3><p>Aumento de percepção de valor em marcas reestruturadas.</p></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// 1:1 with gmxdigital.com: proof reveal (copy + metrics stagger) + count-up on data-count.
+(function(){
+  const isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+  gsap.registerPlugin(ScrollTrigger);
+  const ps = document.querySelector('.gmx-proof-section');
+  const pc = ps.querySelector('.proof-copy');
+  const mc = ps.querySelectorAll('.metric');
+
+  function countUp(el){
+    const raw = el.dataset.count || el.textContent.trim();
+    const m = raw.match(/[\d.]+/); if (!m) return;
+    const num = parseFloat(m[0]);
+    const pre = raw.substring(0, raw.indexOf(m[0]));
+    const suf = raw.substring(raw.indexOf(m[0]) + m[0].length);
+    const isF = m[0].includes('.');
+    const original = el.textContent.trim();
+    el.textContent = pre + '0' + suf;
+    const o = { v: 0 };
+    gsap.to(o, { v: num, duration: 2.2, ease: 'power2.out',
+      onUpdate: () => el.textContent = pre + (isF ? o.v.toFixed(1) : Math.round(o.v)) + suf,
+      onComplete: () => el.textContent = original });
+  }
+
+  if (isPreview) {
+    document.querySelector('.intro')?.remove();
+    gsap.set([pc, ...mc], { opacity: 1, y: 0, scale: 1 });
+    return; // keep real values shown
+  }
+
+  gsap.fromTo(pc, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out',
+    scrollTrigger: { trigger: ps, start: 'top 75%', once: true } });
+  gsap.fromTo(mc, { opacity: 0, y: 50, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, stagger: 0.2, ease: 'power3.out',
+    scrollTrigger: { trigger: ps, start: 'top 65%', once: true } });
+
+  ps.querySelectorAll('.metric h3').forEach(el => {
+    ScrollTrigger.create({ trigger: el.closest('.metric'), start: 'top 85%', once: true, onEnter: () => countUp(el) });
+  });
+})();
+</script>
+</body>
+</html>

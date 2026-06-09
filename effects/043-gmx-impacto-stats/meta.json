@@ -1,0 +1,10 @@
+{
+  "title": "Impacto — Stats Count-up",
+  "subtitle": "GMX · 数字滚动 + 品类跑马灯",
+  "description": "复刻 gmxdigital.com 的「Impacto GMX」区块:顶部品类无限跑马灯(Syncopate,translateX 0→-50% 30s 线性循环,hover 提亮)+ 下方左标题右 3 张玻璃统计卡。卡片随滚动 reveal(opacity/y/scale,stagger 0.2);数字用 data-count 做 count-up(0→目标,2.2s power2.out,保留 +/% /x 前后缀),h3 为青→品红渐变文字。1:1 还原原站。",
+  "tech": "GSAP + ScrollTrigger",
+  "tags": ["scroll", "animation", "typography"],
+  "previewHref": "index.html",
+  "sourceUrl": "https://gmxdigital.com/",
+  "localMirror": "../designs/027-gmxdigital/index.html"
+}

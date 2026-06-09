@@ -272,6 +272,16 @@
     "preview": "026-vectrfl/preview.png"
   },
   {
+    "folder": "027-gmxdigital",
+    "title": "GMX Digital",
+    "description": "",
+    "sourceUrl": "https://gmxdigital.com/",
+    "savedAt": "2026-06-09",
+    "tags": [],
+    "href": "027-gmxdigital/index.html",
+    "preview": "027-gmxdigital/preview.png"
+  },
+  {
     "folder": "Floema",
     "title": "Floema — Spaces for people, made for life",
     "description": "Sustainable signage & equipment brand. Pixi.js scattered-objects hero, scroll-driven photo collages, audio-driven micro-interactions. Homepage captured as full-page PNG (homepage-full.png) because the live site is a Nuxt SPA with Sanity-CMS images served via /_ipx/ proxy — interactive mirror keeps hero + nav but sub-page CSS chunks are absent.",

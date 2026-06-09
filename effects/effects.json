@@ -777,5 +777,73 @@
     "sourceUrl": "https://www.vectrfl.com/",
     "localMirror": "../designs/026-vectrfl/index.html",
     "order": 40
+  },
+  {
+    "num": "041",
+    "folder": "041-gmx-method-process-cards",
+    "title": "Método — Process Cards",
+    "subtitle": "GMX · 流程卡滚动揭示",
+    "description": "复刻 gmxdigital.com 的「Método GMX」流程区块:居中标题(Syncopate 大写)+ 4 张玻璃拟态流程卡。卡片随滚动逐个 reveal-up(opacity 0→1 / y 30→0,power2.out,ScrollTrigger 触发);每卡有大号幽灵序号 01–04(hover 时按卡变青/品红)、顶部渐变描边线、hover 渐变边框 + 上浮。1:1 还原原站机制与配色(--gmx-blue #00f2fe / --gmx-pink #ff007f)。",
+    "tech": "GSAP + ScrollTrigger",
+    "tags": [
+      "scroll",
+      "intro",
+      "animation"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://gmxdigital.com/",
+    "localMirror": "../designs/027-gmxdigital/index.html",
+    "order": 41
+  },
+  {
+    "num": "042",
+    "folder": "042-gmx-portfolio-drag-carousel",
+    "title": "Portfólio — Drag Carousel",
+    "subtitle": "GMX · 无限自动轮播 + 3D tilt",
+    "description": "复刻 gmxdigital.com 的作品轮播:玻璃质感卡片横向无限自动滚动(克隆整组实现无缝循环),每张卡按距容器中心的距离做 3D 透视倾斜(rotateY ±3° + scale + 透明度衰减),hover 时背景图去灰放大、clip-path 展开、按钮反白。左右箭头点击步进(scrollBy 平滑,暂停 3.5s 后恢复),底部渐变进度条实时反映滚动位置;移动端支持拖拽 + 惯性。1:1 还原原站 setupPortfolioDrag。注:演示用海报图替代原站视频(视频体积过大未打包)。",
+    "tech": "Vanilla JS",
+    "tags": [
+      "interaction",
+      "scroll",
+      "animation"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://gmxdigital.com/",
+    "localMirror": "../designs/027-gmxdigital/index.html",
+    "order": 42
+  },
+  {
+    "num": "043",
+    "folder": "043-gmx-impacto-stats",
+    "title": "Impacto — Stats Count-up",
+    "subtitle": "GMX · 数字滚动 + 品类跑马灯",
+    "description": "复刻 gmxdigital.com 的「Impacto GMX」区块:顶部品类无限跑马灯(Syncopate,translateX 0→-50% 30s 线性循环,hover 提亮)+ 下方左标题右 3 张玻璃统计卡。卡片随滚动 reveal(opacity/y/scale,stagger 0.2);数字用 data-count 做 count-up(0→目标,2.2s power2.out,保留 +/% /x 前后缀),h3 为青→品红渐变文字。1:1 还原原站。",
+    "tech": "GSAP + ScrollTrigger",
+    "tags": [
+      "scroll",
+      "animation",
+      "typography"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://gmxdigital.com/",
+    "localMirror": "../designs/027-gmxdigital/index.html",
+    "order": 43
+  },
+  {
+    "num": "044",
+    "folder": "044-gmx-clientes-trajectory",
+    "title": "Clientes — Zigzag Trajectory",
+    "subtitle": "GMX · 滚动绘制轨迹线 + 流光圆点",
+    "description": "复刻 gmxdigital.com「Nossos Clientes」zigzag 时间线:深紫渐变背景上,客户卡片左右交错排布,中线节点用一条多层 SVG 贝塞尔轨迹串联(渐变主线 + 模糊 glow + 白色 core + 虚线 hint)。随滚动用 strokeDashoffset 由上至下绘制(ScrollTrigger scrub 0.3),一颗发光 traveller 圆点(getPointAtLength)骑在绘制前沿移动,直到线走完;每张卡进入视口时 reveal(tag/logo/text/cta 错位)并点亮节点(脉冲环 + 青/品红描角展开)。1:1 还原 initTrajetoria;预览缩略图直接绘满整条线。",
+    "tech": "GSAP + ScrollTrigger",
+    "tags": [
+      "scroll",
+      "animation",
+      "interaction"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://gmxdigital.com/",
+    "localMirror": "../designs/027-gmxdigital/index.html",
+    "order": 44
   }
 ]

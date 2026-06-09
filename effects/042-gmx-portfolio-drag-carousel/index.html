@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMX · Portfólio (Drag Carousel)</title>
+<style>
+@font-face{font-family:'Syncopate';src:url('lib/syncopate-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Syncopate';src:url('lib/syncopate-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Inter';src:url('lib/inter-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Inter';src:url('lib/inter-500.woff2') format('woff2');font-weight:500;font-display:swap}
+:root{--gmx-blue:#00f2fe;--gmx-pink:#ff007f;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#f8f8f8}
+body{font-family:'Inter',sans-serif;color:#222;-webkit-font-smoothing:antialiased}
+
+/* ============ PORTFÓLIO drag carousel (1:1 from gmxdigital.com) ============ */
+.portfolio-light-wrapper{--section-accent:#8b5cf6;position:relative;z-index:20;width:100%;padding:4vh 0 6vh;background:#f8f8f8;overflow:hidden}
+.portfolio-header{text-align:center;padding:6vh 5vw 4vh;position:relative;z-index:10}
+.reveal-up{opacity:0;transform:translateY(30px)}
+.light-section-tag{display:inline-block;font-family:'Syncopate',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:5px;color:var(--gmx-blue);text-transform:uppercase;margin-bottom:18px}
+.portfolio-heading{font-family:'Syncopate',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);color:#111;text-transform:uppercase;letter-spacing:-1.5px;line-height:1.1;max-width:700px;margin:0 auto}
+.portfolio-drag-hint{font-family:'Inter',sans-serif;font-size:.85rem;color:#aaa;margin-top:12px;letter-spacing:1px;opacity:.7;transition:opacity .5s ease}
+
+.portfolio-carousel-wrap{position:relative}
+/* NOTE: scroll-behavior:smooth removed — it animates every scrollLeft+=1 of the
+   auto-scroll loop and cancels it out. Arrows pass behavior:'smooth' to scrollBy explicitly. */
+.portfolio{display:flex;flex-direction:row;align-items:stretch;gap:24px;perspective:1200px;z-index:10;position:relative;padding:0 5vw 30px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+.portfolio::-webkit-scrollbar{display:none}
+.portfolio .showreel-glass-frame{flex:0 0 clamp(340px,42vw,580px);min-width:340px;transition:transform .7s cubic-bezier(.16,1,.3,1),box-shadow .7s ease,opacity .5s ease;will-change:transform;padding:12px;border-radius:24px;background:rgba(255,255,255,.03)}
+
+.showreel-glass-frame{cursor:pointer}
+.work-item{position:relative;overflow:hidden;border-radius:20px;height:55vh;min-height:350px;display:flex;align-items:flex-end;padding:50px;background:#080808}
+.work-bg-parallax{position:absolute;top:-25%;left:0;width:100%;height:150%;background-size:cover;background-position:center;z-index:0;filter:brightness(.4) grayscale(30%);clip-path:inset(6% 0 6% 0);transition:filter .8s ease,transform .8s cubic-bezier(.25,1,.5,1),clip-path .8s cubic-bezier(.25,1,.5,1)}
+.showreel-glass-frame:hover .work-bg-parallax{filter:brightness(.7) grayscale(0%);transform:scale(1.05);clip-path:inset(0)}
+.work-content{position:relative;z-index:2;width:100%}
+.work-title{font-family:'Syncopate',sans-serif;font-size:clamp(2rem,4vw,3.5rem);color:#fff;margin-bottom:15px;text-shadow:0 10px 40px rgba(0,0,0,.8)}
+.work-desc{font-size:1.2rem;font-weight:300;color:#ddd;max-width:650px;text-shadow:0 5px 20px rgba(0,0,0,.8);margin-bottom:25px}
+.gmx-btn{margin-top:10px;padding:16px 40px;border:1px solid rgba(255,255,255,.4);color:#fff;background:rgba(0,0,0,.3);font-family:'Syncopate',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;display:inline-block;transition:all .4s ease;border-radius:50px;backdrop-filter:blur(10px)}
+.showreel-glass-frame:hover .gmx-btn{background:#fff;color:#000;border-color:#fff;box-shadow:0 0 30px rgba(255,255,255,.3)}
+
+.portfolio-nav{position:absolute;top:50%;transform:translateY(-50%);width:56px;height:56px;border-radius:50%;background:rgba(10,10,12,.85);color:#fff;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:30;backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .25s ease,background .25s ease,border-color .25s ease}
+.portfolio-nav:hover{background:linear-gradient(135deg,var(--gmx-blue),var(--gmx-pink));border-color:transparent;transform:translateY(-50%) scale(1.08)}
+.portfolio-nav:active{transform:translateY(-50%) scale(.95)}
+.portfolio-nav--prev{left:clamp(8px,2vw,28px)}
+.portfolio-nav--next{right:clamp(8px,2vw,28px)}
+
+.portfolio-progress{width:min(300px,60vw);height:2px;margin:24px auto 0;background:rgba(0,0,0,.08);border-radius:2px;overflow:hidden;position:relative}
+.portfolio-progress-fill{height:100%;width:20%;border-radius:2px;background:linear-gradient(90deg,var(--gmx-blue),var(--gmx-pink));transition:width .15s ease-out}
+
+@media (max-width:768px){
+  .work-item{height:40vh;min-height:280px;padding:30px}
+  .work-title{font-size:clamp(1.2rem,5vw,2rem)}
+  .work-desc{font-size:.95rem}
+  .portfolio .showreel-glass-frame{flex:0 0 82vw}
+  .portfolio{gap:16px}
+  .portfolio-nav{width:44px;height:44px}
+}
+</style>
+</head>
+<body>
+<div class="portfolio-light-wrapper" id="portfolio">
+  <div class="portfolio-header reveal-up">
+    <span class="light-section-tag">PORTFÓLIO</span>
+    <h2 class="portfolio-heading">Uma seleção dos nossos trabalhos mais apaixonados</h2>
+    <p class="portfolio-drag-hint">use as setas para navegar</p>
+  </div>
+
+  <div class="portfolio-carousel-wrap">
+    <button type="button" class="portfolio-nav portfolio-nav--prev" aria-label="Anterior">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button type="button" class="portfolio-nav portfolio-nav--next" aria-label="Próximo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <section class="portfolio portfolio-drag" id="portfolio-drag">
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/predio10.webp')"></div><div class="work-content"><h2 class="work-title">Arquitetura de Elite</h2><p class="work-desc">Hyperreal IA. Do terreno bruto ao desejo em segundos.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/final4.webp')"></div><div class="work-content"><h2 class="work-title">Urus Mansory</h2><p class="work-desc">Cinematografia automotiva hyperreal para atenção e conversão.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/img1.webp')"></div><div class="work-content"><h2 class="work-title">Porsche 911 Exclusivo</h2><p class="work-desc">Velocidade, luxo e narrativa cinematográfica.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/p9dejulho.webp')"></div><div class="work-content"><h2 class="work-title">9 de Julho</h2><p class="work-desc">Narrativa visual urbana com direção de arte hyperreal.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/img2.webp')"></div><div class="work-content"><h2 class="work-title">Megaarquitetura</h2><p class="work-desc">Cinematografia de alto impacto para projetos monumentais.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/bellavita.webp')"></div><div class="work-content"><h2 class="work-title">Bella Vita</h2><p class="work-desc">Cinematografia hyperreal e direção criativa para empreendimento de alto padrão.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/rochariva.webp')"></div><div class="work-content"><h2 class="work-title">Rocha Riva</h2><p class="work-desc">Produção audiovisual completa para empreendimento imobiliário.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/fidelity.webp')"></div><div class="work-content"><h2 class="work-title">Fidelity</h2><p class="work-desc">Cinematografia aérea e acompanhamento de obra em 4K.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/mc1.webp')"></div><div class="work-content"><h2 class="work-title">MC Incorp.</h2><p class="work-desc">Produção digital e vídeo institucional para loteamento.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+      <div class="showreel-glass-frame"><div class="work-item"><div class="work-bg-parallax" style="background-image:url('assets/mc2.webp')"></div><div class="work-content"><h2 class="work-title">MC Incorp. II</h2><p class="work-desc">Visualização 3D e produção audiovisual para empreendimento.</p><div class="gmx-btn">ASSISTIR VÍDEO</div></div></div></div>
+    </section>
+  </div>
+
+  <div class="portfolio-progress" aria-hidden="true"><div class="portfolio-progress-fill"></div></div>
+</div>
+
+<script>
+// 1:1 with gmxdigital.com setupPortfolioDrag: infinite auto-scroll carousel,
+// clones for seamless loop, 3D tilt by distance-from-center, arrows, progress bar, touch drag.
+(function(){
+  const isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+  const isMobile = () => window.innerWidth <= 768;
+
+  const container = document.querySelector('.portfolio-drag');
+  const progressFill = document.querySelector('.portfolio-progress-fill');
+  const originalCards = Array.from(container.querySelectorAll('.showreel-glass-frame'));
+  const totalCards = originalCards.length;
+
+  // reveal header
+  const header = document.querySelector('.portfolio-header');
+  if (isPreview) { header.style.opacity = '1'; header.style.transform = 'none'; }
+  else { setTimeout(() => { header.style.transition = 'opacity .8s, transform .8s'; header.style.opacity = '1'; header.style.transform = 'none'; }, 100); }
+
+  // clone all cards for seamless infinite loop
+  originalCards.forEach(card => {
+    const clone = card.cloneNode(true);
+    clone.setAttribute('data-cloned', 'true');
+    container.appendChild(clone);
+  });
+  const allCards = Array.from(container.querySelectorAll('.showreel-glass-frame'));
+
+  let originalWidth = 0;
+  function calcOriginalWidth(){
+    const gap = parseFloat(getComputedStyle(container).gap) || 24;
+    originalWidth = 0;
+    for (let i = 0; i < totalCards; i++) originalWidth += originalCards[i].offsetWidth + gap;
+  }
+  setTimeout(() => { calcOriginalWidth(); updateCardEffects(); }, 100);
+  setTimeout(() => { calcOriginalWidth(); updateCardEffects(); }, 500);
+  window.addEventListener('resize', calcOriginalWidth);
+
+  function checkLoop(){
+    if (originalWidth <= 0) return;
+    if (container.scrollLeft >= originalWidth) container.scrollLeft -= originalWidth;
+    else if (container.scrollLeft <= 0 && container.scrollLeft < 1) container.scrollLeft += originalWidth;
+  }
+  function updateProgress(){
+    if (!progressFill || originalWidth <= 0) return;
+    const pct = (container.scrollLeft % originalWidth) / originalWidth;
+    progressFill.style.width = Math.max(5, pct * 100) + '%';
+  }
+  function updateCardEffects(){
+    checkLoop();
+    const cr = container.getBoundingClientRect();
+    const centerX = cr.left + cr.width / 2;
+    allCards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const offset = (cx - centerX) / (cr.width / 2);
+      const o = Math.max(-1, Math.min(1, offset));
+      if (!isMobile()) {
+        card.style.transform = `perspective(1200px) rotateY(${o * 3}deg) scale(${1 - Math.abs(o) * 0.04})`;
+        card.style.opacity = Math.max(0.7, 1 - Math.abs(o) * 0.15);
+      }
+    });
+    updateProgress();
+  }
+  container.addEventListener('scroll', () => requestAnimationFrame(updateCardEffects), { passive: true });
+  requestAnimationFrame(updateCardEffects);
+
+  // auto-scroll
+  let autoPaused = false, isDragging = false, autoRaf = null;
+  const AUTO_SPEED = isMobile() ? 0.6 : 1.0;
+  function autoLoop(){
+    if (!autoPaused && !isDragging) { container.scrollLeft += AUTO_SPEED; checkLoop(); }
+    autoRaf = requestAnimationFrame(autoLoop);
+  }
+  function startAuto(){ if (autoRaf) return; calcOriginalWidth(); autoRaf = requestAnimationFrame(autoLoop); }
+
+  // arrows
+  const prevBtn = document.querySelector('.portfolio-nav--prev');
+  const nextBtn = document.querySelector('.portfolio-nav--next');
+  function cardStep(){
+    const first = container.querySelector('.showreel-glass-frame');
+    const gap = parseFloat(getComputedStyle(container).gap) || 24;
+    return first ? first.offsetWidth + gap : 400;
+  }
+  let resumeT = null;
+  function delayedResume(d){ clearTimeout(resumeT); resumeT = setTimeout(() => autoPaused = false, d || 3000); }
+  function navByArrow(dir){ autoPaused = true; container.scrollBy({ left: dir * cardStep(), behavior: 'smooth' }); delayedResume(3500); }
+  prevBtn.addEventListener('click', () => navByArrow(-1));
+  nextBtn.addEventListener('click', () => navByArrow(1));
+
+  // pause on hover
+  container.addEventListener('mouseenter', () => autoPaused = true);
+  container.addEventListener('mouseleave', () => { if (!isDragging) delayedResume(1500); });
+
+  // touch drag + momentum
+  let tStartX = 0, tScrollLeft = 0, tVel = 0, lastTX = 0, touching = false, momRaf = null;
+  container.addEventListener('touchstart', (e) => {
+    touching = true; autoPaused = true; clearTimeout(resumeT);
+    if (momRaf) { cancelAnimationFrame(momRaf); momRaf = null; }
+    tStartX = e.touches[0].pageX; tScrollLeft = container.scrollLeft; lastTX = tStartX; tVel = 0;
+  }, { passive: true });
+  container.addEventListener('touchmove', (e) => {
+    if (!touching) return;
+    const x = e.touches[0].pageX; const walk = (x - tStartX) * 1.4;
+    tVel = (lastTX - x) * 0.4; lastTX = x; container.scrollLeft = tScrollLeft - walk;
+  }, { passive: true });
+  container.addEventListener('touchend', () => {
+    touching = false;
+    if (Math.abs(tVel) > 1.5) {
+      const dec = () => { tVel *= 0.93; container.scrollLeft += tVel; if (Math.abs(tVel) > 0.5) momRaf = requestAnimationFrame(dec); else { momRaf = null; delayedResume(4000); } };
+      momRaf = requestAnimationFrame(dec);
+    } else delayedResume(4000);
+  }, { passive: true });
+
+  // hide hint after first interaction
+  const hint = document.querySelector('.portfolio-drag-hint');
+  const hideHint = () => { hint.style.opacity = '0'; };
+  prevBtn.addEventListener('click', hideHint, { once: true });
+  nextBtn.addEventListener('click', hideHint, { once: true });
+  container.addEventListener('touchstart', hideHint, { once: true, passive: true });
+
+  if (isPreview) {
+    autoPaused = true;                 // freeze for a clean thumbnail
+    requestAnimationFrame(updateCardEffects);
+  } else {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(en => { if (en.isIntersecting) startAuto(); });
+    }, { rootMargin: '100px 0px', threshold: 0 });
+    obs.observe(container);
+    setTimeout(startAuto, 3000);
+  }
+})();
+</script>
+</body>
+</html>

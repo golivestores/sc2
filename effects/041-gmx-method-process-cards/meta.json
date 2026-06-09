@@ -1,0 +1,10 @@
+{
+  "title": "Método — Process Cards",
+  "subtitle": "GMX · 流程卡滚动揭示",
+  "description": "复刻 gmxdigital.com 的「Método GMX」流程区块:居中标题(Syncopate 大写)+ 4 张玻璃拟态流程卡。卡片随滚动逐个 reveal-up(opacity 0→1 / y 30→0,power2.out,ScrollTrigger 触发);每卡有大号幽灵序号 01–04(hover 时按卡变青/品红)、顶部渐变描边线、hover 渐变边框 + 上浮。1:1 还原原站机制与配色(--gmx-blue #00f2fe / --gmx-pink #ff007f)。",
+  "tech": "GSAP + ScrollTrigger",
+  "tags": ["scroll", "intro", "animation"],
+  "previewHref": "index.html",
+  "sourceUrl": "https://gmxdigital.com/",
+  "localMirror": "../designs/027-gmxdigital/index.html"
+}
