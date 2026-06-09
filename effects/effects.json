@@ -691,5 +691,91 @@
     "sourceUrl": "https://lessestudio.com/",
     "localMirror": "../designs/024-lessestudio/index.html",
     "order": 35
+  },
+  {
+    "num": "036",
+    "folder": "036-sofi-phone-walkthrough",
+    "title": "sofi · App 走查（pinned 手机 + 向下滚动）",
+    "subtitle": "Phone app walkthrough (1:1)",
+    "description": "1:1 复刻 sofihealth.com 的 Application 段：SplitText 标题灰→黑逐字填充入场 → 3 个 iPhone（左 mood bubbles / 中 passiflora 活屏 / 右 sofi score）→ 中间手机放大 pin 住、屏幕内部随滚动纵向走查全部 app 屏（passiflora 卡 → 1,453 → 睡眠柱状图 → moon 6.5h + 星级评分 → calm↔stressed 情绪条 + 占比 → sun level of focus），moon/sun 随滚动旋转，header/footer nav 固定，底部 scroll-down 进度。所有 app 屏为原站真实内联 SVG，像素级保真。GSAP ScrollTrigger scrub 驱动，连续无跳变。",
+    "tech": "GSAP + ScrollTrigger + SplitText",
+    "tags": [
+      "scroll",
+      "interaction",
+      "animation",
+      "intro",
+      "hero"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://www.sofihealth.com/",
+    "localMirror": "../designs/025-sofihealth/index.html",
+    "order": 36
+  },
+  {
+    "num": "037",
+    "folder": "037-sofi-bento-grid",
+    "title": "sofi · 数据影响力 bento 网格",
+    "subtitle": "Bento stats grid (1:1)",
+    "description": "1:1 复刻 sofihealth.com 的 12 列 bento 统计网格：手持 pod、2.12x / 37 / 1.45m / 1,000 years / 1.1k 大数字统计块 + 瓶子排、世界地图图、淡色职业名单背景。滚动进入视口时白块逐个 fade-up（GSAP ScrollTrigger stagger）。原站字体 HelveticaNowDisplayMedium 已打包。",
+    "tech": "vanilla JS + GSAP + ScrollTrigger",
+    "tags": [
+      "scroll",
+      "intro",
+      "animation",
+      "interaction"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://www.sofihealth.com/",
+    "localMirror": "../designs/025-sofihealth/index.html",
+    "order": 37
+  },
+  {
+    "num": "038",
+    "folder": "038-vectr-features-scroll-reveal",
+    "title": "Features Scroll Reveal",
+    "subtitle": "Vectr · 滚动逐卡揭示",
+    "description": "复刻 vectrfl.com 的 Features 区块：sticky 居中的大标题 + 4 张特性卡，随页面滚动逐卡 opacity 0→1 / y 80→0 揭示（power2.out 缓动）。机制 1:1 还原原站——section 高 400vh 提供滚动跑道，rAF 持续读取 section 进度并把每张卡映射到一段错位的进度切片（带 30% 重叠），用 GSAP paused tween 的 .progress() 做连续 scrub，而非离散切换。",
+    "tech": "GSAP",
+    "tags": [
+      "scroll",
+      "intro",
+      "animation"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://www.vectrfl.com/",
+    "localMirror": "../designs/026-vectrfl/index.html",
+    "order": 38
+  },
+  {
+    "num": "039",
+    "folder": "039-vectr-faq-accordion",
+    "title": "FAQ Accordion",
+    "subtitle": "Vectr · 单开手风琴",
+    "description": "复刻 vectrfl.com 的 FAQ 区块：左侧大标题 + 竖分隔线 + 右侧单开手风琴。点击某项展开（max-height 0→scrollHeight，0.6s 过渡），自动收起其它已展开项；chevron 图标随展开/收起旋转，hover 时图标底色由深蓝 #050419 变高亮蓝 #3932DC。纯 JS + CSS，逻辑与原站一致（含强制 reflow 让 max-height 过渡可靠触发、resize 时重算高度）。",
+    "tech": "Vanilla JS",
+    "tags": [
+      "interaction",
+      "animation"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://www.vectrfl.com/",
+    "localMirror": "../designs/026-vectrfl/index.html",
+    "order": 39
+  },
+  {
+    "num": "040",
+    "folder": "040-vectr-footer-nav",
+    "title": "Footer Nav Hover",
+    "subtitle": "Vectr · 导航填充滑动",
+    "description": "复刻 vectrfl.com 页脚导航：深色底三栏（Our Industries / Our Mission / Apply）。hover 时背景由左向右 scaleX 填充亮色、文字由白转深并右移 10px、箭头双图叠放——当前箭头向右滑出、下一支箭头从左补入，全部 0.8s cubic-bezier(.25,1,.5,1) 缓动。纯 CSS hover，无 JS（preview 缩略图用 .is-hovered 类展示中间栏的填充态）。",
+    "tech": "Pure CSS",
+    "tags": [
+      "interaction",
+      "hero"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://www.vectrfl.com/",
+    "localMirror": "../designs/026-vectrfl/index.html",
+    "order": 40
   }
 ]

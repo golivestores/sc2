@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vectr · FAQ Accordion</title>
+<style>
+@font-face{
+  font-family:"Roboto Var";
+  src:url("lib/roboto.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;
+}
+:root{
+  --color-bg:#fcfcfc; --color-highlight:#3932DC; --color-dark:#050419;
+  --color-text:#050419; --color-text-muted:#585765; --color-border:#e6e6e8;
+  --text-base:18px; --text-lg:24px;
+  --tracking-tight:-.96px; --tracking-tightest:-3.2px;
+  --leading-none:1; --leading-snug:1.2; --leading-normal:1.4;
+  --space-xs:12px; --space-lg:24px; --space-2xl:48px; --space-4xl:128px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--color-bg)}
+body{
+  font-family:"Roboto Var","Roboto","Helvetica Neue",Arial,sans-serif;
+  color:var(--color-text);-webkit-font-smoothing:antialiased;
+}
+button{font:inherit;background:none;border:none;cursor:pointer;color:inherit}
+
+/* ============ FAQ (1:1 from vectrfl.com) ============ */
+.faq{
+  position:relative;width:100%;background-color:var(--color-bg);
+  border-top:1px solid var(--color-border);border-bottom:1px solid var(--color-border);
+  padding:0 var(--space-2xl);
+}
+.faq .faq__container{display:flex;gap:48px;max-width:1600px;margin:0 auto}
+.faq .faq__left,.faq .faq__right{padding:var(--space-4xl) 0}
+.faq .faq__left{flex:1;max-width:704px}
+.faq .faq__right{flex:1;display:flex;flex-direction:column}
+.faq .faq__title{
+  font-weight:500;font-size:64px;line-height:var(--leading-none);
+  letter-spacing:var(--tracking-tightest);color:var(--color-text);margin:0;
+}
+.faq_split_bar{min-height:0;width:1px;background-color:var(--color-border)}
+
+.faq-item{border-bottom:1px solid var(--color-border)}
+.faq-item:first-child{margin-top:-48px}
+.faq-item .faq-item__header{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  gap:var(--space-lg);padding:48px 0;text-align:left;
+}
+.faq-item .faq-item__question{
+  font-weight:500;font-size:var(--text-lg);line-height:var(--leading-snug);
+  letter-spacing:var(--tracking-tight);color:var(--color-text);
+}
+.faq-item .faq-item__icon{
+  flex-shrink:0;width:40px;height:24px;display:flex;align-items:center;justify-content:center;
+  border-radius:6px;background:#050419;transition:background .3s ease;
+}
+.faq-item .faq-item__icon img{width:100%;height:100%;transition:transform .3s ease;transform:rotate(180deg)}
+.faq-item .faq-item__content{max-height:0;overflow:hidden;transition:max-height .6s ease,padding .5s ease}
+.faq-item .faq-item__answer{
+  font-size:var(--text-base);line-height:1.5;color:var(--color-text-muted);margin:0;padding-bottom:32px;
+}
+@media (pointer:fine){
+  .faq-item .faq-item__header:hover .faq-item__icon{background:var(--color-highlight)}
+}
+.faq-item.faq-item--open .faq-item__icon img{transform:rotate(0)}
+
+@media (max-width:1200px){
+  .faq{padding:120px var(--space-lg)}
+  .faq .faq__title{font-size:56px;letter-spacing:-2px}
+  .faq-item .faq-item__question{font-size:20px}
+  .faq-item .faq-item__answer{font-size:16px}
+}
+@media all and (max-width:1080px){
+  .faq__container{flex-direction:column}
+  .faq .faq__left,.faq .faq__right{max-width:100%;padding:0}
+  .faq_split_bar{width:100%;height:1px}
+  .faq-item:last-child{border-bottom:none}
+}
+@media (max-width:820px){
+  .faq{padding:0 var(--space-lg)}
+  .faq .faq__container{flex-direction:column;gap:var(--space-2xl);padding-bottom:12px}
+  .faq .faq__left{flex:none;max-width:100%;padding-top:96px}
+  .faq .faq__title{font-size:32px;letter-spacing:-1.28px}
+  .faq-item:first-child{border-top:none;margin-top:0}
+  .faq-item .faq-item__header{gap:var(--space-xs);padding:var(--space-2xl) 0}
+  .faq-item .faq-item__question{font-size:20px}
+  .faq-item .faq-item__answer{font-size:16px;line-height:var(--leading-normal);padding-bottom:var(--space-2xl)}
+  .faq-item .faq-item__content{margin-top:-16px}
+}
+</style>
+</head>
+<body>
+<section class="faq">
+  <div class="faq__container">
+    <div class="faq__left">
+      <h2 class="faq__title">How we work and how we deliver industrial-grade staffing.</h2>
+    </div>
+    <div class="faq_split_bar"></div>
+    <div class="faq__right">
+      <div class="faq-item faq-item--open">
+        <button class="faq-item__header" type="button" aria-expanded="true">
+          <span class="faq-item__question">How fast can crews be mobilized?</span>
+          <span class="faq-item__icon"><img src="assets/chevron-down.svg" alt=""></span>
+        </button>
+        <div class="faq-item__content"><p class="faq-item__answer">We move at the speed of your schedule. Our platform maintains a deep network of verified industrial craft, eliminating the weeks wasted in traditional hiring cycles. One call activates our mobilization engine to source and deploy precision-matched crews in hours, not days, ensuring your most critical paths remain fully manned.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-item__header" type="button" aria-expanded="false">
+          <span class="faq-item__question">How do you handle compliance &amp; background checks?</span>
+          <span class="faq-item__icon"><img src="assets/chevron-down.svg" alt=""></span>
+        </button>
+        <div class="faq-item__content"><p class="faq-item__answer">We use a Zero-Fail Compliance model. Before a worker is even cleared for dispatch, our system automates the verification of background checks, drug testing (FFD), and site-specific certifications including nuclear grade requirements. We block access to the gate for anyone who isn't 100% cleared, ensuring your badging office has zero headaches on Day 1.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-item__header" type="button" aria-expanded="false">
+          <span class="faq-item__question">What is the coverage during outages?</span>
+          <span class="faq-item__icon"><img src="assets/chevron-down.svg" alt=""></span>
+        </button>
+        <div class="faq-item__content"><p class="faq-item__answer">We provide 24/7 active coordination to match the 24/7 nature of an outage. Our coverage spans the full range of outage craft: from general laborers and painters to specialized repairs and schedulers. More importantly, we manage the "last mile" of arrival, monitoring deployments in real-time to ensure your night and day shifts remain fully manned, even when field conditions shift.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-item__header" type="button" aria-expanded="false">
+          <span class="faq-item__question">How does Vectr differ from traditional staffing vendors?</span>
+          <span class="faq-item__icon"><img src="assets/chevron-down.svg" alt=""></span>
+        </button>
+        <div class="faq-item__content"><p class="faq-item__answer">Traditional vendors are reactive; Vectr is an operational engine. While legacy agencies rely on manual resumes and 'available' warm bodies, we use intelligent workflows and expert curation to deliver field-validated precision. We don't just find people who are looking for work; we deploy proven crews that are engineered for the high-tempo grind of a critical path environment.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// 1:1 with vectrfl.com: single-open accordion driven by max-height transition.
+(function(){
+  const openItem = (item) => {
+    const c = item.querySelector('.faq-item__content');
+    if (!c) return;
+    item.classList.add('faq-item--open');
+    item.querySelector('.faq-item__header')?.setAttribute('aria-expanded', 'true');
+    c.style.maxHeight = '0px';
+    void c.offsetHeight;                       // force reflow so transition runs
+    c.style.maxHeight = c.scrollHeight + 'px';
+  };
+  const closeItem = (item) => {
+    const c = item.querySelector('.faq-item__content');
+    if (!c) return;
+    c.style.maxHeight = c.scrollHeight + 'px';
+    void c.offsetHeight;
+    c.style.maxHeight = '0px';
+    item.classList.remove('faq-item--open');
+    item.querySelector('.faq-item__header')?.setAttribute('aria-expanded', 'false');
+  };
+
+  document.querySelectorAll('.faq-item__header').forEach(h => {
+    h.addEventListener('click', (e) => {
+      const item = e.currentTarget.closest('.faq-item');
+      if (!item) return;
+      const isOpen = item.classList.contains('faq-item--open');
+      document.querySelectorAll('.faq-item--open').forEach(o => { if (o !== item) closeItem(o); });
+      isOpen ? closeItem(item) : openItem(item);
+    });
+  });
+
+  // initialise the default-open item's height + keep it correct on resize
+  const syncOpen = () => document.querySelectorAll('.faq-item--open').forEach(o => {
+    const c = o.querySelector('.faq-item__content');
+    if (c) c.style.maxHeight = c.scrollHeight + 'px';
+  });
+  window.addEventListener('resize', syncOpen);
+  window.addEventListener('load', syncOpen);
+  syncOpen();
+})();
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="039-vectr-faq-accordion.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=039-vectr-faq-accordion" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

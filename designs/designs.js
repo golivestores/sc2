@@ -253,6 +253,26 @@ window.__DESIGNS__ = [
     "preview": "024-lessestudio/preview.png"
   },
   {
+    "folder": "025-sofihealth",
+    "title": "Sofi Health",
+    "description": "",
+    "sourceUrl": "https://www.sofihealth.com/",
+    "savedAt": "2026-06-09",
+    "tags": [],
+    "href": "025-sofihealth/index.html",
+    "preview": "025-sofihealth/preview.png"
+  },
+  {
+    "folder": "026-vectrfl",
+    "title": "Vectr FL",
+    "description": "",
+    "sourceUrl": "https://www.vectrfl.com/",
+    "savedAt": "2026-06-09",
+    "tags": [],
+    "href": "026-vectrfl/index.html",
+    "preview": "026-vectrfl/preview.png"
+  },
+  {
     "folder": "Floema",
     "title": "Floema — Spaces for people, made for life",
     "description": "Sustainable signage & equipment brand. Pixi.js scattered-objects hero, scroll-driven photo collages, audio-driven micro-interactions. Homepage captured as full-page PNG (homepage-full.png) because the live site is a Nuxt SPA with Sanity-CMS images served via /_ipx/ proxy — interactive mirror keeps hero + nav but sub-page CSS chunks are absent.",

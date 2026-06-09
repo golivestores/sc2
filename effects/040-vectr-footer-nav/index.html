@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vectr · Footer Nav Hover</title>
+<style>
+@font-face{
+  font-family:"Roboto Var";
+  src:url("lib/roboto.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;
+}
+:root{
+  --color-bg:#fcfcfc; --color-dark:#050419; --color-text-light:#fcfcfc;
+  --color-border-dark:#373647;
+  --text-xl:36px;
+  --tracking-tight:-.96px; --tracking-tighter:-1.44px;
+  --leading-snug:1.2;
+  --space-lg:24px; --space-2xl:48px;
+  --ease-default:cubic-bezier(.25,1,.5,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--color-dark)}
+body{
+  font-family:"Roboto Var","Roboto","Helvetica Neue",Arial,sans-serif;
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ============ FOOTER NAV (1:1 from vectrfl.com) ============ */
+.footer-nav{
+  display:flex;width:100%;height:200px;
+  border-top:1px solid var(--color-border-dark);
+  border-bottom:1px solid var(--color-border-dark);
+}
+.footer-nav-btn{
+  flex:1;display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--space-2xl);height:100%;text-decoration:none;
+  border-right:1px solid var(--color-border-dark);position:relative;overflow:hidden;
+}
+.footer-nav-btn:last-child{border-right:none}
+.footer-nav-btn .footer-nav-btn__bg{
+  position:absolute;inset:0;z-index:0;background-color:var(--color-bg);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .8s var(--ease-default);
+}
+.footer-nav-btn .footer-nav-btn__label{
+  position:relative;z-index:1;font-weight:500;font-size:var(--text-xl);
+  line-height:var(--leading-snug);letter-spacing:var(--tracking-tighter);
+  color:var(--color-text-light);
+  transition:transform .8s var(--ease-default),color .8s var(--ease-default);
+}
+.footer-nav-btn .footer-nav-btn__arrows{
+  position:relative;z-index:1;width:23px;height:32px;overflow:hidden;
+}
+.footer-nav-btn .footer-nav-btn__arrow{
+  position:absolute;top:0;width:23px;height:32px;
+  transition:transform .8s var(--ease-default);
+}
+.footer-nav-btn .footer-nav-btn__arrow--current{left:0}
+.footer-nav-btn .footer-nav-btn__arrow--next{left:-100%}
+
+/* hover (pointer:fine) + .is-hovered demo class share the same end state */
+@media all and (pointer:fine){
+  .footer-nav-btn:hover .footer-nav-btn__bg{transform:scaleX(1)}
+  .footer-nav-btn:hover .footer-nav-btn__label{color:var(--color-dark);transform:translate(10px)}
+  .footer-nav-btn:hover .footer-nav-btn__arrow--current{transform:translate(200%)}
+  .footer-nav-btn:hover .footer-nav-btn__arrow--next{transform:translate(100%)}
+}
+.footer-nav-btn.is-hovered .footer-nav-btn__bg{transform:scaleX(1)}
+.footer-nav-btn.is-hovered .footer-nav-btn__label{color:var(--color-dark);transform:translate(10px)}
+.footer-nav-btn.is-hovered .footer-nav-btn__arrow--current{transform:translate(200%)}
+.footer-nav-btn.is-hovered .footer-nav-btn__arrow--next{transform:translate(100%)}
+
+@media (max-width:1200px){
+  .footer-nav{height:160px}
+  .footer-nav-btn{padding:0 var(--space-lg)}
+  .footer-nav-btn .footer-nav-btn__label{font-size:28px}
+}
+@media (max-width:820px){
+  body{display:block}
+  .footer-nav{flex-direction:column;height:auto}
+  .footer-nav-btn{flex:none;height:72px;border-right:none;border-bottom:1px solid var(--color-border-dark);padding:0 var(--space-lg)}
+  .footer-nav-btn:last-child{border-bottom:none}
+  .footer-nav-btn .footer-nav-btn__label{font-size:20px;letter-spacing:var(--tracking-tight)}
+  .footer-nav-btn .footer-nav-btn__arrows,.footer-nav-btn .footer-nav-btn__arrow{width:18px;height:26px}
+}
+</style>
+</head>
+<body>
+<nav class="footer-nav">
+  <a href="#" class="footer-nav-btn">
+    <span class="footer-nav-btn__bg"></span>
+    <span class="footer-nav-btn__label">Our Industries</span>
+    <span class="footer-nav-btn__arrows">
+      <img src="assets/arrow-right.svg" alt="" class="footer-nav-btn__arrow footer-nav-btn__arrow--current" width="23" height="32">
+      <img src="assets/arrow-right.svg" alt="" class="footer-nav-btn__arrow footer-nav-btn__arrow--next" width="23" height="32">
+    </span>
+  </a>
+  <a href="#" class="footer-nav-btn">
+    <span class="footer-nav-btn__bg"></span>
+    <span class="footer-nav-btn__label">Our Mission</span>
+    <span class="footer-nav-btn__arrows">
+      <img src="assets/arrow-right.svg" alt="" class="footer-nav-btn__arrow footer-nav-btn__arrow--current" width="23" height="32">
+      <img src="assets/arrow-right.svg" alt="" class="footer-nav-btn__arrow footer-nav-btn__arrow--next" width="23" height="32">
+    </span>
+  </a>
+  <a href="#" class="footer-nav-btn">
+    <span class="footer-nav-btn__bg"></span>
+    <span class="footer-nav-btn__label">Apply</span>
+    <span class="footer-nav-btn__arrows">
+      <img src="assets/arrow-right.svg" alt="" class="footer-nav-btn__arrow footer-nav-btn__arrow--current" width="23" height="32">
+      <img src="assets/arrow-right.svg" alt="" class="footer-nav-btn__arrow footer-nav-btn__arrow--next" width="23" height="32">
+    </span>
+  </a>
+</nav>
+
+<script>
+// preview thumbnail: show one button in its hovered (filled) state since CSS :hover
+// can't fire in a static screenshot.
+(function(){
+  const isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+  if (isPreview) {
+    const btns = document.querySelectorAll('.footer-nav-btn');
+    (btns[1] || btns[0])?.classList.add('is-hovered');
+  }
+})();
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="040-vectr-footer-nav.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=040-vectr-footer-nav" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "title": "sofi · 数据影响力 bento 网格",
+  "subtitle": "Bento stats grid (1:1)",
+  "description": "1:1 复刻 sofihealth.com 的 12 列 bento 统计网格：手持 pod、2.12x / 37 / 1.45m / 1,000 years / 1.1k 大数字统计块 + 瓶子排、世界地图图、淡色职业名单背景。滚动进入视口时白块逐个 fade-up（GSAP ScrollTrigger stagger）。原站字体 HelveticaNowDisplayMedium 已打包。",
+  "tech": "vanilla JS + GSAP + ScrollTrigger",
+  "tags": ["scroll", "intro", "animation", "interaction"],
+  "previewHref": "index.html",
+  "sourceUrl": "https://www.sofihealth.com/",
+  "localMirror": "../designs/025-sofihealth/index.html"
+}

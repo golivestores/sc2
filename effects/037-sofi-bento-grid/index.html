@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>sofi · bento stats grid</title>
+<style>
+  @font-face{
+    font-family:'HelveticaNowDisplayMedium';
+    src:url('lib/HelveticaNowDisplayMedium.woff2') format('woff2');
+    font-display:swap;
+  }
+  :root{
+    --bg:#f7f7f7;
+    --block:#ffffff;
+    --ink:#000000;
+    --muted:#121212;
+    --faint:#e6e6e6;           /* faded role text behind "1,000 years" */
+    --ff:'HelveticaNowDisplayMedium',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);font-family:var(--ff);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  body{overflow-x:hidden;}
+
+  /* ---- demo scroll runway (stripped from paste snippets) ---- */
+  .demo-intro{
+    height:115vh;display:flex;align-items:flex-end;justify-content:center;
+    padding-bottom:6vh;text-align:center;
+  }
+  .demo-intro p{font-size:15px;letter-spacing:-.075px;color:#9a9a9a;max-width:520px;line-height:1.5;}
+
+  /* ---- bento section ---- */
+  .grid-section{padding:64px 0;background:var(--bg);}
+  .grid-wrap{
+    width:1440px;max-width:100%;margin:0 auto;padding:0 52px;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-template-rows:225px 225px 225px;
+    gap:20px;
+  }
+  .block{
+    background:var(--block);overflow:hidden;position:relative;
+    display:flex;flex-direction:column;
+    will-change:transform,opacity;
+  }
+  /* placement */
+  .b01{grid-column:1/span 3;grid-row:1/span 2;}
+  .b02{grid-column:4/span 3;grid-row:1;}
+  .b03{grid-column:7/span 6;grid-row:1;}
+  .b04{grid-column:4/span 6;grid-row:2;}
+  .b05{grid-column:10/span 3;grid-row:2/span 2;}
+  .b06{grid-column:1/span 6;grid-row:3;}
+  .b07{grid-column:7/span 3;grid-row:3;}
+
+  /* typography */
+  .stat{font-size:100px;line-height:90px;letter-spacing:-3.5px;font-weight:500;}
+  .small{font-size:15px;line-height:18px;letter-spacing:-.075px;color:var(--muted);}
+  .lede{font-size:36px;line-height:32px;letter-spacing:-.72px;font-weight:500;}
+  .statement{font-size:52px;line-height:48px;letter-spacing:-1.04px;font-weight:500;}
+
+  /* b01 : lede + hand image */
+  .b01{justify-content:space-between;}
+  .b01 .lede{padding:20px 20px 0;}
+  .b01 .img-hand{width:100%;flex:1;background:url('assets/d036430f.webp') center bottom/contain no-repeat;}
+
+  /* b02 / b07 : stat top, small below */
+  .b02,.b07{padding:35px 20px 20px;justify-content:flex-start;gap:14px;}
+  .b02 .small,.b07 .small{max-width:260px;}
+
+  /* b03 : bottles image left, stat+small right */
+  .b03{flex-direction:row;align-items:flex-start;padding:28px 20px;}
+  .b03 .img-bottles{width:345px;height:169px;background:url('assets/b5475875.webp') left center/contain no-repeat;flex:0 0 auto;}
+  .b03 .b03-text{margin-left:24px;}
+  .b03 .b03-text .small{margin-top:6px;max-width:200px;}
+
+  /* b04 : big statement centered vertically */
+  .b04{justify-content:center;padding:0 28px;}
+  .b04 .statement{max-width:600px;}
+
+  /* b05 : stat + small + map image bottom */
+  .b05{padding:20px;justify-content:flex-start;}
+  .b05 .small{margin-top:8px;max-width:260px;}
+  .b05 .img-map{position:absolute;left:19px;right:0;bottom:0;height:252px;background:url('assets/787cc226.webp') center bottom/contain no-repeat;}
+
+  /* b06 : faded role text behind + stat */
+  .b06{justify-content:center;align-items:center;}
+  .b06 .faint{
+    position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    font-size:44px;line-height:40px;letter-spacing:-.88px;color:var(--faint);
+    text-align:center;white-space:nowrap;overflow:hidden;pointer-events:none;
+    font-weight:500;
+  }
+  .b06 .fg{position:relative;text-align:center;}
+  .b06 .small{margin-top:14px;}
+
+  @media (max-width:900px){
+    .grid-wrap{width:100%;padding:0 16px;grid-template-rows:auto;}
+    .block{min-height:200px;}
+    .b01{grid-column:1/span 12;grid-row:auto;}
+    .b02,.b03,.b04,.b05,.b06,.b07{grid-column:1/span 12;grid-row:auto;flex-direction:column;}
+    .b03 .img-bottles{width:100%;}
+    .stat{font-size:64px;line-height:60px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="demo-intro" data-demo-only>
+    <p>we have used plants for thousands of years &mdash; sofi is charting the future of plant-based remedies. scroll to reveal the impact grid.</p>
+  </div>
+
+  <section class="grid-section">
+    <div class="grid-wrap">
+      <div class="block b01">
+        <div class="lede">your sofi pod generates signals with every spray</div>
+        <div class="img-hand"></div>
+      </div>
+
+      <div class="block b02">
+        <div class="stat">2.12x</div>
+        <div class="small">sleep quality improvement for 48% of users at more than 95% of certainty with first two plants</div>
+      </div>
+
+      <div class="block b03">
+        <div class="img-bottles"></div>
+        <div class="b03-text">
+          <div class="stat">37</div>
+          <div class="small">criteria in prioritising plant roadmap</div>
+        </div>
+      </div>
+
+      <div class="block b04">
+        <div class="statement">we understand the impact of our plants as you sofi</div>
+      </div>
+
+      <div class="block b05">
+        <div class="stat">1.45m</div>
+        <div class="small">data points generated in 2022 by our pioneers to validate sofi end-to-end</div>
+        <div class="img-map"></div>
+      </div>
+
+      <div class="block b06">
+        <div class="faint">
+          <span>clinicians &bull; scientists &bull; physicians &bull; coders &bull; mathematicians</span>
+          <span>lab technicians &bull; biochemists &bull; qualified persons &bull; designers</span>
+          <span>ethnobotanists &bull; herbalists &bull; nutritionists &bull; medical doctors</span>
+          <span>professors of medicine &bull; product designers &bull; psychologists</span>
+          <span>clinicians &bull; scientists &bull; physicians &bull; coders &bull; mathematicians</span>
+        </div>
+        <div class="fg">
+          <div class="stat">1,000 years</div>
+          <div class="small">of collective experience in multiple fields</div>
+        </div>
+      </div>
+
+      <div class="block b07">
+        <div class="stat">1.1k</div>
+        <div class="small">pioneers have received &amp; tested sofi</div>
+      </div>
+    </div>
+  </section>
+
+  <div style="height:30vh" data-demo-only></div>
+
+  <script src="lib/gsap.min.js"></script>
+  <script src="lib/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    const isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+    const blocks = gsap.utils.toArray('.block');
+
+    if (isPreview) {
+      // card thumbnail: drop the scroll runway so the grid sits flush to the top, show finished grid
+      document.querySelectorAll('[data-demo-only]').forEach(e => e.remove());
+      document.querySelector('.grid-section').style.paddingTop = '0';
+      gsap.set(blocks, { opacity: 1, y: 0 });
+    } else {
+      gsap.set(blocks, { opacity: 0, y: 48 });
+      gsap.to(blocks, {
+        opacity: 1, y: 0,
+        duration: 0.7, ease: 'power3.out',
+        stagger: { each: 0.08, from: 'start' },
+        scrollTrigger: {
+          trigger: '.grid-section',
+          start: 'top 78%',
+          once: true
+        }
+      });
+    }
+  </script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="037-sofi-bento-grid.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=037-sofi-bento-grid" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

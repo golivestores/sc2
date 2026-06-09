@@ -1,0 +1,10 @@
+{
+  "title": "sofi · App 走查（pinned 手机 + 向下滚动）",
+  "subtitle": "Phone app walkthrough (1:1)",
+  "description": "1:1 复刻 sofihealth.com 的 Application 段：SplitText 标题灰→黑逐字填充入场 → 3 个 iPhone（左 mood bubbles / 中 passiflora 活屏 / 右 sofi score）→ 中间手机放大 pin 住、屏幕内部随滚动纵向走查全部 app 屏（passiflora 卡 → 1,453 → 睡眠柱状图 → moon 6.5h + 星级评分 → calm↔stressed 情绪条 + 占比 → sun level of focus），moon/sun 随滚动旋转，header/footer nav 固定，底部 scroll-down 进度。所有 app 屏为原站真实内联 SVG，像素级保真。GSAP ScrollTrigger scrub 驱动，连续无跳变。",
+  "tech": "GSAP + ScrollTrigger + SplitText",
+  "tags": ["scroll", "interaction", "animation", "intro", "hero"],
+  "previewHref": "index.html",
+  "sourceUrl": "https://www.sofihealth.com/",
+  "localMirror": "../designs/025-sofihealth/index.html"
+}

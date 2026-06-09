@@ -1,0 +1,10 @@
+{
+  "title": "Footer Nav Hover",
+  "subtitle": "Vectr · 导航填充滑动",
+  "description": "复刻 vectrfl.com 页脚导航：深色底三栏（Our Industries / Our Mission / Apply）。hover 时背景由左向右 scaleX 填充亮色、文字由白转深并右移 10px、箭头双图叠放——当前箭头向右滑出、下一支箭头从左补入，全部 0.8s cubic-bezier(.25,1,.5,1) 缓动。纯 CSS hover，无 JS（preview 缩略图用 .is-hovered 类展示中间栏的填充态）。",
+  "tech": "Pure CSS",
+  "tags": ["interaction", "hero"],
+  "previewHref": "index.html",
+  "sourceUrl": "https://www.vectrfl.com/",
+  "localMirror": "../designs/026-vectrfl/index.html"
+}

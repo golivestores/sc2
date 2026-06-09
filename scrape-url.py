@@ -630,9 +630,16 @@ def main():
 /* Local-mirror path shim — auto-injected by scrape-url.py.
    See scrape-url.py for rationale. Behavior under standalone server is unchanged. */
 (function () {
+  /* __docDir = the directory portion of the current document's path, e.g.
+     "/works/greenwoodmcn/" when the mirror is deployed to a subpath. If an
+     absolute path argument already starts with __docDir, the browser/runtime
+     has already correctly resolved a relative URL against the document — do
+     not prefix it again, or fetches double up (/works/x/works/x/...). */
+  var __docDir = location.pathname.replace(/[^/]*$/, '');
   function rewrite(u) {
     if (typeof u !== 'string') return u;
     if (u.length < 2 || u[0] !== '/' || u[1] === '/') return u;
+    if (__docDir.length > 1 && u.indexOf(__docDir) === 0) return u;
     return '.' + u;
   }
   var origFetch = window.fetch;
