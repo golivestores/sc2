@@ -283,6 +283,24 @@ window.__DESIGNS__ = [
     "preview": "027-gmxdigital/preview.png"
   },
   {
+    "folder": "028-onenergy",
+    "title": "ON Energy",
+    "description": "ON.energy — grid-safe power systems for AI data centers. Nuxt 3 SPA with Three.js WebGL scenes (city / data-center / airport GLB models), GSAP + ScrollTrigger pinned sections, Lenis smooth scroll, SplitText hero reveal, and a 351-frame scroll-scrubbed technology image sequence driven via a Web Worker.",
+    "sourceUrl": "https://www.on.energy/",
+    "savedAt": "2026-06-11",
+    "tags": [
+      "nuxt",
+      "threejs",
+      "webgl",
+      "gsap",
+      "scroll",
+      "image-sequence",
+      "lenis"
+    ],
+    "href": "028-onenergy/index.html",
+    "preview": "028-onenergy/preview.png"
+  },
+  {
     "folder": "Floema",
     "title": "Floema — Spaces for people, made for life",
     "description": "Sustainable signage & equipment brand. Pixi.js scattered-objects hero, scroll-driven photo collages, audio-driven micro-interactions. Homepage captured as full-page PNG (homepage-full.png) because the live site is a Nuxt SPA with Sanity-CMS images served via /_ipx/ proxy — interactive mirror keeps hero + nav but sub-page CSS chunks are absent.",

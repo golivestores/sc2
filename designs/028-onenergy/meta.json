@@ -1,0 +1,8 @@
+{
+  "title": "ON Energy",
+  "description": "ON.energy — grid-safe power systems for AI data centers. Nuxt 3 SPA with Three.js WebGL scenes (city / data-center / airport GLB models), GSAP + ScrollTrigger pinned sections, Lenis smooth scroll, SplitText hero reveal, and a 351-frame scroll-scrubbed technology image sequence driven via a Web Worker.",
+  "tech": "Nuxt 3 + Three.js + GSAP/ScrollTrigger + Lenis",
+  "sourceUrl": "https://www.on.energy/",
+  "savedAt": "2026-06-11",
+  "tags": ["nuxt", "threejs", "webgl", "gsap", "scroll", "image-sequence", "lenis"]
+}

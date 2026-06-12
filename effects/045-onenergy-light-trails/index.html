@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ON.energy — Performance Light Trails</title>
+<style>
+  /* ---- fonts (self-contained, A.2) ---- */
+  @font-face{font-family:"Univers Next Pro";font-style:normal;font-weight:300;font-display:swap;
+    src:url(lib/fonts/UniversNextPro-Light.woff2) format("woff2"),url(lib/fonts/UniversNextPro-Light.woff) format("woff")}
+  @font-face{font-family:"ABC Monument Grotesk Mono";font-style:normal;font-weight:400;font-display:swap;
+    src:url(lib/fonts/ABCMonumentGroteskSemi-Mono-Regular.woff2) format("woff2"),url(lib/fonts/ABCMonumentGroteskSemi-Mono-Regular.woff) format("woff")}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:#000;color:#eee;font-family:"Univers Next Pro",sans-serif;overflow:hidden}
+
+  /* ---- section: full-bleed video behind right-aligned text ---- */
+  .home-full-bleed-text-video{position:relative;min-height:100vh;width:100%;overflow:hidden}
+  /* bottom fade to black, matching the original */
+  .home-full-bleed-text-video::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+    background:linear-gradient(180deg,transparent -2.53%,transparent 75.72%,#000 101.8%)}
+
+  /* 24-column grid; text block sits in the right half (grid-column 13 / -3) */
+  .grid-container{display:grid;grid-template-columns:repeat(24,1fr);column-gap:16px;padding:0 36px;
+    position:relative;z-index:2}
+  /* text block sits in the upper portion, anchored by its top margin (matches original) */
+  .content{grid-column:13 / -3;margin:8.3333vw 0}
+
+  .label{font-family:"ABC Monument Grotesk Mono",monospace;font-size:12px;font-weight:400;
+    letter-spacing:-.04em;line-height:1.67;text-transform:uppercase;color:#afafaf;display:flex;align-items:center;gap:8px}
+  .label::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 auto}
+
+  .title{font-family:"Univers Next Pro",sans-serif;font-weight:300;letter-spacing:-.04em;
+    font-size:clamp(22px,2.5vw,42px);line-height:1.167;color:#eee;margin-top:2.5vw}
+  .copy{font-family:"Univers Next Pro",sans-serif;font-weight:300;letter-spacing:-.04em;
+    font-size:clamp(22px,2.5vw,42px);line-height:1.167;color:rgba(237,237,237,.4);margin-top:0}
+
+  /* ghost button with sliding fill + hover glow, reproduced from .base-button */
+  .base-button{position:relative;display:inline-flex;align-items:center;justify-content:center;
+    height:40px;padding:0 24px;margin-top:2.5vw;border-radius:4px;overflow:hidden;
+    font-family:"ABC Monument Grotesk Mono",monospace;font-size:12px;font-weight:400;letter-spacing:-.04em;
+    color:#eee;text-decoration:none;background:rgba(255,255,255,.08);
+    transition:box-shadow .6s ease,color .6s ease;cursor:pointer}
+  .base-button .fill-effect{position:absolute;inset:0;background:#eee;transform:translateY(101%);
+    transition:transform .6s cubic-bezier(.16,1,.3,1);z-index:0}
+  .base-button .btn-label{position:relative;z-index:1}
+  .base-button:hover{box-shadow:0 0 20px #fff3134d;color:#0a0a0a}
+  .base-button:hover .fill-effect{transform:translateY(0)}
+
+  /* ---- background visual layer ---- */
+  .video-wrapper{position:absolute;inset:0;z-index:-1;overflow:hidden}
+  /* source video = WebGL texture source only (hidden); revealed as fallback if WebGL fails */
+  .home-full-bleed-text-video:not(.gl-ok) .source-video{visibility:visible;opacity:1;object-fit:cover}
+  .home-full-bleed-text-video.gl-ok .source-video{visibility:hidden;opacity:0}
+  .source-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .video-displacement-canvas{position:absolute;inset:0;width:100%;height:100%}
+
+  @media (max-width:900px){
+    .content{grid-column:2 / -2;margin:24vw 0}
+    .title,.copy{font-size:clamp(20px,5vw,34px)}
+  }
+</style>
+</head>
+<body>
+  <section class="home-full-bleed-text-video">
+    <div class="grid-container">
+      <div class="content">
+        <h2 class="label">Our Performance</h2>
+        <h3 class="title">Performance Proven at Scale</h3>
+        <p class="copy">Built for environments where uptime is non-negotiable, our technology delivers measurable reliability.</p>
+        <a class="base-button" href="#" data-demo-only><span class="fill-effect"></span><span class="btn-label">Learn more</span></a>
+      </div>
+    </div>
+    <div class="video-wrapper">
+      <video class="source-video" src="assets/trail.mp4" muted loop playsinline autoplay preload="auto" crossorigin="anonymous"></video>
+      <canvas class="video-displacement-canvas"></canvas>
+    </div>
+  </section>
+
+<script>
+/* ON.energy "video-displacement" light-trail effect — self-contained.
+   A full-screen WebGL quad samples the (hidden) trail video as a texture. Near the
+   cursor it applies a flowing wave + chromatic-aberration displacement along the
+   trail direction; elsewhere it draws the raw frame. Shaders/params are the originals.
+   The render loop runs on its own requestAnimationFrame (the source site bound it to a
+   framework raf hook). If WebGL can't init, the raw video is shown so trails still play. */
+(function () {
+  var VERT =
+    "attribute vec2 a_position;attribute vec2 a_texCoord;varying vec2 v_texCoord;" +
+    "void main(){gl_Position=vec4(a_position,0.0,1.0);v_texCoord=a_texCoord;}";
+  var FRAG = [
+    "precision mediump float;",
+    "uniform sampler2D u_texture;uniform vec2 u_mouse;uniform float u_radius;",
+    "uniform float u_strength;uniform float u_active;uniform float u_time;",
+    "varying vec2 v_texCoord;",
+    "void main(){",
+    "  vec2 uv=v_texCoord;",
+    "  float dist=distance(uv,u_mouse);",
+    "  float influence=smoothstep(u_radius,0.0,dist)*u_active;",
+    "  if(influence>0.001){",
+    "    vec2 trailDirection=normalize(vec2(1.0,-1.0)+0.3*vec2(v_texCoord.y,v_texCoord.x));",
+    "    float positionAlongTrail=dot(uv,trailDirection);",
+    "    float wave=sin(positionAlongTrail*15.0-u_time*3.0);",
+    "    vec2 flowOffset=trailDirection*wave*influence*u_strength*2.0;",
+    "    float offset=influence*u_strength;",
+    "    vec2 redOffset=trailDirection*offset*1.5+flowOffset;",
+    "    vec2 blueOffset=-trailDirection*offset*1.5+flowOffset;",
+    "    float r=texture2D(u_texture,uv+redOffset).r;",
+    "    float g=texture2D(u_texture,uv+flowOffset).g;",
+    "    float b=texture2D(u_texture,uv+blueOffset).b;",
+    "    gl_FragColor=vec4(r,g,b,1.0);",
+    "  }else{gl_FragColor=texture2D(u_texture,uv);}",
+    "}"
+  ].join("\n");
+  var P = { radius: 0.25, strength: 0.015, smoothing: 0.1 };
+
+  var section = document.querySelector(".home-full-bleed-text-video");
+  var video = document.querySelector(".source-video");
+  var canvas = document.querySelector(".video-displacement-canvas");
+
+  function tryPlay() { try { video.muted = true; var p = video.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+  tryPlay();
+  video.addEventListener("canplay", tryPlay);
+  video.addEventListener("loadeddata", tryPlay);
+
+  var gl = null;
+  try { gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl"); } catch (e) {}
+  if (!gl) { return; } // CSS :not(.gl-ok) keeps the raw video visible
+
+  function compile(type, src) {
+    var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.error("shader:", gl.getShaderInfoLog(s)); return null; }
+    return s;
+  }
+  var vs = compile(gl.VERTEX_SHADER, VERT), fs = compile(gl.FRAGMENT_SHADER, FRAG);
+  if (!vs || !fs) return;
+  var prog = gl.createProgram(); gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.error("link:", gl.getProgramInfoLog(prog)); return; }
+  gl.useProgram(prog);
+
+  var pb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, pb);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  var pl = gl.getAttribLocation(prog, "a_position"); gl.enableVertexAttribArray(pl); gl.vertexAttribPointer(pl, 2, gl.FLOAT, false, 0, 0);
+  var tb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, tb);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 1, 1, 1, 0, 0, 1, 0]), gl.STATIC_DRAW);
+  var tl = gl.getAttribLocation(prog, "a_texCoord"); gl.enableVertexAttribArray(tl); gl.vertexAttribPointer(tl, 2, gl.FLOAT, false, 0, 0);
+  var tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  var uMouse = gl.getUniformLocation(prog, "u_mouse"), uRadius = gl.getUniformLocation(prog, "u_radius"),
+      uStrength = gl.getUniformLocation(prog, "u_strength"), uActive = gl.getUniformLocation(prog, "u_active"),
+      uTime = gl.getUniformLocation(prog, "u_time");
+
+  function resize() {
+    canvas.width = video.videoWidth || canvas.clientWidth || section.clientWidth;
+    canvas.height = video.videoHeight || canvas.clientHeight || section.clientHeight;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  resize();
+  video.addEventListener("loadedmetadata", resize);
+
+  // mouse state (target tx/ty/tact) + exponentially-smoothed mx/my/act
+  var mx = 0.5, my = 0.5, tx = 0.5, ty = 0.5, act = 0, tact = 0, last = performance.now(), live = false;
+  section.addEventListener("mousemove", function (e) {
+    var r = canvas.getBoundingClientRect(); if (!r.width) return;
+    tx = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+    ty = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+    tact = 1;
+  });
+  section.addEventListener("mouseleave", function () { tact = 0; });
+
+  function frame() {
+    var now = performance.now(), dt = (now - last) / 16.6667; last = now;
+    var w = 1 - Math.pow(1 - P.smoothing, dt);
+    mx += (tx - mx) * w; my += (ty - my) * w; act += (tact - act) * w;
+    if (video.readyState >= 2 && video.videoWidth) {
+      if (canvas.width !== video.videoWidth) resize();
+      try {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
+        gl.uniform2f(uMouse, mx, my); gl.uniform1f(uRadius, P.radius);
+        gl.uniform1f(uStrength, P.strength); gl.uniform1f(uActive, act); gl.uniform1f(uTime, now / 1000);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        if (!live) { live = true; section.classList.add("gl-ok"); } // canvas now owns the visual
+      } catch (e) {}
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="045-onenergy-light-trails.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=045-onenergy-light-trails" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

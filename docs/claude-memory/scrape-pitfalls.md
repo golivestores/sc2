@@ -129,3 +129,28 @@ const y = function(f,c){
 3. chunks 里也扫一遍（少见但偶尔有）：`grep -rln 'import("assets/' designs/<slug>/assets/`
 4. 顺便检查 worker / sw 文件里 `importScripts("assets/...")` 同模式
 5. 这个改完 verify 跑一次确认 `Failed to resolve module specifier` 消失即可（CookieYes / GTM 之类的 PAGEERROR 是另一类，不是这个）
+
+## 8. WebGL "video-displacement" 区块在镜像里黑屏：真内容藏在 hidden 的 texture-source video
+
+**症状**：scrape 完 0 page error、0 404、hero 正常、Three.js 场景也正常，但**某个全屏视频背景区块整块黑**。on.energy (028) 的 "Performance Proven at Scale"（`HomeFullBleedTextVideo` 组件）就是这样——原站是一条流动的金色光流，镜像里纯黑。
+**Why**：这类组件不是直接 `<video>` 当背景，而是：① 一个 `<video class="source-video" autoplay muted loop>` 被 CSS 设成 `visibility:hidden;opacity:0`——它**只是 WebGL 的纹理源**，肉眼不可见；② 一个 `<canvas class="video-displacement-canvas">` 跑一个 chromatic-aberration / 鼠标位移 shader，每帧 `texImage2D(video)` 上传视频帧再 `drawArrays` 输出——**canvas 才是可见层**。这个渲染循环 `F` 挂在框架的全局 rAF hook 上（Nuxt 是 `hooks.hook("window:raf",F)`）。**在镜像/离线环境里 `F` 跑了几十帧后就停**（实测 on.energy 在页面顶部画了 82 帧——那时视频还停在第 0 帧黑场——之后基本停画），canvas 卡在黑帧上。诡异的是同页别的 WebGL（Three.js GLB 场景）照常 animate，说明 `window:raf` 本身没死，是这个组件的 `F` 特异地不再被调用/提前 return（A() 初始化其实成功了：getContext + program link + useProgram 全 OK，glError 0）。具体为何 `F` 特异停掉没在 minified 代码里挖到根因，但**不需要**——真内容在 video 里，直接显示它即可。
+**诊断信号**（按这个顺序逐个排除，每步都是一个 playwright probe）：
+1. 该区块有 `<canvas>` 且截图是黑/透明 → 八成是 raf 驱动的 canvas 效果断了
+2. 找同区块的 `<video>`：`getComputedStyle` 看是不是 `visibility:hidden`/`opacity:0`（纹理源的标志）
+3. 采样 video 像素确认它**有内容**（drawImage 到 2d canvas 再 getImageData 扫亮度；on.energy 实测 44% 像素 >60 亮度 = 确实是光流）。注意：直接读 webgl canvas 像素会因 `preserveDrawingBuffer:false` 返回全透明，不可信——要读 **video** 元素
+4. 按 canvas class 给 gl context 打 tag 数 `drawArrays`，看是否每帧在画（停了就是 `F` 断了）
+**How to apply**：有两档修法。**先别只做 CSS 兜底——用户会立刻发现交互没了**（on.energy 这次就是：CSS 静态版交付后用户回「能看到但是鼠标交互不存在」，被迫返工）。
+
+**首选（1:1，保住交互）——自驱 rAF 重跑原 shader**：
+1. 从 chunk 里把这段 displacement composable **原样**抠出来（grep `video-displacement` 定位组件，再找 `getContext("webgl"`、`u_texture`/`u_mouse` 的 shader 字符串、`ht=(t,s,r={})=>` 之类的 setup 函数）。要拿全：顶点+片元 shader 源码、参数（on.energy 是 `radius:.25,strength:.015,smoothing:.1`）、几何（positions `[-1,-1,1,-1,-1,1,1,1]` + texCoords `[0,1,1,1,0,0,1,0]`，`TRIANGLE_STRIP`）、纹理参数（`CLAMP_TO_EDGE`+`LINEAR`）、逐帧 lerp（`w=1-Math.pow(1-smoothing,dt)`，`dt=(now-last)/16.6667`）、鼠标映射（mousemove 绑在 section 上，用 canvas rect 归一化 → `u_mouse`，`u_active` 1↔0）。
+2. 注入一段自包含 `<script>`：对每个组件根（`.home-full-bleed-text-video`）新建**自己的** `<canvas>` 插进 `.video-wrapper`，照搬 shader 跑**自己的** `requestAnimationFrame` loop（每帧 `texImage2D(video)`+set uniforms+`drawArrays`），并显式 `video.play()`（visibility:hidden 的纹理源在真浏览器里偶尔不 autoplay，要手动 play+muted+playsInline）。原站那个挂 `window:raf` 的死循环不用管，新建 canvas 跟它不抢。
+3. 幂等 + 重试：组件是 SPA 水合后才挂的，用 `setInterval(init,400)` 跑 ~40 次兜住晚挂载；每个 section 用 `__sc2disp` flag 防重复。
+4. 成功画出第一帧后给 section 加个标记类（如 `sc2-gl-ok`），让兜底 CSS 失效。
+**兜底（WebGL 真起不来时不至于黑屏）**：
+```css
+.home-full-bleed-text-video:not(.sc2-gl-ok) .source-video{visibility:visible !important;opacity:1 !important;object-fit:cover !important}
+.home-full-bleed-text-video .video-displacement-canvas{display:none !important}   /* 盖掉原站那个卡黑的 canvas */
+```
+脚本 init WebGL 任何一步失败就 `showRaw(video)`（内联 `visibility:visible`，原 stylesheet 规则没 `!important` 所以内联必胜）。`:not(.sc2-gl-ok)` 让兜底只在脚本没接管时显示裸视频——脚本一接管就隐回纯纹理源，避免两层视频叠加。注意 `object-fit:cover`（这个 scopeId 的 video 规则常没带，否则 2500×1318 拉进 1440×900 变形）。
+
+**最重要的教训（工作流）**：这是**截图骗过验收的典型**——scrape 收尾只看了 hero 渲染 + 无 404 就放行，没逐区滚动核对。**WebGL/canvas 重的站（grep `three`/`gsap`/`canvas` 命中），收尾必须滚完每个动态区逐屏截图比对原站，且对有交互的区块要模拟 hover/mousemove 再截一张比对**，空白的 `<canvas>` 一律当红旗查（见 `feedback-effects-verify-before-shipping.md` / `feedback-motion-sampling-mandatory.md` 同一根因：渲染成功 + 200 ≠ 视觉忠实，静态截图对 ≠ 交互对）。

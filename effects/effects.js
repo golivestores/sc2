@@ -846,5 +846,26 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://gmxdigital.com/",
     "localMirror": "../designs/027-gmxdigital/index.html",
     "order": 44
+  },
+  {
+    "num": "045",
+    "folder": "045-onenergy-light-trails",
+    "title": "ON.energy 光流位移背景",
+    "subtitle": "WebGL video-displacement · 鼠标色散光流",
+    "description": "ON.energy「Performance Proven at Scale」整屏：金色光流视频铺满背景、右半区叠 mono 标签 + 大字标题 + 说明 + ghost 按钮。背景不是直接播视频——视频被设为隐藏的 WebGL 纹理源，一个全屏裸 GLSL 四边形每帧采样它，在光标附近沿光流方向叠加正弦波动 + RGB 色散位移（influence = smoothstep(radius,0,dist)·active），离开光标处直接显示原帧。鼠标用指数平滑惯性跟随。渲染循环自带 requestAnimationFrame；WebGL 不可用时回退显示原视频。shader / 参数（radius .25 / strength .015 / smoothing .1）与原站一致。",
+    "tech": "WebGL (raw GLSL)",
+    "tags": [
+      "hero",
+      "interaction",
+      "animation",
+      "webgl",
+      "shader",
+      "video",
+      "chromatic-aberration"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://www.on.energy/",
+    "localMirror": "../designs/028-onenergy/index.html",
+    "order": 45
   }
 ];
