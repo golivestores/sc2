@@ -867,5 +867,76 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://www.on.energy/",
     "localMirror": "../designs/028-onenergy/index.html",
     "order": 45
+  },
+  {
+    "num": "046",
+    "folder": "046-alphanelabs-3d-device",
+    "title": "MGA-1 滚动拆解 · 3D 蓝图",
+    "subtitle": "scroll-scrubbed 3D explode",
+    "description": "从 Alphane Labs (solutions.alphanelabs.com) 抽取的核心 3D 交互：滚动驱动一段烘焙好的 20s 动画——相机沿 baked 路径绕飞设备（camera-on-rails），同时仪器各部件平移+旋转拆解。正交相机(frustumHeight 6)给出无透视的工程等轴测；白色 unlit 面 + 每个 mesh 叠 EdgesGeometry 蓝边(#0094d3)还原蓝图观感；grill.png 平铺 28×14 当 alphaMap 做细密蓝点散热网格；风扇独立连续自转。机制 = mixer.setTime(进度×20) + camera.lookAt(baked target)，每帧读滚动位(rAF，非 scroll 事件)保证连续。GLTF + DRACO 解压，three r124/r128。",
+    "tech": "Three.js + GLTF/DRACO + baked-animation scrub",
+    "tags": [
+      "scroll",
+      "interaction",
+      "animation",
+      "hero",
+      "3d",
+      "webgl",
+      "threejs",
+      "gltf-draco",
+      "camera-on-rails",
+      "orthographic",
+      "scrollytelling"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://solutions.alphanelabs.com",
+    "localMirror": "../designs/035-alphanelabs/index.html",
+    "order": 46
+  },
+  {
+    "num": "047",
+    "folder": "047-cartier-watch-rotation",
+    "title": "Cartier 腕表 3D 拖拽旋转",
+    "subtitle": "drag-to-spin watch · inertia + idle float",
+    "description": "从 Cartier Watches & Wonders 2026 (cartier.com) 沉浸式体验里抽出的核心 3D 旋转交互，复刻到一只真·腕表上。模型是原站的 Draco 压缩 GLTF（Santos / Baignoire 可切换，表壳/表带/宝石/玻璃表镜 PBR 材质全保留）。旋转系统 1:1 还原原站：① 拖拽累加目标角（dragSpeed 0.008）+ 帧率无关指数缓动跟随（latency 2）= 招牌顺滑惯性；② 松手按角速度衰减续转（fling spin-down）；③ 鼠标位置驱动视差倾斜（yaw 0.1π·ndc.x / pitch −0.05π·ndc.y，缓动 1.5）；④ 待机多频正弦微抖（sin0.3·.003+sin0.7·.002…）让它永不僵死；⑤ 旋转速度做轻微缩放“呼吸”。全部用 lerp(a,b,1−e^(−speed·dt)) 这一个帧率无关缓动函数粘合。渲染：Three.js r128 + GLTFLoader/DRACOLoader（解压 wasm 自带）+ RoomEnvironment 程序化棚拍环境（原站用自定义 octahedral EXR，此处用中性棚光等价呈现金属/黄金反射）+ LinearToneMapping/fov50，与原站一致。自闭包，无 CDN 依赖。",
+    "tech": "Three.js r128 + GLTF/DRACO",
+    "tags": [
+      "interaction",
+      "animation",
+      "3d",
+      "webgl",
+      "threejs",
+      "gltf-draco",
+      "drag",
+      "inertia",
+      "luxury"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://www.cartier.com/en-fr/watchesandwonders",
+    "localMirror": "../designs/044-cartier/index.html",
+    "order": 47
+  },
+  {
+    "num": "048",
+    "folder": "048-lv-collectibles-3d",
+    "title": "Louis Vuitton VIA · 3D 藏品旋转",
+    "subtitle": "drag-to-spin Trunk & Speedy · inertia",
+    "description": "把 Louis Vuitton VIA Collectibles 沉浸式体验（louisvuitton-collectibles.imm-g-prod.com，见 designs/047）里的真·3D 藏品模型抽成可拖拽旋转的查看器：标志性 monogram「Treasure Trunk」行李箱 + Speedy 手袋（均为原站 Draco 压缩 GLTF，monogram 帆布 / 皮革 / 金色五金 PBR 材质全保留，可一键切换）。旋转手感 1:1 复用 Cartier Watches & Wonders 那套引擎：拖拽累加目标角（dragSpeed 0.008）+ 帧率无关指数缓动跟随（lerp(a,b,1−e^(−speed·dt))，latency 2）= 顺滑惯性；松手按角速度衰减续转；鼠标视差倾斜（缓动 1.5）；待机多频正弦微浮；旋转速度做缩放呼吸。Three.js r128 + GLTFLoader/DRACOLoader（解压 wasm 自带）+ RoomEnvironment 程序化棚拍环境 + ACESFilmic。包围球自适应取景（旋转不裁切）。完全自闭包，无 CDN。",
+    "tech": "Three.js r128 + GLTF/DRACO",
+    "tags": [
+      "interaction",
+      "animation",
+      "3d",
+      "webgl",
+      "threejs",
+      "gltf-draco",
+      "drag",
+      "inertia",
+      "luxury"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://louisvuitton-collectibles.imm-g-prod.com/",
+    "localMirror": "../designs/047-lv-collectibles/index.html",
+    "order": 48
   }
 ];

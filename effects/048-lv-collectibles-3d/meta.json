@@ -1,0 +1,11 @@
+{
+  "title": "Louis Vuitton VIA · 3D 藏品旋转",
+  "subtitle": "drag-to-spin Trunk & Speedy · inertia",
+  "description": "把 Louis Vuitton VIA Collectibles 沉浸式体验（louisvuitton-collectibles.imm-g-prod.com，见 designs/047）里的真·3D 藏品模型抽成可拖拽旋转的查看器：标志性 monogram「Treasure Trunk」行李箱 + Speedy 手袋（均为原站 Draco 压缩 GLTF，monogram 帆布 / 皮革 / 金色五金 PBR 材质全保留，可一键切换）。旋转手感 1:1 复用 Cartier Watches & Wonders 那套引擎：拖拽累加目标角（dragSpeed 0.008）+ 帧率无关指数缓动跟随（lerp(a,b,1−e^(−speed·dt))，latency 2）= 顺滑惯性；松手按角速度衰减续转；鼠标视差倾斜（缓动 1.5）；待机多频正弦微浮；旋转速度做缩放呼吸。Three.js r128 + GLTFLoader/DRACOLoader（解压 wasm 自带）+ RoomEnvironment 程序化棚拍环境 + ACESFilmic。包围球自适应取景（旋转不裁切）。完全自闭包，无 CDN。",
+  "tech": "Three.js r128 + GLTF/DRACO",
+  "tags": ["interaction", "animation", "3d", "webgl", "threejs", "gltf-draco", "drag", "inertia", "luxury"],
+  "previewHref": "index.html",
+  "sourceUrl": "https://louisvuitton-collectibles.imm-g-prod.com/",
+  "localMirror": "../designs/047-lv-collectibles/index.html",
+  "order": 48
+}

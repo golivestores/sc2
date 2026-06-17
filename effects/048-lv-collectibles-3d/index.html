@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Louis Vuitton VIA · 3D 藏品拖拽旋转</title>
+<style>
+  :root { --ink:#241c12; --soft:#6b5f4d; --line:rgba(36,28,18,.22); }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; overflow:hidden; }
+  body {
+    font-family:"Times New Roman", Georgia, serif; color:var(--ink);
+    background:radial-gradient(120% 95% at 50% 32%, #efe9df 0%, #ddd5c7 52%, #c4baa8 100%);
+    -webkit-user-select:none; user-select:none; touch-action:none;
+  }
+  #stage { position:fixed; inset:0; }
+  canvas { display:block; width:100%; height:100%; cursor:grab; }
+  canvas.grabbing { cursor:grabbing; }
+
+  /* soft contact shadow under the object */
+  #floor {
+    position:fixed; left:50%; bottom:16%; transform:translateX(-50%);
+    width:40vmin; height:8vmin; pointer-events:none;
+    background:radial-gradient(50% 100% at 50% 0%, rgba(40,28,12,.20), rgba(40,28,12,0) 70%);
+    filter:blur(7px);
+  }
+
+  #loader {
+    position:fixed; inset:0; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:18px; z-index:30; transition:opacity .8s ease;
+    background:radial-gradient(120% 95% at 50% 36%, #efe9df, #c9bfae); letter-spacing:.35em;
+  }
+  #loader.hidden { opacity:0; pointer-events:none; }
+  #loader .brand { font-size:clamp(22px,4vw,40px); letter-spacing:.18em; text-transform:uppercase; }
+  #loader .bar { width:150px; height:1px; background:rgba(36,28,18,.2); position:relative; overflow:hidden; }
+  #loader .bar i { position:absolute; inset:0; width:0%; background:var(--ink); transition:width .2s; }
+  #loader .pct { font-size:11px; letter-spacing:.45em; opacity:.6; font-family:Arial, sans-serif; }
+
+  .label { position:fixed; top:6%; left:0; right:0; text-align:center; z-index:10; pointer-events:none; }
+  .label .maison { font-size:clamp(16px,2.6vw,26px); letter-spacing:.28em; text-transform:uppercase; }
+  .label .model { margin-top:8px; font-size:11px; letter-spacing:.5em; text-transform:uppercase;
+    font-family:Arial, sans-serif; color:var(--soft); }
+
+  .hint { position:fixed; bottom:7%; left:0; right:0; text-align:center; z-index:10;
+    font-family:Arial, sans-serif; font-size:11px; letter-spacing:.42em; text-transform:uppercase;
+    color:rgba(36,28,18,.5); pointer-events:none; animation:breathe 3.4s ease-in-out infinite; }
+  @keyframes breathe { 0%,100%{opacity:.35} 50%{opacity:.75} }
+
+  .switch { position:fixed; bottom:6.5%; left:50%; transform:translateX(-50%); display:flex; gap:9px; z-index:12; }
+  .switch button {
+    background:transparent; border:1px solid var(--line); color:var(--ink);
+    font-family:Arial, sans-serif; font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+    padding:9px 15px; border-radius:30px; cursor:pointer; transition:.35s;
+  }
+  .switch button.active { background:var(--ink); border-color:var(--ink); color:#efe9df; }
+  .switch button:hover { border-color:var(--ink); }
+</style>
+</head>
+<body>
+  <div id="stage"></div>
+  <div id="floor"></div>
+
+  <div class="label" data-demo-only>
+    <div class="maison">Louis&nbsp;Vuitton</div>
+    <div class="model" id="modelName">VIA Treasure Trunk</div>
+  </div>
+
+  <div class="switch" data-demo-only>
+    <button id="btnTrunk" class="active">Trunk</button>
+    <button id="btnSpeedy">Speedy</button>
+  </div>
+
+  <div class="hint" data-demo-only>拖拽旋转 · 松手惯性 · DRAG&nbsp;TO&nbsp;SPIN</div>
+
+  <div id="loader">
+    <div class="brand">Louis Vuitton</div>
+    <div class="bar"><i></i></div>
+    <div class="pct">0%</div>
+  </div>
+
+  <script src="lib/three.min.js"></script>
+  <script src="lib/RoomEnvironment.js"></script>
+  <script src="lib/DRACOLoader.js"></script>
+  <script src="lib/GLTFLoader.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    const IS_PREVIEW = new URLSearchParams(location.search).get('demo') === 'preview';
+
+    const stage = document.getElementById('stage');
+    const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;   // leather/canvas reads richer than Linear here
+    renderer.toneMappingExposure = 1.05;
+    renderer.physicallyCorrectLights = true;
+    stage.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 6);
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new THREE.RoomEnvironment(renderer), 0.04).texture;
+
+    const key = new THREE.DirectionalLight(0xfff4e2, 2.4); key.position.set(2.5, 3, 4); scene.add(key);
+    const fill = new THREE.DirectionalLight(0xdfe6ff, 0.9); fill.position.set(-3, 1, 2); scene.add(fill);
+    const rim = new THREE.DirectionalLight(0xffe7c0, 1.2); rim.position.set(-2, 2, -3); scene.add(rim);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+
+    // rotation rig: undulationWrapper -> dragWrapper -> model
+    const undulationWrapper = new THREE.Group();
+    const dragWrapper = new THREE.Group();
+    undulationWrapper.add(dragWrapper);
+    scene.add(undulationWrapper);
+
+    // exact damp glue from the Cartier W&W experience: lerp(cur, tgt, 1 - exp(-speed*dt))
+    const lerp = (a, b, t) => (1 - t) * a + t * b;
+    const damp = (cur, tgt, speed, dt) => lerp(cur, tgt, 1 - Math.exp(-speed * dt));
+    const CFG = { dragSpeed: 0.008, dragLatency: 2, tiltSpeed: 1.5, fovSpeed: 1 };
+    const TAU = Math.PI * 2;
+
+    const target = { x: 0, y: 0 }, dragRot = { x: 0, y: 0 }, tiltRot = { x: 0, y: 0 }, ndc = { x: 0, y: 0 };
+    let tiltWeight = 1, undTime = 0, fovOnVel = 0, angVelY = 0, angVelX = 0;
+    let dragging = false, lastX = 0, lastY = 0;
+
+    const el = renderer.domElement;
+    const setNdc = e => { ndc.x = (e.clientX/window.innerWidth)*2 - 1; ndc.y = -((e.clientY/window.innerHeight)*2 - 1); };
+    el.addEventListener('pointerdown', e => {
+      dragging = true; lastX = e.clientX; lastY = e.clientY; angVelY = angVelX = 0;
+      el.classList.add('grabbing'); el.setPointerCapture(e.pointerId);
+    });
+    window.addEventListener('pointermove', e => {
+      setNdc(e); if (!dragging) return;
+      const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
+      target.y += dx * CFG.dragSpeed; target.x += dy * CFG.dragSpeed;
+      target.x = Math.max(-0.9, Math.min(0.9, target.x));
+      angVelY = dx * CFG.dragSpeed; angVelX = dy * CFG.dragSpeed;
+    });
+    const endDrag = () => { if (!dragging) return; dragging = false; el.classList.remove('grabbing'); };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+
+    const draco = new THREE.DRACOLoader().setDecoderPath('lib/').setDecoderConfig({ type:'js' });
+    const gltf = new THREE.GLTFLoader().setDRACOLoader(draco);
+
+    const MODELS = {
+      trunk:   { file:'assets/models/trunk.glb',  name:'VIA Treasure Trunk' },
+      speedy:  { file:'assets/models/speedy.glb', name:'Speedy' },
+    };
+    let current = null;
+    const loaderEl = document.getElementById('loader');
+    const barEl = loaderEl.querySelector('.bar i');
+    const pctEl = loaderEl.querySelector('.pct');
+
+    function stripBackdrops(root){
+      // some glb are full "scenes" with a giant background/sky plane that would blow up the
+      // bounding box (montgolfière, paris) — remove backdrop-ish meshes so framing sees the object
+      const kill = [];
+      root.traverse(o => {
+        const n = ((o.name||'') + ' ' + (o.material && o.material.name || '')).toLowerCase();
+        if (/background|backdrop|\bsky\b|\bground\b|\bfloor\b/.test(n)) kill.push(o);
+      });
+      kill.forEach(o => o.parent && o.parent.remove(o));
+    }
+    function frameModel(root){
+      const box = new THREE.Box3().setFromObject(root);
+      const center = box.getCenter(new THREE.Vector3());
+      const sphere = box.getBoundingSphere(new THREE.Sphere());
+      root.position.sub(center);
+      const r = sphere.radius || 1;
+      const s = 1.5 / r;                 // fit the bounding SPHERE (rotation-invariant) so it never clips while spinning
+      root.scale.setScalar(s);
+      root.userData._baseScale = s;
+      root.rotation.set(-0.12, 0.0, 0);
+    }
+
+    function loadModel(key, firstLoad){
+      const def = MODELS[key];
+      if (firstLoad) loaderEl.classList.remove('hidden');
+      gltf.load(def.file, g => {
+        if (current) { dragWrapper.remove(current); current.traverse(o=>{ if(o.geometry)o.geometry.dispose(); }); }
+        current = g.scene;
+        stripBackdrops(current);
+        frameModel(current);
+        dragWrapper.add(current);
+        target.x = target.y = dragRot.x = dragRot.y = 0;
+        document.getElementById('modelName').textContent = def.name;
+        target.y = IS_PREVIEW ? 0 : -0.7;
+        setTimeout(()=>loaderEl.classList.add('hidden'), 150);
+      }, ev => {
+        if (ev.total) { const p = Math.round(ev.loaded/ev.total*100); barEl.style.width = p+'%'; pctEl.textContent = p+'%'; }
+      }, err => { console.error('glb load error', err); pctEl.textContent = 'load error'; });
+    }
+
+    const btnT = document.getElementById('btnTrunk'), btnS = document.getElementById('btnSpeedy');
+    function pick(btn, key){ if (btn.classList.contains('active')) return;
+      [btnT,btnS].forEach(b=>b.classList.remove('active')); btn.classList.add('active'); loadModel(key); }
+    btnT.addEventListener('click', ()=>pick(btnT,'trunk'));
+    btnS.addEventListener('click', ()=>pick(btnS,'speedy'));
+
+    loadModel('trunk', true);
+
+    let last = performance.now();
+    function tick(now){
+      const dt = Math.min((now - last)/1000, 0.05); last = now;
+      if (IS_PREVIEW) target.y += dt * 0.5;
+      if (!dragging && (Math.abs(angVelY) > 1e-5 || Math.abs(angVelX) > 1e-5)) {
+        target.y += angVelY; target.x += angVelX;
+        target.x = Math.max(-0.9, Math.min(0.9, target.x));
+        const decay = Math.exp(-3.0 * dt); angVelY *= decay; angVelX *= decay;
+        if (Math.abs(angVelY) < 1e-5) angVelY = 0; if (Math.abs(angVelX) < 1e-5) angVelX = 0;
+      }
+      target.y %= TAU; target.x %= TAU;
+      dragRot.y = damp(dragRot.y, target.y, CFG.dragLatency, dt);
+      dragRot.x = damp(dragRot.x, target.x, CFG.dragLatency, dt);
+      const tgtTiltY = 0.1 * Math.PI * ndc.x, tgtTiltX = -0.05 * Math.PI * ndc.y;
+      tiltRot.y = damp(tiltRot.y, tgtTiltY, CFG.tiltSpeed, dt);
+      tiltRot.x = damp(tiltRot.x, tgtTiltX, CFG.tiltSpeed, dt);
+      tiltWeight = damp(tiltWeight, dragging ? 0 : 1, 4, dt);
+      dragWrapper.rotation.y = dragRot.y + tiltRot.y * tiltWeight;
+      dragWrapper.rotation.x = dragRot.x + tiltRot.x * tiltWeight;
+      undTime += dt; const o = undTime;
+      undulationWrapper.rotation.x = Math.sin(o*0.3)*0.003 + Math.sin(o*0.7)*0.002;
+      undulationWrapper.rotation.y = Math.cos(o*0.2)*0.003 + Math.cos(o*0.5)*0.002;
+      undulationWrapper.rotation.z = Math.sin(o*0.15)*0.0005;
+      const spin = Math.abs(angVelY) + Math.abs(angVelX);
+      fovOnVel = damp(fovOnVel, Math.min(spin*6, 1), CFG.fovSpeed, dt);
+      if (current && current.userData._baseScale) current.scale.setScalar(current.userData._baseScale * (1 + 0.06 * fovOnVel));
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    window.addEventListener('resize', ()=>{
+      camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    if (IS_PREVIEW) document.querySelectorAll('[data-demo-only]').forEach(el => el.style.display = 'none');
+  })();
+  </script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="048-lv-collectibles-3d.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=048-lv-collectibles-3d" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>
