@@ -10,25 +10,16 @@
   html, body { width:100%; height:100%; overflow:hidden; }
   body {
     font-family:"Times New Roman", Georgia, serif; color:var(--ink);
-    background:radial-gradient(120% 95% at 50% 32%, #efe9df 0%, #ddd5c7 52%, #c4baa8 100%);
+    background:#ece9e2;            /* clean flat neutral — model only, no scene background */
     -webkit-user-select:none; user-select:none; touch-action:none;
   }
   #stage { position:fixed; inset:0; }
-  canvas { display:block; width:100%; height:100%; cursor:grab; }
-  canvas.grabbing { cursor:grabbing; }
-
-  /* soft contact shadow under the object */
-  #floor {
-    position:fixed; left:50%; bottom:16%; transform:translateX(-50%);
-    width:40vmin; height:8vmin; pointer-events:none;
-    background:radial-gradient(50% 100% at 50% 0%, rgba(40,28,12,.20), rgba(40,28,12,0) 70%);
-    filter:blur(7px);
-  }
+  canvas { display:block; width:100%; height:100%; cursor:default; }
 
   #loader {
     position:fixed; inset:0; display:flex; flex-direction:column; align-items:center;
     justify-content:center; gap:18px; z-index:30; transition:opacity .8s ease;
-    background:radial-gradient(120% 95% at 50% 36%, #efe9df, #c9bfae); letter-spacing:.35em;
+    background:#ece9e2; letter-spacing:.35em;
   }
   #loader.hidden { opacity:0; pointer-events:none; }
   #loader .brand { font-size:clamp(22px,4vw,40px); letter-spacing:.18em; text-transform:uppercase; }
@@ -58,7 +49,6 @@
 </head>
 <body>
   <div id="stage"></div>
-  <div id="floor"></div>
 
   <div class="label" data-demo-only>
     <div class="maison">Louis&nbsp;Vuitton</div>
@@ -70,7 +60,7 @@
     <button id="btnSpeedy">Speedy</button>
   </div>
 
-  <div class="hint" data-demo-only>拖拽旋转 · 松手惯性 · DRAG&nbsp;TO&nbsp;SPIN</div>
+  <div class="hint" data-demo-only>向下滚动旋转 · SCROLL&nbsp;TO&nbsp;ROTATE</div>
 
   <div id="loader">
     <div class="brand">Louis Vuitton</div>
@@ -118,29 +108,18 @@
     // exact damp glue from the Cartier W&W experience: lerp(cur, tgt, 1 - exp(-speed*dt))
     const lerp = (a, b, t) => (1 - t) * a + t * b;
     const damp = (cur, tgt, speed, dt) => lerp(cur, tgt, 1 - Math.exp(-speed * dt));
-    const CFG = { dragSpeed: 0.008, dragLatency: 2, tiltSpeed: 1.5, fovSpeed: 1 };
-    const TAU = Math.PI * 2;
+    // wheel-scroll drives the spin — SAME interaction as the original LV experience:
+    // a continuous Y-axis rotation that the scroll wheel feeds into (smooth-damped follow).
+    const CFG = { scrollK: 0.0026, idleSpin: 0.10, follow: 3.6, tiltSpeed: 1.5 };
 
-    const target = { x: 0, y: 0 }, dragRot = { x: 0, y: 0 }, tiltRot = { x: 0, y: 0 }, ndc = { x: 0, y: 0 };
-    let tiltWeight = 1, undTime = 0, fovOnVel = 0, angVelY = 0, angVelX = 0;
-    let dragging = false, lastX = 0, lastY = 0;
+    const tiltRot = { x: 0, y: 0 }, ndc = { x: 0, y: 0 };
+    let undTime = 0, spinY = 0, targetY = 0;
 
-    const el = renderer.domElement;
-    const setNdc = e => { ndc.x = (e.clientX/window.innerWidth)*2 - 1; ndc.y = -((e.clientY/window.innerHeight)*2 - 1); };
-    el.addEventListener('pointerdown', e => {
-      dragging = true; lastX = e.clientX; lastY = e.clientY; angVelY = angVelX = 0;
-      el.classList.add('grabbing'); el.setPointerCapture(e.pointerId);
-    });
     window.addEventListener('pointermove', e => {
-      setNdc(e); if (!dragging) return;
-      const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY;
-      target.y += dx * CFG.dragSpeed; target.x += dy * CFG.dragSpeed;
-      target.x = Math.max(-0.9, Math.min(0.9, target.x));
-      angVelY = dx * CFG.dragSpeed; angVelX = dy * CFG.dragSpeed;
+      ndc.x = (e.clientX/window.innerWidth)*2 - 1; ndc.y = -((e.clientY/window.innerHeight)*2 - 1);
     });
-    const endDrag = () => { if (!dragging) return; dragging = false; el.classList.remove('grabbing'); };
-    window.addEventListener('pointerup', endDrag);
-    window.addEventListener('pointercancel', endDrag);
+    // scroll down → rotate forward, scroll up → rotate back
+    window.addEventListener('wheel', e => { targetY += e.deltaY * CFG.scrollK; }, { passive: true });
 
     const draco = new THREE.DRACOLoader().setDecoderPath('lib/').setDecoderConfig({ type:'js' });
     const gltf = new THREE.GLTFLoader().setDRACOLoader(draco);
@@ -185,9 +164,8 @@
         stripBackdrops(current);
         frameModel(current);
         dragWrapper.add(current);
-        target.x = target.y = dragRot.x = dragRot.y = 0;
+        spinY = targetY = 0;
         document.getElementById('modelName').textContent = def.name;
-        target.y = IS_PREVIEW ? 0 : -0.7;
         setTimeout(()=>loaderEl.classList.add('hidden'), 150);
       }, ev => {
         if (ev.total) { const p = Math.round(ev.loaded/ev.total*100); barEl.style.width = p+'%'; pctEl.textContent = p+'%'; }
@@ -205,29 +183,21 @@
     let last = performance.now();
     function tick(now){
       const dt = Math.min((now - last)/1000, 0.05); last = now;
-      if (IS_PREVIEW) target.y += dt * 0.5;
-      if (!dragging && (Math.abs(angVelY) > 1e-5 || Math.abs(angVelX) > 1e-5)) {
-        target.y += angVelY; target.x += angVelX;
-        target.x = Math.max(-0.9, Math.min(0.9, target.x));
-        const decay = Math.exp(-3.0 * dt); angVelY *= decay; angVelX *= decay;
-        if (Math.abs(angVelY) < 1e-5) angVelY = 0; if (Math.abs(angVelX) < 1e-5) angVelX = 0;
-      }
-      target.y %= TAU; target.x %= TAU;
-      dragRot.y = damp(dragRot.y, target.y, CFG.dragLatency, dt);
-      dragRot.x = damp(dragRot.x, target.x, CFG.dragLatency, dt);
-      const tgtTiltY = 0.1 * Math.PI * ndc.x, tgtTiltX = -0.05 * Math.PI * ndc.y;
+      // gentle continuous Y spin (the original trunk is always rotating); preview spins faster
+      targetY += (IS_PREVIEW ? 0.6 : CFG.idleSpin) * dt;
+      // smooth follow toward the scroll-accumulated target angle (the "smooth scroll" feel)
+      spinY = damp(spinY, targetY, CFG.follow, dt);
+      // subtle cursor parallax tilt (like the original's mouse influence)
+      const tgtTiltY = 0.06 * Math.PI * ndc.x, tgtTiltX = -0.04 * Math.PI * ndc.y;
       tiltRot.y = damp(tiltRot.y, tgtTiltY, CFG.tiltSpeed, dt);
       tiltRot.x = damp(tiltRot.x, tgtTiltX, CFG.tiltSpeed, dt);
-      tiltWeight = damp(tiltWeight, dragging ? 0 : 1, 4, dt);
-      dragWrapper.rotation.y = dragRot.y + tiltRot.y * tiltWeight;
-      dragWrapper.rotation.x = dragRot.x + tiltRot.x * tiltWeight;
+      dragWrapper.rotation.y = spinY + tiltRot.y;
+      dragWrapper.rotation.x = tiltRot.x;
+      // idle undulation
       undTime += dt; const o = undTime;
       undulationWrapper.rotation.x = Math.sin(o*0.3)*0.003 + Math.sin(o*0.7)*0.002;
       undulationWrapper.rotation.y = Math.cos(o*0.2)*0.003 + Math.cos(o*0.5)*0.002;
       undulationWrapper.rotation.z = Math.sin(o*0.15)*0.0005;
-      const spin = Math.abs(angVelY) + Math.abs(angVelX);
-      fovOnVel = damp(fovOnVel, Math.min(spin*6, 1), CFG.fovSpeed, dt);
-      if (current && current.userData._baseScale) current.scale.setScalar(current.userData._baseScale * (1 + 0.06 * fovOnVel));
       renderer.render(scene, camera);
       requestAnimationFrame(tick);
     }
