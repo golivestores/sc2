@@ -1,0 +1,71 @@
+/*
+ * The Typekit service used to deliver this font or fonts for use on websites
+ * is provided by Adobe and is subject to these Terms of Use
+ * http://www.adobe.com/products/eulas/tou_typekit. For font license
+ * information, see the list below.
+ *
+ * futura-pt-condensed:
+ *   - http://typekit.com/eulas/00000000000000007758da46
+ *   - http://typekit.com/eulas/00000000000000007758da47
+ *   - http://typekit.com/eulas/00000000000000007758da48
+ *   - http://typekit.com/eulas/00000000000000007758da49
+ *   - http://typekit.com/eulas/0000000000000000775e42a2
+ *   - http://typekit.com/eulas/00000000000000007758da4b
+ *   - http://typekit.com/eulas/00000000000000007758da4c
+ *   - http://typekit.com/eulas/00000000000000007758da4d
+ *
+ * © 2009-2026 Adobe Systems Incorporated. All Rights Reserved.
+ */
+/*{"last_published":"2025-11-19 13:06:08 UTC"}*/
+
+@import "p.typekit.net/p.b75357bf.css"
+
+@font-face {
+font-family:"futura-pt-condensed";
+src:url("af/a04fc5/00000000000000007758da46/31/l.e35c7ac2") format("woff2"),url("af/a04fc5/00000000000000007758da46/31/d.e35c7ac2") format("woff"),url("af/a04fc5/00000000000000007758da46/31/a.e35c7ac2") format("opentype");
+font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"futura-pt-condensed";
+src:url("af/0a6961/00000000000000007758da47/31/l.b6b20ecb") format("woff2"),url("af/0a6961/00000000000000007758da47/31/d.b6b20ecb") format("woff"),url("af/0a6961/00000000000000007758da47/31/a.b6b20ecb") format("opentype");
+font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"futura-pt-condensed";
+src:url("af/bc858a/00000000000000007758da48/31/l.33a52b6c") format("woff2"),url("af/bc858a/00000000000000007758da48/31/d.33a52b6c") format("woff"),url("af/bc858a/00000000000000007758da48/31/a.33a52b6c") format("opentype");
+font-display:auto;font-style:normal;font-weight:500;font-stretch:normal;
+}
+
+@font-face {
+font-family:"futura-pt-condensed";
+src:url("af/0c7e03/00000000000000007758da49/31/l.4dafc780") format("woff2"),url("af/0c7e03/00000000000000007758da49/31/d.4dafc780") format("woff"),url("af/0c7e03/00000000000000007758da49/31/a.4dafc780") format("opentype");
+font-display:auto;font-style:italic;font-weight:500;font-stretch:normal;
+}
+
+@font-face {
+font-family:"futura-pt-condensed";
+src:url("af/ec3396/0000000000000000775e42a2/31/l.e87284ca") format("woff2"),url("af/ec3396/0000000000000000775e42a2/31/d.e87284ca") format("woff"),url("af/ec3396/0000000000000000775e42a2/31/a.e87284ca") format("opentype");
+font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"futura-pt-condensed";
+src:url("af/0f5d6f/00000000000000007758da4b/31/l.d63db0e7") format("woff2"),url("af/0f5d6f/00000000000000007758da4b/31/d.d63db0e7") format("woff"),url("af/0f5d6f/00000000000000007758da4b/31/a.d63db0e7") format("opentype");
+font-display:auto;font-style:italic;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"futura-pt-condensed";
+src:url("af/e249d7/00000000000000007758da4c/31/l.fd713b15") format("woff2"),url("af/e249d7/00000000000000007758da4c/31/d.fd713b15") format("woff"),url("af/e249d7/00000000000000007758da4c/31/a.fd713b15") format("opentype");
+font-display:auto;font-style:normal;font-weight:800;font-stretch:normal;
+}
+
+@font-face {
+font-family:"futura-pt-condensed";
+src:url("af/73422f/00000000000000007758da4d/31/l.99bf876d") format("woff2"),url("af/73422f/00000000000000007758da4d/31/d.99bf876d") format("woff"),url("af/73422f/00000000000000007758da4d/31/a.99bf876d") format("opentype");
+font-display:auto;font-style:italic;font-weight:800;font-stretch:normal;
+}
+
+.tk-futura-pt-condensed { font-family: "futura-pt-condensed",sans-serif; }

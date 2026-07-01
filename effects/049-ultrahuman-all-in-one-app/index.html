@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultrahuman — All in one app</title>
+<style>
+@font-face{font-family:Graphik;src:url("assets/fonts/Graphik-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:Graphik;src:url("assets/fonts/Graphik-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:Graphik;src:url("assets/fonts/Graphik-Semibold.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap;}
+*{box-sizing:border-box}
+/* match the original site's rem base (html font-size:62.5% => 1rem=10px);
+   without this every rem value (.jPVCOg max-width:60rem, paddings, button sizes) is 1.6x too big */
+html{scroll-behavior:auto;font-size:62.5%}
+html,body{margin:0;padding:0;background:#000;}
+body{font-family:Graphik,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+/* original site resets heading margins; without this the h2 gets browser-default
+   margin-top:0.83em (~117px) which the original doesn't have -> extra black on top */
+h2{margin:0}
+/* scroll runway so the phone rises into the text on scroll (like the original page flow) */
+.uh-room{width:100%;background:#000;}
+.uh-room--before{height:8vh}
+.uh-room--after{height:26vh}
+/* the extracted section keeps its own bg (#000) via .cfJaUK */
+#app-section{position:relative}
+/* preview/thumbnail mode: no scroll room, section composed in view */
+body.is-preview .uh-room--before{height:8vh}
+body.is-preview .uh-room--after{height:6vh}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulseRing{0%{transform:translate(-50%,-50%) scale(0);opacity:.6}100%{transform:translate(-50%,-50%) scale(1.4);opacity:0}}
+/* ---- extracted section CSS (verbatim from live stylesheets) ---- */
+.feeHWc { width: 100%; margin: 0px auto; padding: 0px 12px; }
+@media (min-width: 576px){
+.feeHWc { max-width: 670px; }
+}
+@media (min-width: 768px){
+.feeHWc { max-width: 900px; }
+}
+@media (min-width: 992px){
+.feeHWc { max-width: 1024px; }
+}
+@media (min-width: 1200px){
+.feeHWc { max-width: 1248px; }
+}
+@media (min-width: 1400px){
+.feeHWc { max-width: 1440px; }
+}
+@media (min-width: 2100px){
+.feeHWc { max-width: 1920px; }
+}
+.XRXrm { font-size: 1.6rem; font-weight: 500; cursor: pointer; border: none; letter-spacing: -0.6px; background: rgb(255, 255, 255); border-radius: 50px; padding: 12px 14px; transition: 0.2s ease-in-out; text-align: center; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; display: flex !important; }
+@media (min-width: 2100px){
+.XRXrm { font-size: 1.9rem; }
+}
+@media (min-width: 992px){
+.XRXrm { margin-top: 16px; padding: 12px 24px; display: inline-block !important; }
+}
+.XRXrm.primary { border: none; background: rgb(0, 127, 245); backdrop-filter: blur(27px); color: rgb(255, 255, 255); }
+.XRXrm.flat { position: relative; border-top: none; border-right: none; border-left: none; border-image: initial; border-bottom: 1px solid rgba(0, 0, 0, 0.2); background: transparent; border-radius: 0px; color: rgb(0, 0, 0); white-space: nowrap; }
+.XRXrm.flat svg { position: relative; margin-left: 10px; bottom: 2px; }
+@media (min-width: 992px){
+.XRXrm.flat svg { bottom: -2px; }
+}
+.XRXrm.flat:hover { box-shadow: none; }
+.kIvxTv { -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; gap: 10px; line-height: 1; vertical-align: middle; background: rgba(255, 255, 255, 0.13); color: rgb(255, 255, 255); backdrop-filter: blur(6px); display: inline-flex !important; margin-top: 0px !important; }
+.kIvxTv svg { display: block; }
+.kIvxTv:disabled { background: rgba(255, 255, 255, 0.08); color: rgb(255, 255, 255); cursor: not-allowed; opacity: 0.4; }
+.kIvxTv:not(:disabled):hover { transform: scale(1.02); }
+.eHrAYP { display: inline-flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; line-height: 0; pointer-events: none; margin: 0px !important; }
+.eChDVz { display: inline-flex; -webkit-box-align: center; align-items: center; line-height: 1; pointer-events: none; }
+.QNsOO { padding-top: 8px; padding-bottom: 8px; }
+.cfJaUK { background: rgb(0, 0, 0); padding: 4.8rem 0px; }
+@media (min-width: 768px){
+.cfJaUK { padding: 9.6rem 0px; }
+}
+.jyhbBX { display: flex; flex-direction: column; -webkit-box-align: center; align-items: center; text-align: center; position: relative; padding: 48px 0px; }
+@media (min-width: 768px){
+.jyhbBX { padding: 24px 0px; }
+}
+.csKmUz { color: rgb(14, 252, 109); text-align: center; font-size: 141.197px; font-style: normal; font-weight: 400; line-height: 58%; letter-spacing: -8.472px; margin-bottom: -3.2rem; }
+@media (max-width: 768px){
+.csKmUz { font-size: 80px; letter-spacing: -4px; margin-bottom: -2.4rem; }
+}
+@media (max-width: 576px){
+.csKmUz { font-size: 60px; letter-spacing: -3px; }
+}
+.kxKFxA { position: absolute; bottom: 0px; left: 0px; right: 0px; width: 100%; height: 22rem; z-index: 2; background: linear-gradient(to top, rgb(0, 0, 0), transparent); pointer-events: none; display: flex; align-items: flex-end; -webkit-box-pack: center; justify-content: center; padding-bottom: 4rem; }
+@media (max-width: 768px){
+.kxKFxA { height: 16rem; padding-bottom: 0px; }
+}
+@media (min-width: 992px){
+.kxKFxA { padding-bottom: 1.6rem; }
+}
+.kMwYUD { color: rgb(255, 255, 255); text-align: center; font-size: 16px; font-style: normal; font-weight: 400; line-height: 130%; letter-spacing: -0.32px; max-width: 460px; margin: 0px auto; padding: 0px 16px; z-index: 100; }
+@media (min-width: 992px){
+.kMwYUD { max-width: 600px; }
+}
+.kMwYUD.content-web { display: block; }
+@media (max-width: 768px){
+.kMwYUD.content-web { display: none; }
+}
+.kMwYUD.content-mobile { display: none; }
+@media (max-width: 768px){
+.kMwYUD.content-mobile { display: block; }
+}
+.jVoxij { opacity: 0; animation: 500ms ease 0s 1 normal forwards running fadeIn; will-change: opacity; }
+@media (prefers-reduced-motion: reduce){
+.jVoxij { animation: auto ease 0s 1 normal none running none; opacity: 1; }
+}
+.gsiVwP { display: flex; flex-direction: row; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; gap: 16px; margin: 4.8rem 0px 0px; }
+@media (min-width: 992px){
+.gsiVwP { gap: 24px; }
+}
+.gYrtnc { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.cWRnmF { display: block; }
+@media (min-width: 992px){
+.cWRnmF { display: none; }
+}
+.kppnVc { display: none; }
+@media (min-width: 992px){
+.kppnVc { display: block; }
+}
+.jPVCOg { position: relative; }
+@media (min-width: 992px){
+.jPVCOg { max-width: 60rem; }
+}
+.ilgSBp { width: 100%; height: auto; display: block; position: relative; z-index: 2; }
+.ilgSBp::after { content: ""; position: absolute; bottom: 0px; left: 0px; right: 0px; height: 60px; background: linear-gradient(transparent, rgba(0, 0, 0, 0.8)); pointer-events: none; }
+.fdyFWF { position: absolute; top: 4.5%; left: 50%; transform: translateX(-50%); width: 39%; aspect-ratio: 234 / 500; border-radius: 34px; background: rgb(0, 0, 0); overflow: hidden; z-index: 1; }
+@media (max-width: 768px){
+.fdyFWF { top: 5.4%; border-radius: 24px; width: 60%; margin-left: 4px; }
+}
+.kXOOaU { position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; object-fit: cover; opacity: 1; transition: opacity 250ms; will-change: opacity; }
+.kXOOaV { position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; object-fit: cover; opacity: 0; transition: opacity 250ms; will-change: opacity; }
+.dzjWSq { position: absolute; left: 50%; transform: translateX(-50%); z-index: 3; top: 70%; width: 86%; max-width: 45rem; display: inline-flex; padding: 8px; -webkit-box-align: center; align-items: center; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.1); box-shadow: rgba(255, 255, 255, 0.1) 0px 24px 34px 0px; backdrop-filter: blur(13px); color: rgb(255, 255, 255); overflow: visible; --xpad: 8px; --gap: 0px; --ypad: 8px; --pulse-color: rgba(255, 255, 255, 0.2); --pulse-duration: 1500ms; --pulse-scale: 1.5; }
+@media (max-width: 768px){
+.dzjWSq { top: 79%; width: calc(100% - 32px); padding: 8px; --xpad: 8px; --gap: 0px; --ypad: 8px; }
+}
+@media (min-width: 992px){
+.dzjWSq { top: 70%; padding: 8px; --xpad: 8px; --ypad: 8px; }
+}
+.cAKMe { position: absolute; top: var(--ypad); bottom: var(--ypad); width: var(--itemWidth, calc((100% - (var(--xpad) * 2)) / 4)); left: calc(var(--xpad) + 0 * (var(--itemWidth, ((100% - (var(--xpad) * 2)) / 4)) + var(--gap))); border-radius: 16px; border: none; background: rgba(255, 255, 255, 0.1); transition: left 300ms, width 300ms; will-change: left, width; pointer-events: none; z-index: 0; }
+.gMFDBs { display: flex; padding: 10px 0px 8px; flex-direction: column; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; gap: 4px; flex: 1 1 0%; color: rgb(255, 255, 255); background: none; border: none; cursor: pointer; transition: color 0.2s; width: var(--itemWidth, 25%); position: relative; z-index: 1; }
+.gMFDBs .pulses { display: none; }
+.gMFDBs:hover { color: rgba(255, 255, 255, 0.8); }
+.gMFDBs .icon { width: 22px; height: 22px; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; overflow: visible; }
+.gMFDBs .label { color: inherit; font-size: 9px; font-style: normal; font-weight: 600; line-height: 16px; letter-spacing: 0.6px; text-align: center; text-transform: uppercase; }
+@media (max-width: 768px){
+.gMFDBs .label { color: rgb(255, 255, 255); }
+}
+.tnwig { display: flex; padding: 10px 0px 8px; flex-direction: column; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; gap: 4px; flex: 1 1 0%; color: rgba(255, 255, 255, 0.4); background: none; border: none; cursor: pointer; transition: color 0.2s; width: var(--itemWidth, 25%); position: relative; z-index: 1; }
+.tnwig .pulses { display: block; }
+.tnwig:hover { color: rgba(255, 255, 255, 0.8); }
+.tnwig .icon { width: 22px; height: 22px; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; overflow: visible; }
+.tnwig .label { color: inherit; font-size: 9px; font-style: normal; font-weight: 600; line-height: 16px; letter-spacing: 0.6px; text-align: center; text-transform: uppercase; }
+@media (max-width: 768px){
+.tnwig .label { color: rgb(255, 255, 255); }
+}
+.dfCCtX { position: absolute; inset: 0px; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; pointer-events: none; z-index: 0; }
+.dfCCtX .ring { position: absolute; left: 50%; top: 50%; width: 80px; height: 80px; border-radius: 50%; transform: translate(-50%, -50%) scale(0); border: 2px solid var(--pulse-color, rgba(255, 255, 255, 0.1)); opacity: 0; animation: pulseRing var(--pulse-duration, 1500ms) ease-out forwards; }
+.dfCCtX .ring:nth-child(2) { animation-delay: calc(var(--pulse-duration, 1500ms) / 3); }
+.dfCCtX .ring:nth-child(3) { animation-delay: calc(var(--pulse-duration, 1500ms) * 2 / 3); }
+@media (prefers-reduced-motion: reduce){
+.dfCCtX .ring { animation: auto ease 0s 1 normal none running none; }
+}
+</style>
+</head>
+<body>
+<div class="uh-room uh-room--before" data-demo-only></div>
+<div id="app-section" style="transform:translateZ(0)" class="sc-83552663-0 QNsOO"><div role="region" aria-label="Ultrahuman app features" class="sc-433c8452-0 cfJaUK"><div class="sc-d532561a-1 sc-433c8452-1 feeHWc jyhbBX"><h2 class="sc-433c8452-2 csKmUz">All in<br>one app.</h2><div class="sc-433c8452-10 jPVCOg"><img alt="Ultrahuman app interface" loading="lazy" width="5000" height="4444" decoding="async" data-nimg="1" class="sc-433c8452-11 ilgSBp" style="color:transparent" src="assets/hand-phone-mockup.avif"><div class="sc-433c8452-12 fdyFWF"><video src="assets/videos/ring-new.mp4" poster="assets/posters/ring.png" preload="auto" autoplay="" loop="" muted="" playsinline="" aria-hidden="false" class="sc-433c8452-13 kXOOaU"></video><video src="assets/videos/m1-new.mp4" poster="assets/posters/m1.png" preload="metadata" loop="" muted="" playsinline="" aria-hidden="true" class="sc-433c8452-13 kXOOaV"></video><video src="assets/videos/home-new.mp4" poster="assets/posters/home.png" preload="metadata" loop="" muted="" playsinline="" aria-hidden="true" class="sc-433c8452-13 kXOOaV"></video><video src="assets/videos/bv-new.mp4" poster="assets/posters/bv.png" preload="metadata" loop="" muted="" playsinline="" aria-hidden="true" class="sc-433c8452-13 kXOOaV"></video></div><div role="tablist" aria-label="App features" class="sc-433c8452-14 dzjWSq"><div class="sc-433c8452-15 cAKMe"></div><button data-metric-item="true" role="tab" aria-selected="true" aria-controls="panel-RING" class="sc-433c8452-17 gMFDBs"><div class="icon"><svg width="100%" height="100%" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><path fill-rule="evenodd" clip-rule="evenodd" d="M11 0C17.0751 0 22 4.92487 22 11C22 17.0751 17.0751 22 11 22C4.92487 22 0 17.0751 0 11C0 4.92487 4.92487 0 11 0ZM11 2.2C6.13989 2.2 2.2 6.13989 2.2 11C2.2 15.8601 6.13989 19.8 11 19.8C15.8601 19.8 19.8 15.8601 19.8 11C19.8 6.13989 15.8601 2.2 11 2.2ZM15.9494 17.601C14.5707 18.6365 12.857 19.25 11 19.25C9.14311 19.25 7.4295 18.6365 6.05079 17.6012L15.9494 17.601Z" fill="#ffffff"></path></svg></div><span class="label">RING</span></button><button data-metric-item="true" role="tab" aria-selected="false" aria-controls="panel-METABOLISM" class="sc-433c8452-17 tnwig"><div class="sc-433c8452-16 dfCCtX pulses" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="ring"></span></div><div class="icon"><svg width="100%" height="100%" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><path d="M11 0C17.0751 0 22 4.92487 22 11C22 17.0751 17.0751 22 11 22C4.92487 22 0 17.0751 0 11C0 4.92487 4.92487 0 11 0ZM5.88281 7V10.4854H7.96387L4.5 13.4199L7.0166 16L11 12.625L14.9834 16L17.5 13.4199L14.0361 10.4854H16.1123V7H5.88281Z" fill="rgba(255,255,255,0.4)"></path></svg></div><span class="label">METABOLISM</span></button><button data-metric-item="true" role="tab" aria-selected="false" aria-controls="panel-HOME" class="sc-433c8452-17 tnwig"><div class="icon"><svg width="100%" height="100%" viewBox="0 0 25 16" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><rect width="25" height="11" rx="1" fill="rgba(255,255,255,0.4)"></rect><path d="M0 13.0703C0 12.7942 0.223858 12.5703 0.5 12.5703H24.5C24.7761 12.5703 25 12.7942 25 13.0703V13.659C25 13.7856 24.9519 13.9075 24.8655 14.0001L23.593 15.3636C23.2148 15.7689 22.6852 15.999 22.1309 15.999H12.5H2.54135C1.8887 15.999 1.2771 15.6806 0.902851 15.1459L0.0903752 13.9851C0.0315516 13.9011 0 13.801 0 13.6984V13.0703Z" fill="rgba(255,255,255,0.4)"></path></svg></div><span class="label">HOME</span></button><button data-metric-item="true" role="tab" aria-selected="false" aria-controls="panel-VISION" class="sc-433c8452-17 tnwig"><div class="icon"><svg width="100%" height="100%" viewBox="0 0 15 20" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.1667 0C14.5758 0 14.916 0.294792 14.9866 0.683541L15 0.833333V3.33333C15 6.23701 13.3496 8.75547 10.9357 10.0018C13.3496 11.2445 15 13.763 15 16.6667V19.1667L14.9866 19.3165C14.916 19.7052 14.5758 20 14.1667 20C13.7064 20 13.3333 19.6269 13.3333 19.1667V18.75H1.66667V19.1667L1.65324 19.3165C1.58268 19.7052 1.24243 20 0.833333 20C0.373096 20 0 19.6269 0 19.1667V16.6667L0.0106062 16.2652C0.102278 14.5337 0.784963 12.9122 1.93247 11.6416C3.3452 10.0772 5.35033 9.16667 7.5 9.16667C9.48107 9.16667 11.2316 8.17889 12.286 6.66903L2.71266 6.66746C2.85214 6.8672 3.00459 7.05889 3.16939 7.24138C3.47785 7.58294 3.45102 8.1099 3.10945 8.41836C2.76789 8.72683 2.24093 8.69999 1.93247 8.35843C0.784963 7.08778 0.102278 5.46634 0.0106062 3.73477L0 3.33333V0.833333C0 0.373096 0.373096 0 0.833333 0C1.24243 0 1.58268 0.294792 1.65324 0.683541L1.66667 0.833333V1.25H13.3333V0.833333C13.3333 0.373096 13.7064 0 14.1667 0ZM13.0918 15.0004L1.90815 14.9999C1.74956 15.5331 1.66667 16.0933 1.66667 16.6667V17.0833H13.3333V16.6667L13.3247 16.3466C13.2995 15.8813 13.2198 15.4304 13.0918 15.0004ZM7.5 10.8333C5.82684 10.8333 4.26935 11.5406 3.16939 12.7586C3.00414 12.9416 2.85131 13.1338 2.71152 13.3342L12.2871 13.3326C11.2329 11.8218 9.4818 10.8333 7.5 10.8333ZM13.3333 2.91667H1.66667V3.33333C1.66667 3.9073 1.74973 4.46801 1.90864 5.00181L13.0913 5.00131C13.2196 4.57074 13.2995 4.11932 13.3247 3.65337L13.3333 3.33333V2.91667Z" fill="rgba(255,255,255,0.4)"></path></svg></div><span class="label">VISION</span></button></div><div class="sc-433c8452-3 kxKFxA"><div class="sc-433c8452-9 kppnVc"><p id="panel-RING" role="tabpanel" aria-live="polite" class="sc-433c8452-4 sc-433c8452-5 kMwYUD jVoxij">Leverage the Ring AIR’s advanced, discreet, and preventive health monitoring to guide your path toward vitality and a longer, healthier life.</p></div></div></div><div class="sc-433c8452-8 cWRnmF"><p role="status" aria-live="polite" class="sc-433c8452-4 sc-433c8452-5 kMwYUD jVoxij">Leverage the Ring AIR’s advanced, discreet, and preventive health monitoring to guide your path toward vitality and a longer, healthier life.</p></div><div class="sc-433c8452-6 gsiVwP"><div class="sc-433c8452-7 gYrtnc"><button data-buttontype="app_download_appstore_button" type="button" class="sc-87d441a3-5 sc-9dff9bcb-0 XRXrm kIvxTv"><span class="sc-9dff9bcb-1 eHrAYP"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="17" viewBox="0 0 14 17" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.1957 1.15562C10.1957 1.9749 9.84441 2.79418 9.34781 3.38464C8.82083 4.0391 7.90901 4.52555 7.18404 4.52555C7.10102 4.52555 7.01799 4.51435 6.9669 4.50475C6.95728 4.46475 6.93652 4.33993 6.93652 4.21512C6.93652 3.38464 7.36132 2.56536 7.81641 2.04691C8.39608 1.37324 9.35738 0.864387 10.1654 0.833984C10.1861 0.926793 10.1957 1.04201 10.1957 1.15562ZM13.045 6.31549C13.0648 6.30244 13.0785 6.29349 13.0848 6.28855C12.0086 4.74278 10.3734 4.70117 9.91824 4.70117C9.22202 4.70117 8.5988 4.94861 8.07503 5.15657C7.69542 5.30729 7.36805 5.43726 7.103 5.43726C6.81004 5.43726 6.47463 5.30154 6.10037 5.15009C5.62803 4.95895 5.09381 4.74278 4.50491 4.74278C2.51842 4.74278 0.5 6.39255 0.5 9.50325C0.5 11.4427 1.24573 13.486 2.16871 14.8014C2.96555 15.9215 3.65858 16.8336 4.65182 16.8336C5.12277 16.8336 5.46807 16.6868 5.83122 16.5324C6.23396 16.3612 6.65864 16.1807 7.30099 16.1807C7.95026 16.1807 8.33821 16.3503 8.71224 16.5138C9.06035 16.6659 9.39641 16.8128 9.91984 16.8128C11.0057 16.8128 11.7195 15.8287 12.403 14.843C13.1695 13.7229 13.4904 12.6236 13.5 12.5724C13.4377 12.5516 11.357 11.7115 11.357 9.33685C11.357 7.42472 12.7755 6.49259 13.045 6.31549Z" fill="white"></path></svg></span><span class="sc-9dff9bcb-2 eChDVz">Download on Appstore</span></button></div><div class="sc-433c8452-7 gYrtnc"><button data-buttontype="app_download_playstore_button" type="button" class="sc-87d441a3-5 sc-9dff9bcb-0 XRXrm kIvxTv"><span class="sc-9dff9bcb-1 eHrAYP"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.06159 1.06616L8.68095 8.4843H8.68185L11.3824 5.85562L2.65672 1.0804C2.39129 0.929273 2.09151 0.844608 1.78424 0.833984C1.52406 0.834165 1.27079 0.915538 1.06159 1.06616ZM0.715925 16.2417L0.716248 16.2423L0.713508 16.244L0.715925 16.2417ZM0.715925 16.2417C0.566566 15.9781 0.492241 15.6804 0.500641 15.3794V2.29822C0.499406 2.09965 0.530235 1.90213 0.592 1.71288L8.1136 9.03851L0.715925 16.2417ZM1.32324 16.7571C1.46928 16.8101 1.62421 16.8361 1.78004 16.8336C2.0904 16.8266 2.39382 16.7428 2.66166 16.5899L11.117 11.9641L8.68132 9.58984L1.32324 16.7571ZM11.8436 11.5655L9.24805 9.04005L12.1103 6.25391L14.6529 7.64433C15.1409 7.857 15.4675 8.31581 15.5007 8.83547C15.4676 9.35562 15.1406 9.81492 14.652 10.0275L11.8436 11.5655Z" fill="white"></path></svg></span><span class="sc-9dff9bcb-2 eChDVz">Download on Playstore</span></button></div></div></div></div></div>
+<div class="uh-room uh-room--after" data-demo-only></div>
+<script>
+(function(){
+  var isPreview = new URLSearchParams(location.search).get('demo')==='preview';
+  if(isPreview) document.body.classList.add('is-preview');
+
+  var SUBS = {"RING": "Leverage the Ring AIR’s advanced, discreet, and preventive health monitoring to guide your path toward vitality and a longer, healthier life.", "METABOLISM": "Track glucose in real time. Understand how food and exercise impact your body, and get actionable nudges that help you build healthier metabolic habits.", "HOME": "Your space shapes your health. Home Monitor provides real-time insights on air quality, light exposure, temperature, noise, and humidity, with a Room Score that reflects the true state of your environment.", "VISION": "Comprehensive biomarker testing across metabolic, cardiovascular, immune, hormonal, and nutritional health. Get clear AI-powered summaries paired with personalized supplement and lifestyle recommendations."};
+  var ORDER = ['RING','METABOLISM','HOME','VISION'];
+  var sec = document.getElementById('app-section');
+  var tabs = [].slice.call(sec.querySelectorAll('[role=tab]'));
+  var videos = [].slice.call(sec.querySelectorAll('.fdyFWF video'));
+  var slider = sec.querySelector('.cAKMe');
+  // subtitle paragraphs (web copy inside gradient + mobile copy)
+  var subs = [].slice.call(sec.querySelectorAll('.kMwYUD'));
+
+  function setSlider(i){
+    slider.style.left = 'calc(var(--xpad) + '+i+' * (var(--itemWidth, ((100% - (var(--xpad) * 2)) / 4)) + var(--gap)))';
+  }
+  function selectTab(i){
+    tabs.forEach(function(t,j){
+      var on = j===i;
+      t.setAttribute('aria-selected', on?'true':'false');
+      t.classList.toggle('gMFDBs', on);
+      t.classList.toggle('tnwig', !on);
+    });
+    videos.forEach(function(v,j){
+      var on = j===i;
+      v.classList.toggle('kXOOaU', on);
+      v.classList.toggle('kXOOaV', !on);
+      v.setAttribute('aria-hidden', on?'false':'true');
+      if(on){ try{ v.currentTime=0; v.play(); }catch(e){} } else { try{ v.pause(); }catch(e){} }
+    });
+    var txt = SUBS[ORDER[i]] || '';
+    subs.forEach(function(p){
+      p.textContent = txt;
+      // retrigger fadeIn
+      p.classList.remove('jVoxij'); void p.offsetWidth; p.classList.add('jVoxij');
+    });
+    setSlider(i);
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click', function(){ selectTab(i); });
+  });
+  // init: RING
+  setSlider(0);
+  // ensure the first video plays (muted autoplay)
+  var first = videos[0];
+  if(first){ first.muted=true; var pr=first.play(); if(pr&&pr.catch) pr.catch(function(){}); }
+
+  // preview: compose the section nicely in the (scaled) thumbnail viewport
+  if(isPreview){
+    function compose(){
+      var r = sec.querySelector('.jPVCOg').getBoundingClientRect();
+      // scroll so the phone + tabs sit centered-ish
+      var target = window.scrollY + r.top - (window.innerHeight*0.12);
+      window.scrollTo(0, Math.max(0, target));
+    }
+    setTimeout(compose, 200);
+    setTimeout(compose, 900);
+  }
+})();
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="049-ultrahuman-all-in-one-app.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=049-ultrahuman-all-in-one-app" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

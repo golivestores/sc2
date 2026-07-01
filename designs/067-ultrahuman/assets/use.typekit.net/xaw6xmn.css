@@ -1,0 +1,103 @@
+/*
+ * The Typekit service used to deliver this font or fonts for use on websites
+ * is provided by Adobe and is subject to these Terms of Use
+ * http://www.adobe.com/products/eulas/tou_typekit. For font license
+ * information, see the list below.
+ *
+ * dharma-gothic-c:
+ *   - http://typekit.com/eulas/00000000000000007735c158
+ *   - http://typekit.com/eulas/00000000000000007735c162
+ *   - http://typekit.com/eulas/00000000000000007735c166
+ *   - http://typekit.com/eulas/00000000000000007735c16e
+ * dharma-gothic-e:
+ *   - http://typekit.com/eulas/00000000000000007735c16a
+ *   - http://typekit.com/eulas/00000000000000007735c15c
+ *   - http://typekit.com/eulas/00000000000000007735c167
+ *   - http://typekit.com/eulas/00000000000000007735c16d
+ * dharma-gothic-m:
+ *   - http://typekit.com/eulas/00000000000000007735c157
+ *   - http://typekit.com/eulas/00000000000000007735c161
+ *   - http://typekit.com/eulas/00000000000000007735c17d
+ *   - http://typekit.com/eulas/00000000000000007735c180
+ *
+ * © 2009-2026 Adobe Systems Incorporated. All Rights Reserved.
+ */
+/*{"last_published":"2026-03-13 07:25:44 UTC"}*/
+
+@import "p.typekit.net/p.8263cfa5.css"
+
+@font-face {
+font-family:"dharma-gothic-c";
+src:url("af/417afd/00000000000000007735c158/31/l.e35c7ac2") format("woff2"),url("af/417afd/00000000000000007735c158/31/d.e35c7ac2") format("woff"),url("af/417afd/00000000000000007735c158/31/a.e35c7ac2") format("opentype");
+font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-c";
+src:url("af/746195/00000000000000007735c162/31/l.b6b20ecb") format("woff2"),url("af/746195/00000000000000007735c162/31/d.b6b20ecb") format("woff"),url("af/746195/00000000000000007735c162/31/a.b6b20ecb") format("opentype");
+font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-c";
+src:url("af/99378a/00000000000000007735c166/31/l.e87284ca") format("woff2"),url("af/99378a/00000000000000007735c166/31/d.e87284ca") format("woff"),url("af/99378a/00000000000000007735c166/31/a.e87284ca") format("opentype");
+font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-c";
+src:url("af/d5023c/00000000000000007735c16e/31/l.d63db0e7") format("woff2"),url("af/d5023c/00000000000000007735c16e/31/d.d63db0e7") format("woff"),url("af/d5023c/00000000000000007735c16e/31/a.d63db0e7") format("opentype");
+font-display:auto;font-style:italic;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-e";
+src:url("af/bf56ba/00000000000000007735c16a/31/l.e35c7ac2") format("woff2"),url("af/bf56ba/00000000000000007735c16a/31/d.e35c7ac2") format("woff"),url("af/bf56ba/00000000000000007735c16a/31/a.e35c7ac2") format("opentype");
+font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-e";
+src:url("af/f2dab6/00000000000000007735c15c/31/l.b6b20ecb") format("woff2"),url("af/f2dab6/00000000000000007735c15c/31/d.b6b20ecb") format("woff"),url("af/f2dab6/00000000000000007735c15c/31/a.b6b20ecb") format("opentype");
+font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-e";
+src:url("af/cacb5d/00000000000000007735c167/31/l.d63db0e7") format("woff2"),url("af/cacb5d/00000000000000007735c167/31/d.d63db0e7") format("woff"),url("af/cacb5d/00000000000000007735c167/31/a.d63db0e7") format("opentype");
+font-display:auto;font-style:italic;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-e";
+src:url("af/2ad6ba/00000000000000007735c16d/31/l.e87284ca") format("woff2"),url("af/2ad6ba/00000000000000007735c16d/31/d.e87284ca") format("woff"),url("af/2ad6ba/00000000000000007735c16d/31/a.e87284ca") format("opentype");
+font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-m";
+src:url("af/283d8b/00000000000000007735c157/31/l.e35c7ac2") format("woff2"),url("af/283d8b/00000000000000007735c157/31/d.e35c7ac2") format("woff"),url("af/283d8b/00000000000000007735c157/31/a.e35c7ac2") format("opentype");
+font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-m";
+src:url("af/0b98b2/00000000000000007735c161/31/l.b6b20ecb") format("woff2"),url("af/0b98b2/00000000000000007735c161/31/d.b6b20ecb") format("woff"),url("af/0b98b2/00000000000000007735c161/31/a.b6b20ecb") format("opentype");
+font-display:auto;font-style:italic;font-weight:400;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-m";
+src:url("af/d7d881/00000000000000007735c17d/31/l.e87284ca") format("woff2"),url("af/d7d881/00000000000000007735c17d/31/d.e87284ca") format("woff"),url("af/d7d881/00000000000000007735c17d/31/a.e87284ca") format("opentype");
+font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
+}
+
+@font-face {
+font-family:"dharma-gothic-m";
+src:url("af/6c0c1f/00000000000000007735c180/31/l.d63db0e7") format("woff2"),url("af/6c0c1f/00000000000000007735c180/31/d.d63db0e7") format("woff"),url("af/6c0c1f/00000000000000007735c180/31/a.d63db0e7") format("opentype");
+font-display:auto;font-style:italic;font-weight:700;font-stretch:normal;
+}
+
+.tk-dharma-gothic-c { font-family: "dharma-gothic-c",sans-serif; }
+.tk-dharma-gothic-e { font-family: "dharma-gothic-e",sans-serif; }
+.tk-dharma-gothic-m { font-family: "dharma-gothic-m",sans-serif; }

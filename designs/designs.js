@@ -45,10 +45,10 @@ window.__DESIGNS__ = [
     "title": "Good Life Meds",
     "description": "",
     "sourceUrl": "https://www.goodlifemeds.com/",
-    "savedAt": "2026-05-07",
+    "savedAt": "2026-06-22",
     "tags": [],
     "href": "005-goodlifemeds/index.html",
-    "preview": ""
+    "preview": "005-goodlifemeds/preview.png"
   },
   {
     "folder": "006-flowerknows",
@@ -299,6 +299,606 @@ window.__DESIGNS__ = [
     ],
     "href": "028-onenergy/index.html",
     "preview": "028-onenergy/preview.png"
+  },
+  {
+    "folder": "029-chipsa",
+    "title": "Chipsa Design",
+    "description": "俄罗斯创意数字工作室 Chipsa 官网。Next.js (Pages Router) + Three.js/WebGL 重度站点：岩石 3D hero、奖项区漂浮 3D 物件、纹理化大字母、彩色 3D 球体、Lenis 平滑滚动，配合大量 mockup 视频展示。获 Awwwards / CSSDA / FWA 等奖项。",
+    "sourceUrl": "https://chipsa.design/",
+    "savedAt": "2026-06-15",
+    "tags": [
+      "webgl",
+      "three.js",
+      "nextjs",
+      "3d",
+      "agency",
+      "scroll",
+      "video",
+      "awards"
+    ],
+    "href": "029-chipsa/index.html",
+    "preview": "029-chipsa/preview.png"
+  },
+  {
+    "folder": "030-hut8",
+    "title": "Himax",
+    "description": "Himax (镜像源 hut8.com，已 rebrand) — energy infrastructure / Bitcoin mining platform. Nuxt 3 SPA with a Three.js + Draco-compressed GLB hero (animated circuit-board → isometric data-center scenes driven by scroll), Mapbox GL on the platform page, and Vimeo background video. Mirror recovered via the Nuxt 3 recipe: 35 route CSS chunks, 4 GLB scenes, Draco decoder, Sanity-CDN images, base-href + absolute asset-path rewrites.",
+    "sourceUrl": "https://www.hut8.com/",
+    "savedAt": "2026-06-15",
+    "tags": [
+      "webgl",
+      "three.js",
+      "scroll",
+      "nuxt",
+      "hero",
+      "3d"
+    ],
+    "href": "030-hut8/index.html",
+    "preview": "030-hut8/preview.png"
+  },
+  {
+    "folder": "031-serverobotics",
+    "title": "Serve Robotics",
+    "description": "Serve Robotics — autonomous sidewalk delivery-robot company. A React Router v7 SPA (ssr:false prerender mode) with Lenis smooth-scroll driving character-by-character text reveals, a sticky Smart/Sustainable/Fast value carousel, a Mux-streamed hero video, and a Sanity-CMS social feed. Recovery was non-trivial: scrape-url.py's URL rewriter corrupted index.html (mangled bare numbers in SVG viewBox/path + the viewport meta, and left the ES-module imports as bare \"assets/...\" specifiers). Rebuilt index.html from the pristine raw HTML; rewrote the build's /assets/ & /fonts/ paths to deploy-absolute and patched the same literals (plus the Vite preload helper) inside the JS chunks so route modules load; and injected history.replaceState('/') so the prerendered index route matches instead of crashing into a catch-all sub-page error boundary. Sanity images and the Mux/curator videos stream from their live CDNs.",
+    "sourceUrl": "https://www.serverobotics.com/",
+    "savedAt": "2026-06-15",
+    "tags": [
+      "spa",
+      "react-router",
+      "scroll",
+      "hero",
+      "video",
+      "typography"
+    ],
+    "href": "031-serverobotics/index.html",
+    "preview": "031-serverobotics/preview.png"
+  },
+  {
+    "folder": "032-loviz-cargo-bike",
+    "title": "Loviz Cargo Bike",
+    "description": "Loviz — a scroll-driven 3D product showcase for an e-cargo bike. Built on Webflow (IX2 interactions, dark theme), with the interactive 3D model embedded via a Govie viewer iframe (platform.govie.de). A custom script uses the Govie Embed API to call jumpToSceneByTitle() as each section scrolls into the viewport middle, driving the bike's camera/scene per section (Handlebar, Design, Cargo Capacity, Bigger Box, Liftable Seat, Electric Assist, Choose Style + color picker). The 3D viewer is a remote WebGL app and is loaded live from Govie (requires internet); the stale revision URL baked into the published HTML was repointed to the canonical share URL the live site uses.",
+    "sourceUrl": "https://www.loviz.de/cargo-bike",
+    "savedAt": "2026-06-15",
+    "tags": [
+      "webflow",
+      "3d",
+      "webgl",
+      "scroll",
+      "interaction",
+      "product-showcase",
+      "govie",
+      "iframe-embed"
+    ],
+    "href": "032-loviz-cargo-bike/index.html",
+    "preview": "032-loviz-cargo-bike/preview.png"
+  },
+  {
+    "folder": "033-skf-fighting-friction",
+    "title": "Himax Fighting Friction",
+    "description": "",
+    "sourceUrl": "https://www.skf.com/group/fighting-friction/01",
+    "savedAt": "2026-06-15",
+    "tags": [],
+    "href": "033-skf-fighting-friction/index.html",
+    "preview": "033-skf-fighting-friction/preview.png"
+  },
+  {
+    "folder": "034-phive",
+    "title": "Phive",
+    "description": "Phive — Portuguese premium fitness-club chain (Porto / Lisbon / Celas), built by Burocratik. Nuxt 3 SPA (i18n en/pt) with a Three.js WebGPU→WebGL2 hero rendering a 3D PHIVE-branded weight plate (GLTF), GSAP + ScrollTrigger pinned sections, SplitText display-type reveals, a Lenis smooth-scroll marquee, and Sanity-CMS-driven content. Mirror recovered via the Nuxt 3 recipe: fetched 28 runtime-only route CSS chunks, injected base-href, and rewrote location.pathname to the SSR'd /en route so the i18n router hydrates in place instead of redirecting to a root-absolute /en (404). Sanity images/audio and the DigitalOcean-Spaces club videos stream from their live CDNs (offline they fall back).",
+    "sourceUrl": "https://phive.pt/en",
+    "savedAt": "2026-06-15",
+    "tags": [
+      "nuxt",
+      "threejs",
+      "webgl",
+      "gsap",
+      "scroll",
+      "lenis",
+      "typography",
+      "hero",
+      "3d"
+    ],
+    "href": "034-phive/index.html",
+    "preview": "034-phive/preview.png"
+  },
+  {
+    "folder": "035-alphanelabs",
+    "title": "阿祖 AI 建站 (Himax)",
+    "description": "Alphane Labs (solutions.alphanelabs.com) 材料表征测试服务站镜像，已改版替换品牌为 Himax、首屏标题为「阿祖 AI 建站」三行。Nuxt 3 SPA + Three.js WebGL 滚动叙事：首屏分子气泡背景、DRACO 压缩 GLB 的仪器 3D 模型逐屏拆解/标注、玻璃质分子球渲染。GSAP ScrollTrigger/SplitText/ScrollSmoother + Lenis 平滑滚动驱动，内容走 Storyblok CMS，联系页用 Mapbox。",
+    "sourceUrl": "https://solutions.alphanelabs.com",
+    "savedAt": "2026-06-16",
+    "tags": [
+      "nuxt3",
+      "threejs",
+      "webgl",
+      "draco-glb",
+      "gsap",
+      "scrolltrigger",
+      "lenis",
+      "storyblok",
+      "scroll-storytelling"
+    ],
+    "href": "035-alphanelabs/index.html",
+    "preview": "035-alphanelabs/preview.png"
+  },
+  {
+    "folder": "036-maddys2025",
+    "title": "Himax 2025",
+    "description": "Advertising Club Madras — Maddys 2025 awards site. Next.js App Router (Turbopack) + GSAP ScrollTrigger: hero, jury chairs/members grids, highlights collage, and a scroll-driven sticky rotating circular badge in the footer.",
+    "sourceUrl": "https://maddys2025.ripplear.live",
+    "savedAt": "2026-06-16",
+    "tags": [
+      "nextjs",
+      "gsap",
+      "scrolltrigger",
+      "awards",
+      "scroll",
+      "spa"
+    ],
+    "href": "036-maddys2025/index.html",
+    "preview": "036-maddys2025/preview.png"
+  },
+  {
+    "folder": "037-moblinks",
+    "title": "Moblinks",
+    "description": "Moblinks (MOB LINKS) — French streetwear / puzzle-merch brand storefront. Nuxt 3 SPA with a Three.js WebGPU→WebGL2 hero rendering a 3D Draco-compressed GLB logo (elastic intro scale/rotation, mouse-parallax, HDR environment) plus scroll-driven scene transitions, GSAP + ScrollTrigger + SplitText animations, autoplay product videos (incl. a Vimeo-hosted clip), a jigsaw-pieces footer, and Shopify 'Savory' headless commerce for the catalog. Mirror recovered via the Nuxt 3 recipe: fetched 11 runtime-only route CSS chunks, the Draco decoder, and ~15 JS-constructed static images/videos; injected base-href + an early history.replaceState to '/' so the loader store's index-route gate fires (the route-mismatch otherwise short-circuited 'ready' to true and crashed the intro on an unloaded model). Vimeo video localized; the Shopify cart GraphQL backend is the only feature requiring network (products themselves are prerendered, so the page is fully offline-renderable).",
+    "sourceUrl": "https://www.moblinks.fr/",
+    "savedAt": "2026-06-16",
+    "tags": [
+      "nuxt",
+      "threejs",
+      "webgl",
+      "gsap",
+      "scroll",
+      "typography",
+      "hero",
+      "3d"
+    ],
+    "href": "037-moblinks/index.html",
+    "preview": "037-moblinks/preview.png"
+  },
+  {
+    "folder": "038-festivent",
+    "title": "Festivent",
+    "description": "",
+    "sourceUrl": "https://festivent.ca/",
+    "savedAt": "2026-06-16",
+    "tags": [],
+    "href": "038-festivent/index.html",
+    "preview": "038-festivent/preview.png"
+  },
+  {
+    "folder": "039-voldogfood",
+    "title": "Voldog",
+    "description": "Voldog — B.A.R.F διατροφή για σκύλους και γάτες (WordPress/Divi). Hero με dog/cat switch (βίντεο + background).",
+    "sourceUrl": "https://www.voldogfood.com/",
+    "savedAt": "2026-06-16",
+    "tags": [],
+    "href": "039-voldogfood/index.html",
+    "preview": "039-voldogfood/preview.png"
+  },
+  {
+    "folder": "040-dontboardme",
+    "title": "DontBoardMe",
+    "description": "Dog-walking / pet-care site (Nuxt 3 SPA). Playful pink intro gate (bounce-a-ball Lottie), Bayon display type, swiper galleries, Strapi-backed content. Fully self-contained offline mirror.",
+    "sourceUrl": "https://dontboardme.com/",
+    "savedAt": "2026-06-16",
+    "tags": [
+      "intro",
+      "animation",
+      "scroll"
+    ],
+    "href": "040-dontboardme/index.html",
+    "preview": "040-dontboardme/preview.png"
+  },
+  {
+    "folder": "041-sunbum",
+    "title": "Himax",
+    "description": "Himax 官网首页镜像（原 Sun Bum / Shopify 主题站，已整体 rebrand 为 Himax）。明亮夏日风、产品轮播、横幅、分类导航与品牌叙事。完整本地化可离线打开（cart/checkout 等后端 AJAX 端点离线不可用，不影响展示）。",
+    "sourceUrl": "https://www.sunbum.com/",
+    "savedAt": "2026-06-16",
+    "tags": [
+      "shopify",
+      "ecommerce",
+      "hero",
+      "carousel"
+    ],
+    "href": "041-sunbum/index.html",
+    "preview": "041-sunbum/preview.png"
+  },
+  {
+    "folder": "042-redis",
+    "title": "Redis Agency",
+    "description": "Redis — 俄罗斯设计/产品工作室官网首页镜像（Next.js 15 + Turbopack + React Server Components）。深色主题、大号衬线 hero「Redis agency」+ 红萝卜主视觉、绿色泼墨、服务清单与案例画廊。已修复 Turbopack 离线水合（patch publicPath + base href）与 Next 图片优化端点，完整本地化可断网打开（仅 Google/GTM 埋点离线不加载，不影响展示；案例/博客等子页导航为线上路由）。",
+    "sourceUrl": "https://redis.agency/",
+    "savedAt": "2026-06-17",
+    "tags": [
+      "nextjs",
+      "turbopack",
+      "rsc",
+      "agency",
+      "dark",
+      "hero",
+      "typography"
+    ],
+    "href": "042-redis/index.html",
+    "preview": "042-redis/preview.png"
+  },
+  {
+    "folder": "043-wero-merchant",
+    "title": "Sowieso Wero — Merchant (B2B)",
+    "description": "iDEAL → Wero merchant (B2B) campaign page. Playful scroll story with three Lottie canvas animations (fist-bump hands hero, flying wero card, piggy bank), GSAP ScrollTrigger scrub, Plyr-driven explainer videos and a large PSP-partner logo grid. Fully self-contained offline mirror: all videos, fonts, i18n messages and the build manifest are bundled locally.",
+    "sourceUrl": "https://sowieso.wero-wallet.eu/nl-en/merchant",
+    "savedAt": "2026-06-17",
+    "tags": [
+      "scroll",
+      "animation",
+      "intro",
+      "hero"
+    ],
+    "href": "043-wero-merchant/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "044-cartier",
+    "title": "Cartier — Watches & Wonders 2026",
+    "description": "Cartier 沉浸式 3D 滚动体验（Nuxt + Three.js + Lenis + Draco/EXR/KTX2，AEM 外壳）。原站 Akamai 反爬挡掉 py 抓取且 ArchiveWeb.page 录不动；改用真实浏览器认证会话绕过 Akamai，把整套体验资源（12 GLB 腕表模型 + 13 EXR 场景 HDR + 4 LUT + 音频 + 字体，约 255MB）下载到本地 exp/，再把 Nuxt 的 cdnURL 改成本地路径、移除 Akamai sensor/弹窗，做成完全离线可交互的静态镜像。滚动可在「WATCHES & WONDERS 大厅 → THE FILM → THE SOUND OF CRAFT」等场景间穿梭。",
+    "sourceUrl": "https://www.cartier.com/en-fr/watchesandwonders",
+    "savedAt": "2026-06-17",
+    "tags": [
+      "webgl",
+      "threejs",
+      "nuxt",
+      "lenis",
+      "draco",
+      "scrollytelling",
+      "luxury",
+      "akamai",
+      "3d"
+    ],
+    "href": "044-cartier/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "045-southcliffdentalgroup",
+    "title": "South Cliff Dental Group",
+    "description": "Award-winning NHS &amp; private dental group. Next.js 15 (App Router, Vercel) + React-three-fiber/Three.js WebGL cliff scene + GSAP ScrollSmoother + troika 3D text + Prismic CMS. Scroll-driven 3D scene reveal fully working offline.",
+    "sourceUrl": "https://southcliffdentalgroup.com/",
+    "savedAt": "2026-06-17",
+    "tags": [
+      "3d",
+      "webgl",
+      "scroll",
+      "hero"
+    ],
+    "href": "045-southcliffdentalgroup/index.html",
+    "preview": "045-southcliffdentalgroup/preview.png"
+  },
+  {
+    "folder": "046-onscrollshapemorph",
+    "title": "On-Scroll Shape Morph (Codrops)",
+    "description": "",
+    "sourceUrl": "https://tympanus.net/Development/OnScrollShapeMorph/",
+    "savedAt": "2026-06-17",
+    "tags": [],
+    "href": "046-onscrollshapemorph/index.html",
+    "preview": "046-onscrollshapemorph/preview.png"
+  },
+  {
+    "folder": "047-lv-collectibles",
+    "title": "Louis Vuitton — VIA Collectibles",
+    "description": "Louis Vuitton VIA «Treasure Trunk» 数字藏品沉浸式体验（Vue 3 + Vite + Three.js + Draco/HDR/MSDF 文字 + Lottie + 空间音频）。点 “Begin the exploration” 后滚动穿梭一系列 3D 世界（沙漠/水景里的 LV monogram trunk、beach / brownmountain / flowerfields / iceland / paris / skatepark / skycity / waterfalls 等多个场景 + speedy 包 / 热气球 / 钥匙模型）。原站是普通 Apache（无 Akamai），但 Vue dev 式 bare-import 入口 + 运行时构造的资源路径让 scrape-url.py 只抓到 11 个文件；改用递归爬 Apache 目录列表把整棵 /assets /mock /scripts 树（25 个 GLB + HDR envmap + 22 段音频 + MSDF 字体 + Draco，约 163MB）拉到本地，再把 window.DigitalServices.env.animationPath 从 '/' 改成镜像路径（一个钩子让所有 Three.js loader + Worker 里的 Draco 解码器全部解到本地）。完全离线、0 broken、可交互。",
+    "sourceUrl": "https://louisvuitton-collectibles.imm-g-prod.com/",
+    "savedAt": "2026-06-17",
+    "tags": [
+      "webgl",
+      "threejs",
+      "vue",
+      "vite",
+      "draco",
+      "scrollytelling",
+      "luxury",
+      "3d",
+      "immersive"
+    ],
+    "href": "047-lv-collectibles/index.html",
+    "preview": "047-lv-collectibles/preview.png"
+  },
+  {
+    "folder": "048-penelope-care",
+    "title": "Penelope Care",
+    "description": "",
+    "sourceUrl": "https://penelope-care.com/",
+    "savedAt": "2026-06-22",
+    "tags": [],
+    "href": "048-penelope-care/index.html",
+    "preview": "048-penelope-care/preview.png"
+  },
+  {
+    "folder": "049-siellabeauty",
+    "title": "Himax Beauty",
+    "description": "",
+    "sourceUrl": "https://siellabeauty.com/en",
+    "savedAt": "2026-06-22",
+    "tags": [],
+    "href": "049-siellabeauty/index.html",
+    "preview": "049-siellabeauty/preview.png"
+  },
+  {
+    "folder": "050-enaathletics",
+    "title": "ENA Athletics",
+    "description": "运动鞋品牌官网首页镜像（已 rebrand 为 Himax 标语 + 移除全部外部链接/追踪器，完全自包含离线）。WordPress 自研主题，多段全屏 hero 视频 + GSAP/ScrollTrigger 滚动叙事，Swiper 产品轮播，Avenir 字体。",
+    "sourceUrl": "https://www.enaathletics.com/",
+    "savedAt": "2026-06-22",
+    "tags": [
+      "scroll",
+      "hero",
+      "video",
+      "ecommerce",
+      "gsap"
+    ],
+    "href": "050-enaathletics/index.html",
+    "preview": "050-enaathletics/preview.png"
+  },
+  {
+    "folder": "051-vessi",
+    "title": "Himax",
+    "description": "加拿大防水鞋品牌 Vessi 官网首页镜像，已整体 rebrand 为 Himax（品牌字样、logo wordmark、favicon、title、FAQ/版权文案全部替换，资源 URL/域名保持原样不动）。Shopify 自研主题，用原生 Web Components（hero-slider / product-card / banner-media / inview-unclip）+ Motion One 动画库搭建：hero 视频轮播、产品卡 hover 多图轮播、滚动 reveal unclip 动画、以及一个 Section Rendering API 懒加载的全屏视频段（已补抓本地化）。footer 巨型 wordmark 由 water-ripple-media WebGL 水波纹渲染，已换成 HIMAX 文本 SVG。scrollHeight 与原站逐像素对齐。",
+    "sourceUrl": "https://vessi.com/",
+    "savedAt": "2026-06-22",
+    "tags": [
+      "ecommerce",
+      "scroll",
+      "animation",
+      "video",
+      "hero",
+      "interaction"
+    ],
+    "href": "051-vessi/index.html",
+    "preview": "051-vessi/preview.png"
+  },
+  {
+    "folder": "052-hivetown",
+    "title": "Hivetown",
+    "description": "",
+    "sourceUrl": "https://www.hivetown.co/",
+    "savedAt": "2026-06-23",
+    "tags": [],
+    "href": "052-hivetown/index.html",
+    "preview": "052-hivetown/preview.png"
+  },
+  {
+    "folder": "053-nymphaicosmetics",
+    "title": "Nymphai Cosmetics",
+    "description": "",
+    "sourceUrl": "https://nymphaicosmetics.com/",
+    "savedAt": "2026-06-23",
+    "tags": [],
+    "href": "053-nymphaicosmetics/index.html",
+    "preview": "053-nymphaicosmetics/preview.png"
+  },
+  {
+    "folder": "054-verostudio",
+    "title": "Vero Studio",
+    "description": "Luxury fine-art studio that turns a wedding dress into a sculpture. Scroll-driven hero with a WebGL 3D dress reveal (Three.js + Draco), full-bleed Sanity videos, GSAP transitions. Built by plutot.cool on Next.js 15 + Turbopack (Vercel).",
+    "sourceUrl": "https://www.verostudio.com/",
+    "savedAt": "2026-06-23",
+    "tags": [
+      "scroll",
+      "hero",
+      "interaction"
+    ],
+    "href": "054-verostudio/index.html",
+    "preview": "054-verostudio/preview.png"
+  },
+  {
+    "folder": "055-around-digiphy",
+    "title": "DigiPHY 2.0",
+    "description": "Granstudio 的 DigiPHY 汽车设计平台交互站。WebGL 圆形虚拟工作室：ENTER STUDIO 进入后滚轮在楼层间移动、方向键在房间内走动，3D Jeep intro + baked 楼层场景 + DIGI 助手引导。",
+    "sourceUrl": "https://rdapkuns.github.io/around-digiphy/",
+    "savedAt": "2026-06-23",
+    "tags": [
+      "webgl",
+      "3d",
+      "interaction",
+      "scroll",
+      "hero"
+    ],
+    "href": "055-around-digiphy/index.html",
+    "preview": "055-around-digiphy/preview.png"
+  },
+  {
+    "folder": "056-mypifi",
+    "title": "Himax",
+    "description": "PiFi（mypifi.com）宠物智能产品品牌官网首页镜像，已整体 rebrand 为 Himax：title、og/twitter meta、JSON-LD、header/抽屉/footer 三处 logo（换成自绘的 HIMAX 白色字标 SVG）、导航「Why Himax / Himax Blog」、正文/FAQ/CTA「Get My Himax」、shopName 等共 36 处品牌文本全部替换；资源 URL/域名/slug（mypifi.com、why-pifi、Pifi_fulllogo 文件名）保持原样不动。Shopify 自研主题，GSAP + ScrollTrigger 驱动滚动揭示动画、Swiper 卡片轮播、hero 背景视频自动播放。页面含「Every pet deserves to be known」深色卡片组、Personalized Wellness 上传演示、Loved by Families 视频墙、Customer Reviews、FAQ 手风琴；footer 原版权行已按要求删除。站点接入 Intelligems 做 A/B 测试，hero 主文案在不同访问下会换变体（本次抓到「Feed Right. Chew Bright.」变体）。评论/FAQ 由外部 app API 动态填充，离线状态文本会少一部分；结账/购物车后端离线失效，均属预期。在线/离线均完整渲染、0 broken image。",
+    "sourceUrl": "https://www.mypifi.com/",
+    "savedAt": "2026-06-23",
+    "tags": [
+      "ecommerce",
+      "scroll",
+      "animation",
+      "video",
+      "hero",
+      "interaction"
+    ],
+    "href": "056-mypifi/index.html",
+    "preview": "056-mypifi/preview.png"
+  },
+  {
+    "folder": "057-arago",
+    "title": "Himax (阿祖AI出海)",
+    "description": "Arago 光学计算公司官网镜像，已 rebrand 成 Himax / 阿祖AI出海（logo、首屏大字、版权、全文品牌词替换，外链已断）。Nuxt 3 (SSR 预渲染) + Three.js WebGL 滚动叙事：随滚动旋转/变形的 3D 数据中心芯片模型（Draco 压缩 GLB + KTX2 烤贴图 + studio cubemap 环境反射），由 Theatre.js 编排相机/序列，Lenis 平滑滚动。",
+    "sourceUrl": "https://arago.wawww.studio/",
+    "savedAt": "2026-06-29",
+    "tags": [
+      "webgl",
+      "3d",
+      "scroll",
+      "hero",
+      "nuxt",
+      "threejs"
+    ],
+    "href": "057-arago/index.html",
+    "preview": "057-arago/preview.png"
+  },
+  {
+    "folder": "058-heyhanni",
+    "title": "Himax (Hanni rebrand)",
+    "description": "Hanni（heyhanni.com）美国身体护理 DTC 品牌官网首页镜像，已 rebrand 成 Himax：header/footer 字标 logo 换成自绘 himax wordmark（Fredoka 圆润几何粗体，匹配原 hanni 米色/酒红配色），标题/导航/版权/meta 等全部可见文本 Hanni→Himax。Shopify（Liquid 主题）+ GemPages 页面构建器搭建：hero 淋浴磨砂巾大图、'Worth The Hype' 产品网格、随滚动展示的护理流程与色卡、Subscribe & Save 瓷砖区、评价卡、超大 footer wordmark。共 12 段产品视频 + 21 个 section，离线 0 broken。注：产品实拍照里印在瓶身的 hanni 字样属位图烤入无法 find-replace；联系邮箱 hi@heyhanni.com 为域名保留。结账/购物车/web-pixels 等电商后端走线上。",
+    "sourceUrl": "https://heyhanni.com/",
+    "savedAt": "2026-06-29",
+    "tags": [
+      "shopify",
+      "ecommerce",
+      "scroll",
+      "hero",
+      "gempages"
+    ],
+    "href": "058-heyhanni/index.html",
+    "preview": "058-heyhanni/preview.png"
+  },
+  {
+    "folder": "059-maisonlouismarie",
+    "title": "Maison Louis Marie",
+    "description": "",
+    "sourceUrl": "https://maisonlouismarie.com/",
+    "savedAt": "2026-06-29",
+    "tags": [],
+    "href": "059-maisonlouismarie/index.html",
+    "preview": ""
+  },
+  {
+    "folder": "060-flamingoestate",
+    "title": "Flamingo Estate",
+    "description": "",
+    "sourceUrl": "https://flamingoestate.com/",
+    "savedAt": "2026-06-29",
+    "tags": [],
+    "href": "060-flamingoestate/index.html",
+    "preview": "060-flamingoestate/preview.png"
+  },
+  {
+    "folder": "061-dsanddurga",
+    "title": "D.S. & Durga",
+    "description": "D.S. & Durga 香水品牌官网镜像。Next.js (Pages Router) + Sanity CMS（图片走 cdn.sanity.io）+ Shopify 后端电商。复古杂志感首屏（Crush Balls is Back）、I Don't Know What / Cult Classics / Gift Sets 产品网格、香水喷雾 QUIZ 互动区。镜像已修：注入 base href、patch webpack publicPath + 路由 CSS 加载器（root-absolute /_next/ → 相对）、flip Next/Image unoptimized 让图直连 Sanity CDN、本地图标 /images/ → 相对 + 复制到根。导航/购物等跨页链接保持原样（无需外部跳转）。",
+    "sourceUrl": "https://www.dsanddurga.com/",
+    "savedAt": "2026-06-29",
+    "tags": [
+      "ecommerce",
+      "nextjs",
+      "editorial",
+      "hero",
+      "grid"
+    ],
+    "href": "061-dsanddurga/index.html",
+    "preview": "061-dsanddurga/preview.png"
+  },
+  {
+    "folder": "062-anima",
+    "title": "Anima Therapy",
+    "description": "",
+    "sourceUrl": "https://kindly-2e8okmvk.peachworlds.com/",
+    "savedAt": "2026-06-29",
+    "tags": [],
+    "href": "062-anima/index.html",
+    "preview": "062-anima/preview.png"
+  },
+  {
+    "folder": "063-sloshseltzer",
+    "title": "Himax Seltzer (阿祖AI出海)",
+    "description": "Buttermax 自研「Slosh Seltzer」全屏 WebGL2 沉浸式体验（最大主义设计探索），已 rebrand 成 Himax：所有 SLOSH/Slosh 品牌词改为 HIMAX/Himax，首屏粉色大字「THIS IS THE BIG KIDS TABLE」改为「阿祖AI出海」。年龄门「I'M READY TO PARTY」进入后是一套 3D 易拉罐叙事：按 Enter 或点拉环开罐 → 滚动驱动镜头穿梭多个口味场景（strawberry/lime/orange/cherry/raspberry），含 cheers 碰杯、ringpull 拉环、液体喷溅等关卡。技术栈是工作室自研的 Hydra WebGL2 引擎（GLUI/GLText MSDF 文字 + PBR：HDRI/RGBM 环境贴图、KTX2/Basis 压缩贴图、Draco 压缩几何、Oimo 物理、video2spritesheet 帧序列液体动画、audiosprite 空间音频，Firebase 用于实时/多人）。原站资源路径由引擎运行时构造（assets/ 与 resources/ 双基址），scrape-url.py 只抓到 10 个文件；改用真实 Edge（headless swiftshader 不达 WebGL2 会跳 unsupported）捕获 119 个权威请求 URL + manifest 并集，按 content-type 过滤 SPA fallback 并行下载（约 42MB，212 文件）。rebrand 改法：UI 文字全是引擎布局里的 _innerText（DOM .char span / WebGL glText 两类），大标题是 DOM 文字（steelfish-eb 显示字体无中文字形 → 注入 CJK 字体回退让「阿祖AI出海」用 YaHei 渲染），3D logo 是 glText 走 MSDF 图集（含完整拉丁字符集，HIMAX 直接渲染）。base href 指向镜像目录后完全离线、0 broken、0 pageerror、可交互（深层 3D 场景需真实鼠标/Enter 驱动，合成事件不触发——原站同此）。",
+    "sourceUrl": "https://sloshseltzer.com/",
+    "savedAt": "2026-06-29",
+    "tags": [
+      "webgl",
+      "webgl2",
+      "3d",
+      "scroll",
+      "hero",
+      "immersive",
+      "interaction",
+      "physics",
+      "spritesheet"
+    ],
+    "href": "063-sloshseltzer/index.html",
+    "preview": "063-sloshseltzer/preview.png"
+  },
+  {
+    "folder": "064-ciaoenergy",
+    "title": "阿祖AI出海 · Himax Energy",
+    "description": "Ciao Energy 官网镜像（已 rebrand：品牌文本 → Himax，首屏 logo → 阿祖AI出海）。Webflow + GSAP(ScrollTrigger/SplitText) + Three.js WebGL 首屏 3D 罐子滚动叙事，6 口味切换 + 背景循环视频。",
+    "sourceUrl": "https://www.ciaoenergy.com/",
+    "savedAt": "2026-07-01",
+    "tags": [
+      "webflow",
+      "webgl",
+      "three.js",
+      "gsap",
+      "scroll",
+      "3d",
+      "hero"
+    ],
+    "href": "064-ciaoenergy/index.html",
+    "preview": "064-ciaoenergy/preview.png"
+  },
+  {
+    "folder": "065-exebenus",
+    "title": "Himax",
+    "description": "Exebenus (钻井预测 AI) 镜像，品牌整体替换为 Himax、首屏标题改为「阿祖AI出海」。Webflow + 外部 Vercel 自定义代码 (Vite/GSAP/Lottie) + 782 帧 webp 滚动钻井可视化，全部离线本地化。",
+    "sourceUrl": "https://www.exebenus.com/",
+    "savedAt": "2026-06-29",
+    "tags": [
+      "webflow",
+      "gsap",
+      "image-sequence",
+      "scrollytelling",
+      "webgl-canvas"
+    ],
+    "href": "065-exebenus/index.html",
+    "preview": "065-exebenus/preview.png"
+  },
+  {
+    "folder": "066-armory",
+    "title": "Himax (armory rebrand)",
+    "description": "Webflow + GSAP/ScrollTrigger/SplitText + Lenis + WebGL shader site for a C-UAS defence startup. Mirrored from armory.in, rebranded armory→himax, hero headline changed to 阿祖AI出海.",
+    "sourceUrl": "https://www.armory.in/",
+    "savedAt": "2026-06-29",
+    "tags": [
+      "webflow",
+      "gsap",
+      "scroll",
+      "webgl",
+      "hero"
+    ],
+    "href": "066-armory/index.html",
+    "preview": "066-armory/preview.png"
+  },
+  {
+    "folder": "067-ultrahuman",
+    "title": "Ultrahuman",
+    "description": "",
+    "sourceUrl": "https://www.ultrahuman.com/us/",
+    "savedAt": "2026-07-01",
+    "tags": [],
+    "href": "067-ultrahuman/index.html",
+    "preview": "067-ultrahuman/preview.png"
+  },
+  {
+    "folder": "068-moonbird",
+    "title": "Moonbird",
+    "description": "Moonbird（手持呼吸训练器）Shopify Hydrogen (Oxygen) 店铺镜像。React Router v7 framework 模式 + 滚动叙事视频。抓回后修 bare 模块 specifier + 子路径路由 replaceState、注入运行时 cdn→本地 img/video 重写钩子（Hydrogen <Image> 动态构建的 cdn URL 靠 MutationObserver 兜底）、下载运行时图片、并注入外部网络屏蔽（复刻确定性离线态，避免联网时 tracker 触发 RR not-found 翻转）。全部离线本地化，0 broken img。",
+    "sourceUrl": "https://www.moonbird.life/",
+    "savedAt": "2026-07-01",
+    "tags": [
+      "shopify-hydrogen",
+      "react-router-v7",
+      "scrollytelling",
+      "video",
+      "spa-mirror"
+    ],
+    "href": "068-moonbird/index.html",
+    "preview": "068-moonbird/preview.png"
   },
   {
     "folder": "Floema",

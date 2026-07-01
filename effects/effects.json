@@ -936,5 +936,25 @@
     "sourceUrl": "https://louisvuitton-collectibles.imm-g-prod.com/",
     "localMirror": "../designs/047-lv-collectibles/index.html",
     "order": 48
+  },
+  {
+    "num": "049",
+    "folder": "049-ultrahuman-all-in-one-app",
+    "title": "All in one app",
+    "subtitle": "手机上浮 + Tab 切换应用演示",
+    "description": "复刻 Ultrahuman 首页「All in one app」屏：巨型霓虹绿 Graphik 展示标题作背景，手持手机随滚动自然上浮嵌入标题中，机身屏幕内循环播放 App 演示视频；底部玻璃拟态 Tab 栏（RING / METABOLISM / HOME / VISION）点击可滑动指示条并交叉淡入切换对应视频与说明文案，最后是两颗玻璃质感下载按钮（仅保留视觉，已去除应用商店外链）。纯 HTML/CSS + 原生 JS，无第三方动画库（原站手机上浮就是自然滚动）。",
+    "tech": "HTML/CSS + vanilla JS + HTML5 video",
+    "tags": [
+      "scroll",
+      "interaction",
+      "typography",
+      "video",
+      "hero",
+      "product-showcase"
+    ],
+    "previewHref": "index.html",
+    "sourceUrl": "https://www.ultrahuman.com/us/",
+    "localMirror": "../designs/067-ultrahuman/index.html",
+    "order": 49
   }
 ]
