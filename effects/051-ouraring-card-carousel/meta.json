@@ -1,0 +1,9 @@
+{
+  "title": "Oura 特性卡片轮播",
+  "subtitle": "Feature card carousel",
+  "description": "Oura Ring 首页的横向卡片轮播：CSS scroll-snap 原生吸附 + 指针拖拽滚动，每张卡片含毛玻璃分类 pill、可展开的 + 按钮、底部 serif 斜体大标题与视差图片；底部细进度条随滚动缩放、prev/next 圆形箭头按卡步进并带禁用态。1:1 复刻自 ouraring.com。",
+  "tech": "CSS scroll-snap + Pointer drag",
+  "tags": ["interaction", "scroll", "carousel", "parallax", "snap"],
+  "sourceUrl": "https://ouraring.com/",
+  "localMirror": "../designs/069-ouraring/index.html"
+}

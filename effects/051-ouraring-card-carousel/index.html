@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Oura — Card Carousel</title>
+<style>
+@font-face{font-family:'AkkuratLL';src:url('lib/AkkuratLL-Light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Editorial New';src:url('lib/PPEditorialNew-UltralightItalic.woff2') format('woff2');font-weight:300;font-style:italic;font-display:swap}
+@font-face{font-family:'Editorial New';src:url('lib/PPEditorialNew-Light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+
+:root{
+  --sandstone-100:#fefaef; --sandstone-200:#f7f1e8; --sandstone-300:#efeae2;
+  --sandstone-400:#efe6db; --sandstone-450:#e6ded3; --sandstone-500:#4a4741;
+  --backdrop-500:#222428; --backdrop-600:#151619;
+  --card-w:493px; --card-h:658px; --gap:24px; --rail-pad:clamp(24px,6vw,96px);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:'AkkuratLL',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--sandstone-500);
+  background:linear-gradient(160deg,#f4ecdd 0%,#f2e9d7 45%,#f6efe2 100%);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+
+.wrap{max-width:1920px;margin:0 auto;padding:clamp(40px,8vh,110px) 0}
+
+/* ---- rail ---- */
+.rail{
+  display:flex; gap:var(--gap);
+  overflow-x:auto; overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  padding:4px var(--rail-pad) 4px var(--rail-pad);
+  scrollbar-width:none; -ms-overflow-style:none;
+  cursor:grab;
+  list-style:none; margin:0;
+}
+.rail::-webkit-scrollbar{display:none}
+.rail.is-dragging{cursor:grabbing; scroll-snap-type:none}
+.rail.is-dragging .card{pointer-events:none}
+
+.slide{scroll-snap-align:start; flex:0 0 auto}
+
+/* ---- card ---- */
+.card{
+  position:relative;
+  width:var(--card-w); height:var(--card-h);
+  border-radius:12px; overflow:hidden;
+  background:#c8bfb2;
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+  user-select:none;
+}
+.card.is-expanded{width:min(760px,86vw)}
+
+.card__media{position:absolute; inset:0; overflow:hidden}
+.card__img{
+  position:absolute; left:0; top:-5%;
+  width:100%; height:110%;
+  object-fit:cover; object-position:center 30%;
+  will-change:transform;
+  transform:translateY(var(--py,0px));
+}
+.card__scrim{
+  position:absolute; left:0; right:0; bottom:0; height:52%;
+  background:linear-gradient(to top,rgba(20,18,15,.62),rgba(20,18,15,.12) 55%,transparent);
+  pointer-events:none;
+}
+
+/* pill */
+.pill{
+  position:absolute; top:24px; left:24px;
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 22px; border-radius:999px;
+  color:var(--sandstone-200);
+  overflow:hidden; isolation:isolate;
+}
+.pill__blur{
+  position:absolute; inset:0; z-index:-1; border-radius:999px;
+  background:rgba(34,36,40,.40);
+  backdrop-filter:blur(18px) saturate(1.1);
+  -webkit-backdrop-filter:blur(18px) saturate(1.1);
+  mix-blend-mode:normal;
+}
+.pill__icon{width:22px;height:22px;display:block;color:var(--sandstone-200);flex:0 0 auto}
+.pill__label{font-size:15px;line-height:1.2;letter-spacing:.01em;white-space:nowrap}
+
+/* expand button */
+.card__expand{
+  position:absolute; top:22px; right:22px;
+  width:52px; height:52px; border-radius:999px; border:0;
+  background:var(--sandstone-100); color:#2a2823;
+  display:grid; place-items:center; cursor:pointer;
+  transition:background .25s ease, transform .5s cubic-bezier(.4,0,.2,1);
+}
+.card__expand:hover{background:#fff}
+.card__expand svg{transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.card.is-expanded .card__expand svg{transform:rotate(45deg)}
+
+/* headline */
+.card__title{
+  position:absolute; left:26px; right:26px; bottom:24px; margin:0;
+  color:var(--sandstone-200);
+  font-family:'AkkuratLL',sans-serif; font-weight:300;
+  font-size:clamp(1.75rem,2vw,2.5rem); line-height:1.02;
+  letter-spacing:-.005em;
+}
+.card__title em{font-family:'Editorial New',Georgia,serif; font-style:italic; font-weight:300}
+
+/* ---- controls (below cards) ---- */
+.controls{
+  max-width:1312px;
+  margin:26px var(--rail-pad) 0 var(--rail-pad);
+}
+.progress{position:relative; height:1px; width:100%; background:#d9d2c6; overflow:hidden; border-radius:2px}
+.progress__fill{
+  position:absolute; inset:0; height:1px; transform-origin:left;
+  background:var(--sandstone-500); transform:scaleX(0);
+}
+.nav{display:flex; justify-content:flex-end; gap:16px; padding-top:22px}
+.nav__btn{
+  width:56px; height:56px; border-radius:999px; cursor:pointer;
+  display:grid; place-items:center; transition:opacity .25s, background .25s, border-color .25s, color .25s;
+}
+.nav__btn svg{width:22px;height:22px}
+.nav__btn--prev{background:transparent; border:1px solid #b9b0a1; color:#4a4741}
+.nav__btn--prev:hover{border-color:#4a4741}
+.nav__btn--next{background:var(--backdrop-600); border:1px solid var(--backdrop-600); color:var(--sandstone-100)}
+.nav__btn--next:hover{background:#000}
+.nav__btn:disabled{opacity:.35; cursor:default}
+.nav__btn:disabled:hover{border-color:#b9b0a1; background:var(--backdrop-600)}
+.nav__btn--prev:disabled:hover{border-color:#b9b0a1}
+
+/* demo intro hint (stripped in paste snippets) */
+.hint{
+  text-align:center; color:#8a8172; font-size:13px; letter-spacing:.04em;
+  margin:0 0 18px; text-transform:uppercase;
+}
+
+@media (max-width:820px){
+  :root{--card-w:80vw; --card-h:388px; --rail-pad:20px}
+  .card__title{font-size:1.6rem}
+}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="hint" data-demo-only>Drag · scroll · or use the arrows</p>
+    <ul class="rail" data-rail tabindex="0" aria-label="Explore Oura features">
+      <li class="slide" data-slide>
+        <article class="card" data-card>
+          <div class="card__media">
+            <img class="card__img" src="assets/slider-1.jpg" alt="Sleep and Rest" draggable="false" loading="lazy" decoding="async"/>
+          </div>
+          <span class="card__scrim" aria-hidden="true"></span>
+          <div class="pill">
+            <span class="pill__blur" aria-hidden="true"></span>
+            <svg class="pill__icon" aria-hidden="true" fill="none" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M9.35462 0.470653C9.50015 0.674849 9.50956 0.946258 9.37851 1.16004C8.58337 2.45718 8.12484 3.98276 8.12484 5.61735C8.12484 9.66621 10.9425 13.0585 14.7247 13.9375C15.0609 14.0156 15.2701 14.3515 15.1919 14.6877C15.1138 15.0239 14.7779 15.2332 14.4417 15.155C10.106 14.1474 6.87484 10.2605 6.87484 5.61735C6.87484 4.28976 7.13935 3.023 7.61866 1.86766C4.49425 3.1376 2.2915 6.20413 2.2915 9.78401C2.2915 14.5014 6.11574 18.3257 10.8332 18.3257C13.9163 18.3257 16.6185 16.6926 18.1212 14.2413C18.3016 13.947 18.6864 13.8547 18.9807 14.0351C19.2749 14.2155 19.3673 14.6003 19.1869 14.8946C17.4665 17.7011 14.369 19.5757 10.8332 19.5757C5.42538 19.5757 1.0415 15.1918 1.0415 9.78401C1.0415 5.10448 4.32354 1.19298 8.71075 0.223135C8.9556 0.169011 9.20908 0.266457 9.35462 0.470653Z" fill="currentColor" fill-rule="evenodd"></path></svg>
+            <span class="pill__label">Sleep and Rest</span>
+          </div>
+          <button class="card__expand" type="button" aria-label="Expand Sleep and Rest card" data-expand>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <h3 class="card__title">Get the best sleep of <em>your life</em></h3>
+        </article>
+      </li>
+      <li class="slide" data-slide>
+        <article class="card" data-card>
+          <div class="card__media">
+            <img class="card__img" src="assets/slider-2.jpg" alt="Wellness and Longevity" draggable="false" loading="lazy" decoding="async"/>
+          </div>
+          <span class="card__scrim" aria-hidden="true"></span>
+          <div class="pill">
+            <span class="pill__blur" aria-hidden="true"></span>
+            <svg class="pill__icon" aria-hidden="true" fill="none" viewBox="0 0 21 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.0125 20C8.81101 19.8665 7.61368 19.5202 6.42053 18.9612C5.22737 18.4022 4.15519 17.6262 3.204 16.6333C2.25282 15.6404 1.48102 14.4139 0.888611 12.9537C0.296204 11.4935 0 9.79558 0 7.85982V6.90864H0.951189C1.83563 6.90864 2.77847 7.07968 3.77972 7.42178C4.78098 7.76387 5.66542 8.20192 6.43304 8.73592C6.56654 7.23404 6.96704 5.68627 7.63454 4.09262C8.30204 2.49896 9.0947 1.13475 10.0125 0C10.9303 1.13475 11.723 2.49896 12.3905 4.09262C13.058 5.68627 13.4585 7.23404 13.592 8.73592C14.3596 8.23529 15.2441 7.80559 16.2453 7.44681C17.2466 7.08803 18.1894 6.90864 19.0738 6.90864H20.025V7.85982C20.025 9.79558 19.7288 11.4935 19.1364 12.9537C18.544 14.4139 17.7722 15.6404 16.821 16.6333C15.8698 17.6262 14.7977 18.4022 13.6045 18.9612C12.4113 19.5202 11.214 19.8665 10.0125 20ZM10.2128 18.4731C10.0292 15.3692 9.13225 13.0163 7.5219 11.4143C5.91156 9.81227 3.91323 8.81936 1.52691 8.43554C1.74385 11.6562 2.68252 14.0592 4.34293 15.6446C6.00334 17.2299 7.95995 18.1727 10.2128 18.4731ZM9.98748 12.3404C10.2211 11.9066 10.5423 11.4393 10.9512 10.9387C11.36 10.438 11.7564 10.0209 12.1402 9.68711C12.2236 8.55236 12.0567 7.40092 11.6395 6.23279C11.2224 5.06466 10.68 3.85482 10.0125 2.60325C9.34501 3.85482 8.80267 5.06466 8.38548 6.23279C7.96829 7.40092 7.80142 8.55236 7.88486 9.68711C8.26867 10.0209 8.65665 10.438 9.04881 10.9387C9.44097 11.4393 9.75386 11.9066 9.98748 12.3404ZM11.7146 18.0476C12.499 17.7639 13.2791 17.3884 14.0551 16.9212C14.831 16.4539 15.5319 15.8448 16.1577 15.0939C16.7835 14.3429 17.3091 13.4209 17.7347 12.3279C18.1602 11.2349 18.4147 9.93742 18.4981 8.43554C16.7292 8.71923 15.169 9.34919 13.8173 10.3254C12.4656 11.3016 11.4727 12.5073 10.8385 13.9424C11.0388 14.5766 11.214 15.2149 11.3642 15.8573C11.5144 16.4998 11.6312 17.2299 11.7146 18.0476Z" fill="currentColor"></path></svg>
+            <span class="pill__label">Wellness and Longevity</span>
+          </div>
+          <button class="card__expand" type="button" aria-label="Expand Wellness and Longevity card" data-expand>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <h3 class="card__title">Don’t just live longer, <em>live healthier</em></h3>
+        </article>
+      </li>
+      <li class="slide" data-slide>
+        <article class="card" data-card>
+          <div class="card__media">
+            <img class="card__img" src="assets/slider-3.jpg" alt="Activity and Fitness" draggable="false" loading="lazy" decoding="async"/>
+          </div>
+          <span class="card__scrim" aria-hidden="true"></span>
+          <div class="pill">
+            <span class="pill__blur" aria-hidden="true"></span>
+            <svg class="pill__icon" aria-hidden="true" fill="none" viewBox="0 0 16 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M4.45095 5.5117C4.73428 3.67008 6.05393 1.87404 8.09191 1.52088C7.87 3.93585 9.16508 6.22092 10.9827 7.70813C11.7822 8.36225 12.5567 9.12287 13.1274 9.94975C13.6986 10.7773 14.0416 11.6357 14.0416 12.5C14.0416 14.4344 13.3821 15.9313 12.3284 16.9455C11.7028 17.5476 10.9213 17.9959 10.0213 18.2617C10.3223 17.8622 10.4999 17.3306 10.4999 16.6667C10.4999 14.6204 9.66248 12.5742 8.67308 11.4419C8.43837 11.1733 8.05572 11.3873 8.03086 11.7431C7.94516 12.9702 7.30981 13.6392 6.6972 14.2842C6.08728 14.9263 5.49989 15.5448 5.49989 16.6667C5.49989 17.2843 5.72388 17.8497 6.09505 18.2859C3.77124 17.6208 2.36883 15.7411 1.94609 13.6274C1.55658 11.6799 1.95462 10.1547 2.30891 9.44618C2.46328 9.13744 2.33815 8.76202 2.02941 8.60765C1.72068 8.45328 1.34525 8.57842 1.19088 8.88715C0.711819 9.84525 0.276544 11.6535 0.720367 13.8726C1.34807 17.0111 3.85096 19.7917 7.9999 19.7917C10.0418 19.7917 11.8718 19.12 13.1952 17.8461C14.5224 16.5687 15.2916 14.7323 15.2916 12.5C15.2916 11.2998 14.8162 10.1961 14.1562 9.23973C13.4957 8.28274 12.6263 7.4378 11.7743 6.74069C10.0428 5.32399 8.99677 3.20252 9.40747 1.14904C9.50396 0.6666 9.13159 0.192803 8.61205 0.212508C5.48704 0.331034 3.58739 2.90426 3.21549 5.32163C2.98407 6.82588 3.3324 8.09555 3.73237 8.9812C3.93249 9.42431 4.14729 9.77555 4.31407 10.0185C4.39762 10.1401 4.46958 10.2353 4.52233 10.302C4.54872 10.3353 4.57035 10.3616 4.58628 10.3806L4.6058 10.4035L4.61215 10.4107L4.61443 10.4133L4.61534 10.4144C4.61534 10.4144 4.6161 10.4152 5.08323 10L4.6161 10.4152C4.84543 10.6732 5.24047 10.6965 5.49846 10.4671C5.75591 10.2383 5.77959 9.8444 5.55178 9.58638L5.55068 9.58513L5.54295 9.57601C5.53466 9.56616 5.5209 9.5495 5.50253 9.52629C5.46576 9.47983 5.41077 9.40737 5.34457 9.31096C5.21187 9.11767 5.03605 8.83089 4.87158 8.46671C4.54238 7.73778 4.26571 6.71579 4.45095 5.5117Z" fill="currentColor" fill-rule="evenodd"></path></svg>
+            <span class="pill__label">Activity and Fitness</span>
+          </div>
+          <button class="card__expand" type="button" aria-label="Expand Activity and Fitness card" data-expand>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <h3 class="card__title">Bring your fitness goals <em>into focus</em></h3>
+        </article>
+      </li>
+      <li class="slide" data-slide>
+        <article class="card" data-card>
+          <div class="card__media">
+            <img class="card__img" src="assets/slider-4.jpg" alt="Heart Health" draggable="false" loading="lazy" decoding="async"/>
+          </div>
+          <span class="card__scrim" aria-hidden="true"></span>
+          <div class="pill">
+            <span class="pill__blur" aria-hidden="true"></span>
+            <svg class="pill__icon" aria-hidden="true" fill="none" viewBox="0 0 20 18" xmlns="http://www.w3.org/2000/svg"><path d="M16.4294 3.43818C14.9754 1.965 12.6226 1.965 11.1686 3.43818C10.9889 3.62027 10.8317 3.81581 10.6966 4.02143C10.5426 4.25606 10.2807 4.39737 10 4.39737C9.71936 4.39737 9.45752 4.25606 9.30346 4.02143C9.16845 3.81581 9.01123 3.62027 8.83151 3.43818C7.37751 1.965 5.0247 1.965 3.57071 3.43818C2.11717 4.9109 2.17005 7.38958 3.56879 8.79755C4.42767 9.66208 6.18447 11.4421 7.72536 13.0047C8.49607 13.7863 9.21316 14.5139 9.73757 15.0461L10 15.3125L10.2625 15.0461C10.7869 14.5139 11.504 13.7863 12.2747 13.0047C13.8156 11.4421 15.5724 9.66208 16.4313 8.79755C17.83 7.38958 17.8829 4.91089 16.4294 3.43818ZM10 16.5C9.40633 17.0847 9.40631 17.0847 9.40627 17.0847L8.55039 16.2159C8.02608 15.6838 7.30914 14.9563 6.53862 14.1749C4.99707 12.6116 3.24265 10.8341 2.38642 9.97218C0.354947 7.92732 0.277459 4.40226 2.3845 2.26741C4.48521 0.138988 7.89205 0.133048 10 2.24959C12.1081 0.133047 15.5149 0.138987 17.6156 2.26741C19.7226 4.40226 19.6451 7.92732 17.6137 9.97218C16.7575 10.8341 15.003 12.6116 13.4615 14.1749C12.691 14.9563 11.974 15.6838 11.4497 16.2159L10.5947 17.0837L10.594 17.0845C10.594 17.0845 10.5938 17.0847 10 16.5ZM10 16.5L10.594 17.0845C10.4374 17.2435 10.2233 17.3333 10 17.3333C9.77684 17.3333 9.5629 17.2437 9.40627 17.0847L10 16.5Z" fill="currentColor"></path></svg>
+            <span class="pill__label">Heart Health</span>
+          </div>
+          <button class="card__expand" type="button" aria-label="Expand Heart Health card" data-expand>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <h3 class="card__title">Listen to what your heart is <em>telling you</em></h3>
+        </article>
+      </li>
+      <li class="slide" data-slide>
+        <article class="card" data-card>
+          <div class="card__media">
+            <img class="card__img" src="assets/slider-5.jpg" alt="Women’s Health" draggable="false" loading="lazy" decoding="async"/>
+          </div>
+          <span class="card__scrim" aria-hidden="true"></span>
+          <div class="pill">
+            <span class="pill__blur" aria-hidden="true"></span>
+            <svg class="pill__icon" aria-hidden="true" fill="none" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11.25 1.5625C11.25 0.699555 11.9496 0 12.8125 0C13.6754 0 14.375 0.699555 14.375 1.5625V14.6875C14.375 15.5504 13.6754 16.25 12.8125 16.25C11.9496 16.25 11.25 15.5504 11.25 14.6875V1.5625Z" fill="currentColor"></path><path d="M7.1875 3.75C6.32455 3.75 5.625 4.44955 5.625 5.3125V18.4375C5.625 19.3004 6.32455 20 7.1875 20C8.05044 20 8.75 19.3004 8.75 18.4375V5.3125C8.75 4.44955 8.05044 3.75 7.1875 3.75Z" fill="currentColor"></path><path d="M1.5625 6.875C0.699555 6.875 0 7.57455 0 8.4375V12.8125C0 13.6754 0.699555 14.375 1.5625 14.375C2.42544 14.375 3.125 13.6754 3.125 12.8125V8.4375C3.125 7.57455 2.42544 6.875 1.5625 6.875Z" fill="currentColor"></path><path d="M18.4375 5C17.5746 5 16.875 5.69955 16.875 6.5625V12.1875C16.875 13.0504 17.5746 13.75 18.4375 13.75C19.3004 13.75 20 13.0504 20 12.1875V6.5625C20 5.69955 19.3004 5 18.4375 5Z" fill="currentColor"></path></svg>
+            <span class="pill__label">Women’s Health</span>
+          </div>
+          <button class="card__expand" type="button" aria-label="Expand Women’s Health card" data-expand>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <h3 class="card__title">Understand the ins and outs of <em>women’s health</em></h3>
+        </article>
+      </li>
+      <li class="slide" data-slide>
+        <article class="card" data-card>
+          <div class="card__media">
+            <img class="card__img" src="assets/slider-6.jpg" alt="Stress" draggable="false" loading="lazy" decoding="async"/>
+          </div>
+          <span class="card__scrim" aria-hidden="true"></span>
+          <div class="pill">
+            <span class="pill__blur" aria-hidden="true"></span>
+            <svg class="pill__icon" aria-hidden="true" fill="none" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M12.0833 2.08333C12.0833 3.23393 11.1506 4.16667 10 4.16667C8.84941 4.16667 7.91667 3.23393 7.91667 2.08333C7.91667 0.93274 8.84941 0 10 0C11.1506 0 12.0833 0.93274 12.0833 2.08333Z" fill="currentColor"></path><path d="M13.3333 5.83333C13.6261 5.83333 13.8973 5.98692 14.0479 6.23792L15.0914 7.97707C15.8444 9.23209 17.2007 10 18.6643 10H19.1667C19.6269 10 20 10.3731 20 10.8333C20 11.2936 19.6269 11.6667 19.1667 11.6667H18.6643C16.6153 11.6667 14.7165 10.5916 13.6622 8.83456L12.8615 7.5H8.33334V14.1667C8.33334 14.6269 7.96024 15 7.5 15H2.19951C1.90523 15 1.66667 15.2386 1.66667 15.5328C1.66667 15.7893 1.8493 16.0093 2.10131 16.0566L4.32024 16.4726C4.7726 16.5574 5.07055 16.9929 4.98573 17.4452C4.90091 17.8976 4.46545 18.1955 4.0131 18.1107L1.79417 17.6947C0.753859 17.4996 3.17891e-06 16.5913 3.17891e-06 15.5328C3.17891e-06 14.3181 0.984756 13.3333 2.19951 13.3333H6.66667V8.28637L6.33776 8.83456C5.28354 10.5916 3.38475 11.6667 1.33571 11.6667H0.833333C0.373096 11.6667 0 11.2936 0 10.8333C0 10.3731 0.373096 10 0.833333 10H1.33571C2.79931 10 4.15559 9.23209 4.9086 7.97707L5.95209 6.23792C6.10269 5.98692 6.37395 5.83333 6.66667 5.83333H13.3333Z" fill="currentColor"></path><path d="M10 19.2333L5.9869 19.9857C5.53455 20.0705 5.09909 19.7726 5.01427 19.3202C4.92945 18.8679 5.2274 18.4324 5.67976 18.3476L9.82776 17.5699C9.84025 17.5672 9.85283 17.5649 9.86549 17.5628L17.8987 16.0566C18.1507 16.0093 18.3333 15.7893 18.3333 15.5328C18.3333 15.2386 18.0948 15 17.8005 15H12.5C12.0398 15 11.6667 14.6269 11.6667 14.1667V11.25C11.6667 10.7898 12.0398 10.4167 12.5 10.4167C12.9602 10.4167 13.3333 10.7898 13.3333 11.25V13.3333H17.8005C19.0152 13.3333 20 14.3181 20 15.5328C20 16.5913 19.2461 17.4996 18.2058 17.6947L14.4782 18.3936C14.8395 18.5388 15.0602 18.923 14.9857 19.3202C14.9009 19.7726 14.4654 20.0705 14.0131 19.9857L10 19.2333Z" fill="currentColor"></path></svg>
+            <span class="pill__label">Stress</span>
+          </div>
+          <button class="card__expand" type="button" aria-label="Expand Stress card" data-expand>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <h3 class="card__title">Put your stress to <em>the test</em></h3>
+        </article>
+      </li>
+    </ul>
+    <div class="controls">
+      <div class="progress"><div class="progress__fill" data-progress></div></div>
+      <div class="nav">
+        <button class="nav__btn nav__btn--prev" type="button" aria-label="Previous" data-prev>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="nav__btn nav__btn--next" type="button" aria-label="Next" data-next>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  var isPreview = new URLSearchParams(location.search).get('demo') === 'preview';
+  var rail = document.querySelector('[data-rail]');
+  var fill = document.querySelector('[data-progress]');
+  var prev = document.querySelector('[data-prev]');
+  var next = document.querySelector('[data-next]');
+  var cards = [].slice.call(rail.querySelectorAll('[data-card]'));
+  var slides = [].slice.call(rail.querySelectorAll('[data-slide]'));
+
+  function step(){
+    var s = slides[0]; if(!s) return 500;
+    var r = s.getBoundingClientRect();
+    var gap = parseFloat(getComputedStyle(rail).columnGap || getComputedStyle(rail).gap) || 24;
+    return r.width + gap;
+  }
+  function maxScroll(){ return rail.scrollWidth - rail.clientWidth; }
+
+  function update(){
+    var m = maxScroll();
+    var p = m > 0 ? rail.scrollLeft / m : 0;
+    p = Math.max(0, Math.min(1, p));
+    fill.style.transform = 'scaleX(' + p + ')';
+    prev.disabled = rail.scrollLeft <= 1;
+    next.disabled = rail.scrollLeft >= m - 1;
+    parallax();
+  }
+
+  // subtle horizontal parallax: image drifts vertically by card's offset from viewport centre
+  function parallax(){
+    var vw = rail.clientWidth, mid = rail.getBoundingClientRect().left + vw/2;
+    cards.forEach(function(c){
+      var img = c.querySelector('.card__img');
+      var b = c.getBoundingClientRect();
+      var cc = b.left + b.width/2;
+      var d = (cc - mid) / vw;           // -1..1 across viewport
+      img.style.setProperty('--py', (d * 22).toFixed(1) + 'px');
+    });
+  }
+
+  rail.addEventListener('scroll', function(){
+    if(raf) return; raf = requestAnimationFrame(function(){ raf=0; update(); });
+  });
+  var raf = 0;
+
+  prev.addEventListener('click', function(){ rail.scrollBy({left:-step(), behavior:'smooth'}); });
+  next.addEventListener('click', function(){ rail.scrollBy({left: step(), behavior:'smooth'}); });
+
+  // pointer drag-to-scroll. Capture is deferred until the drag threshold is
+  // crossed so a plain click still reaches child buttons (pill / expand).
+  var down=false, sx=0, sl=0, moved=0, captured=false;
+  rail.addEventListener('pointerdown', function(e){
+    if(e.button!==undefined && e.button!==0) return;
+    if(e.target.closest('button')) return;   // let button clicks through
+    down=true; moved=0; captured=false; sx=e.clientX; sl=rail.scrollLeft;
+  });
+  rail.addEventListener('pointermove', function(e){
+    if(!down) return;
+    var dx=e.clientX-sx; moved+=Math.abs(dx);
+    if(moved>5 && !captured){
+      captured=true;
+      rail.classList.add('is-dragging');
+      try{rail.setPointerCapture(e.pointerId);}catch(_){}
+    }
+    if(captured) rail.scrollLeft = sl - dx;
+  });
+  function endDrag(e){
+    if(!down) return; down=false;
+    rail.classList.remove('is-dragging');
+    if(captured){ try{rail.releasePointerCapture(e.pointerId);}catch(_){} captured=false; }
+  }
+  rail.addEventListener('pointerup', endDrag);
+  rail.addEventListener('pointercancel', endDrag);
+
+  // expand
+  cards.forEach(function(c){
+    var btn = c.querySelector('[data-expand]');
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      c.classList.toggle('is-expanded');
+      // recompute after width transition
+      var t=0, iv=setInterval(function(){ update(); if((t+=60)>560){clearInterval(iv);} }, 60);
+    });
+  });
+
+  window.addEventListener('resize', update);
+  requestAnimationFrame(update);
+
+  if(isPreview){
+    // gallery thumbnail: nudge so a second card peeks in, freeze interaction hint
+    var h=document.querySelector('.hint'); if(h) h.style.display='none';
+    requestAnimationFrame(function(){ rail.scrollLeft = Math.round(step()*0.18); update(); });
+  }
+})();
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="051-ouraring-card-carousel.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=051-ouraring-card-carousel" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>
