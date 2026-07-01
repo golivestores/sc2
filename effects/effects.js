@@ -957,5 +957,25 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://www.ultrahuman.com/us/",
     "localMirror": "../designs/067-ultrahuman/index.html",
     "order": 49
+  },
+  {
+    "num": "050",
+    "folder": "050-moonbird-app-showcase",
+    "title": "Moonbird App Showcase",
+    "subtitle": "滚动驱动手机换屏 + 文案交叉淡入",
+    "description": "从 moonbird.life「Screen-free when you breathe」段 1:1 抽出的滚动叙事：sticky 手机居中，4 张 app 截图（Today / 生物反馈 / 数据 / 连接）随滚动进度交叉淡入；右侧 sticky 文案 4 块（Aura AI coach → Real-time biofeedback → Your data → Connects + 下载 CTA）与手机屏同步切换。机制忠实复刻原站：进度 l = clamp(0,1, -(rect.top-12vh)/(rect.height-76vh))，activeIndex = min(3, floor(l*4)) 四等分离散切换 + CSS 0.5~0.7s 交叉淡入。纯 CSS + 原生 JS（scroll + rAF），完全自包含无外链。",
+    "tech": "Vanilla JS",
+    "tags": [
+      "scroll",
+      "animation",
+      "interaction",
+      "sticky-scroll",
+      "phone-mockup",
+      "crossfade"
+    ],
+    "previewHref": "",
+    "sourceUrl": "https://www.moonbird.life/",
+    "localMirror": "../designs/068-moonbird/index.html",
+    "order": 50
   }
 ];

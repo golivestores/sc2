@@ -1,0 +1,7 @@
+{
+  "title": "Moonbird",
+  "description": "Moonbird（手持呼吸训练器）Shopify Hydrogen (Oxygen) 店铺镜像。React Router v7 framework 模式 + 滚动叙事视频。抓回后修 bare 模块 specifier + 子路径路由 replaceState、注入运行时 cdn→本地 img/video 重写钩子（Hydrogen <Image> 动态构建的 cdn URL 靠 MutationObserver 兜底）、下载运行时图片、并注入外部网络屏蔽（复刻确定性离线态，避免联网时 tracker 触发 RR not-found 翻转）。全部离线本地化，0 broken img。",
+  "sourceUrl": "https://www.moonbird.life/",
+  "savedAt": "2026-07-01",
+  "tags": ["shopify-hydrogen", "react-router-v7", "scrollytelling", "video", "spa-mirror"]
+}

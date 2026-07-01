@@ -26,3 +26,31 @@ OPEN.command
 # designs/014-floema is superseded by designs/Floema in 5f12f62).
 designs/014-floema/
 .skip-index
+
+# 030-hut8: user asked to keep this mirror local-only and NOT upload to GitHub
+# (2026-06-15). Whole folder excluded so it can never be accidentally pushed.
+# Still visible in the LOCAL navigator (no .skip-index), just never committed.
+designs/030-hut8/
+
+# 031-serverobotics: user asked to keep this mirror local-only and NOT upload to
+# GitHub (2026-06-15). Whole folder excluded so it can never be accidentally pushed.
+# Still visible in the LOCAL navigator (no .skip-index), just never committed.
+designs/031-serverobotics/
+
+# 034-phive: user asked to keep this mirror local-only and NOT upload to GitHub
+# (2026-06-16). Rebranded to HIMAX (himax-fit). Whole folder excluded so it can
+# never be accidentally pushed. Still visible in the LOCAL navigator, just never committed.
+designs/034-phive/
+
+# Mac share packages for colleagues (portable folder + .command launcher + .zip),
+# built from a local mirror via the mac-portable-package workflow. Build artifacts
+# for handoff — regenerate from the mirror, never commit.
+mac-zip/
+
+# 068-moonbird: three Shopify-CDN videos exceed GitHub's 100MB per-file hard limit
+# (378MB / 129MB / 105MB). Kept locally so the mirror plays fully on this machine,
+# but excluded from git — a fresh clone loses only those loop videos; the rest of
+# the mirror (and the 050 effect, which uses images) is intact. No LFS in this repo.
+designs/068-moonbird/assets/cdn.shopify.com/videos/c/o/v/a95c75fe6e934d268ef6fd1684ceff7c.mp4
+designs/068-moonbird/assets/cdn.shopify.com/videos/c/o/v/cf0797347ad34ada86454471ebcba2a8.mp4
+designs/068-moonbird/assets/cdn.shopify.com/videos/c/o/v/e01576f92d654e50983851d98c371a69.mp4

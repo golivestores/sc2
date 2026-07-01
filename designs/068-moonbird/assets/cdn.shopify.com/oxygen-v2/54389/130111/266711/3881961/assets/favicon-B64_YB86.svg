@@ -1,0 +1,5 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="16" height="16" rx="2" fill="#FFFFFF"/>
+  <path d="M14.1967 3.8439C12.2616 3.9859 9.68417 4.78858 8 5.02689C6.31583 4.78858 3.73842 3.9859 1.8033 3.8439C0.573725 3.75368 -0.448223 4.97425 0.202126 6.45626C1.18699 8.70059 5.23231 12 8 12C10.7677 12 14.813 8.70059 15.7979 6.45626C16.4482 4.97425 15.4263 3.75368 14.1967 3.8439Z" fill="#004FFF"/>
+  <text x="8" y="9.05" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="2.2" font-weight="500" fill="#FFFFFF">moonbird</text>
+</svg>
