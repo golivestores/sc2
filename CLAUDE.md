@@ -27,6 +27,8 @@
 @docs/claude-memory/nuxt3-spa-mirror-recipe.md
 @docs/claude-memory/nextjs-spa-mirror-recipe.md
 @docs/claude-memory/sveltekit-spa-mirror-recipe.md
+@docs/claude-memory/react-router-v7-spa-mirror-recipe.md
+@docs/claude-memory/akamai-authenticated-browser-download-recipe.md
 
 ## effect 实现规则
 @docs/claude-memory/effect-slider-collage-rules.md
@@ -42,3 +44,4 @@
 @docs/claude-memory/feedback-no-auto-push.md
 @docs/claude-memory/feedback-error-postmortem-discipline.md
 @docs/claude-memory/feedback-motion-sampling-mandatory.md
+@docs/claude-memory/feedback-mac-package-and-transition-playbook.md

@@ -103,7 +103,7 @@ def looks_like_asset_url(v):
 
 
 def http_get(url):
-    req = Request(url, headers={
+    _headers = {
         "User-Agent": UA,
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.9",
@@ -111,7 +111,15 @@ def http_get(url):
         "Sec-Fetch-Mode": "navigate",
         "Sec-Fetch-Site": "none",
         "Upgrade-Insecure-Requests": "1",
-    })
+    }
+    # Optional cookie injection (e.g. Shopify storefront password auth).
+    # Only sent to the host named in SCRAPE_COOKIE_HOST to avoid leaking to CDNs.
+    import os as _os
+    _ck = _os.environ.get("SCRAPE_COOKIE")
+    _ck_host = _os.environ.get("SCRAPE_COOKIE_HOST", "")
+    if _ck and (not _ck_host or _ck_host in url):
+        _headers["Cookie"] = _ck
+    req = Request(url, headers=_headers)
     with urlopen(req, timeout=TIMEOUT) as r:
         data = r.read()
         ctype = r.headers.get("Content-Type", "")
