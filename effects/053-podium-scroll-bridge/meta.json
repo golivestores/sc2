@@ -1,0 +1,12 @@
+{
+  "title": "Podium Scroll Bridge",
+  "subtitle": "masked media blob + scattered type",
+  "description": "Podium homepage opening scroll bridge cut directly from the local mirror. The effect page hosts the original mirrored Next/Three scene and maps the outer scroll to the same first-section scroll range, preserving the original canvas, media, sizing, and transition timing.",
+  "tech": "Original mirror iframe + scroll sync",
+  "tags": ["首屏", "滑块", "滚动", "形变", "路径裁切", "逐字出场", "B2B服务"],
+  "previewHref": "",
+  "sourceUrl": "https://podium.global/",
+  "localMirror": "../designs/091-podium/index.html",
+  "order": 53,
+  "savedAt": "2026-07-13"
+}

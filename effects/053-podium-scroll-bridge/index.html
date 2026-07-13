@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Podium Scroll Bridge · sc2 effect</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: #fff; }
+  body {
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  #podium-mirror {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+    background: #fff;
+    pointer-events: auto;
+  }
+  #scroll-range {
+    height: calc(100vh + 120vh);
+  }
+  .load-cover {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    color: #000;
+    font: 900 13px/1 Arial, sans-serif;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    transition: opacity .35s ease;
+    pointer-events: none;
+  }
+  body.is-loaded .load-cover { opacity: 0; }
+  @media (max-width: 700px) {
+    #scroll-range { height: calc(100vh + 115vh); }
+  }
+</style>
+</head>
+<body>
+<iframe
+  id="podium-mirror"
+  title="Podium original mirrored scroll section"
+  src="../../designs/091-podium/index.html"
+></iframe>
+<div id="scroll-range" aria-hidden="true"></div>
+<div class="load-cover" aria-hidden="true">Loading Podium</div>
+
+<script>
+(function () {
+  "use strict";
+  const frame = document.getElementById("podium-mirror");
+  const previewMode = new URLSearchParams(location.search).get("demo") === "preview";
+  let frameReady = false;
+  let innerScrollProxyInstalled = false;
+  let raf = 0;
+  let previewStart = performance.now();
+
+  function maxSlice() {
+    return Math.max(900, window.innerHeight * (window.innerWidth < 700 ? 1.15 : 1.2));
+  }
+
+  function getTargetScroll(now) {
+    if (!previewMode) return Math.min(window.scrollY, maxSlice());
+    const t = ((now - previewStart) / 1000) % 7.2;
+    const phase = t < 3.6 ? t / 3.6 : 1 - (t - 3.6) / 3.6;
+    const eased = phase * phase * (3 - 2 * phase);
+    return eased * maxSlice();
+  }
+
+  function hideInnerChrome(doc) {
+    if (doc.getElementById("sc2-effect-frame-style")) return;
+    const style = doc.createElement("style");
+    style.id = "sc2-effect-frame-style";
+    style.textContent = [
+      "html,body{scrollbar-width:none!important}",
+      "html::-webkit-scrollbar,body::-webkit-scrollbar{display:none!important}",
+      "#sc2-overlay{display:none!important}"
+    ].join("");
+    doc.head.appendChild(style);
+  }
+
+  function wheelPixels(event, win) {
+    if (event.deltaMode === 1) return event.deltaY * 16;
+    if (event.deltaMode === 2) return event.deltaY * win.innerHeight;
+    return event.deltaY;
+  }
+
+  function installInnerScrollProxy(win) {
+    if (innerScrollProxyInstalled) return;
+    innerScrollProxyInstalled = true;
+    win.addEventListener("wheel", function (event) {
+      if (previewMode) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.scrollBy(0, wheelPixels(event, win));
+      requestUpdate();
+    }, { passive: false, capture: true });
+    win.addEventListener("keydown", function (event) {
+      if (previewMode || event.defaultPrevented) return;
+      const keys = {
+        ArrowDown: 48,
+        ArrowUp: -48,
+        PageDown: window.innerHeight * 0.85,
+        PageUp: -window.innerHeight * 0.85,
+        " ": event.shiftKey ? -window.innerHeight * 0.85 : window.innerHeight * 0.85
+      };
+      if (!(event.key in keys)) return;
+      event.preventDefault();
+      window.scrollBy(0, keys[event.key]);
+      requestUpdate();
+    });
+  }
+
+  function sync(now) {
+    raf = 0;
+    if (!frameReady || !frame.contentWindow) {
+      if (previewMode) requestUpdate();
+      return;
+    }
+    try {
+      const win = frame.contentWindow;
+      hideInnerChrome(frame.contentDocument);
+      installInnerScrollProxy(win);
+      win.scrollTo(0, getTargetScroll(now || performance.now()));
+    } catch (error) {
+      // Same-origin is expected under the sc2 local server. If the page is
+      // opened somewhere else, leave the original mirror visible instead.
+    }
+    if (previewMode) requestUpdate();
+  }
+
+  function requestUpdate() {
+    if (raf) return;
+    raf = requestAnimationFrame(sync);
+  }
+
+  frame.addEventListener("load", function () {
+    frameReady = true;
+    document.body.classList.add("is-loaded");
+    requestUpdate();
+    setTimeout(requestUpdate, 500);
+    setTimeout(requestUpdate, 1500);
+  });
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  requestUpdate();
+})();
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="053-podium-scroll-bridge.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=053-podium-scroll-bridge" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>
