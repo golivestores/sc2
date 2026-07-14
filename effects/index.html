@@ -157,27 +157,85 @@
      Force them away with !important. */
   .card[hidden] { display: none !important; }
 
-  /* iframe preview — scaled down so entire demo fits */
+  /* Static poster preview — no demo iframe on the gallery, so the page doesn't
+     boot dozens of effects just to render the card grid. */
   .card__preview {
     position: relative;
     aspect-ratio: 3 / 2;
     overflow: hidden;
-    background: var(--bg);
+    background: #15120d;
     border-bottom: 1px solid var(--border);
   }
-  .card__preview iframe {
+  .card__preview-img {
     position: absolute;
-    top: 0; left: 0;
-    /* render iframe at 4x card width so the inner viewport is >= 1024px and the
-       demo's desktop media queries (e.g. .home-plateforme__grid 4-column +
-       nth-child translate offsets) actually fire. Then scale down to fit. */
-    width: 400%; height: 400%;
-    border: 0;
-    transform: scale(0.25);
-    transform-origin: top left;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #15120d;
     z-index: 1;
   }
-  /* corner "open" badge — appears on hover, doesn't block iframe so :hover effects inside still play */
+  .card__poster {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: grid;
+    align-content: space-between;
+    padding: 22px;
+    color: #fffaf0;
+    background:
+      linear-gradient(135deg, var(--poster-a, #1f1303), var(--poster-b, #746756) 54%, var(--poster-c, #f3e7d1)),
+      radial-gradient(circle at 18% 22%, rgba(255,255,255,.55), transparent 30%);
+  }
+  .card__poster::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(255,255,255,.22);
+  }
+  .card__poster::after {
+    content: "";
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 22px;
+    height: 26%;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.78) 0 24%, rgba(255,255,255,.42) 24% 48%, rgba(255,255,255,.18) 48% 72%, rgba(0,0,0,.32) 72% 100%);
+    opacity: .42;
+  }
+  .card__poster-kicker,
+  .card__poster-title,
+  .card__poster-tech {
+    position: relative;
+    z-index: 1;
+  }
+  .card__poster-kicker {
+    margin: 0 0 10px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .74;
+  }
+  .card__poster-title {
+    margin: 0;
+    max-width: 88%;
+    font-size: clamp(22px, 2.5vw, 34px);
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+  .card__poster-tech {
+    margin: 28px 0 0;
+    max-width: 78%;
+    font-size: 12px;
+    line-height: 1.35;
+    opacity: .72;
+  }
+  .card__preview-img + .card__poster {
+    display: none;
+  }
+  /* corner "open" badge — appears on hover */
   .card__open {
     position: absolute;
     top: 10px; right: 10px;
@@ -362,7 +420,7 @@
     📦 zip 和 📋 源码 按钮的文件是 <b>lazy 打包</b> 的：第一次点会调 <code>package-effects.py --only &lt;slug&gt;</code> 实时生成（几秒），之后磁盘有了就秒回。前提是用 <code>python serve.py</code> 启动（默认 8080）；直接 <code>python -m http.server</code> 没拦截，按钮会 404。
   </p>
   <p>
-    每张卡片用 iframe 以 50% 缩放显示动态预览，鼠标可以直接 hover 触发预览里的交互。<br>
+    每张卡片使用静态贴图预览，避免集合页一次性加载所有 effect 的运行环境。<br>
     要打开独立全屏版：点卡片标题/描述区，或卡片右上角 hover 浮出的 ↗（在新标签打开）。
   </p>
 </footer>
@@ -389,14 +447,18 @@
   const TAG_AXIS   = window.TAG_AXIS || {};
   const AXIS_ORDER = window.AXIS_ORDER || { _other: 9 };
 
+  function hashString(s) {
+    let h = 0;
+    for (let i = 0; i < String(s).length; i++) {
+      h = ((h << 5) - h + String(s).charCodeAt(i)) | 0;
+    }
+    return Math.abs(h);
+  }
+
   function cardHTML(item) {
     const folder = item.folder + '/';
     // Explicit index.html (and original.html) — file:// won't auto-resolve `folder/` to `folder/index.html`
     const demoHref   = folder + 'index.html';
-    // Append ?demo=preview so the demo (if it supports it) hides any leading
-    // hero/intro and runs a faked cascade on load — see effect's index.html.
-    // Standalone-opened pages (no params) keep the original 1:1 behavior.
-    const previewSrc = folder + (item.previewHref || 'index.html') + '?demo=preview';
     const zipHref    = folder + encodeURIComponent(item.folder) + '.zip';
     const viewerHref = 'view.html?effect=' + encodeURIComponent(item.folder);
     // "原站 ↗" goes to the LOCAL scraped mirror under designs/, not the live URL.
@@ -428,10 +490,28 @@
       item.num, item.folder, item.title, item.subtitle, item.description,
       item.tech, ...(item.tags || []),
     ].filter(Boolean).join(' ').toLowerCase();
+    const seed = hashString(item.folder || item.title);
+    const hue = seed % 360;
+    const posterStyle = [
+      `--poster-a:hsl(${hue} 31% 17%)`,
+      `--poster-b:hsl(${(hue + 42) % 360} 28% 34%)`,
+      `--poster-c:hsl(${(hue + 88) % 360} 42% 78%)`,
+    ].join(';');
+    const previewImage = item.preview
+      ? `<img class="card__preview-img" src="${escapeHTML(item.preview)}" loading="lazy" alt="">`
+      : '';
+    const previewClass = item.preview ? 'card__preview has-image' : 'card__preview';
     return `
       <div class="card" data-tags="${escapeHTML((item.tags || []).join(','))}" data-haystack="${escapeHTML(haystack)}">
-        <div class="card__preview">
-          <iframe src="${escapeHTML(previewSrc)}" loading="lazy" title="${escapeHTML(item.title)}"></iframe>
+        <div class="${previewClass}">
+          ${previewImage}
+          <div class="card__poster" style="${escapeHTML(posterStyle)}">
+            <div>
+              <p class="card__poster-kicker">Effect ${escapeHTML(item.num || '')}</p>
+              <h2 class="card__poster-title">${escapeHTML(item.title)}</h2>
+            </div>
+            <p class="card__poster-tech">${escapeHTML(item.tech || item.subtitle || 'Static preview')}</p>
+          </div>
           <a class="card__open" href="${escapeHTML(demoHref)}" title="打开 demo" target="_blank" rel="noopener">↗</a>
         </div>
         <a class="card__body" href="${escapeHTML(demoHref)}">

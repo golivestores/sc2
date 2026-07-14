@@ -15,6 +15,7 @@ window.__EFFECTS__ = [
       "B2B服务"
     ],
     "previewHref": "",
+    "preview": "001-talamus-card-grid/preview.jpg",
     "sourceUrl": "https://talamus.pro/",
     "localMirror": "../designs/001-talamus/index.html",
     "order": 1
@@ -34,6 +35,7 @@ window.__EFFECTS__ = [
       "B2B服务"
     ],
     "previewHref": "",
+    "preview": "002-talamus-hero/preview.jpg",
     "sourceUrl": "https://talamus.pro/",
     "localMirror": "../designs/001-talamus/index.html",
     "order": 2
@@ -52,6 +54,7 @@ window.__EFFECTS__ = [
       "B2B服务"
     ],
     "previewHref": "",
+    "preview": "003-talamus-cta/preview.jpg",
     "sourceUrl": "https://talamus.pro/",
     "localMirror": "../designs/001-talamus/index.html",
     "order": 3
@@ -71,6 +74,7 @@ window.__EFFECTS__ = [
       "工业安防"
     ],
     "previewHref": "",
+    "preview": "004-shift5-categories/preview.jpg",
     "sourceUrl": "https://shift5.io/",
     "localMirror": "../designs/002-shift5/index.html",
     "order": 4
@@ -90,6 +94,7 @@ window.__EFFECTS__ = [
       "工业安防"
     ],
     "previewHref": "",
+    "preview": "005-shift5-news/preview.jpg",
     "sourceUrl": "https://shift5.io/",
     "localMirror": "../designs/002-shift5/index.html",
     "order": 5
@@ -109,6 +114,7 @@ window.__EFFECTS__ = [
       "协会组织"
     ],
     "previewHref": "",
+    "preview": "006-adf-news/preview.jpg",
     "sourceUrl": "https://www.armateursdefrance.org/",
     "localMirror": "../designs/003-armateursdefrance/index.html",
     "order": 6
@@ -128,6 +134,7 @@ window.__EFFECTS__ = [
       "协会组织"
     ],
     "previewHref": "",
+    "preview": "007-adf-domains/preview.jpg",
     "sourceUrl": "https://www.armateursdefrance.org/",
     "localMirror": "../designs/003-armateursdefrance/index.html",
     "order": 7
@@ -147,6 +154,7 @@ window.__EFFECTS__ = [
       "时尚"
     ],
     "previewHref": "",
+    "preview": "008-omr-hoodie-grid/preview.jpg",
     "sourceUrl": "https://omrbeauty.com/",
     "localMirror": "../designs/004-omrbeauty/index.html",
     "order": 8
@@ -166,6 +174,7 @@ window.__EFFECTS__ = [
       "时尚"
     ],
     "previewHref": "",
+    "preview": "009-omr-banner-tiles/preview.jpg",
     "sourceUrl": "https://omrbeauty.com/",
     "localMirror": "../designs/004-omrbeauty/index.html",
     "order": 9
@@ -185,6 +194,7 @@ window.__EFFECTS__ = [
       "健康"
     ],
     "previewHref": "",
+    "preview": "010-glm-weight-loss-carousel/preview.jpg",
     "sourceUrl": "https://www.goodlifemeds.com/",
     "localMirror": "../designs/005-goodlifemeds/index.html",
     "order": 10
@@ -204,6 +214,7 @@ window.__EFFECTS__ = [
       "健康"
     ],
     "previewHref": "",
+    "preview": "011-glm-daily-wellness-carousel/preview.jpg",
     "sourceUrl": "https://www.goodlifemeds.com/",
     "localMirror": "../designs/005-goodlifemeds/index.html",
     "order": 11
@@ -223,6 +234,7 @@ window.__EFFECTS__ = [
       "健康"
     ],
     "previewHref": "",
+    "preview": "012-glm-testimonials/preview.jpg",
     "sourceUrl": "https://www.goodlifemeds.com/",
     "localMirror": "../designs/005-goodlifemeds/index.html",
     "order": 12
@@ -241,6 +253,7 @@ window.__EFFECTS__ = [
       "健康"
     ],
     "previewHref": "",
+    "preview": "013-glm-how-it-works/preview.jpg",
     "sourceUrl": "https://www.goodlifemeds.com/",
     "localMirror": "../designs/005-goodlifemeds/index.html",
     "order": 13
@@ -261,6 +274,7 @@ window.__EFFECTS__ = [
       "美妆"
     ],
     "previewHref": "",
+    "preview": "014-flowerknows-bestsellers/preview.jpg",
     "sourceUrl": "https://flowerknows.co/",
     "localMirror": "../designs/006-flowerknows/index.html",
     "order": 14
@@ -281,6 +295,7 @@ window.__EFFECTS__ = [
       "食品"
     ],
     "previewHref": "",
+    "preview": "015-donmolinico-products-carousel/preview.jpg",
     "sourceUrl": "https://www.donmolinico.es/products/",
     "localMirror": "../designs/008-donmolinico/index.html",
     "order": 15
@@ -301,6 +316,7 @@ window.__EFFECTS__ = [
       "食品"
     ],
     "previewHref": "",
+    "preview": "016-donmolinico-litolata-trio/preview.jpg",
     "sourceUrl": "https://www.donmolinico.es/products/",
     "localMirror": "../designs/008-donmolinico/index.html",
     "order": 16
@@ -321,6 +337,7 @@ window.__EFFECTS__ = [
       "食品"
     ],
     "previewHref": "",
+    "preview": "017-donmolinico-pandereta-duo/preview.jpg",
     "sourceUrl": "https://www.donmolinico.es/products/",
     "localMirror": "../designs/008-donmolinico/index.html",
     "order": 17
@@ -342,6 +359,7 @@ window.__EFFECTS__ = [
       "设计建筑"
     ],
     "previewHref": "",
+    "preview": "018-obsidianassembly-places-slider/preview.jpg",
     "sourceUrl": "https://obsidianassembly.com/",
     "localMirror": "../designs/009-obsidianassembly/index.html",
     "order": 18
@@ -363,6 +381,7 @@ window.__EFFECTS__ = [
       "食品"
     ],
     "previewHref": "",
+    "preview": "019-donmolinico-mobile-topbar/preview.jpg",
     "sourceUrl": "https://www.donmolinico.es/",
     "localMirror": "../designs/011-donmolinico-home/index.html",
     "order": 19
@@ -382,6 +401,7 @@ window.__EFFECTS__ = [
       "科技"
     ],
     "previewHref": "",
+    "preview": "020-minamassoud-countries/preview.jpg",
     "sourceUrl": "https://mina-massoud.com/",
     "localMirror": "../designs/012-minamassoud/index.html",
     "order": 20
@@ -403,6 +423,7 @@ window.__EFFECTS__ = [
       "案例动态"
     ],
     "previewHref": "",
+    "preview": "021-floema-collections-scroll/preview.jpg",
     "sourceUrl": "https://www.floema.com/en",
     "localMirror": "../designs/Floema/index.html",
     "order": 21
@@ -424,6 +445,7 @@ window.__EFFECTS__ = [
       "健康"
     ],
     "previewHref": "",
+    "preview": "022-lab46-sticky-bestseller-grid/preview.jpg",
     "sourceUrl": "https://lab46.de/en",
     "localMirror": "../designs/015-lab46/index.html",
     "order": 22
@@ -445,6 +467,7 @@ window.__EFFECTS__ = [
       "agency"
     ],
     "previewHref": "",
+    "preview": "023-theunknown-illuminate-hero/preview.jpg",
     "sourceUrl": "https://theunknown.tv/en",
     "localMirror": "../designs/016-theunknown/index.html",
     "order": 23
@@ -466,6 +489,7 @@ window.__EFFECTS__ = [
       "agency"
     ],
     "previewHref": "",
+    "preview": "024-theunknown-store/preview.jpg",
     "sourceUrl": "https://theunknown.tv/en",
     "localMirror": "../designs/016-theunknown/index.html",
     "order": 24
@@ -485,6 +509,7 @@ window.__EFFECTS__ = [
       "B2B服务"
     ],
     "previewHref": "",
+    "preview": "025-innocean-capsule-pile/preview.jpg",
     "sourceUrl": "https://innoceanberlin.com/",
     "localMirror": "../designs/017-innoceanberlin/index.html",
     "order": 25
@@ -504,6 +529,7 @@ window.__EFFECTS__ = [
       "B2B服务"
     ],
     "previewHref": "",
+    "preview": "026-sunmetalon-blurred-glow-hero/preview.jpg",
     "sourceUrl": "https://sunmetalon.com/",
     "localMirror": "../designs/019-sunmetalon/index.html",
     "order": 26
@@ -524,6 +550,7 @@ window.__EFFECTS__ = [
       "B2B服务"
     ],
     "previewHref": "",
+    "preview": "027-sunmetalon-feature-cards-row/preview.jpg",
     "sourceUrl": "https://sunmetalon.com/",
     "localMirror": "../designs/019-sunmetalon/index.html",
     "order": 27
@@ -544,6 +571,7 @@ window.__EFFECTS__ = [
       "B2B服务"
     ],
     "previewHref": "",
+    "preview": "028-sunmetalon-stacking-cards-3d-fold/preview.jpg",
     "sourceUrl": "https://sunmetalon.com/",
     "localMirror": "../designs/019-sunmetalon/index.html",
     "order": 28
@@ -566,6 +594,7 @@ window.__EFFECTS__ = [
       "健康"
     ],
     "previewHref": "",
+    "preview": "029-lab46-phase-cards-hero/preview.jpg",
     "sourceUrl": "https://lab46.de/en",
     "localMirror": "../designs/015-lab46/index.html",
     "order": 29
@@ -588,6 +617,7 @@ window.__EFFECTS__ = [
       "GLSL"
     ],
     "previewHref": "",
+    "preview": "030-fromanother-water-ripple-cards/preview.jpg",
     "sourceUrl": "https://www.fromanother.love/",
     "localMirror": "../designs/020-fromanother/index.html",
     "order": 30
@@ -612,6 +642,7 @@ window.__EFFECTS__ = [
       "Shopify"
     ],
     "previewHref": "",
+    "preview": "031-pov-product-card-grid/preview.jpg",
     "sourceUrl": "https://povbeauty.com/",
     "localMirror": "../designs/023-povbeauty/index.html",
     "order": 31
@@ -635,6 +666,7 @@ window.__EFFECTS__ = [
       "Shopify"
     ],
     "previewHref": "",
+    "preview": "032-pov-shop-by-step/preview.jpg",
     "sourceUrl": "https://povbeauty.com/",
     "localMirror": "../designs/023-povbeauty/index.html",
     "order": 32
@@ -653,6 +685,7 @@ window.__EFFECTS__ = [
       "animation"
     ],
     "previewHref": "index.html",
+    "preview": "033-lessestudio-latest-work-cards/preview.jpg",
     "sourceUrl": "https://lessestudio.com/",
     "localMirror": "../designs/024-lessestudio/index.html",
     "order": 33
@@ -671,6 +704,7 @@ window.__EFFECTS__ = [
       "intro"
     ],
     "previewHref": "index.html",
+    "preview": "034-lessestudio-testimonials/preview.jpg",
     "sourceUrl": "https://lessestudio.com/",
     "localMirror": "../designs/024-lessestudio/index.html",
     "order": 34
@@ -689,6 +723,7 @@ window.__EFFECTS__ = [
       "interaction"
     ],
     "previewHref": "index.html",
+    "preview": "035-lessestudio-pinned-showcase/preview.jpg",
     "sourceUrl": "https://lessestudio.com/",
     "localMirror": "../designs/024-lessestudio/index.html",
     "order": 35
@@ -708,6 +743,7 @@ window.__EFFECTS__ = [
       "hero"
     ],
     "previewHref": "index.html",
+    "preview": "036-sofi-phone-walkthrough/preview.jpg",
     "sourceUrl": "https://www.sofihealth.com/",
     "localMirror": "../designs/025-sofihealth/index.html",
     "order": 36
@@ -726,6 +762,7 @@ window.__EFFECTS__ = [
       "interaction"
     ],
     "previewHref": "index.html",
+    "preview": "037-sofi-bento-grid/preview.jpg",
     "sourceUrl": "https://www.sofihealth.com/",
     "localMirror": "../designs/025-sofihealth/index.html",
     "order": 37
@@ -743,6 +780,7 @@ window.__EFFECTS__ = [
       "animation"
     ],
     "previewHref": "index.html",
+    "preview": "038-vectr-features-scroll-reveal/preview.jpg",
     "sourceUrl": "https://www.vectrfl.com/",
     "localMirror": "../designs/026-vectrfl/index.html",
     "order": 38
@@ -759,6 +797,7 @@ window.__EFFECTS__ = [
       "animation"
     ],
     "previewHref": "index.html",
+    "preview": "039-vectr-faq-accordion/preview.jpg",
     "sourceUrl": "https://www.vectrfl.com/",
     "localMirror": "../designs/026-vectrfl/index.html",
     "order": 39
@@ -775,6 +814,7 @@ window.__EFFECTS__ = [
       "hero"
     ],
     "previewHref": "index.html",
+    "preview": "040-vectr-footer-nav/preview.jpg",
     "sourceUrl": "https://www.vectrfl.com/",
     "localMirror": "../designs/026-vectrfl/index.html",
     "order": 40
@@ -792,6 +832,7 @@ window.__EFFECTS__ = [
       "animation"
     ],
     "previewHref": "index.html",
+    "preview": "041-gmx-method-process-cards/preview.jpg",
     "sourceUrl": "https://gmxdigital.com/",
     "localMirror": "../designs/027-gmxdigital/index.html",
     "order": 41
@@ -809,6 +850,7 @@ window.__EFFECTS__ = [
       "animation"
     ],
     "previewHref": "index.html",
+    "preview": "042-gmx-portfolio-drag-carousel/preview.jpg",
     "sourceUrl": "https://gmxdigital.com/",
     "localMirror": "../designs/027-gmxdigital/index.html",
     "order": 42
@@ -826,6 +868,7 @@ window.__EFFECTS__ = [
       "typography"
     ],
     "previewHref": "index.html",
+    "preview": "043-gmx-impacto-stats/preview.jpg",
     "sourceUrl": "https://gmxdigital.com/",
     "localMirror": "../designs/027-gmxdigital/index.html",
     "order": 43
@@ -843,6 +886,7 @@ window.__EFFECTS__ = [
       "interaction"
     ],
     "previewHref": "index.html",
+    "preview": "044-gmx-clientes-trajectory/preview.jpg",
     "sourceUrl": "https://gmxdigital.com/",
     "localMirror": "../designs/027-gmxdigital/index.html",
     "order": 44
@@ -864,6 +908,7 @@ window.__EFFECTS__ = [
       "chromatic-aberration"
     ],
     "previewHref": "",
+    "preview": "045-onenergy-light-trails/preview.jpg",
     "sourceUrl": "https://www.on.energy/",
     "localMirror": "../designs/028-onenergy/index.html",
     "order": 45
@@ -889,6 +934,7 @@ window.__EFFECTS__ = [
       "scrollytelling"
     ],
     "previewHref": "index.html",
+    "preview": "046-alphanelabs-3d-device/preview.jpg",
     "sourceUrl": "https://solutions.alphanelabs.com",
     "localMirror": "../designs/035-alphanelabs/index.html",
     "order": 46
@@ -912,6 +958,7 @@ window.__EFFECTS__ = [
       "luxury"
     ],
     "previewHref": "index.html",
+    "preview": "047-cartier-watch-rotation/preview.jpg",
     "sourceUrl": "https://www.cartier.com/en-fr/watchesandwonders",
     "localMirror": "../designs/044-cartier/index.html",
     "order": 47
@@ -934,6 +981,7 @@ window.__EFFECTS__ = [
       "luxury"
     ],
     "previewHref": "index.html",
+    "preview": "048-lv-collectibles-3d/preview.jpg",
     "sourceUrl": "https://louisvuitton-collectibles.imm-g-prod.com/",
     "localMirror": "../designs/047-lv-collectibles/index.html",
     "order": 48
@@ -954,6 +1002,7 @@ window.__EFFECTS__ = [
       "product-showcase"
     ],
     "previewHref": "index.html",
+    "preview": "049-ultrahuman-all-in-one-app/preview.jpg",
     "sourceUrl": "https://www.ultrahuman.com/us/",
     "localMirror": "../designs/067-ultrahuman/index.html",
     "order": 49
@@ -974,6 +1023,7 @@ window.__EFFECTS__ = [
       "crossfade"
     ],
     "previewHref": "",
+    "preview": "050-moonbird-app-showcase/preview.jpg",
     "sourceUrl": "https://www.moonbird.life/",
     "localMirror": "../designs/068-moonbird/index.html",
     "order": 50
@@ -993,6 +1043,7 @@ window.__EFFECTS__ = [
       "snap"
     ],
     "previewHref": "",
+    "preview": "051-ouraring-card-carousel/preview.jpg",
     "sourceUrl": "https://ouraring.com/",
     "localMirror": "../designs/069-ouraring/index.html",
     "order": 51
@@ -1012,6 +1063,7 @@ window.__EFFECTS__ = [
       "hero"
     ],
     "previewHref": "",
+    "preview": "052-ouraring-health-sensing-tabs/preview.jpg",
     "sourceUrl": "https://ouraring.com/store/rings/oura-ring-5",
     "localMirror": "../designs/070-oura-ring-5/index.html",
     "order": 52
@@ -1033,8 +1085,29 @@ window.__EFFECTS__ = [
       "B2B服务"
     ],
     "previewHref": "",
+    "preview": "053-podium-scroll-bridge/preview.jpg",
     "sourceUrl": "https://podium.global/",
     "localMirror": "../designs/091-podium/index.html",
     "order": 53
+  },
+  {
+    "num": "054",
+    "folder": "054-scroll-bg-color-guide",
+    "title": "滚动背景变色实现说明",
+    "subtitle": "CSS 变量重定向 + 滚动主导区块判定",
+    "description": "一个文档型 effect：缩略 iframe 显示贴图式摘要，点进去阅读完整的《随滚动平滑切换背景色的实现说明》。内容讲解用 CSS 自定义属性做语义变量映射，由 JS 根据当前主导区块切换主题，过渡交给 CSS transition 完成。",
+    "tech": "CSS Custom Properties + IntersectionObserver + Lenis",
+    "tags": [
+      "介绍",
+      "文字段",
+      "滚动",
+      "多态切换",
+      "科技"
+    ],
+    "previewHref": "",
+    "preview": "054-scroll-bg-color-guide/preview.jpg",
+    "sourceUrl": "",
+    "localMirror": "",
+    "order": 54
   }
 ];

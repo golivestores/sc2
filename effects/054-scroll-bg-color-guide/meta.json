@@ -1,0 +1,12 @@
+{
+  "title": "滚动背景变色实现说明",
+  "subtitle": "CSS 变量重定向 + 滚动主导区块判定",
+  "description": "一个文档型 effect：缩略 iframe 显示贴图式摘要，点进去阅读完整的《随滚动平滑切换背景色的实现说明》。内容讲解用 CSS 自定义属性做语义变量映射，由 JS 根据当前主导区块切换主题，过渡交给 CSS transition 完成。",
+  "tech": "CSS Custom Properties + IntersectionObserver + Lenis",
+  "tags": ["介绍", "文字段", "滚动", "多态切换", "科技"],
+  "previewHref": "",
+  "sourceUrl": "",
+  "localMirror": "",
+  "order": 54,
+  "savedAt": "2026-07-13"
+}

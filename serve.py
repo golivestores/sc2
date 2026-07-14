@@ -88,6 +88,10 @@ def _run_packager(slug: str, bundle_only: bool) -> tuple[bool, str]:
 
 class LazyHandler(SimpleHTTPRequestHandler):
     """SimpleHTTPRequestHandler with lazy build on zip / source-bundle miss."""
+    extensions_map = {
+        **SimpleHTTPRequestHandler.extensions_map,
+        ".md": "text/markdown; charset=utf-8",
+    }
 
     def __init__(self, *args, **kwargs):
         # Pin directory to repo root so cwd at server start doesn't matter.

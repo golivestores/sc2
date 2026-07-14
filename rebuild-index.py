@@ -205,6 +205,11 @@ def rebuild_effects(root: Path) -> int:
             order = int(meta.get("order", default_order))
         except (TypeError, ValueError):
             order = default_order
+        preview = ""
+        for preview_name in ("preview.jpg", "preview.webp", "preview.png"):
+            if (d / preview_name).exists():
+                preview = f"{d.name}/{preview_name}"
+                break
         effects.append({
             "num":         num,
             "folder":      d.name,
@@ -214,6 +219,7 @@ def rebuild_effects(root: Path) -> int:
             "tech":        meta.get("tech")        or "",
             "tags":        list(meta.get("tags") or []),
             "previewHref": meta.get("previewHref") or "",
+            "preview":     preview,
             "sourceUrl":   meta.get("sourceUrl")   or "",
             "localMirror": meta.get("localMirror") or "",
             "order":       order,
