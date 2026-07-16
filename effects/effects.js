@@ -1109,5 +1109,49 @@ window.__EFFECTS__ = [
     "sourceUrl": "",
     "localMirror": "",
     "order": 54
+  },
+  {
+    "num": "055",
+    "folder": "055-lxtrendship-syenergy-scroll",
+    "title": "LX Trendship SY(E)NERGY Scroll Story",
+    "subtitle": "image collapse + split-word reveal + WebGL light field",
+    "description": "The original LX Trendship SY(E)NERGY sticky sequence isolated as a focused effect. Scrolling compresses the interior carousel between oversized brackets, assembles the SY(E)NERGY wordmark, reveals its supporting copy, and expands the original WebGL light field behind the typography.",
+    "tech": "Original Next.js mirror + WebGL + scroll sync",
+    "tags": [
+      "首屏",
+      "滑块",
+      "滚动",
+      "形变",
+      "逐字出场",
+      "响应式",
+      "设计建筑"
+    ],
+    "previewHref": "",
+    "preview": "055-lxtrendship-syenergy-scroll/preview.png",
+    "sourceUrl": "https://www.lxtrendship.com/en",
+    "localMirror": "../designs/098-lxtrendship/index.html",
+    "order": 55
+  },
+  {
+    "num": "056",
+    "folder": "056-lxtrendship-maison-scroll",
+    "title": "LX Trendship Maison de Synergy Scroll Reveal",
+    "subtitle": "ornamental moon stage + architectural parallax rise",
+    "description": "The Maison de Synergy exhibition passage isolated from the LX Trendship homepage. The original floral moon composition, serif title, layered parallax ornaments, and illustrated house travel through the viewport on the source site's exact responsive scroll path.",
+    "tech": "Original Next.js mirror + layered parallax + scroll sync",
+    "tags": [
+      "案例动态",
+      "文字段",
+      "滚动",
+      "视差",
+      "形变",
+      "响应式",
+      "设计建筑"
+    ],
+    "previewHref": "",
+    "preview": "056-lxtrendship-maison-scroll/preview.png",
+    "sourceUrl": "https://www.lxtrendship.com/en",
+    "localMirror": "../designs/098-lxtrendship/index.html",
+    "order": 56
   }
 ];

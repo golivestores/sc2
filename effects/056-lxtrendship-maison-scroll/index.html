@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LX Trendship Maison de Synergy Scroll Reveal — sc2 effect</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: #000; }
+  body {
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  #mirror {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+    background: #000;
+  }
+  #scroll-range { height: 220vh; }
+  .load-cover {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    color: #5b506d;
+    background: #f7cbc8;
+    font: 700 12px/1 Arial, sans-serif;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    transition: opacity .35s ease;
+    pointer-events: none;
+  }
+  body.is-ready .load-cover { opacity: 0; }
+</style>
+</head>
+<body>
+<iframe
+  id="mirror"
+  title="LX Trendship original Maison de Synergy scroll section"
+  src="../../designs/098-lxtrendship/index.html"
+></iframe>
+<div id="scroll-range" aria-hidden="true"></div>
+<div class="load-cover" aria-hidden="true">Loading Maison de Synergy</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const frame = document.getElementById("mirror");
+  const scrollRange = document.getElementById("scroll-range");
+  const previewMode = new URLSearchParams(location.search).get("demo") === "preview";
+  let innerWindow = null;
+  let innerDocument = null;
+  let sectionTop = 0;
+  let sectionRange = 1;
+  let ready = false;
+  let raf = 0;
+  let previewStart = performance.now();
+  let locateTimer = 0;
+
+  function smoothstep(value) {
+    value = Math.max(0, Math.min(1, value));
+    return value * value * (3 - 2 * value);
+  }
+
+  function previewProgress(now) {
+    const duration = 8;
+    const t = ((now - previewStart) / 1000) % duration;
+    const linear = t < duration / 2 ? t / (duration / 2) : 1 - (t - duration / 2) / (duration / 2);
+    return smoothstep(linear);
+  }
+
+  function outerProgress(now) {
+    if (previewMode) return previewProgress(now);
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    return Math.max(0, Math.min(1, scrollY / max));
+  }
+
+  function wheelPixels(event, win) {
+    if (event.deltaMode === 1) return event.deltaY * 16;
+    if (event.deltaMode === 2) return event.deltaY * win.innerHeight;
+    return event.deltaY;
+  }
+
+  function installInnerControls(win, doc) {
+    if (doc.getElementById("sc2-maison-frame-style")) return;
+    const style = doc.createElement("style");
+    style.id = "sc2-maison-frame-style";
+    style.textContent = [
+      "html,body{scrollbar-width:none!important}",
+      "html::-webkit-scrollbar,body::-webkit-scrollbar{display:none!important}",
+      ".default-menu{transform:translateY(-125%)!important;z-index:2147483000!important;isolation:isolate;transition:transform .35s ease}",
+      ".default-menu.sc2-maison-menu-on{transform:translateY(0)!important}",
+      "#sc2-overlay{display:none!important}"
+    ].join("");
+    doc.head.appendChild(style);
+
+    win.addEventListener("wheel", function (event) {
+      if (previewMode) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.scrollBy(0, wheelPixels(event, win));
+      requestUpdate();
+    }, { passive: false, capture: true });
+
+    win.addEventListener("keydown", function (event) {
+      if (previewMode || event.defaultPrevented) return;
+      const movement = {
+        ArrowDown: 52,
+        ArrowUp: -52,
+        PageDown: innerHeight * .85,
+        PageUp: -innerHeight * .85,
+        " ": event.shiftKey ? -innerHeight * .85 : innerHeight * .85
+      }[event.key];
+      if (movement == null) return;
+      event.preventDefault();
+      window.scrollBy(0, movement);
+      requestUpdate();
+    });
+  }
+
+  function measure() {
+    if (!innerDocument || !innerWindow) return false;
+    const section = innerDocument.querySelector(".offline");
+    const house = section && section.querySelector(".house");
+    if (!section || !house || house.getBoundingClientRect().height < 100) return false;
+    sectionTop = section.getBoundingClientRect().top + innerWindow.scrollY;
+    sectionRange = Math.max(1, section.offsetHeight - house.getBoundingClientRect().height);
+    scrollRange.style.height = (window.innerHeight + sectionRange) + "px";
+    installInnerControls(innerWindow, innerDocument);
+    ready = true;
+    document.body.classList.add("is-ready");
+    return true;
+  }
+
+  function locateTarget() {
+    clearTimeout(locateTimer);
+    if (measure()) {
+      requestUpdate();
+      return;
+    }
+    locateTimer = setTimeout(locateTarget, 180);
+  }
+
+  function sync(now) {
+    raf = 0;
+    if (!ready || !innerWindow) {
+      if (previewMode) requestUpdate();
+      return;
+    }
+    const progress = outerProgress(now || performance.now());
+    innerWindow.scrollTo(0, sectionTop + sectionRange * progress);
+    const menu = innerDocument.querySelector(".default-menu");
+    if (menu) menu.classList.toggle("sc2-maison-menu-on", progress >= .52);
+    if (previewMode) requestUpdate();
+  }
+
+  function requestUpdate() {
+    if (raf) return;
+    raf = requestAnimationFrame(sync);
+  }
+
+  frame.addEventListener("load", function () {
+    try {
+      innerWindow = frame.contentWindow;
+      innerDocument = frame.contentDocument;
+      locateTarget();
+    } catch (error) {
+      document.body.classList.add("is-ready");
+    }
+  });
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", function () {
+    ready = false;
+    clearTimeout(locateTimer);
+    locateTimer = setTimeout(locateTarget, 160);
+  });
+})();
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="056-lxtrendship-maison-scroll.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=056-lxtrendship-maison-scroll" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

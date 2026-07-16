@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="kr"><head><script>
+/* Local-mirror path shim — auto-injected by scrape-url.py.
+   See scrape-url.py for rationale. Behavior under standalone server is unchanged. */
+(function () {
+  /* __docDir = the directory portion of the current document's path, e.g.
+     "/works/greenwoodmcn/" when the mirror is deployed to a subpath. If an
+     absolute path argument already starts with __docDir, the browser/runtime
+     has already correctly resolved a relative URL against the document — do
+     not prefix it again, or fetches double up (/works/x/works/x/...). */
+  var __docDir = location.pathname.replace(/[^/]*$/, '');
+  function rewrite(u) {
+    if (typeof u !== 'string') return u;
+    if (u.length < 2 || u[0] !== '/' || u[1] === '/') return u;
+    if (__docDir.length > 1 && u.indexOf(__docDir) === 0) return u;
+    return '.' + u;
+  }
+  var origFetch = window.fetch;
+  if (origFetch) {
+    window.fetch = function (input, init) {
+      if (typeof input === 'string') {
+        input = rewrite(input);
+      } else if (input && typeof Request !== 'undefined' && input instanceof Request) {
+        try {
+          var u = new URL(input.url);
+          if (u.origin === location.origin && u.pathname[0] === '/' && u.pathname[1] !== '/') {
+            input = new Request(rewrite(u.pathname + u.search + u.hash), input);
+          }
+        } catch (e) {}
+      }
+      return origFetch.call(this, input, init);
+    };
+  }
+  var origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url) {
+    arguments[1] = rewrite(url);
+    return origOpen.apply(this, arguments);
+  };
+})();
+</script><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><meta name="naver-site-verification" content="6e385b612b073266cab38dcb031c4bf55d6d6105"/><meta name="google-site-verification" content="oXkuwT9ok4jtTHVsf_evBLyNkhLPHNrUT4RRs4RVG1g"/><meta property="og:image" content="/images/preview.png"/><meta property="og:title" content="LX하우시스 TRENDSHIP"/><meta property="og:url" content="https://www.lxtrendship.com"/><meta property="og:description" content=""/><link href="assets/unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/><link rel="stylesheet" href="assets/cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/><link rel="preload" as="style" href="assets/fonts.googleapis.com/css2.2398b319"/><link rel="stylesheet" href="assets/fonts.googleapis.com/css2.2398b319" media="print"/><noscript><link rel="stylesheet" href="assets/fonts.googleapis.com/css2.2398b319"/></noscript><link rel="stylesheet" href="assets/cdn.quilljs.com/1.3.6/quill.snow.css"/><link rel="preload" href="assets/www.lxtrendship.com/_next/static/css/ca019efc25a7.css" as="style"/><link rel="stylesheet" href="assets/www.lxtrendship.com/_next/static/css/ca019efc25a7.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="assets/www.lxtrendship.com/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="assets/www.lxtrendship.com/js/daum-post.js" defer="" data-nscript="beforeInteractive"></script><script src="assets/www.lxtrendship.com/js/kakao.js" defer="" data-nscript="beforeInteractive"></script><script src="assets/www.lxtrendship.com/js/naveridlogin_js_sdk_2.0.2.js" defer="" data-nscript="beforeInteractive"></script><script src="assets/www.lxtrendship.com/_next/static/chunks/webpack-cae0c1c15f09.js" defer=""></script><script src="assets/www.lxtrendship.com/_next/static/chunks/framework-3ff863ca3a21.js" defer=""></script><script src="assets/www.lxtrendship.com/_next/static/chunks/main-8759e6645722.js" defer=""></script><script src="assets/www.lxtrendship.com/_next/static/chunks/pages/_app-48b5915646ae.js" defer=""></script><script src="assets/www.lxtrendship.com/_next/static/chunks/pages/en-fce467252655.js" defer=""></script><script src="assets/www.lxtrendship.com/_next/static/lx-app-1.11/_buildManifest.js" defer=""></script><script src="assets/www.lxtrendship.com/_next/static/lx-app-1.11/_ssgManifest.js" defer=""></script></head><body><div id="__next"></div><script id="__NEXT_DATA__" type="application/json">{"props":{"props":{},"__N_SSG":true,"pageProps":{}},"page":"/en","query":{},"buildId":"lx-app-1.11","assetPrefix":"/designs/098-lxtrendship","isFallback":false,"gsp":true,"appGip":true,"scriptLoader":[]}</script></body></html>
