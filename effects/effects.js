@@ -1174,5 +1174,25 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://www.risk.film/",
     "localMirror": "../designs/100-risk/index.html",
     "order": 57
+  },
+  {
+    "num": "058",
+    "folder": "058-champions4good-volleyball-horse",
+    "title": "Champions for Good — 拍球到骑马",
+    "subtitle": "拍球到骑马的 Lottie 滚动序列",
+    "description": "完整提取 Champions for Good 的拍球到骑马滚动序列，保留循环 SVG Lottie 运动员、随滚动出现的文字、贴纸与区块音频。",
+    "tech": "Webflow runtime · GSAP ScrollTrigger · SplitType · Lottie SVG · Lenis",
+    "tags": [
+      "介绍",
+      "滚动",
+      "逐字出场",
+      "响应式",
+      "协会组织"
+    ],
+    "previewHref": "",
+    "preview": "058-champions4good-volleyball-horse/preview.png",
+    "sourceUrl": "https://www.champions4good.club/",
+    "localMirror": "../designs/099-champions4good/index.html",
+    "order": 58
   }
 ];
