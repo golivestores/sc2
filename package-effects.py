@@ -137,12 +137,32 @@ def strip_demo_only(html: str) -> str:
     return "".join(out)
 
 
+def strip_sc2_overlay(text: str) -> str:
+    """Remove the gallery-only controls injected into an effect demo.
+
+    These controls are intentionally present in index.html at runtime, but are
+    not effect source and must not be exposed in a colleague's reusable code.
+    """
+    return re.sub(
+        re.escape("<!-- sc2-overlay:start -->") + r".*?" +
+        re.escape("<!-- sc2-overlay:end -->"),
+        "",
+        text,
+        flags=re.S,
+    )
+
+
 def extract_snippets(html_text: str) -> dict:
     """Pull HTML body / inline CSS / inline JS into copy-paste-ready strings.
 
     Excludes <script src="..."> from the JS string but lists the URLs separately
     under `external_scripts` so the viewer can show "you also need to load X".
+
+    The sc2 overlay is gallery chrome, not part of an effect.  It is injected
+    into each demo's index.html so users can download a zip or open this source
+    viewer, but must never appear in the reusable HTML/CSS/JS snippets.
     """
+    html_text = strip_sc2_overlay(html_text)
     css_blocks = re.findall(r"<style[^>]*>(.*?)</style>", html_text, re.S | re.I)
     css = "\n\n".join(b.strip() for b in css_blocks if b.strip())
 
@@ -191,6 +211,8 @@ def write_source_bundle(effect_dir: Path, files: list[Path]) -> Path:
                     text = None
             except Exception:
                 text = None
+        if text is not None:
+            text = strip_sc2_overlay(text)
         file_records.append({"path": rel, "size": size, "text": text})
 
     snippets = {"html": "", "css": "", "js": "", "external_scripts": []}

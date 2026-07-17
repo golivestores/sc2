@@ -930,6 +930,16 @@
     "preview": "098-lxtrendship/preview.png"
   },
   {
+    "folder": "100-risk",
+    "title": "Risk Film",
+    "description": "",
+    "sourceUrl": "https://www.risk.film/",
+    "savedAt": "2026-07-17",
+    "tags": [],
+    "href": "100-risk/index.html",
+    "preview": "100-risk/preview.png"
+  },
+  {
     "folder": "Floema",
     "title": "Floema — Spaces for people, made for life",
     "description": "Sustainable signage & equipment brand. Pixi.js scattered-objects hero, scroll-driven photo collages, audio-driven micro-interactions. Homepage captured as full-page PNG (homepage-full.png) because the live site is a Nuxt SPA with Sanity-CMS images served via /_ipx/ proxy — interactive mirror keeps hero + nav but sub-page CSS chunks are absent.",

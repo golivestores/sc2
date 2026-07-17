@@ -1153,5 +1153,26 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://www.lxtrendship.com/en",
     "localMirror": "../designs/098-lxtrendship/index.html",
     "order": 56
+  },
+  {
+    "num": "057",
+    "folder": "057-risk-film-infinite-work-loop",
+    "title": "Risk Film Infinite Work Loop",
+    "subtitle": "full-bleed film reel with looping project transitions",
+    "description": "The looping project reel from Risk Film's homepage, isolated as a standalone offline effect. Full-bleed film clips, credit typography, the dot-frame treatment and the original timing/runtime are preserved; site navigation and unrelated pages are excluded.",
+    "tech": "Original Risk Film runtime + GSAP + local MP4 assets",
+    "tags": [
+      "案例动态",
+      "轮播",
+      "自动播放",
+      "遮罩",
+      "响应式",
+      "设计建筑"
+    ],
+    "previewHref": "",
+    "preview": "057-risk-film-infinite-work-loop/preview.jpg",
+    "sourceUrl": "https://www.risk.film/",
+    "localMirror": "../designs/100-risk/index.html",
+    "order": 57
   }
 ];
