@@ -137,12 +137,32 @@ def strip_demo_only(html: str) -> str:
     return "".join(out)
 
 
+def strip_sc2_overlay(text: str) -> str:
+    """Remove the gallery-only controls injected into an effect demo.
+
+    These controls are intentionally present in index.html at runtime, but are
+    not effect source and must not be exposed in a colleague's reusable code.
+    """
+    return re.sub(
+        re.escape("<!-- sc2-overlay:start -->") + r".*?" +
+        re.escape("<!-- sc2-overlay:end -->"),
+        "",
+        text,
+        flags=re.S,
+    )
+
+
 def extract_snippets(html_text: str) -> dict:
     """Pull HTML body / inline CSS / inline JS into copy-paste-ready strings.
 
     Excludes <script src="..."> from the JS string but lists the URLs separately
     under `external_scripts` so the viewer can show "you also need to load X".
+
+    The sc2 overlay is gallery chrome, not part of an effect.  It is injected
+    into each demo's index.html so users can download a zip or open this source
+    viewer, but must never appear in the reusable HTML/CSS/JS snippets.
     """
+    html_text = strip_sc2_overlay(html_text)
     css_blocks = re.findall(r"<style[^>]*>(.*?)</style>", html_text, re.S | re.I)
     css = "\n\n".join(b.strip() for b in css_blocks if b.strip())
 
@@ -191,6 +211,8 @@ def write_source_bundle(effect_dir: Path, files: list[Path]) -> Path:
                     text = None
             except Exception:
                 text = None
+        if text is not None:
+            text = strip_sc2_overlay(text)
         file_records.append({"path": rel, "size": size, "text": text})
 
     snippets = {"html": "", "css": "", "js": "", "external_scripts": []}
@@ -578,19 +600,20 @@ def main():
         except Exception as e:
             bad_meta.append((d.name, f"JSON parse error: {e}"))
             continue
-        # Tag taxonomy validation — see TAGS.md for the locked spec.
-        # Axes:
-        #   1 板块       (required, exactly 1)
-        #   2 形态       (optional, 0 or 1)
-        #   3 触发       (required, exactly 1)
-        #   4 技术       (optional, 0-3)
-        #   5 产品类型   (required, exactly 1)
-        tags = parsed.get("tags", [])
-        if not isinstance(tags, list):
-            bad_meta.append((d.name, "tags must be a JSON array"))
-            continue
-        for err in _validate_tags(tags):
-            bad_meta.append((d.name, err))
+        # Full packaging is also a release-time metadata gate, so it keeps the
+        # locked five-axis taxonomy validation. ``--only`` is the local
+        # server's on-demand download path; legacy effects created before the
+        # taxonomy migration must still be downloadable, and ZIP generation
+        # itself does not depend on tags. Missing/invalid JSON is still fatal.
+        if not args.only:
+            # Axes: 1 板块 (required), 2 形态 (optional), 3 触发 (required),
+            # 4 技术 (optional, 0-3), 5 产品类型 (required).
+            tags = parsed.get("tags", [])
+            if not isinstance(tags, list):
+                bad_meta.append((d.name, "tags must be a JSON array"))
+                continue
+            for err in _validate_tags(tags):
+                bad_meta.append((d.name, err))
     if bad_meta:
         print("aborting: invalid meta.json found —")
         for name, err in bad_meta:
