@@ -182,6 +182,71 @@ function loadScript(src) {
   });
 }
 
+function stripSc2Overlay(text) {
+  return text.replace(
+    /<!-- sc2-overlay:start -->[\s\S]*?<!-- sc2-overlay:end -->/gi,
+    ''
+  );
+}
+
+function extractSnippets(htmlText) {
+  const source = stripSc2Overlay(htmlText);
+  const css = [...source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)]
+    .map(m => m[1].trim())
+    .filter(Boolean)
+    .join('\n\n');
+  const js = [...source.matchAll(/<script(?![^>]*\bsrc\b)[^>]*>([\s\S]*?)<\/script>/gi)]
+    .map(m => m[1].trim())
+    .filter(Boolean)
+    .join('\n\n');
+  const externalScripts = [...source.matchAll(/<script[^>]*\bsrc\s*=\s*["']([^"']+)["']/gi)]
+    .map(m => m[1]);
+
+  const bodyMatch = source.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  let body = bodyMatch ? bodyMatch[1] : source;
+  body = body
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+
+  // Demo-only elements are gallery scaffolding, not reusable effect markup.
+  const template = document.createElement('template');
+  template.innerHTML = body;
+  template.content.querySelectorAll('[data-demo-only]').forEach(el => el.remove());
+  body = template.innerHTML.replace(/\n\s*\n\s*\n+/g, '\n\n').trim();
+
+  return { html: body, css, js, external_scripts: externalScripts };
+}
+
+async function fetchTextFile(url, required = true) {
+  try {
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+    return await response.text();
+  } catch (error) {
+    if (required) throw error;
+    return null;
+  }
+}
+
+async function buildBundleFromSource(folder) {
+  const base = encodeURIComponent(folder);
+  const [indexText, metaText] = await Promise.all([
+    fetchTextFile(`${base}/index.html?_=${Date.now()}`),
+    fetchTextFile(`${base}/meta.json?_=${Date.now()}`, false)
+  ]);
+  const files = [
+    { path: 'index.html', size: new Blob([indexText]).size, text: stripSc2Overlay(indexText) }
+  ];
+  if (metaText !== null) {
+    files.push({ path: 'meta.json', size: new Blob([metaText]).size, text: metaText });
+  }
+  return {
+    effect: folder,
+    files,
+    snippets: extractSnippets(indexText)
+  };
+}
+
 function findMetaFromBundleOrEffects(folder, bundle) {
   // 1) try meta.json from bundle.files (most authoritative — packager just read it)
   if (bundle && Array.isArray(bundle.files)) {
@@ -357,18 +422,37 @@ function showFatal(title, html) {
       '正确用法：<code>view.html?effect=NNN-名字</code>');
     return;
   }
-  // Load source-bundle.js (works under file:// because <script> tags can load
-  // sibling files where fetch() can't). If it fails, fall back to fetch under HTTP.
+  // Under HTTP(S), read the effect source directly so the viewer never depends
+  // on generated/ignored source-bundle.js files being present on deployment.
+  // Under file://, keep the generated bundle fallback because fetch is blocked.
   let bundle = null;
-  try {
-    await loadScript(`${encodeURIComponent(folder)}/source-bundle.js?_=${Date.now()}`);
-    bundle = window.__SC2_BUNDLE__;
-  } catch {}
+  let directLoadError = null;
+  if (location.protocol !== 'file:') {
+    try {
+      bundle = await buildBundleFromSource(folder);
+    } catch (error) {
+      directLoadError = error;
+    }
+  }
 
   if (!bundle || bundle.effect !== folder) {
-    showFatal(`找不到 ${folder} 的 source-bundle.js`,
-      '请在项目根目录运行 <code>python package-effects.py</code> 生成它，然后刷新本页。<br>' +
-      '（这个文件包含逐文件源码 + paste-ready snippets，由 <code>view.html</code> 使用。）');
+    try {
+      window.__SC2_BUNDLE__ = null;
+      await loadScript(`${encodeURIComponent(folder)}/source-bundle.js?_=${Date.now()}`);
+      bundle = window.__SC2_BUNDLE__;
+    } catch {}
+  }
+
+  if (!bundle || bundle.effect !== folder) {
+    const detail = directLoadError
+      ? `浏览器直接读取源码失败：<code>${escapeHTML(directLoadError.message)}</code><br>`
+      : '';
+    showFatal(`无法读取 ${folder} 的源码`,
+      detail +
+      '请确认该 effect 文件夹内存在 <code>index.html</code>。' +
+      (location.protocol === 'file:'
+        ? '<br>当前是本地文件模式，请先运行 <code>python package-effects.py --bundle-only</code>。'
+        : ''));
     return;
   }
 
