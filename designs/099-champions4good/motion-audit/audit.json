@@ -1,0 +1,210 @@
+{
+  "height": 20792,
+  "lotties": [
+    {
+      "className": "hero-sticker",
+      "top": -677,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69ad2f7fa0d8a42f48e7cb33_fencing.json",
+      "duration": "6.458333333333333",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie",
+      "top": 900,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/699cbf57a3baf554905772e8_volleyball_desktop.json",
+      "duration": "8.074741408074741",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie",
+      "top": 605,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69b860a75dc06d6daafcd1ba_horse.json",
+      "duration": "2.0353687020353686",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie is-horse",
+      "top": 0,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69b1e768a04dcf41aacfa94b_horse_mobile.json",
+      "duration": "2.0353687020353686",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie",
+      "top": 6480,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69ad2fc267eed7319abe0df2_archer_desktop.json",
+      "duration": "4.037370704037371",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie _02",
+      "top": 0,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69ad2fd7d569da6b4b7f5c46_archer_mobile.json",
+      "duration": "4.037370704037371",
+      "renderer": "svg"
+    },
+    {
+      "className": "inline-sticker in-headline-xxl",
+      "top": 11549,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/699c0d84fa87821af2dbcf61_runner_1.lottie",
+      "duration": "3.125",
+      "renderer": "svg"
+    },
+    {
+      "className": "inline-sticker in-headline-xxl",
+      "top": 11695,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/699c0d8454284a7ce8b1a99b_runner_2.lottie",
+      "duration": "3.125",
+      "renderer": "svg"
+    },
+    {
+      "className": "inline-sticker in-headline-xxl",
+      "top": 12279,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/699c0d482468f78a4a5d7526_basketball_1.lottie",
+      "duration": "2.04",
+      "renderer": "svg"
+    },
+    {
+      "className": "inline-sticker in-headline-xxl",
+      "top": 12717,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/699c0d48d46a83cad0484303_basketball_2.lottie",
+      "duration": "2.0416666666666665",
+      "renderer": "svg"
+    },
+    {
+      "className": "inline-sticker in-headline-xxl",
+      "top": 13301,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69ad2ff0c691c180dd09490c_lifter_01.json",
+      "duration": "10.625",
+      "renderer": "svg"
+    },
+    {
+      "className": "inline-sticker in-headline-xxl",
+      "top": 13593,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69ad2ffa778c864921d5308e_lifter_02.json",
+      "duration": "10.625",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie is-cyclist",
+      "top": 14874,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69ad30372873beed539c57eb_bike.json",
+      "duration": "3.8",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie is-tennis",
+      "top": 18168,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/699c0be82e3a14cead82ccb2_tennis_final.json",
+      "duration": "2.0353687020353686",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie is-golfer",
+      "top": 19292,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69b86601859a45761b0400ac_golf.json",
+      "duration": "6",
+      "renderer": "svg"
+    },
+    {
+      "className": "lottie is-golfer",
+      "top": 0,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69b86601859a45761b0400ac_golf.json",
+      "duration": "6",
+      "renderer": "svg"
+    },
+    {
+      "className": "footer-runner",
+      "top": 20396,
+      "source": "assets/cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/696364c8a237dd559198587c_animation.json",
+      "duration": "0.8333333333333334",
+      "renderer": "canvas"
+    }
+  ],
+  "sections": [
+    {
+      "className": "trailing-section",
+      "top": 0,
+      "height": 900,
+      "text": "YOURNETWORK OF\nGAME CHANGERS"
+    },
+    {
+      "className": "image_trail_section_hero",
+      "top": 0,
+      "height": 900,
+      "text": "YOURNETWORK OF\nGAME CHANGERS"
+    },
+    {
+      "className": "default-section is-purple overflow-none",
+      "top": 0,
+      "height": 0,
+      "text": "YOUR NETWORK  OFGAME CHANGERSDer Champions for Good Club verbindet Athlet-innen, Unternehm"
+    },
+    {
+      "className": "default-section h-100 overflow-none",
+      "top": 0,
+      "height": 0,
+      "text": "FinallyNo BoringNetworkingSportliche Events, echte Begegnungen und neue Chancen fuer alle "
+    },
+    {
+      "className": "default-section h-100",
+      "top": 4500,
+      "height": 900,
+      "text": ""
+    },
+    {
+      "className": "default-section h-100 overflow-none mh-auto",
+      "top": 5400,
+      "height": 900,
+      "text": "\u201eMit Champions for Good ist eine Plattform entstanden, die Athlet:innen Zugang zu einem vi"
+    },
+    {
+      "className": "default-section is-brown",
+      "top": 0,
+      "height": 0,
+      "text": "Unser zielNeue CHancen fuer athlet-innen"
+    },
+    {
+      "className": "default-section overf",
+      "top": 11250,
+      "height": 2912,
+      "text": "UNSERE\nMISSION?\nDIE\nREGELN\nDES\nKLASS-\nISCHEN SPON-\nSORINGS\nUND\nNET-\nWORKINGS\nNEU DENKEN\nUN"
+    },
+    {
+      "className": "default-section is-purple",
+      "top": 14162,
+      "height": 1619,
+      "text": "OUR\nVALUES\n01 OFFENE KOMMUNIKATION 02TEAMGEIST 03KOLLABORATION 04FAIR PLAY 05RESPEKT 06INT"
+    },
+    {
+      "className": "default-section overflow-none",
+      "top": 15781,
+      "height": 1225,
+      "text": "CLUB\nMEMBERSHIPS\nATHLETE\nKostenfrei\n\nF\u00fcr Spitzen-Athlet:innen, die ihre Karriere \u00fcber den "
+    },
+    {
+      "className": "default-section is-green",
+      "top": 17006,
+      "height": 1765,
+      "text": "YOUR\nBENEFITS\n01 KURATIERTES NETZWERK AUS EXECUTIVES UND ATHLET-INNEN 02TICKETS ZU EINZIGA"
+    },
+    {
+      "className": "default-section overflow-none",
+      "top": 18772,
+      "height": 1576,
+      "text": "READY\nTO\nJOIN?\nVEREINBARE EIN GESPRAECH MIT UNSEREM TEAM UND ERFAHRE MEHR UEBER DEINE MEMB"
+    },
+    {
+      "className": "default-section",
+      "top": 0,
+      "height": 0,
+      "text": "Ready to join?Vereinbare ein GespraEch mit unserem team und erfahre mehr UEber Deine Membe"
+    },
+    {
+      "className": "footer",
+      "top": 20348,
+      "height": 444,
+      "text": "Men\u00fc\nMembers\nMembers\nEvents\nEvents\nFAQ\nFAQ\nLinks\nClub Platform\nClub Platform\nLinkedIn\nLink"
+    }
+  ]
+}

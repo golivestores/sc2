@@ -148,7 +148,7 @@
   },
   {
     "folder": "015-lab46",
-    "title": "LAB46: Intimate Science",
+    "title": "Himax: 阿祖AI出海",
     "description": "",
     "sourceUrl": "https://lab46.de/en",
     "savedAt": "2026-05-18",
@@ -920,14 +920,322 @@
     "preview": "070-oura-ring-5/preview.png"
   },
   {
+    "folder": "071-uswing",
+    "title": "USWING AU",
+    "description": "",
+    "sourceUrl": "https://uswing-au.myshopify.com/",
+    "savedAt": "2026-07-01",
+    "tags": [],
+    "href": "071-uswing/index.html",
+    "preview": "071-uswing/preview.png"
+  },
+  {
+    "folder": "072-bitfalk-aim",
+    "title": "Bitfalk Systems — AIM",
+    "description": "Bitfalk Systems 'Humanovation' landing (Astro v5). Scroll-driven 222-frame falcon hero canvas, 5 Three.js/WebGL scenes (universum + globe + techstack DNA-helix of devicon logos + UnrealBloom postprocessing), a retro 'ENGINE ROOM' terminal with a playable falcon.exe cartridge mini-game (iframe), GSAP ScrollTrigger animations, and bilingual (EN/DE) greeting audio.",
+    "sourceUrl": "https://bitfalk.com/aim/",
+    "savedAt": "2026-07-02",
+    "tags": [
+      "webgl",
+      "three",
+      "gsap",
+      "scroll",
+      "hero",
+      "canvas",
+      "astro"
+    ],
+    "href": "072-bitfalk-aim/index.html",
+    "preview": "072-bitfalk-aim/preview.png"
+  },
+  {
+    "folder": "073-wixstudio-space",
+    "title": "阿祖AI出海 — Space (himax)",
+    "description": "",
+    "sourceUrl": "https://www.wix.com/studio/design/inspiration/space",
+    "savedAt": "2026-07-02",
+    "tags": [],
+    "href": "073-wixstudio-space/index.html",
+    "preview": "073-wixstudio-space/preview.png"
+  },
+  {
+    "folder": "074-ori-koji-global",
+    "title": "himax",
+    "description": "阿祖AI建站",
+    "sourceUrl": "https://ori-koji-global.webflow.io/",
+    "savedAt": "2026-07-06",
+    "tags": [],
+    "href": "074-ori-koji-global/index.html",
+    "preview": "074-ori-koji-global/preview.png"
+  },
+  {
+    "folder": "075-pasqua",
+    "title": "Himax",
+    "description": "",
+    "sourceUrl": "https://pasqua.it/",
+    "savedAt": "2026-07-06",
+    "tags": [],
+    "href": "075-pasqua/index.html",
+    "preview": "075-pasqua/preview.png"
+  },
+  {
+    "folder": "076-ohzi",
+    "title": "OHZI",
+    "description": "",
+    "sourceUrl": "https://ohzi.io/who-we-are",
+    "savedAt": "2026-07-06",
+    "tags": [],
+    "href": "076-ohzi/index.html",
+    "preview": "076-ohzi/preview.png"
+  },
+  {
+    "folder": "077-sigma-software-labs",
+    "title": "Himax",
+    "description": "",
+    "sourceUrl": "https://labs.sigma.software/?utm_source=chatgpt.com#sigma-software-group",
+    "savedAt": "2026-07-06",
+    "tags": [],
+    "href": "077-sigma-software-labs/index.html",
+    "preview": "077-sigma-software-labs/preview.png"
+  },
+  {
+    "folder": "078-blackholeexperience",
+    "title": "Himax",
+    "description": "Himax AI website building experience.",
+    "sourceUrl": "https://www.blackholeexperience.com/",
+    "savedAt": "2026-07-06",
+    "tags": [],
+    "href": "078-blackholeexperience/index.html",
+    "preview": "078-blackholeexperience/preview.png"
+  },
+  {
+    "folder": "079-fasterdisplays",
+    "title": "Faster Displays",
+    "description": "",
+    "sourceUrl": "https://fasterdisplays.com/en/exhibitor",
+    "savedAt": "2026-07-06",
+    "tags": [],
+    "href": "079-fasterdisplays/index.html",
+    "preview": "079-fasterdisplays/preview.png"
+  },
+  {
+    "folder": "080-uswing",
+    "title": "USWING AU",
+    "description": "",
+    "sourceUrl": "https://uswing-au.myshopify.com/",
+    "savedAt": "2026-07-01",
+    "tags": [],
+    "href": "080-uswing/index.html",
+    "preview": "080-uswing/preview.png"
+  },
+  {
+    "folder": "081-magische-spiegelungen",
+    "title": "Himax",
+    "description": "Himax virtual experience.",
+    "sourceUrl": "https://www.magische-spiegelungen.de/",
+    "savedAt": "2026-07-08",
+    "tags": [],
+    "href": "081-magische-spiegelungen/index.html",
+    "preview": "081-magische-spiegelungen/preview.png"
+  },
+  {
+    "folder": "082-zerolimits",
+    "title": "Himax",
+    "description": "",
+    "sourceUrl": "https://wakanda-forever-master.dogstudio-dev.co/zerolimits",
+    "savedAt": "2026-07-08",
+    "tags": [],
+    "href": "082-zerolimits/index.html",
+    "preview": "082-zerolimits/preview.png"
+  },
+  {
+    "folder": "083-accentboissons",
+    "title": "Himax — 阿祖AI建站",
+    "description": "Himax brand mirror customized with 阿祖AI建站 hero copy.",
+    "sourceUrl": "https://accentboissons.com/",
+    "savedAt": "2026-07-08",
+    "tags": [],
+    "href": "083-accentboissons/index.html",
+    "preview": "083-accentboissons/preview.png"
+  },
+  {
+    "folder": "084-emons",
+    "title": "Himax - Transport & Logistics",
+    "description": "Freight forwarding and logistics services for road, air, sea and rail transport.",
+    "sourceUrl": "https://www.emons.de/en",
+    "savedAt": "2026-07-09",
+    "tags": [],
+    "href": "084-emons/index.html",
+    "preview": "084-emons/preview.png"
+  },
+  {
+    "folder": "085-razorpay-sprint",
+    "title": "085-razorpay-sprint",
+    "description": "",
+    "sourceUrl": "",
+    "savedAt": "",
+    "tags": [],
+    "href": "085-razorpay-sprint/index.html",
+    "preview": "085-razorpay-sprint/preview.png"
+  },
+  {
+    "folder": "086-rideradian",
+    "title": "Himax",
+    "description": "阿祖AI出海",
+    "sourceUrl": "https://www.rideradian.com/",
+    "savedAt": "2026-07-09",
+    "tags": [],
+    "href": "086-rideradian/index.html",
+    "preview": "086-rideradian/preview.png"
+  },
+  {
+    "folder": "086-terminal-industries",
+    "title": "Terminal Industries",
+    "description": "",
+    "sourceUrl": "https://terminal-industries.com/",
+    "savedAt": "2026-07-09",
+    "tags": [],
+    "href": "086-terminal-industries/index.html",
+    "preview": "086-terminal-industries/preview.png"
+  },
+  {
+    "folder": "087-valentime",
+    "title": "Himax",
+    "description": "",
+    "sourceUrl": "",
+    "savedAt": "2026-07-09",
+    "tags": [],
+    "href": "087-valentime/index.html",
+    "preview": "087-valentime/preview.png"
+  },
+  {
+    "folder": "088-zero-university",
+    "title": "Himax",
+    "description": "",
+    "sourceUrl": "#",
+    "savedAt": "2026-07-10",
+    "tags": [],
+    "href": "088-zero-university/index.html",
+    "preview": "088-zero-university/preview.png"
+  },
+  {
+    "folder": "089-tsitsipas",
+    "title": "Himax",
+    "description": "Himax official website mirror.",
+    "sourceUrl": "https://tsitsipas.com/?utm_source=mesh3d.gallery&utm_medium=referral",
+    "savedAt": "2026-07-10",
+    "tags": [],
+    "href": "089-tsitsipas/index.html",
+    "preview": "089-tsitsipas/preview.png"
+  },
+  {
+    "folder": "090-flowty",
+    "title": "Himax",
+    "description": "",
+    "sourceUrl": "https://flowty.co/",
+    "savedAt": "2026-07-10",
+    "tags": [],
+    "href": "090-flowty/index.html",
+    "preview": "090-flowty/preview.png"
+  },
+  {
+    "folder": "091-podium",
+    "title": "Podium",
+    "description": "",
+    "sourceUrl": "https://podium.global/",
+    "savedAt": "2026-07-10",
+    "tags": [],
+    "href": "091-podium/index.html",
+    "preview": "091-podium/preview.png"
+  },
+  {
+    "folder": "092-sourjacks",
+    "title": "Himax",
+    "description": "",
+    "sourceUrl": "https://www.sourjacks.com/",
+    "savedAt": "2026-07-13",
+    "tags": [],
+    "href": "092-sourjacks/index.html",
+    "preview": "092-sourjacks/preview.png"
+  },
+  {
+    "folder": "093-ducati-superleggera-v4-centenario",
+    "title": "Himax 阿祖AI建站",
+    "description": "阿祖AI建站",
+    "sourceUrl": "https://superleggerav4centenario.ducati.com/en/ww",
+    "savedAt": "2026-07-13",
+    "tags": [],
+    "href": "093-ducati-superleggera-v4-centenario/index.html",
+    "preview": "093-ducati-superleggera-v4-centenario/preview.png"
+  },
+  {
+    "folder": "094-thewatch",
+    "title": "The Watch",
+    "description": "",
+    "sourceUrl": "https://thewatch.60fps.fr/",
+    "savedAt": "2026-07-13",
+    "tags": [],
+    "href": "094-thewatch/index.html",
+    "preview": "094-thewatch/preview.png"
+  },
+  {
+    "folder": "095-evian-celebrating200",
+    "title": "Himax — 阿祖AI建站",
+    "description": "",
+    "sourceUrl": "https://celebrating200.evian.com/gallery",
+    "savedAt": "2026-07-16",
+    "tags": [],
+    "href": "095-evian-celebrating200/index.html",
+    "preview": "095-evian-celebrating200/preview.png"
+  },
+  {
+    "folder": "096-haoqi",
+    "title": "Himax",
+    "description": "阿祖AI建站",
+    "sourceUrl": "https://haoqi.design/",
+    "savedAt": "2026-07-16",
+    "tags": [],
+    "href": "096-haoqi/index.html",
+    "preview": "096-haoqi/preview.png"
+  },
+  {
+    "folder": "097-cula",
+    "title": "Himax",
+    "description": "",
+    "sourceUrl": "https://www.cula.tech/",
+    "savedAt": "2026-07-16",
+    "tags": [],
+    "href": "097-cula/index.html",
+    "preview": "097-cula/preview.png"
+  },
+  {
     "folder": "098-lxtrendship",
-    "title": "LX Trendship",
+    "title": "Himax",
     "description": "",
     "sourceUrl": "https://www.lxtrendship.com/en",
     "savedAt": "2026-07-16",
     "tags": [],
     "href": "098-lxtrendship/index.html",
     "preview": "098-lxtrendship/preview.png"
+  },
+  {
+    "folder": "099-champions4good",
+    "title": "Champions 4 Good",
+    "description": "",
+    "sourceUrl": "https://www.champions4good.club/",
+    "savedAt": "2026-07-17",
+    "tags": [],
+    "href": "099-champions4good/index.html",
+    "preview": "099-champions4good/preview.png"
+  },
+  {
+    "folder": "100-risk",
+    "title": "Risk Film",
+    "description": "",
+    "sourceUrl": "https://www.risk.film/",
+    "savedAt": "2026-07-17",
+    "tags": [],
+    "href": "100-risk/index.html",
+    "preview": "100-risk/preview.png"
   },
   {
     "folder": "Floema",

@@ -67,7 +67,7 @@ DESIGNS = ROOT / "designs"
 _URL_PROTOCOL_RE = re.compile(r"^(?://|https?:|/)", re.IGNORECASE)
 _URL_ASSET_EXT_RE = re.compile(
     r"""\.(?:
-        json|gltf|glb|bin|hdr|exr|ktx2?|drc       # 3D / data
+        json|lottie|gltf|glb|bin|hdr|exr|ktx2?|drc # 3D / animation data
       | png|jpe?g|webp|svg|gif|ico|avif|bmp      # images
       | css|m?js                                  # code
       | woff2?|ttf|otf|eot                        # fonts
@@ -622,6 +622,31 @@ def main():
 
     new_html = re.sub(r"(<style[^>]*>)(.*?)</style>", _inline_style_sub, new_html, flags=re.I | re.S)
 
+    # Downloaded assets are served from local paths, so the source CDN's SRI
+    # digests no longer apply consistently (especially after CSS URL rewrites).
+    # Let the browser load the local copies instead of rejecting critical CSS/JS.
+    new_html = re.sub(r'\s+integrity=("[^"]*"|\'[^\']*\')', '', new_html, flags=re.I)
+
+    # Webflow encodes a slash in some inline video poster URLs. The regular
+    # attribute rewrite above cannot match those values, although the matching
+    # poster file has already been mirrored at its normal local path.
+    def rewrite_webflow_encoded_poster(m):
+        host, folder, filename = m.groups()
+        return f"assets/{host}/{folder}/{filename}"
+    new_html = re.sub(
+        r'https?://(cdn\.prod\.website-files\.com)/([^/"\' )]+)%2F([^"\' )]+)',
+        rewrite_webflow_encoded_poster,
+        new_html,
+        flags=re.I,
+    )
+
+    # Analytics is not part of a self-contained mirror and otherwise makes an
+    # unnecessary external beacon request on every local page load.
+    new_html = re.sub(
+        r'<script\b[^>]*\bsrc=("|\')[^"\']*cloud\.umami\.is[^"\']*\1[^>]*></script>',
+        '', new_html, flags=re.I,
+    )
+
     # Inject a runtime path shim into <head>. Bundled JS often hardcodes root-absolute
     # URLs like fetch("/api/data.json"), GLTFLoader.load("/models/x.glb"), or
     # fetch("/_astro/envmap.hdr"). Those resolve fine when this page is served from
@@ -838,6 +863,8 @@ def apply_nuxt_spa_fixup(mirror_dir: Path, original_url: str):
     rewrites = 0
     files_changed = 0
     for f in list(mirror_dir.rglob("*.js")) + list(mirror_dir.rglob("*.css")):
+        if not f.is_file():
+            continue
         text = f.read_text(encoding="utf-8", errors="replace")
         new = text
         for pat, repl in patterns:
@@ -901,6 +928,8 @@ def apply_nuxt_spa_fixup(mirror_dir: Path, original_url: str):
     fp_patched = 0
     fp_pat = re.compile(r'(\b[a-zA-Z_$]\.p\s*=\s*)"/(_nuxt/)"')
     for f in mirror_dir.rglob("*.js"):
+        if not f.is_file():
+            continue
         text = f.read_text(encoding="utf-8", errors="replace")
         new = fp_pat.sub(r'\1"./\2"', text)
         if new != text:

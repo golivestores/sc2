@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Empire Metaverse 3D Hero — sc2 effect</title>
+  <style>
+    @font-face { font-family:Unbounded; src:url('./assets/fonts/Unbounded-Bold.ttf') format('truetype'); font-weight:700; font-display:swap; }
+    @font-face { font-family:Poppins; src:url('./assets/fonts/Poppins-Light.ttf') format('truetype'); font-weight:300; font-display:swap; }
+    @font-face { font-family:Poppins; src:url('./assets/fonts/Poppins-Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+    :root { color-scheme: light; --ink:#0d0a0b; --orange:#ff5b09; }
+    * { box-sizing:border-box; }
+    html, body { margin:0; min-height:100%; background:#fff; font-family:Poppins, Arial, Helvetica, sans-serif; color:var(--ink); }
+    body { overflow-x:hidden; }
+    .scroll-room { position:relative; height:200vh; min-height:1600px; background:linear-gradient(112deg,#eaf2ff 0%,#fff 54%,#fafafa 100%); }
+    .stage { position:sticky; z-index:2; top:0; width:100%; height:100vh; min-height:800px; overflow:hidden; }
+    .model { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+    .hero-title { position:absolute; z-index:1; top:clamp(118px,15vh,162px); left:50%; width:min(92vw,1180px); transform:translateX(-50%); text-align:center; text-transform:uppercase; font:700 clamp(68px,7.7vw,148px)/1.35 Unbounded, Arial, sans-serif; letter-spacing:-.075em; }
+    .hero-title span { display:block; white-space:nowrap; }
+    .copy { position:absolute; z-index:3; left:max(7vw,32px); bottom:clamp(120px,20vh,200px); width:min(59vw,870px); }
+    .eyebrow { margin:0 0 44px; color:var(--orange); font-size:clamp(18px,2.15vw,32px); line-height:1; font-weight:400; }
+    h1 { margin:0; max-width:850px; font-family:Poppins, Arial, sans-serif; font-size:clamp(44px,5.25vw,80px); line-height:1.14; letter-spacing:-.052em; font-weight:300; }
+    .body { margin:48px 0 0; max-width:850px; font-size:clamp(20px,2.05vw,38px); line-height:1.5; letter-spacing:-.028em; color:#2a2c32; font-weight:300; }
+    .sc2-overlay { position:fixed; z-index:9; top:14px; right:14px; display:flex; flex-direction:column; gap:8px; }
+    .sc2-overlay a { border-radius:999px; background:#111; color:#fff; padding:9px 13px; text-decoration:none; font:12px/1 Arial,sans-serif; }
+    @media (max-width:760px) {
+      .scroll-room { min-height:1300px; }
+      .stage { min-height:650px; }
+      .hero-title { top:100px; width:92vw; font-size:clamp(44px,13vw,76px); line-height:1.32; letter-spacing:-.06em; }
+      .copy { left:24px; right:24px; bottom:120px; width:auto; }
+      .eyebrow { margin-bottom:24px; }
+      .body { margin-top:28px; max-width:92%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="scroll-room">
+    <section class="stage" aria-label="Empire Metaverse hero">
+      <canvas class="model" aria-hidden="true"></canvas>
+    </section>
+    <h1 class="hero-title" aria-label="Your own metaverse floor"><span>Your Own</span><span>Metaverse</span><span>Floor</span></h1>
+    <div class="copy">
+      <p class="eyebrow reveal">Metaverse:</p>
+      <h1 class="reveal">A $5 Trillion<br>Opportunity For Your<br>Business</h1>
+      <p class="body reveal">By 2030, the metaverse is projected to be worth a staggering $5 trillion, presenting a massive growth potential across various industries. Sectors like consumer goods, retail, finance, technology, manufacturing, and healthcare are primed to capitalize on this emerging digital frontier.</p>
+    </div>
+  </main>
+  <script src="lib/gsap.min.js"></script>
+  <script src="lib/ScrollTrigger.min.js"></script>
+  <script type="importmap">{"imports":{"three":"./lib/three.module.js"}}</script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from './lib/GLTFLoader.js';
+
+    const preview = new URLSearchParams(location.search).get('demo') === 'preview';
+    gsap.registerPlugin(ScrollTrigger);
+    const canvas = document.querySelector('.model');
+    const stage = document.querySelector('.stage');
+    const room = document.querySelector('.scroll-room');
+    const reveal = gsap.utils.toArray('.reveal');
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, .1, 1000);
+    let activeCamera = camera;
+    const clouds = new THREE.Group(); scene.add(clouds);
+    const loader = new GLTFLoader();
+    const textureLoader = new THREE.TextureLoader();
+    const START_PROGRESS = 0;
+    let building, buildingNode, mixer, clip, action, current = START_PROGRESS, target = START_PROGRESS;
+
+    function resize() {
+      const w=stage.clientWidth, h=stage.clientHeight;
+      renderer.setSize(w,h,false); activeCamera.aspect=w/h; activeCamera.updateProjectionMatrix();
+    }
+    function cloud(texture, x, y, z, s) {
+      const material = new THREE.SpriteMaterial({ map:texture, transparent:true, opacity:.82, depthWrite:false });
+      const sprite = new THREE.Sprite(material); sprite.position.set(x,y,z); sprite.scale.set(s,s*.72,1); clouds.add(sprite);
+    }
+    function applyProgress(p) {
+      if (mixer && clip) mixer.setTime(p * clip.duration);
+      if (buildingNode) {
+        buildingNode.rotation.y = p * Math.PI;
+        buildingNode.position.x = -.43 * p;
+      }
+      if (activeCamera && activeCamera.isPerspectiveCamera) {
+        activeCamera.zoom = 1 + .9 * p;
+        activeCamera.updateProjectionMatrix();
+      }
+      const windows = [[.42,.51],[.50,.66],[.64,.84]];
+      reveal.forEach((el,index) => {
+        const [from,to] = windows[index];
+        const amount = Math.max(0,Math.min(1,(p-from)/(to-from)));
+        el.style.opacity = amount.toFixed(4);
+        el.style.transform = `translateY(${(1-amount)*50}%)`;
+      });
+    }
+    textureLoader.load('./assets/cloud10.png', texture => {
+      [[-3.4,3.2,1,1.5],[-1.4,4.9,.8,1.1],[1.8,3.7,.5,1.35],[3.8,5,.6,1.1],[.4,2.6,1.2,.85]].forEach(v => cloud(texture,...v));
+    });
+    loader.load('./assets/scene.glb', gltf => {
+      building = gltf.scene;
+      buildingNode = building.getObjectByName('Empire_Build');
+      scene.add(building);
+      activeCamera = building.getObjectByName('Camera') || (gltf.cameras && gltf.cameras[0]) || camera;
+      if (gltf.animations.length) {
+        mixer = new THREE.AnimationMixer(building);
+        clip = gltf.animations.find(a=>a.name==='CameraAction2.002') || gltf.animations[0];
+        action = mixer.clipAction(clip);
+        action.play();
+      }
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      Promise.all(['./assets/glass.jpg','./assets/gold.jpg'].map(src => new Promise(resolve => textureLoader.load(src, resolve)))).then(([glass,gold]) => {
+        const a=pmrem.fromEquirectangular(glass).texture, b=pmrem.fromEquirectangular(gold).texture;
+        building.traverse(o => { if (o.isMesh) { if (o.name==='Empire_Build001') o.material.envMap=a; if (o.name==='Empire_Build001_1') o.material.envMap=b; o.material.needsUpdate=true; } });
+        glass.dispose(); gold.dispose(); pmrem.dispose();
+      });
+      applyProgress(current);
+      resize();
+    });
+    function tick() {
+      current += (target-current)*.12;
+      applyProgress(current);
+      clouds.rotation.y += .0008;
+      renderer.render(scene,activeCamera);
+      requestAnimationFrame(tick);
+    }
+    resize(); document.documentElement.style.setProperty('--effect-progress', START_PROGRESS.toFixed(4)); addEventListener('resize',resize); applyProgress(START_PROGRESS); tick();
+    if (!preview) {
+      ScrollTrigger.create({
+        trigger:room, start:'top top', end:'bottom bottom', scrub:true,
+        onUpdate:self => {
+          target=self.progress;
+          document.documentElement.style.setProperty('--effect-progress',target.toFixed(4));
+        }
+      });
+    }
+  </script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="059-empiremetaverse-3d-hero.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=059-empiremetaverse-3d-hero" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

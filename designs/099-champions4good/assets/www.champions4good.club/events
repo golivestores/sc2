@@ -1,0 +1,507 @@
+<!DOCTYPE html><!-- This site was created in Webflow. https://webflow.com --><!-- Last Published: Fri Jun 05 2026 15:22:15 GMT+0000 (Coordinated Universal Time) --><html data-wf-domain="www.champions4good.club" data-wf-page="6915c7f81863959ca645ab6f" data-wf-site="68d958ba50e5b8ce718345d4" lang="de"><head><meta charset="utf-8"/><link href="https://cdn.prod.website-files.com" rel="preconnect" crossorigin="anonymous"/><title>Events</title><meta content="Der Champions for Good Club verbindet Athlet:innen, Unternehmer:innen und Investor:innen. Unsere Events sind ein Raum für Sportlichkeit, Visionen und Gestaltungskraft." name="description"/><meta content="Events" property="og:title"/><meta content="Der Champions for Good Club verbindet Athlet:innen, Unternehmer:innen und Investor:innen. Unsere Events sind ein Raum für Sportlichkeit, Visionen und Gestaltungskraft." property="og:description"/><meta content="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d96375b8e5d7f8e832bed7_open-graph.png" property="og:image"/><meta content="Events" name="twitter:title"/><meta content="Der Champions for Good Club verbindet Athlet:innen, Unternehmer:innen und Investor:innen. Unsere Events sind ein Raum für Sportlichkeit, Visionen und Gestaltungskraft." name="twitter:description"/><meta content="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d96375b8e5d7f8e832bed7_open-graph.png" name="twitter:image"/><meta property="og:type" content="website"/><meta content="summary_large_image" name="twitter:card"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="Webflow" name="generator"/><link href="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/css/champions4good.webflow.shared.e09626709.min.css" rel="stylesheet" type="text/css" integrity="sha384-4JYmcJJUYf3V7sihysm2eq40dcs6ysX2mQzhnK1Usio9JOZNFhY5BDEguWC62Bwq" crossorigin="anonymous"/><script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script><link href="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d96356ee8e329fe00f8346_favicon.png" rel="shortcut icon" type="image/x-icon"/><link href="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d96359201975b8d36f8332_webclip.png" rel="apple-touch-icon"/><script defer src="https://cloud.umami.is/script.js" data-website-id="e7a77374-fa74-48e8-b1ed-1330f50c4f08"></script>
+
+
+<!--
+<script>
+  function onErrorLoader() {
+    const script = document.createElement("script");
+    script.src = "https://champions4good.vercel.app/scripts/app.js";
+    script.defer = "true";
+    document.head.appendChild(script);
+  }
+</script>
+-->
+
+
+<script
+  defer
+  src="https://champions4good.vercel.app/scripts/app.js"
+></script>
+
+<!--
+<script
+  defer
+  src="https://localhost:3000/scripts/app.js"
+  onerror="onErrorLoader()"
+></script>
+-->
+
+<!--
+<link
+  rel="stylesheet"
+  href="https://localhost:3000/styles/main.css"
+  onerror="this.onerror=null;this.href='https://champions4good.vercel.app/styles/main.css'"
+/>
+-->
+
+<link
+  rel="stylesheet"
+  href="https://champions4good.vercel.app/styles/main.css"
+/>
+
+<!--
+<style>
+
+/* =========================================================
+   FLICK CARDS — DRAGGABLE HIT AREA
+   Unsichtbarer "Dragger" über jeder Karte,
+   um Drag-Gesten sauber abzufangen.
+========================================================= */
+[data-flick-cards-dragger] {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+
+
+
+/* =========================================================
+   FLICK CARDS — OPACITY LEVELS DER MEDIEN
+   Stufenweise Reduktion der Opacity je nach Kartenposition.
+   Enthält auch Regeln für Webflow Designer & Editor.
+========================================================= */
+
+/* Basis: Alle Slides etwas gedimmt */
+[data-flick-cards-item-status] .flick-card__media,
+:is(.wf-design-mode, .w-editor) .flick-card__media {
+  transition: opacity 0.2s ease;
+  opacity: 0.5;
+}
+
+/* Zweite Position links/rechts */
+[data-flick-cards-item-status="2-before"] .flick-card__media,
+[data-flick-cards-item-status="2-after"] .flick-card__media,
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-child(2) .flick-card__media,
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-last-child(1) .flick-card__media {
+  transition: opacity 0.2s ease;
+  opacity: 0.75;
+}
+
+/* Aktive Karte */
+[data-flick-cards-item-status="active"] .flick-card__media,
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-child(1) .flick-card__media {
+  opacity: 1;
+}
+
+
+
+/* =========================================================
+   FLICK CARDS — DESIGNER-VORSCHAU TRANSFORM
+   Zeigt die Karten-Stacking-Positionen visuell in Webflow.
+========================================================= */
+
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-child(1) {z-index: 4;}
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-child(2) {
+  transform: translate(25%, 1%) rotate(10deg) scale(0.9, 0.9);
+  z-index: 3;
+}
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-child(3) {
+  transform: translate(45%, 5%) rotate(15deg) scale(0.8, 0.8);
+  z-index: 2;
+}
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-last-child(1) {
+  transform: translate(-25%, 1%) rotate(-10deg) scale(0.9, 0.9);
+  z-index: 3;
+}
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-last-child(2) {
+  transform: translate(-45%, 5%) rotate(-15deg) scale(0.8, 0.8);
+  z-index: 2;
+}
+
+
+
+/* =========================================================
+   FLICK CARDS — BUTTON ANIMATION
+   Buttons fahren nur auf aktiver Karte ein.
+========================================================= */
+
+/* Basiszustand: versteckt */
+[data-flick-cards-item-status] .flick-card__btn,
+:is(.wf-design-mode, .w-editor) .flick-group__item .flick-card__btn {
+  transition: opacity 0.4s cubic-bezier(0.625, 0.05, 0, 1),
+              1s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translate(0%, 50%) rotate(0.001deg);
+}
+
+/* Aktive Karte: Button sichtbar */
+[data-flick-cards-item-status="active"] .flick-card__btn,
+:is(.wf-design-mode, .w-editor) .flick-group__item:nth-child(1) .flick-card__btn {
+  opacity: 1;
+  transform: translate(0%, 0%) rotate(0.001deg);
+}
+
+
+
+/* =========================================================
+   LENIS — SMOOTH SCROLL STYLES
+   Offizielle empfohlenen Styles für Lenis v1.
+========================================================= */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+</style>
+--></head><body class="global-body"><div class="embed w-embed"><link rel="stylesheet" href="https://champions4good.vercel.app/styles/main.css" />
+<!--<link rel="stylesheet" href="https://localhost:3000/styles/main.css" />-->
+
+<style>
+  .global-body {
+    overflow-x: hidden;
+} 
+ 
+</style>
+
+<style>
+@media screen and (min-width: 992px) {
+  .custom-headline-01 {
+    font-size: clamp(6rem, 22vw, 29rem);
+  }
+}
+</style>
+
+
+
+
+
+
+<style>
+  @media screen and (min-width: 992px) {
+    .custom-headline-01-span {
+      font-size: calc(1.75vw + 1.75vh + 0.2rem);
+    }
+  }
+  
+  
+@media (min-width: 992px) {
+
+  /* XXL */
+  .global-headline-xxl {
+    font-size: clamp(8.5rem, 13vw, 13.75rem);
+    /* 136px → 220px */
+  }
+
+  /* XL */
+  .global-headline-xl {
+    font-size: clamp(7rem, 10.5vw, 11.25rem);
+    /* 112px → 180px */
+  }
+
+  /* L */
+  .global-headline-l {
+    font-size: clamp(3.5rem, 5vw, 5rem);
+    /* 56px → 80px */
+  }
+
+  /* M */
+  .global-headline-m {
+    font-size: clamp(2.75rem, 4vw, 4rem);
+    /* 44px → 64px */
+  }
+
+  /* S */
+  .global-headline-s {
+    font-size: clamp(2rem, 3vw, 3rem);
+    /* 32px → 48px */
+  }
+
+  /* XS */
+  .global-headline-xs {
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    /* 24px → 32px */
+  }
+
+  /* Copy */
+  .copytext {
+    font-size: clamp(0.9, 1.2vw, 1rem);
+    /* 16px → 18px */
+  }
+
+  .copytext-small {
+    font-size: clamp(0.875rem, 1vw, 1rem);
+    /* 14px → 16px */
+  }
+
+}
+
+  
+</style></div><div class="global-sounds w-embed"><audio id="sound-button-hover" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-button-hover.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-bike-ride" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-bike-ride.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-archer" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-archer.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-golf" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-golf.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-swiping-card" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-swiping-card.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-tennis" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-tennis.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-running" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-running.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-logo-running" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-running.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-basketball" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-basketball.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-gym" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-gym.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-fencing" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-fencing.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-volleyball" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-volleyball.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-horse" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-horse.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-sticker" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-sticker.mp3" type="audio/mpeg">
+</audio>
+<audio id="sound-sled" preload="auto">
+  <source src="https://champions4good.vercel.app/sounds/sound-sled.mp3" type="audio/mpeg">
+</audio></div><div data-sticker-cursor="" class="sticker-cursor"><div class="sticker-cursor-inner"><div data-sticker-cursor-item="" class="sticker-cursor-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 39 23" width="100%" data-sticker-cursor-svg="" class="sticker-cursor-svg"><path fill="#fff" fill-rule="evenodd" d="M5.94 0c.537 0 1.065.055 1.569.174h12.82v.027A6.769 6.769 0 0 1 22.012 0h.525c.537 0 1.065.055 1.568.174H39l-.046 2.118c-.014.623-.206 3.738-.394 6.926-.134 2.276-.267 4.61-.343 6.254h.437v7.354H24.027v-.002c-.47.116-.968.176-1.49.176h-.501a7.01 7.01 0 0 1-1.707-.198v.024H7.431v-.002c-.47.116-.969.176-1.49.176h-.502c-1.561 0-3.052-.433-4.114-1.598C.299 20.276 0 18.819 0 17.47V5.405c.016-1.243.313-2.643 1.293-3.75C2.32.495 3.79 0 5.415 0h.526Z" clip-rule="evenodd"></path><path fill="#121212" d="M33.59 2.247h3.28c-.026 1.145-.752 12.163-.802 14.875h-1.702c-.05-2.712-.776-13.73-.776-14.875Zm2.979 15.297v3.21h-2.703v-3.21h2.703ZM29.267 20.753h-3.154V2.247h3.154l-.026 6.666 1.052-6.666h3.153L31.92 10.63l1.602 10.123h-3.304l-.977-7.288.026 7.288ZM22.262 18.216c.275 0 .325-.224.325-.522v-5.398h3.104v5.472c0 1.667-.927 3.16-3.154 3.16h-.5c-2.378 0-3.355-1.294-3.355-3.458V5.43c.025-1.94.927-3.358 3.33-3.358h.525c2.202 0 3.154 1.194 3.154 3.01v4.9h-3.104v-4.8c0-.3-.05-.473-.325-.473-.25 0-.326.15-.326.472v12.512c0 .323.075.522.326.522ZM18.244 2.247v18.506h-3.18V2.247h3.18ZM9.516 2.247h3.154l.025 15.571h2.002l-.025 2.935H9.516V2.247ZM5.665 18.216c.275 0 .325-.224.325-.522v-5.398h3.104v5.472c0 1.667-.926 3.16-3.154 3.16h-.5c-2.378 0-3.354-1.294-3.354-3.458V5.43c.025-1.94.926-3.358 3.329-3.358h.525c2.203 0 3.154 1.194 3.154 3.01v4.9H5.99v-4.8c0-.3-.05-.473-.325-.473-.25 0-.325.15-.325.472v12.512c0 .323.075.522.325.522Z"></path></svg></div></div></div><div data-transition="" class="transition"><div class="transition-ball is-1"></div><div class="transition-ball is-2"></div><div class="transition-ball is-3"></div></div><div data-w-id="3f9927a9-14a0-caec-58a9-0fa8f5f38521" class="nav"><div data-intro-nav="" class="vw-desktop"><div class="nav-wrap"><div class="w-layout-grid global-grid"><div id="w-node-_3f9927a9-14a0-caec-58a9-0fa8f5f3852c-f5f38521" class="align-vertically"><a href="/" data-transition-link="dark-purple" class="section-layer-div w-inline-block"><div class="nav-logo-purple"><div class="align-vertically is-left-aligned"><img sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d958ba50e5b8ce718345f3_64cb7b0270b5c54c41464dfbbc953074_logo_white-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d958ba50e5b8ce718345f3_64cb7b0270b5c54c41464dfbbc953074_logo_white.png 813w" alt="" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d958ba50e5b8ce718345f3_64cb7b0270b5c54c41464dfbbc953074_logo_white.png" loading="lazy" class="nav-logo"/></div></div><div class="nav-logo-black"><div class="align-vertically is-left-aligned"><img sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0037ac885b13dd0218b_logo-black-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0037ac885b13dd0218b_logo-black-p-800.png 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0037ac885b13dd0218b_logo-black.png 1179w" alt="champions for good logo" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0037ac885b13dd0218b_logo-black.png" loading="lazy" class="nav-logo"/></div></div><div class="nav-logo-yellow"><div class="align-vertically is-left-aligned"><img sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0036e2e66206f0bc004_logo-yellow-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0036e2e66206f0bc004_logo-yellow-p-800.png 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0036e2e66206f0bc004_logo-yellow.png 1179w" alt="champions for good logo" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0036e2e66206f0bc004_logo-yellow.png" loading="lazy" class="nav-logo"/></div></div><div class="nav-logo-green"><div class="align-vertically is-left-aligned"><img sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe00379d18e97091f98b1_20145a1fbadd5ab0ac16191e1a0d3343_logo-green-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe00379d18e97091f98b1_20145a1fbadd5ab0ac16191e1a0d3343_logo-green.png 1179w" alt="champions for good logo" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe00379d18e97091f98b1_20145a1fbadd5ab0ac16191e1a0d3343_logo-green.png" loading="lazy" class="nav-logo"/></div></div></a><link rel="prefetch" href="/"/></div><div id="w-node-_3f9927a9-14a0-caec-58a9-0fa8f5f38525-f5f38521" class="align-horizontally g-2"><a data-transition-link="dark-purple" data-link="" href="/member" class="nav-item-d w-inline-block"><span class="nav-item-d-wrap"><span data-link-text="" class="nav-item-d-text is-first">Members</span><span data-link-text="" aria-hidden="true" class="nav-item-d-text is-second">Members</span></span></a><link rel="prefetch" href="/member"/><a data-transition-link="brown" data-link="" href="/events" aria-current="page" class="nav-item-d w-inline-block w--current"><span class="nav-item-d-wrap"><span data-link-text="" class="nav-item-d-text is-first">Events</span><span data-link-text="" aria-hidden="true" class="nav-item-d-text is-second">Events</span></span></a><link rel="prefetch" href="/events"/><a data-transition-link="dark-green" data-link="" href="/faq" class="nav-item-d w-inline-block"><span class="nav-item-d-wrap"><span data-link-text="" class="nav-item-d-text is-first">FAQ</span><span data-link-text="" aria-hidden="true" class="nav-item-d-text is-second">FAQ</span></span></a><link rel="prefetch" href="/faq"/><button data-w-id="ca82f555-3878-cc37-e9eb-f042c8287c16" aria-pressed="false" aria-label="Sound anschalten und ausschalten" data-sound-toggle="" type="button" class="sound-toggle"><span class="sound-toggle-text-wrap"><span class="sound-toggle-text is-first">Sounds</span><span class="sound-toggle-text is-second">Sounds</span></span><span class="sound-toggle-bar"><div class="sound-toggle-bar-bg"></div><span class="sound-toggle-bar-inner"><span class="sound-toggle-bar-dot"></span></span></span></button></div><div id="w-node-_3f9927a9-14a0-caec-58a9-0fa8f5f3853a-f5f38521" class="align-vertically is-right-aligned"><a data-button="" href="https://calendly.com/jason-brix-champions4good/30min?background_color=062629&amp;text_color=ffffff&amp;primary_color=94ffe5" target="_blank" class="default-btn has-ball is-nav w-inline-block"><span class="default-btn-wrap"><span class="default-btn-txt is-first">Join</span><span aria-hidden="true" class="default-btn-txt is-second">Join</span></span><span class="default-btn-bg is-nav"></span></a></div></div></div></div><div data-intro-nav="" class="vw-mobile"><div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="webflow-native-nav-mobile w-nav"><div class="nav-outer"><div class="nav-inner"><div class="align-vertically"><a href="/" data-transition-link="dark-purple" class="section-layer-div h-auto w-inline-block"><div class="nav-logo-purple"><div class="align-vertically is-left-aligned"><img sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d958ba50e5b8ce718345f3_64cb7b0270b5c54c41464dfbbc953074_logo_white-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d958ba50e5b8ce718345f3_64cb7b0270b5c54c41464dfbbc953074_logo_white.png 813w" alt="" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68d958ba50e5b8ce718345f3_64cb7b0270b5c54c41464dfbbc953074_logo_white.png" loading="lazy" class="nav-logo"/></div></div><div class="nav-logo-black"><div class="align-vertically is-left-aligned"><img sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0037ac885b13dd0218b_logo-black-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0037ac885b13dd0218b_logo-black-p-800.png 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0037ac885b13dd0218b_logo-black.png 1179w" alt="champions for good logo" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0037ac885b13dd0218b_logo-black.png" loading="lazy" class="nav-logo"/></div></div><div class="nav-logo-yellow"><div class="align-vertically is-left-aligned"><img sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0036e2e66206f0bc004_logo-yellow-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0036e2e66206f0bc004_logo-yellow-p-800.png 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0036e2e66206f0bc004_logo-yellow.png 1179w" alt="champions for good logo" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe0036e2e66206f0bc004_logo-yellow.png" loading="lazy" class="nav-logo"/></div></div><div class="nav-logo-green"><div class="align-vertically is-left-aligned"><img sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe00379d18e97091f98b1_20145a1fbadd5ab0ac16191e1a0d3343_logo-green-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe00379d18e97091f98b1_20145a1fbadd5ab0ac16191e1a0d3343_logo-green.png 1179w" alt="champions for good logo" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/68dbe00379d18e97091f98b1_20145a1fbadd5ab0ac16191e1a0d3343_logo-green.png" loading="lazy" class="nav-logo"/></div></div></a><link rel="prefetch" href="/"/></div><div id="w-node-_3f9927a9-14a0-caec-58a9-0fa8f5f38547-f5f38521" class="nav-btn-div"><div class="menu-button w-nav-button"><div class="section-layer-div"><div data-w-id="3f9927a9-14a0-caec-58a9-0fa8f5f3854a" class="section-layer-1 is-relative"><div class="button-txt open">Menu</div></div><div data-w-id="3f9927a9-14a0-caec-58a9-0fa8f5f3854d" class="section-layer-2 is-absolute"><div data-w-id="3f9927a9-14a0-caec-58a9-0fa8f5f3854e" class="button-txt close">Close</div></div></div></div></div><nav role="navigation" class="nav-menu-div w-nav-menu"><ul role="list" class="nav-menu-right w-list-unstyled"><li data-w-id="3f9927a9-14a0-caec-58a9-0fa8f5f38552" class="nav-item"><a href="/member" data-transition-link="dark-purple" class="nav-link">Members</a></li><li data-w-id="3f9927a9-14a0-caec-58a9-0fa8f5f38555" class="nav-item"><a href="/events" data-transition-link="brown" aria-current="page" class="nav-link w--current">Events</a></li><li data-w-id="3f9927a9-14a0-caec-58a9-0fa8f5f38558" class="nav-item"><a href="/faq" data-transition-link="dark-green" class="nav-link">faq</a></li><li data-w-id="3f9927a9-14a0-caec-58a9-0fa8f5f3855b" class="nav-item"><a href="https://calendly.com/jason-brix-champions4good/30min?background_color=062629&amp;text_color=ffffff&amp;primary_color=94ffe5" target="_blank" class="nav-link">Join</a></li></ul></nav></div></div></div></div></div><div class="main-content"><div id="events" data-sound-hero="" data-sound-hero-id="sound-basketball" class="default-section is-brown overflow-none"><div class="global-wrapper is-first-section"><div data-intro-title-animation="" class="global-headline-div"><div class="align-horizontally g-1 mg-035"><h1 class="global-headline-xl is-yellow">Die Highlights</h1></div><div class="global-subline-div _025"><div class="align-horizontally g-075 mg-05"><div data-intro-sticker="" class="inline-sticker-wrap"><div class="inline-sticker in-headline-xl" data-w-id="da4e9865-b38c-812c-a853-161533c9cd74" data-animation-type="lottie" data-src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/699c0d482468f78a4a5d7526_basketball_1.lottie" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="0" data-duration="2.04" data-loading="eager"></div></div><div class="global-headline-xl is-yellow">AUS 25/26</div></div></div></div><div data-intro-slider="" class="global-content-div"><div data-swiper="" class="swiper swiper1 w-dyn-list"><div role="list" class="swiper-wrapper w-dyn-items"><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/6a4fb44bde30f970cf7c0245_Frame%2027401%20(1).jpg" loading="eager" alt="" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club Summer Special</div><div class="global-subline-div _025"><div class="copytext is-brown">July 2026</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/6a22802fa955fae54eb9a46b_Champions4Good-DYN_NVFoto_a5_0030.jpg" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/6a22802fa955fae54eb9a46b_Champions4Good-DYN_NVFoto_a5_0030-p-500.jpg 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/6a22802fa955fae54eb9a46b_Champions4Good-DYN_NVFoto_a5_0030-p-800.jpg 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/6a22802fa955fae54eb9a46b_Champions4Good-DYN_NVFoto_a5_0030-p-1080.jpg 1080w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/6a22802fa955fae54eb9a46b_Champions4Good-DYN_NVFoto_a5_0030-p-1600.jpg 1600w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/6a22802fa955fae54eb9a46b_Champions4Good-DYN_NVFoto_a5_0030.jpg 1920w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club x DYN Media</div><div class="global-subline-div _025"><div class="copytext is-brown">May 2026</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69fdcc2d43a6cb4ab838bb55_Frame%2027399.jpg" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69fdcc2d43a6cb4ab838bb55_Frame%2027399-p-500.jpg 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69fdcc2d43a6cb4ab838bb55_Frame%2027399-p-800.jpg 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69fdcc2d43a6cb4ab838bb55_Frame%2027399-p-1080.jpg 1080w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69fdcc2d43a6cb4ab838bb55_Frame%2027399-p-1600.jpg 1600w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69fdcc2d43a6cb4ab838bb55_Frame%2027399.jpg 1818w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club x MATRIX Fitness</div><div class="global-subline-div _025"><div class="copytext is-brown">April 2026</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a3ca3f8d77b23867587_2604_Webflow_B04_Event.avif" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a3ca3f8d77b23867587_2604_Webflow_B04_Event-p-500.avif 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a3ca3f8d77b23867587_2604_Webflow_B04_Event-p-800.avif 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a3ca3f8d77b23867587_2604_Webflow_B04_Event.avif 1818w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club x TSV Bayer Leverkusen</div><div class="global-subline-div _025"><div class="copytext is-brown">March 2026</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce21f901d817c371c2b2d1_2603_Lindner_Hotel_Framne.avif" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce21f901d817c371c2b2d1_2603_Lindner_Hotel_Framne-p-500.avif 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce21f901d817c371c2b2d1_2603_Lindner_Hotel_Framne-p-800.avif 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce21f901d817c371c2b2d1_2603_Lindner_Hotel_Framne-p-1080.avif 1080w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce21f901d817c371c2b2d1_2603_Lindner_Hotel_Framne.avif 1818w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club Goes Mallorca</div><div class="global-subline-div _025"><div class="copytext is-brown">March 2026</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a12f00072c18a7ceaa8_2602_Webflow_UMEvent.avif" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a12f00072c18a7ceaa8_2602_Webflow_UMEvent-p-500.avif 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a12f00072c18a7ceaa8_2602_Webflow_UMEvent-p-800.avif 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a12f00072c18a7ceaa8_2602_Webflow_UMEvent-p-1080.avif 1080w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69ce1a12f00072c18a7ceaa8_2602_Webflow_UMEvent.avif 1818w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club x Maastricht University</div><div class="global-subline-div _025"><div class="copytext is-brown">February 2026</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69833815fa3852025ab08dbe_event_img.avif" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69833815fa3852025ab08dbe_event_img-p-500.avif 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69833815fa3852025ab08dbe_event_img-p-800.avif 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69833815fa3852025ab08dbe_event_img-p-1080.avif 1080w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69833815fa3852025ab08dbe_event_img.avif 1728w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Padel Session Berlin</div><div class="global-subline-div _025"><div class="copytext is-brown">January 2026</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69821584d775fd2f595f4e90_event_img.avif" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69821584d775fd2f595f4e90_event_img-p-500.avif 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69821584d775fd2f595f4e90_event_img-p-800.avif 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69821584d775fd2f595f4e90_event_img.avif 1728w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club Get Together</div><div class="global-subline-div _025"><div class="copytext is-brown">December 2025</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213d2706a248cad68a49c_event_img-2.avif" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213d2706a248cad68a49c_event_img-2-p-500.avif 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213d2706a248cad68a49c_event_img-2-p-800.avif 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213d2706a248cad68a49c_event_img-2.avif 1728w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">IHF Handball Frauen WM</div><div class="global-subline-div _025"><div class="copytext is-brown">December 2025</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213dfe5bc919cf4898067_event_img.avif" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213dfe5bc919cf4898067_event_img-p-500.avif 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213dfe5bc919cf4898067_event_img-p-800.avif 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213dfe5bc919cf4898067_event_img.avif 1728w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Champions Kitchen</div><div class="global-subline-div _025"><div class="copytext is-brown">November 2025</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213eacaa477cf7c4effd9_event_img-1.avif" loading="eager" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213eacaa477cf7c4effd9_event_img-1-p-500.avif 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213eacaa477cf7c4effd9_event_img-1-p-800.avif 800w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/698213eacaa477cf7c4effd9_event_img-1.avif 1728w" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club Get Together Duesseldorf</div><div class="global-subline-div _025"><div class="copytext is-brown">October 2025</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69219fc89d4783fde774fef5_69033eadde7772098a53dc0f_c9b66c64b37e6083aa526474bdf5c708_Premier_Padel.avif" loading="eager" alt="" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Premier Padel Duesseldorf</div><div class="global-subline-div _025"><div class="copytext is-brown">September 2025</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69219fabd21d2815b5c4b8b2_69033eae19ca64fc263957b5_43eb0e2e5bd35716e94d90e8194da2ea_KO%CC%88MEILE_TORBENFLA_202509071318272910.avif" loading="eager" alt="" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">New Balance KOE-Meile</div><div class="global-subline-div _025"><div class="copytext is-brown">September 2025</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69219f899993963846c3fef0_68e3b00aea308fab1a2fa295_7652ce4987e21fae407167b906e95cfda192063a.avif" loading="eager" alt="" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Bonn Open</div><div class="global-subline-div _025"><div class="copytext is-brown">August 2025</div></div></div></div></div></div></div><div role="listitem" class="swiper-slide w-dyn-item"><div class="swiper-box is-yellow"><div class="align-vertically"><div class="img-div r-16"><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345ec/69219f76e1bc6ce0281322b6_6901e09aac31bfb2f6655b01_ChampionsForGood_GetTogether.avif" loading="eager" alt="" class="default-img h-100"/></div><div class="global-subline-div _1"><div class="align-vertically"><div class="global-headline-s is-brown">Club Get Together</div><div class="global-subline-div _025"><div class="copytext is-brown">August 2025</div></div></div></div></div></div></div></div></div><div data-swiper-navigation="" class="swiper-navigation"><button type="button" data-swiper-prev="" class="swiper-button is-prev is-yellow"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 21 16" fill="none" class="icon-arrow is-first"><path d="M9.12109 1.41406L3.82812 6.70703H20.4141V8.70703H3.82812L9.12109 14L7.70703 15.4141L0 7.70703L7.70703 0L9.12109 1.41406Z" fill="currentColor"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 21 16" fill="none" class="icon-arrow is-second"><path d="M9.12109 1.41406L3.82812 6.70703H20.4141V8.70703H3.82812L9.12109 14L7.70703 15.4141L0 7.70703L7.70703 0L9.12109 1.41406Z" fill="currentColor"></path></svg><span class="swiper-button-bg is-yellow"></span></button><button type="button" data-swiper-next="" class="swiper-button is-next is-yellow"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 21 16" fill="none" class="icon-arrow is-first"><path d="M20.418 7.70703L12.7109 15.4141L11.2969 14L16.5898 8.70703H0V6.70703H16.5898L11.2969 1.41406L12.7109 0L20.418 7.70703Z" fill="currentColor"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 21 16" fill="none" class="icon-arrow is-second"><path d="M20.418 7.70703L12.7109 15.4141L11.2969 14L16.5898 8.70703H0V6.70703H16.5898L11.2969 1.41406L12.7109 0L20.418 7.70703Z" fill="currentColor"></path></svg><span class="swiper-button-bg is-yellow"></span></button></div></div></div></div><div data-w-id="6dfdb012-7ea8-a3f8-b93a-4321c25b8dd0" class="nav-yellow-to-black"></div><div class="m-nav-yellow-to-black"></div><div id="join" data-golf="" class="breakpoint-section"><div class="vw-desktop"><div class="default-section overflow-none"><div class="global-wrapper h-100 tp-3 bp-0"><div class="global-grid mg-2 h-100"><div id="w-node-_2ddff774-ef7a-ff10-a5e8-3b801af9aacb-1af9aabf" class="align-vertically is-left-aligned is-stretched"><div data-sticker-white="" data-sticker="" class="sticker-wrap"><h2 data-title="" data-scroll="true" class="global-headline-xl is-left-aligned">READy TO <span>JOIN?</span></h2><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce693d8a479dedfed0022_purple-sticker-01.svg" loading="lazy" width="298" height="160" alt="" data-sticker-item="" class="sticker is-purple-1"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce69093b28088106fe3e8_pink-three-circle-sticker.svg" loading="lazy" width="298" height="279" alt="" data-sticker-item="" class="sticker is-purple-2"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce690a0f2466325bac831_dark-purple-sticker.svg" loading="lazy" width="338" height="338" alt="" data-sticker-item="" class="sticker is-purple-3"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697cdf9ff4eeb0e43c792091_blue-sticker-01.svg" loading="lazy" width="300" height="300" alt="" data-sticker-item="" class="sticker is-green-1"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697cdf9fd93512fce94a121d_light-green-sticker.svg" loading="lazy" width="338" height="338" alt="" data-sticker-item="" class="sticker is-green-2"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce9e5e0dcd643f21f0278_yellow-sticker-01.svg" loading="lazy" width="277" height="160" alt="" data-sticker-item="" class="sticker is-yellow-1"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce9e505089fdd1be80650_dark-brown-sitcker.svg" loading="lazy" width="338" height="338" alt="" data-sticker-item="" class="sticker is-yellow-2"/></div></div><div id="w-node-_2ddff774-ef7a-ff10-a5e8-3b801af9aad3-1af9aabf" class="align-vertically is-left-aligned is-top-aligned"><h3 animation="true" class="global-headline-s is-left-aligned">Vereinbare ein GespraEch mit unserem team und erfahre mehr UEber Deine Membership bei champions for good.</h3><div class="global-subline-div _1 is-left-aligned"><a data-button="" href="https://calendly.com/jason-brix-champions4good/30min?background_color=062629&amp;text_color=ffffff&amp;primary_color=94ffe5" target="_blank" class="default-btn has-ball w-inline-block"><span class="default-btn-wrap"><span class="default-btn-txt is-first">Join</span><span aria-hidden="true" class="default-btn-txt is-second">Join</span></span><span class="default-btn-bg"></span></a></div></div></div></div><div class="global-grid mg-2 h-100"><div id="w-node-_97f07804-4868-636b-f785-586c96d0e92d-1af9aabf" class="lottie is-golfer" data-w-id="97f07804-4868-636b-f785-586c96d0e92d" data-animation-type="lottie" data-src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69b86601859a45761b0400ac_golf.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="0" data-duration="6" data-loading="eager"></div></div></div></div><div class="vw-mobile"><div class="default-section"><div class="global-wrapper tp-3 bp-0"><div class="global-grid mg-2 h-100"><div id="w-node-_2ddff774-ef7a-ff10-a5e8-3b801af9aae1-1af9aabf" class="align-vertically h-100 is-stretched"><div class="align-vertically is-left-aligned"><div data-sticker-mobile-active="" data-sticker="" class="sticker-wrap"><h2 class="global-headline-xl is-left-aligned">Ready to join?</h2><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce693d8a479dedfed0022_purple-sticker-01.svg" loading="lazy" width="298" height="160" alt="" data-sticker-item="" class="sticker is-purple-1"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce69093b28088106fe3e8_pink-three-circle-sticker.svg" loading="lazy" width="298" height="279" alt="" data-sticker-item="" class="sticker is-purple-2"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce690a0f2466325bac831_dark-purple-sticker.svg" loading="lazy" width="338" height="338" alt="" data-sticker-item="" class="sticker is-purple-3"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697cdf9ff4eeb0e43c792091_blue-sticker-01.svg" loading="lazy" width="300" height="300" alt="" data-sticker-item="" class="sticker is-green-1"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697cdf9fd93512fce94a121d_light-green-sticker.svg" loading="lazy" width="338" height="338" alt="" data-sticker-item="" class="sticker is-green-2"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce9e5e0dcd643f21f0278_yellow-sticker-01.svg" loading="lazy" width="277" height="160" alt="" data-sticker-item="" class="sticker is-yellow-1"/><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/697ce9e505089fdd1be80650_dark-brown-sitcker.svg" loading="lazy" width="338" height="338" alt="" data-sticker-item="" class="sticker is-yellow-2"/></div><div class="global-subline-div _1 is-left-aligned"><h3 animation="true" class="global-headline-s is-left-aligned">Vereinbare ein GespraEch mit unserem team und erfahre mehr UEber Deine Membership bei champions for good.</h3></div><div class="global-subline-div _2 is-left-aligned"><a data-button="" href="https://calendly.com/jason-brix-champions4good/30min?background_color=062629&amp;text_color=ffffff&amp;primary_color=94ffe5" target="_blank" class="default-btn has-ball w-inline-block"><span class="default-btn-wrap"><span class="default-btn-txt is-first">Join</span><span aria-hidden="true" class="default-btn-txt is-second">Join</span></span><span class="default-btn-bg"></span></a></div></div></div></div></div><div class="lottie is-golfer" data-w-id="134a1cc3-b90f-a7b6-91b6-d703e8cd9d9b" data-animation-type="lottie" data-src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69b86601859a45761b0400ac_golf.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="0" data-duration="6" data-loading="eager"></div></div></div></div></div><div class="footer"><div class="footer-wrapper"><div class="footer-align-vertically"><div class="global-grid mg-2"><div data-logo-sound="" id="w-node-_3dda3641-77e4-75bc-30b9-23788b892ac8-bf537142" class="footer-logo-wrap"><div id="w-node-_8cad7e62-a2f0-c77b-5fbb-c9707a03ba44-bf537142" class="footer-runner" data-w-id="8cad7e62-a2f0-c77b-5fbb-c9707a03ba44" data-animation-type="lottie" data-src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/696364c8a237dd559198587c_animation.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="canvas" data-default-duration="0" data-duration="0.8333333333333334" data-loading="eager"></div><img id="w-node-_98f960dc-475d-c106-419d-fa5cbf537147-bf537142" sizes="100vw" alt="" src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69629cbda674dabeedcbe0ff_Group%205576.png" loading="lazy" srcset="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69629cbda674dabeedcbe0ff_Group%205576-p-500.png 500w, https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69629cbda674dabeedcbe0ff_Group%205576.png 833w" class="footer-logo"/></div><div id="w-node-_98f960dc-475d-c106-419d-fa5cbf537159-bf537142" class="footer-link-list"><div class="footer-txt">Menü</div><a data-transition-link="dark-purple" data-link="" href="/member" class="footer-url w-inline-block"><span class="footer-url-wrap"><span data-link-text="" class="footer-url-text is-first">Members</span><span data-link-text="" aria-hidden="true" class="footer-url-text is-second">Members</span></span></a><link rel="prefetch" href="/member"/><a data-transition-link="brown" data-link="" href="/events" aria-current="page" class="footer-url w-inline-block w--current"><span class="footer-url-wrap"><span data-link-text="" class="footer-url-text is-first">Events</span><span data-link-text="" aria-hidden="true" class="footer-url-text is-second">Events</span></span></a><link rel="prefetch" href="/events"/><a data-transition-link="dark-green" data-link="" href="/faq" class="footer-url w-inline-block"><span class="footer-url-wrap"><span data-link-text="" class="footer-url-text is-first">FAQ</span><span data-link-text="" aria-hidden="true" class="footer-url-text is-second">FAQ</span></span></a><link rel="prefetch" href="/faq"/></div><div id="w-node-_98f960dc-475d-c106-419d-fa5cbf537160-bf537142" class="footer-link-list center"><div class="footer-link-list"><div class="footer-txt">Links</div><a data-transition-link="" data-link="" href="https://championsforgood-club.coapp.io/" target="_blank" class="footer-url w-inline-block"><span class="footer-url-wrap"><span data-link-text="" class="footer-url-text is-first">Club Platform</span><span data-link-text="" aria-hidden="true" class="footer-url-text is-second">Club Platform</span></span></a><a data-transition-link="" data-link="" href="https://www.linkedin.com/company/champions-for-good/" target="_blank" class="footer-url w-inline-block"><span class="footer-url-wrap"><span data-link-text="" class="footer-url-text is-first">LinkedIn</span><span data-link-text="" aria-hidden="true" class="footer-url-text is-second">LinkedIn</span></span></a></div></div><div id="w-node-_733c9015-8824-c567-d7da-c69ebe49fafd-bf537142" class="footer-link-list"><div class="footer-txt">Legal</div><a data-transition-link="white" data-link="" href="/legal/impressum" class="footer-url w-inline-block"><span class="footer-url-wrap"><span data-link-text="" class="footer-url-text is-first">Impressum</span><span data-link-text="" aria-hidden="true" class="footer-url-text is-second">Impressum</span></span></a><a data-transition-link="white" data-link="" href="/legal/datenschutz" class="footer-url w-inline-block"><span class="footer-url-wrap"><span data-link-text="" class="footer-url-text is-first">Datenschutz</span><span data-link-text="" aria-hidden="true" class="footer-url-text is-second">Datenschutz</span></span></a></div></div><div class="footer-row-2"><div class="footer-align-horizontally is-strechted is-vertically-aligned-on-mobile"><div class="footer-url">© 2026 | Champions for Good GmbH</div><div class="align-horizontally g-025"><a href="https://www.doubleplay.studio/" target="_blank" class="footer-url">Website made by Double Play</a><img src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/69907d8f0e1bfdecac495c29_dp_ball.png" loading="lazy" alt="Lila Umriss eines Tennisballs vor weißem Hintergrund." class="icon xs"/></div></div></div></div></div></div><script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=68d958ba50e5b8ce718345d4" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/js/webflow.schunk.f2efb3c5440a81cf.js" type="text/javascript" integrity="sha384-VK02VJvMib7ytrF5M2joPWNtDQs366FZgEQ5B+Iwnjx0WBnwQXfootyziSYxdrmS" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/js/webflow.schunk.4c686a534a266e62.js" type="text/javascript" integrity="sha384-39EyQ8cNWin0nqx8ZR+ODmbCBmuHtV0/06Zp/9dpqURnddXgVSrOgB08TJSgeAPh" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/68d958ba50e5b8ce718345d4/js/webflow.57cd2236.ed0f484fa83a1d7e.js" type="text/javascript" integrity="sha384-g4ycnAOe6xBRZP+t2N8dqvoOVDS+/M8aS0IpuTEAKcghdK3acmj5ryC3nyQGqiJ7" crossorigin="anonymous"></script><script async src="https://cdn.jsdelivr.net/npm/@finsweet/cookie-consent@1/fs-cc.js" fs-cc-mode="opt-in"></script>
+<script async type="module" src="https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js" fs-mirrorclick></script>
+
+
+<!--
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/InertiaPlugin.min.js"></script>
+
+<script>
+/* ============================================================
+   FLICK CARDS SLIDER
+   - Drag-basierter Karten-Stack
+   - Endpunkt: data-flick-cards-init
+   ============================================================ */
+gsap.registerPlugin(Draggable);
+
+function initFlickCards() {
+  const sliders = document.querySelectorAll('[data-flick-cards-init]');
+
+  sliders.forEach(slider => {
+    const list = slider.querySelector('[data-flick-cards-list]');
+    const cards = Array.from(list.querySelectorAll('[data-flick-cards-item]'));
+    const total = cards.length;
+    let activeIndex = 0;
+
+    const sliderWidth = slider.offsetWidth;
+    const threshold = 0.1;
+
+    // Dragger-Elemente innerhalb jeder Karte
+    const draggers = [];
+    cards.forEach(card => {
+      const dragger = document.createElement('div');
+      dragger.setAttribute('data-flick-cards-dragger', '');
+      card.appendChild(dragger);
+      draggers.push(dragger);
+    });
+
+    slider.setAttribute('data-flick-drag-status', 'grab');
+
+    // Karten-Layout-Konfiguration
+    function getConfig(i, currentIndex) {
+      let diff = i - currentIndex;
+      if (diff > total / 2) diff -= total;
+      else if (diff < -total / 2) diff += total;
+
+      switch (diff) {
+        case 0:  return { x: 0,   y: 0,   rot: 0,   s: 1,   o: 1, z: 5 };
+        case 1:  return { x: 25,  y: 1,   rot: 10,  s: 0.9, o: 1, z: 4 };
+        case -1: return { x: -25, y: 1,   rot: -10, s: 0.9, o: 1, z: 4 };
+        case 2:  return { x: 45,  y: 5,   rot: 15,  s: 0.8, o: 1, z: 3 };
+        case -2: return { x: -45, y: 5,   rot: -15, s: 0.8, o: 1, z: 3 };
+        default:
+          const dir = diff > 0 ? 1 : -1;
+          return { x: 55 * dir, y: 5, rot: 20 * dir, s: 0.6, o: 0, z: 2 };
+      }
+    }
+
+    // Karten rendern
+    function renderCards(currentIndex) {
+      cards.forEach((card, i) => {
+        const cfg = getConfig(i, currentIndex);
+        let status;
+
+        if (cfg.x === 0)        status = 'active';
+        else if (cfg.x === 25)  status = '2-after';
+        else if (cfg.x === -25) status = '2-before';
+        else if (cfg.x === 45)  status = '3-after';
+        else if (cfg.x === -45) status = '3-before';
+        else                    status = 'hidden';
+
+        card.setAttribute('data-flick-cards-item-status', status);
+        card.style.zIndex = cfg.z;
+
+        gsap.to(card, {
+          duration: 0.6,
+          ease: 'elastic.out(1.2, 1)',
+          xPercent: cfg.x,
+          yPercent: cfg.y,
+          rotation: cfg.rot,
+          scale: cfg.s,
+          opacity: cfg.o
+        });
+      });
+    }
+
+    renderCards(activeIndex);
+
+    if (total < 7) {
+      console.log('Not minimum of 7 cards');
+      return;
+    }
+
+    let pressClientX = 0;
+    let pressClientY = 0;
+
+    Draggable.create(draggers, {
+      type: 'x',
+      edgeResistance: 0.8,
+      bounds: { minX: -sliderWidth / 2, maxX: sliderWidth / 2 },
+      inertia: false,
+
+      onPress() {
+        pressClientX = this.pointerEvent.clientX;
+        pressClientY = this.pointerEvent.clientY;
+        slider.setAttribute('data-flick-drag-status', 'grabbing');
+      },
+
+      onDrag() {
+        const rawProgress = this.x / sliderWidth;
+        const progress = Math.min(1, Math.abs(rawProgress));
+        const direction = rawProgress > 0 ? -1 : 1;
+        const nextIndex = (activeIndex + direction + total) % total;
+
+        cards.forEach((card, i) => {
+          const from = getConfig(i, activeIndex);
+          const to   = getConfig(i, nextIndex);
+          const mix  = prop => from[prop] + (to[prop] - from[prop]) * progress;
+
+          gsap.set(card, {
+            xPercent: mix('x'),
+            yPercent: mix('y'),
+            rotation: mix('rot'),
+            scale:    mix('s'),
+            opacity:  mix('o')
+          });
+        });
+      },
+
+      onRelease() {
+        slider.setAttribute('data-flick-drag-status', 'grab');
+
+        const releaseX = this.pointerEvent.clientX;
+        const releaseY = this.pointerEvent.clientY;
+        const dragDistance = Math.hypot(releaseX - pressClientX, releaseY - pressClientY);
+
+        const raw = this.x / sliderWidth;
+        let shift = 0;
+        if (raw > threshold) shift = -1;
+        else if (raw < -threshold) shift = 1;
+
+        if (shift !== 0) {
+          activeIndex = (activeIndex + shift + total) % total;
+          renderCards(activeIndex);
+        }
+
+        gsap.to(this.target, { x: 0, duration: 0.3, ease: 'power1.out' });
+
+        // Weiterleitung von Klicks, wenn kaum gezogen wurde
+        if (dragDistance < 4) {
+          this.target.style.pointerEvents = 'none';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              const el = document.elementFromPoint(releaseX, releaseY);
+              if (el) el.click();
+              this.target.style.pointerEvents = 'auto';
+            });
+          });
+        }
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initFlickCards);
+</script>
+
+
+<script async src="https://cdn.jsdelivr.net/npm/@finsweet/cookie-consent@1/fs-cc.js" fs-cc-mode="opt-in"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+<script async type="module" src="https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js" fs-mirrorclick></script>
+
+<script>
+/* ============================================================
+   SWIPER SETUP
+   ============================================================ */
+$(".swiper").append(`<div class="swiper-scrollbar"></div>`);
+$(".swiper").append(`<div class="swiper-pagination"></div>`);
+$(".swiper").append(`<div class="swiper-arrow button-prev"></div>`);
+$(".swiper").append(`<div class="swiper-arrow button-next"></div>`);
+
+const swiper1 = new Swiper(".swiper1", {
+  direction: "horizontal",
+  loop: true,
+  slidesPerView: 1,
+  slidesPerGroup: 1,
+  spaceBetween: 20,
+  mousewheel: { forceToAxis: true },
+  speed: 400,
+
+  breakpoints: {
+    480: { slidesPerView: 1 },
+    768: { slidesPerView: 2 },
+    992: { slidesPerView: 3 }
+  },
+
+  pagination: { el: ".swiper-pagination", clickable: true },
+  navigation: { nextEl: ".button-next", prevEl: ".button-prev" },
+  scrollbar: { el: ".swiper-scrollbar", draggable: true }
+});
+</script>
+
+<script>
+/* ============================================================
+   LENIS SMOOTH SCROLL
+   ============================================================ */
+const lenis = new Lenis();
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+</script>
+-->
+</body></html>
