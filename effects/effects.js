@@ -1194,5 +1194,26 @@ window.__EFFECTS__ = [
     "sourceUrl": "https://www.champions4good.club/",
     "localMirror": "../designs/099-champions4good/index.html",
     "order": 58
+  },
+  {
+    "num": "059",
+    "folder": "059-empiremetaverse-3d-hero",
+    "title": "Empire Metaverse 3D Hero",
+    "subtitle": "滚动驱动的 Empire Building 3D 叙事首屏",
+    "description": "提取 Empire Metaverse 从首屏到商业机会文案画面的连续滚动体验：3D 建筑镜头、飘动云层与逐段显现的正文均由同一条平滑进度驱动。",
+    "tech": "Three.js + GLTFLoader + GSAP",
+    "tags": [
+      "animation",
+      "scroll",
+      "hero",
+      "3d",
+      "WebGL",
+      "typography"
+    ],
+    "previewHref": "index.html",
+    "preview": "059-empiremetaverse-3d-hero/preview.png",
+    "sourceUrl": "https://empiremetaverse.com/",
+    "localMirror": "../designs/101-empiremetaverse/index.html",
+    "order": 59
   }
 ];
