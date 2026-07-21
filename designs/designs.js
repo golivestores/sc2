@@ -1240,7 +1240,7 @@ window.__DESIGNS__ = [
   },
   {
     "folder": "102-andrewcunliffe",
-    "title": "Andrew Cunliffe",
+    "title": "Himax",
     "description": "",
     "sourceUrl": "https://andrewcunliffe.ai/",
     "savedAt": "2026-07-21",
