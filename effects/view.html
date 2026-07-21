@@ -172,16 +172,6 @@ function getEffectFolder() {
   return u.get('effect') || '';
 }
 
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error('load failed: ' + src));
-    document.head.appendChild(s);
-  });
-}
-
 function stripSc2Overlay(text) {
   return text.replace(
     /<!-- sc2-overlay:start -->[\s\S]*?<!-- sc2-overlay:end -->/gi,
@@ -422,25 +412,21 @@ function showFatal(title, html) {
       '正确用法：<code>view.html?effect=NNN-名字</code>');
     return;
   }
-  // Under HTTP(S), read the effect source directly so the viewer never depends
-  // on generated/ignored source-bundle.js files being present on deployment.
-  // Under file://, keep the generated bundle fallback because fetch is blocked.
-  let bundle = null;
-  let directLoadError = null;
-  if (location.protocol !== 'file:') {
-    try {
-      bundle = await buildBundleFromSource(folder);
-    } catch (error) {
-      directLoadError = error;
-    }
+  // Chromium blocks file:// pages from reading sibling files. Route local-file
+  // entries to the standard project server, where sources are read directly.
+  if (location.protocol === 'file:') {
+    const localViewer = new URL('/effects/view.html', 'http://127.0.0.1:8080');
+    localViewer.searchParams.set('effect', folder);
+    location.replace(localViewer.href);
+    return;
   }
 
-  if (!bundle || bundle.effect !== folder) {
-    try {
-      window.__SC2_BUNDLE__ = null;
-      await loadScript(`${encodeURIComponent(folder)}/source-bundle.js?_=${Date.now()}`);
-      bundle = window.__SC2_BUNDLE__;
-    } catch {}
+  let bundle = null;
+  let directLoadError = null;
+  try {
+    bundle = await buildBundleFromSource(folder);
+  } catch (error) {
+    directLoadError = error;
   }
 
   if (!bundle || bundle.effect !== folder) {
@@ -449,10 +435,7 @@ function showFatal(title, html) {
       : '';
     showFatal(`无法读取 ${folder} 的源码`,
       detail +
-      '请确认该 effect 文件夹内存在 <code>index.html</code>。' +
-      (location.protocol === 'file:'
-        ? '<br>当前是本地文件模式，请先运行 <code>python package-effects.py --bundle-only</code>。'
-        : ''));
+      '请确认该 effect 文件夹内存在 <code>index.html</code>。');
     return;
   }
 

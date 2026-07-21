@@ -1203,17 +1203,38 @@ window.__EFFECTS__ = [
     "description": "提取 Empire Metaverse 从首屏到商业机会文案画面的连续滚动体验：3D 建筑镜头、飘动云层与逐段显现的正文均由同一条平滑进度驱动。",
     "tech": "Three.js + GLTFLoader + GSAP",
     "tags": [
-      "animation",
-      "scroll",
-      "hero",
-      "3d",
-      "WebGL",
-      "typography"
+      "首屏",
+      "滚动",
+      "视差",
+      "形变",
+      "响应式",
+      "科技"
     ],
     "previewHref": "index.html",
     "preview": "059-empiremetaverse-3d-hero/preview.png",
     "sourceUrl": "https://empiremetaverse.com/",
     "localMirror": "../designs/101-empiremetaverse/index.html",
     "order": 59
+  },
+  {
+    "num": "060",
+    "folder": "060-andrewcunliffe-work-scenes",
+    "title": "Andrew Cunliffe Work Scenes",
+    "subtitle": "滚动驱动的多项目空间化作品展示",
+    "description": "提取 Andrew Cunliffe 网站 Work 区间，从 HighLvl 到 Black Sheep 的六个项目以全屏粘性舞台、漂浮媒体、交叉淡入与滚动进度连续切换。",
+    "tech": "HTML + CSS + JavaScript",
+    "tags": [
+      "案例动态",
+      "滚动",
+      "多态切换",
+      "视差",
+      "响应式",
+      "科技"
+    ],
+    "previewHref": "index.html",
+    "preview": "060-andrewcunliffe-work-scenes/preview.png",
+    "sourceUrl": "https://andrewcunliffe.ai/",
+    "localMirror": "../designs/102-andrewcunliffe/index.html",
+    "order": 60
   }
 ];

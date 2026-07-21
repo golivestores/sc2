@@ -124,9 +124,9 @@ python finalize.py --package                    # 加上 --package 才会预打�
 |---|---|---|---|
 | `rebuild-index.py` | `effects.{js,json}` + `designs.{js,json}` + `tag-axis.js` | 让画廊看见新卡片 | ✅ |
 | `inject-overlay.py` | 每个 `effects/NNN/index.html` 底部注入浮动 overlay | demo 单页右上角 📦 zip + 📋 源码 按钮 | ✅ |
-| `package-effects.py` | `effects/NNN/<NNN>.zip` + `source-bundle.js` | 卡片下载按钮 + viewer paste 块 | ❌ 默认跳过 |
+| `package-effects.py` | `effects/NNN/<NNN>.zip` | 卡片下载按钮 | ❌ 默认跳过 |
 
-zip 和 source-bundle.js 默认不预打，由 `serve.py` 在第一次点对应按钮时 lazy 打。想一次全打就 `--package`，CI 之类的场景用。
+zip 默认不预打，由 `serve.py` 在第一次点下载按钮时 lazy 打。源码查看器始终直接读取 Effect 的真实文件。想一次全打就 `--package`，CI 之类的场景用。
 
 **自查清单**（每次交付前必走一遍）：
 
@@ -150,7 +150,7 @@ zip 和 source-bundle.js 默认不预打，由 `serve.py` 在第一次点对应�
 ```
 sc2/
 ├── README.md                  ← 本文件
-├── .gitignore                 ← 排 .claude / *.zip / source-bundle.js / preview.png 等生成物
+├── .gitignore                 ← 排 .claude / *.zip / preview.png 等生成物
 │
 ├── designs/                   ← 整站镜像
 │   ├── index.html             ← 镜像导航：读 designs.js 渲染卡片
@@ -174,16 +174,15 @@ sc2/
 │       ├── meta.json          ← 卡片元数据（schema 见下）
 │       ├── assets/            ← demo 私有资源
 │       ├── lib/               ← demo 自带的第三方 JS 副本（不跨 effect 引用兄弟资源）
-│       ├── source-bundle.js   ← package-effects.py 生成（gitignored）
 │       └── NNN-短名.zip       ← package-effects.py 生成（gitignored）
 │
-├── serve.py                   ← 日常入口：本地 HTTP server + lazy zip/source-bundle 打包（默认 8080，自动开浏览器）
+├── serve.py                   ← 日常入口：本地 HTTP server + lazy zip 打包（默认 8080，自动开浏览器）
 ├── scrape-url.py              ← URL → designs/<NNN>/ 离线镜像（含 auto-rebuild + headless verify）
 ├── nuxt-spa-fixup.py          ← 对已抓的 Nuxt SPA 镜像后补 5 步 recipe（独立入口）
 ├── new-effect.py              ← 新建 effects/<NNN-slug>/ 骨架文件
 ├── finalize.py                ← 收尾脚本：默认 rebuild + inject-overlay；--package 加打 zip
 ├── rebuild-index.py           ← 扫两个目录重建 designs.js / effects.js / tag-axis.js
-├── package-effects.py         ← 给单个或全部 effect 生成 source-bundle.js + zip（--only / --bundle-only）
+├── package-effects.py         ← 给单个或全部 effect 生成 zip（--only）
 ├── inject-overlay.py          ← 把浮动下载/源码 overlay 注入每个 effect 的 index.html
 └── reencode-mp4.py            ← 批量 ffmpeg 重压 mp4 到 1.5-2 Mbps（瘦体积用）
 ```
@@ -199,7 +198,7 @@ sc2/
 | `python new-effect.py <slug>` | 新建 effect 骨架 | `--num NNN` `--title` `--source-url` `--mirror` |
 | `python finalize.py` | 改完 effect 一键收尾（rebuild + overlay，默认不打 zip） | `--package` `--skip-rebuild` `--skip-overlay` |
 | `python reencode-mp4.py` | 批量压视频（CRF 27 H.264） | （无参数，会自动跳过已经低码率/太小的） |
-| `python package-effects.py` | （serve.py / finalize.py 调用；可手跑） | `--bundle-only` `--only SLUG` |
+| `python package-effects.py` | （serve.py / finalize.py 调用；可手跑） | `--only SLUG` |
 | `python inject-overlay.py` | （finalize 内部调用，可单独跑） | 无 |
 | `python rebuild-index.py` | （finalize 内部调用，可单独跑） | 无 |
 | `python nuxt-spa-fixup.py FOLDER` | 对已抓的 Nuxt SPA 镜像后补 5 步 recipe | `--url URL` |
@@ -345,9 +344,9 @@ effect 的 index.html 里仅为 demo 展示而加（不属于 block 本体）的
 1. **Nuxt/Astro/Next/SvelteKit 框架 manifest 404**：自动复制框架目录到镜像根应该解决了。如果没解决（手抓的旧镜像），手工把 `designs/<NNN>/assets/<host>/_nuxt/` 复制到 `designs/<NNN>/_nuxt/`
 2. **Webpack 数字编号 chunk**（`__webpack_require__.e(123)`）漏抓：URL 是运行时拼出来的，scraper grep 不到。F12 看 Network 404，curl 手补到对应路径
 
-### viewer 报「找不到 source-bundle.js」
+### viewer 无法显示源码
 
-跑 `python finalize.py` 或单独跑 `python package-effects.py`。`source-bundle.js` 是生成物、gitignored。
+请用 `python serve.py` 启动项目后，从 `http://127.0.0.1:8080/effects/` 进入。源码页直接读取 Effect 的真实文件，不需要生成中间文件。
 
 ### 解压 zip 后视频不播
 
@@ -364,7 +363,7 @@ effect 的 index.html 里仅为 demo 展示而加（不属于 block 本体）的
 ### 仓库体积变大
 
 - mp4 默认是 1080p / 7+ Mbps，scrape 回来很占空间。跑 `python reencode-mp4.py` 全部重压到 ~1.8 Mbps（CRF 27），通常能砍掉 50%+
-- effects 的 `*.zip` 和 `source-bundle.js` 已经在 .gitignore 里、不进库
+- effects 的 `*.zip` 已经在 .gitignore 里、不进库
 - `_nuxt/` 等框架目录会比 `assets/<host>/_nuxt/` 多占一份磁盘（auto-copy 双份）——但镜像独立性更好，这点冗余可以忍
 
 ---
@@ -392,4 +391,4 @@ sc2/
 
 Mac/Linux 与 Windows 等价：所有脚本都是 Python，没有 PowerShell 依赖。
 
-`serve.py` 是 `python -m http.server` 的 drop-in 替代——多做一件事：拦截 `effects/<slug>/<slug>.zip` 和 `source-bundle.js` 请求，文件不在磁盘上就实时调 `package-effects.py --only <slug>` 打包出来再 serve。这样 clone 完不需要先跑一遍 `python finalize.py --package` 预热 19 个 zip（zip 在 `.gitignore` 里，git 仓库不带它们）。
+`serve.py` 是 `python -m http.server` 的 drop-in 替代——多做一件事：拦截 `effects/<slug>/<slug>.zip` 请求，文件不在磁盘上就实时调 `package-effects.py --only <slug>` 打包出来再 serve。源码查看器直接读取真实文件，不参与 lazy build。

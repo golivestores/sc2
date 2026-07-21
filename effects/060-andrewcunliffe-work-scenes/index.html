@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Andrew Cunliffe — Work Scenes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-head">
+    <strong>ANDREW</strong>
+    <span class="place">MARIN COUNTY&nbsp;&nbsp;·&nbsp;&nbsp;<b id="clock">--:--</b></span>
+    <span class="menu-mark"><i></i><i></i></span>
+  </header>
+
+  <aside class="section-rail" aria-label="Section progress">
+    <span>INTRO</span><span>ABOUT</span><span class="active">WORK</span><span>CONTACT</span>
+  </aside>
+
+  <main class="track" id="workTrack">
+    <div class="stage">
+      <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+      <article class="scene layout-left" data-scene="highlvl">
+        <div class="scene-title"><h2>HighLvl</h2></div>
+        <div class="scene-info"><p>An AI nutrition coach — designed, built, and shipped by one designer directing a fleet of AI agents in under a week. Live on the App Store; Android in beta.</p><button aria-label="View HighLvl">↗</button></div>
+        <div class="media anchor phone"><video muted loop playsinline autoplay poster="assets/highlvl-poster.png"><source src="assets/highlvl-attention.mp4" type="video/mp4"></video></div>
+        <div class="media tile tile-a"><img src="assets/highlvl-today.png" alt="HighLvl daily plan"></div>
+        <div class="media tile tile-b"><img src="assets/highlvl-macros.png" alt="HighLvl themes"></div>
+        <span class="scene-index">01</span>
+      </article>
+
+      <article class="scene layout-left" data-scene="ravenmcp">
+        <div class="scene-title"><h2>Raven MCP</h2></div>
+        <div class="scene-info"><p>An MCP server that gives any MCP-capable AI assistant access to a curated design knowledge graph — patterns, principles, and frameworks for designing with AI.</p><button aria-label="View Raven MCP">↗</button></div>
+        <div class="media anchor monitor"><video muted loop playsinline autoplay poster="assets/raven-poster.png"><source src="assets/raven-audit.mp4" type="video/mp4"></video></div>
+        <div class="media tile tile-a"><img src="assets/raven-codex.png" alt="Raven in Codex"></div>
+        <div class="media tile tile-b"><img src="assets/raven-oddlot.png" alt="Oddlot redesign"></div>
+        <div class="media tile tile-c"><img src="assets/raven-nexus.png" alt="Nexus redesign"></div>
+        <span class="scene-index">02</span>
+      </article>
+
+      <article class="scene layout-left" data-scene="help">
+        <div class="scene-title"><h2>Digital help<br>platform vision</h2></div>
+        <div class="scene-info gated"><p>TELL ME WHO YOU ARE</p><button aria-label="View digital help platform vision">↗</button></div>
+        <div class="media anchor monitor"><img src="assets/help-poster.png" alt="Digital help platform"></div>
+        <div class="media tile tile-a"><img src="assets/help-welcome.png" alt="Welcome experience"></div>
+        <div class="media tile tile-b"><img src="assets/help-search.png" alt="Search variants"></div>
+        <span class="scene-index">03</span>
+      </article>
+
+      <article class="scene layout-right" data-scene="platform">
+        <div class="scene-title"><h2>Platform design<br>at scale</h2></div>
+        <div class="scene-info gated"><p>TELL ME WHO YOU ARE</p><button aria-label="View platform design at scale">↗</button></div>
+        <div class="media anchor monitor"><img src="assets/platform-hero.png" alt="Platform studio"></div>
+        <div class="media tile tile-a"><img src="assets/platform-context.png" alt="Context model"></div>
+        <div class="media tile tile-b"><img src="assets/platform-flow.png" alt="Platform workflow"></div>
+        <span class="scene-index">04</span>
+      </article>
+
+      <article class="scene layout-left wide-title" data-scene="innovation">
+        <div class="scene-title"><h2>Closing the innovation loop</h2></div>
+        <div class="scene-info gated"><p>TELL ME WHO YOU ARE</p><button aria-label="View innovation loop">↗</button></div>
+        <div class="media anchor monitor"><img src="assets/innovation-main.png" alt="Innovation dashboard"></div>
+        <div class="media tile tile-a"><img src="assets/innovation-backlog.png" alt="Innovation backlog"></div>
+        <div class="media tile tile-b"><img src="assets/innovation-prototype.png" alt="AI and human studio prototype"></div>
+        <span class="scene-index">05</span>
+      </article>
+
+      <article class="scene layout-right" data-scene="blacksheep">
+        <div class="scene-title"><h2>Black Sheep<br>Jiu Jitsu</h2></div>
+        <div class="scene-info"><p>Brand system, marketing site, and the platform that runs the whole business — designed and built end-to-end around an existing logo.</p><button aria-label="View Black Sheep Jiu Jitsu">↗</button></div>
+        <div class="media anchor laptop"><video muted loop playsinline autoplay poster="assets/blacksheep-poster.jpg"><source src="assets/blacksheep-hero.mp4" type="video/mp4"></video></div>
+        <div class="media tile tile-a"><img src="assets/blacksheep-programs.png" alt="Black Sheep programs"></div>
+        <div class="media tile tile-b"><img src="assets/blacksheep-camp.png" alt="Black Sheep summer camp"></div>
+        <span class="scene-index">06</span>
+      </article>
+
+      <div class="scroll-cue" aria-hidden="true"><span></span></div>
+    </div>
+  </main>
+  <script src="script.js"></script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="060-andrewcunliffe-work-scenes.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=060-andrewcunliffe-work-scenes" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

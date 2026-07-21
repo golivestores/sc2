@@ -1,21 +1,17 @@
 """
-serve.py — local dev server for sc2 with lazy zip / source-bundle generation.
+serve.py — local dev server for sc2 with lazy zip generation.
 
 Drop-in replacement for `python -m http.server`. What it adds:
   - Default port 8080 (instead of 8000).
   - Auto-opens http://127.0.0.1:<port>/effects/ in the browser ~0.4s after
     the listener is up.
-  - Intercepts GET for `effects/<slug>/<slug>.zip` and
-    `effects/<slug>/source-bundle.js`. If the file is missing on disk, runs
+  - Intercepts GET for `effects/<slug>/<slug>.zip`. If the file is missing on disk, runs
     `python package-effects.py --only <slug>` to materialize it before
     handing off to the default static file serving.
 
-Why: `effects/*/*.zip` and `effects/*/source-bundle.js` are .gitignored to
-keep the repo light. Without lazy build, a fresh `git clone` would 404 on
-the gallery's 📦 zip and 📋 源码 buttons until the cloner runs
-`python finalize.py`. serve.py removes that step — first click on a button
-takes a few seconds (one-time package per effect), subsequent clicks are
-instant because the file is now on disk.
+Why: `effects/*/*.zip` files are .gitignored to keep the repo light. The
+source viewer reads source files directly; only ZIP downloads need an
+on-demand build.
 
 Usage:
     python serve.py            # default port 8080
@@ -34,15 +30,16 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
 
 ROOT = Path(__file__).resolve().parent
 PACKAGER = ROOT / "package-effects.py"
+TRIONN_MIRROR_COOKIE = "sc2_trionn_mirror=1"
+TRIONN_MIRROR_ROOT = ROOT / "web_example" / "0018-himax-trionn" / "assets" / "trionn.com"
+MONUMOIR_MIRROR_ROOT = ROOT / "web_example" / "0019-himax-monumoir" / "assets" / "www.monumoir.com"
 
 # Match GET paths like /effects/001-talamus-card-grid/001-talamus-card-grid.zip
 # The same slug appears twice: directory name and zip basename. This is the
 # convention package-effects.py uses; if it changes, update the pattern.
-ZIP_PAT    = re.compile(r"^/effects/([^/]+)/\1\.zip$")
-BUNDLE_PAT = re.compile(r"^/effects/([^/]+)/source-bundle\.js$")
+ZIP_PAT = re.compile(r"^/effects/([^/]+)/\1\.zip$")
 
-# Per-slug mutex so two simultaneous requests (zip + source-bundle from the
-# same gallery card click flurry) don't kick off two parallel package builds.
+# Per-slug mutex so simultaneous ZIP requests don't start parallel builds.
 # Created lazily inside _lock_for under the dict lock.
 _dict_lock = threading.Lock()
 _build_locks: dict[str, threading.Lock] = {}
@@ -63,15 +60,13 @@ def _slug_is_safe(slug: str) -> bool:
     return bool(re.match(r"^\d+-[A-Za-z0-9-]+$", slug))
 
 
-def _run_packager(slug: str, bundle_only: bool) -> tuple[bool, str]:
+def _run_packager(slug: str) -> tuple[bool, str]:
     """Invoke package-effects.py --only <slug>. Return (ok, stdout-or-error)."""
     if not _slug_is_safe(slug):
         return False, f"refusing build for unsafe slug {slug!r}"
     if not (ROOT / "effects" / slug / "index.html").exists():
         return False, f"effect not found: effects/{slug}/"
     cmd = [sys.executable, str(PACKAGER), "--only", slug]
-    if bundle_only:
-        cmd.append("--bundle-only")
     try:
         r = subprocess.run(
             cmd, capture_output=True, text=True, timeout=120, cwd=str(ROOT)
@@ -87,7 +82,7 @@ def _run_packager(slug: str, bundle_only: bool) -> tuple[bool, str]:
 
 
 class LazyHandler(SimpleHTTPRequestHandler):
-    """SimpleHTTPRequestHandler with lazy build on zip / source-bundle miss."""
+    """SimpleHTTPRequestHandler with lazy build on ZIP miss."""
     extensions_map = {
         **SimpleHTTPRequestHandler.extensions_map,
         ".md": "text/markdown; charset=utf-8",
@@ -96,6 +91,31 @@ class LazyHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         # Pin directory to repo root so cwd at server start doesn't matter.
         super().__init__(*args, directory=str(ROOT), **kwargs)
+
+    def translate_path(self, path):
+        """Serve the Trionn mirror's root-absolute runtime assets privately.
+
+        The source Next/Turbopack runtime identifies chunks by /_next paths.
+        A scoped cookie lets that unchanged runtime keep those paths without
+        colliding with other projects that share this preview server.
+        """
+        request_path = path.split("?", 1)[0].split("#", 1)[0]
+        referer = self.headers.get("Referer", "")
+        monumoir_exact = request_path in {"/soundscape_renaissance_cello_03.mp3", "/fonts/DavidLibre-Medium.ttf"}
+        monumoir_prefixes = ("/fonts/", "/soundscape_")
+        if (monumoir_exact or "/web_example/0019-himax-monumoir/" in referer and request_path.startswith(monumoir_prefixes)):
+            parts = [part for part in request_path.split("/") if part]
+            if all(part not in {".", ".."} for part in parts):
+                return str(MONUMOIR_MIRROR_ROOT.joinpath(*parts))
+        prefixes = ("/_next/", "/images/", "/video/", "/audio/", "/assets/", "/assets/trionn.com/")
+        scoped_referer = "trionn_mirror=1" in referer or "/web_example/0018-himax-trionn/" in referer
+        if (TRIONN_MIRROR_COOKIE in self.headers.get("Cookie", "") or scoped_referer) and request_path.startswith(prefixes):
+            parts = [part for part in request_path.split("/") if part]
+            if all(part not in {".", ".."} for part in parts):
+                if parts[:2] == ["assets", "trionn.com"]:
+                    parts = parts[2:]
+                return str(TRIONN_MIRROR_ROOT.joinpath(*parts))
+        return super().translate_path(path)
 
     def _maybe_build(self) -> None:
         """If self.path is a known-on-demand resource and the file is missing,
@@ -114,22 +134,7 @@ class LazyHandler(SimpleHTTPRequestHandler):
                 if target.exists():  # double-check after acquiring lock
                     return
                 print(f"  [lazy-build] {slug}.zip — packaging...")
-                ok, msg = _run_packager(slug, bundle_only=False)
-                tag = "ok" if ok else "FAIL"
-                print(f"  [lazy-build {tag}] {slug}: {msg[:300]}")
-            return
-
-        m = BUNDLE_PAT.match(path)
-        if m:
-            slug = m.group(1)
-            target = ROOT / "effects" / slug / "source-bundle.js"
-            if target.exists():
-                return
-            with _lock_for(slug):
-                if target.exists():
-                    return
-                print(f"  [lazy-build] {slug}/source-bundle.js — building...")
-                ok, msg = _run_packager(slug, bundle_only=True)
+                ok, msg = _run_packager(slug)
                 tag = "ok" if ok else "FAIL"
                 print(f"  [lazy-build {tag}] {slug}: {msg[:300]}")
             return
@@ -171,7 +176,7 @@ def main() -> int:
     print(f"sc2 dev server on {base}/")
     print(f"  effects gallery:  {base}/effects/")
     print(f"  designs nav:      {base}/designs/")
-    print(f"  lazy build:       intercepts effects/*/*.zip and source-bundle.js")
+    print(f"  lazy build:       intercepts effects/*/*.zip")
     print(f"  (Ctrl+C to stop)")
 
     if not args.no_open:
