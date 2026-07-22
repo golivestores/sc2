@@ -1,9 +1,19 @@
 {
   "title": "Cartier 腕表 3D 拖拽旋转",
-  "subtitle": "drag-to-spin watch · inertia + idle float",
+  "subtitle": "拖拽旋转腕表 + 惯性与待机漂浮",
   "description": "从 Cartier Watches & Wonders 2026 (cartier.com) 沉浸式体验里抽出的核心 3D 旋转交互，复刻到一只真·腕表上。模型是原站的 Draco 压缩 GLTF（Santos / Baignoire 可切换，表壳/表带/宝石/玻璃表镜 PBR 材质全保留）。旋转系统 1:1 还原原站：① 拖拽累加目标角（dragSpeed 0.008）+ 帧率无关指数缓动跟随（latency 2）= 招牌顺滑惯性；② 松手按角速度衰减续转（fling spin-down）；③ 鼠标位置驱动视差倾斜（yaw 0.1π·ndc.x / pitch −0.05π·ndc.y，缓动 1.5）；④ 待机多频正弦微抖（sin0.3·.003+sin0.7·.002…）让它永不僵死；⑤ 旋转速度做轻微缩放“呼吸”。全部用 lerp(a,b,1−e^(−speed·dt)) 这一个帧率无关缓动函数粘合。渲染：Three.js r128 + GLTFLoader/DRACOLoader（解压 wasm 自带）+ RoomEnvironment 程序化棚拍环境（原站用自定义 octahedral EXR，此处用中性棚光等价呈现金属/黄金反射）+ LinearToneMapping/fov50，与原站一致。自闭包，无 CDN 依赖。",
-  "tech": "Three.js r128 + GLTF/DRACO",
-  "tags": ["interaction", "animation", "3d", "webgl", "threejs", "gltf-draco", "drag", "inertia", "luxury"],
+  "tech": "Three.js r128 + GLTF / DRACO",
+  "tags": [
+    "interaction",
+    "animation",
+    "3d",
+    "webgl",
+    "threejs",
+    "gltf-draco",
+    "drag",
+    "inertia",
+    "luxury"
+  ],
   "previewHref": "index.html",
   "sourceUrl": "https://www.cartier.com/en-fr/watchesandwonders",
   "localMirror": "../designs/044-cartier/index.html",

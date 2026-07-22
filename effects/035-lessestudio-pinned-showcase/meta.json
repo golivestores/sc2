@@ -1,9 +1,14 @@
 {
-  "title": "Pinned showcase — sticky scroll card",
-  "subtitle": "Card grows + content crossfades + bg fades beige → black",
+  "title": "Pinned Showcase｜Sticky 滚动卡片",
+  "subtitle": "卡片放大 + 内容交叉淡入 + 背景由米色过渡到黑色",
   "description": "Sticky-pinned project showcase：section 高 200vh，内部 position:sticky 卡片随 scrollProgress (0→1) 同时增长（40vw×30vw → 100vw×100vh）+ 圆角收敛（1vw → 0）+ 内部 4 个图层按 0.25/0.5/0.75 边界 crossfade + 整体背景米色 → 黑色渐变。Reference: lessestudio.com 在 LATEST WORK 之上的大 showcase section（每个 stage 显示一个项目的代表图）。",
-  "tech": "vanilla JS + CSS",
-  "tags": ["scroll", "intro", "animation", "interaction"],
+  "tech": "原生 JS + CSS",
+  "tags": [
+    "scroll",
+    "intro",
+    "animation",
+    "interaction"
+  ],
   "previewHref": "index.html",
   "sourceUrl": "https://lessestudio.com/",
   "localMirror": "../designs/024-lessestudio/index.html"

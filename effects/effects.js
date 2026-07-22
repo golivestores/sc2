@@ -4,9 +4,9 @@ window.__EFFECTS__ = [
     "num": "001",
     "folder": "001-talamus-card-grid",
     "title": "Talamus 错位卡片网格",
-    "subtitle": "staggered card grid",
+    "subtitle": "卡片网格错峰入场",
     "description": "7 张白色卡片用 grid + nth-child(8n+k) translateY/translateX 错位排布；每张卡的 scale + opacity 由独立 IntersectionObserver 触发，所以滚动到位会陆续出现而非一次全显；同时叠加 simpleparallax-js 的连续滚动 drift（每张卡 scale 1.0 + index*0.2，速率不同制造层次）。源自 Talamus 首页 \"formations\" section。",
-    "tech": "CSS Grid + IO + simpleparallax-js",
+    "tech": "CSS Grid + IntersectionObserver + simpleParallax.js",
     "tags": [
       "产品",
       "网格",
@@ -24,9 +24,9 @@ window.__EFFECTS__ = [
     "num": "002",
     "folder": "002-talamus-hero",
     "title": "Talamus Hero（Himax 定制版）",
-    "subtitle": "video bg + char-by-char title reveal",
+    "subtitle": "视频背景 + 标题逐字显现",
     "description": "Talamus 首页 hero 1:1 还原：橙色粒子背景视频铺满，超大标题用 splitting.js 拆字母后逐个 translateY 上滑（per-char-delay = char-index × 10ms）；CTA 带白块右扩 + 箭头旋转 hover；右下角说明配竖线 0%→100% + 文字 translateX 滑入。Tadam 类在 window load 后 10ms 一次性给所有 [data-tadam] 加 --tadam 触发动画。已替换文案为「阿祖AI建站」+ 左上角 Himax 品牌标，字体改用 Inter 800（halyard-display 是 Adobe Typekit 私有授权，离线 fallback 系统 bold sans）。",
-    "tech": "splitting.js + CSS transitions",
+    "tech": "Splitting.js + CSS 过渡",
     "tags": [
       "首屏",
       "入场",
@@ -44,9 +44,9 @@ window.__EFFECTS__ = [
     "num": "003",
     "folder": "003-talamus-cta",
     "title": "Talamus CTA",
-    "subtitle": "scroll-trigger char reveal over particle video",
+    "subtitle": "滚动触发的逐字显现叠加粒子视频",
     "description": "Talamus 中段 CTA：黑底红色粒子视频铺满，标题用 splitting.js 拆字母后逐个 translateY 上滑（per-char-delay = char-index × 10ms），跟着 0.5s opacity 淡出橙色 CTA 按钮（带白块右扩 + 箭头旋转 hover）。整段由 TadamScroll 监听滚动位置，scrollY+innerHeight 越过 section 绝对顶时给 .module-cta 加 --tadam，连锁触发标题字符 + CTA 反复。完全 1:1 还原原版交互。",
-    "tech": "splitting.js + scroll trigger",
+    "tech": "Splitting.js + 滚动触发",
     "tags": [
       "CTA",
       "入场",
@@ -63,9 +63,9 @@ window.__EFFECTS__ = [
     "num": "004",
     "folder": "004-shift5-categories",
     "title": "Shift5 分类卡片 hover",
-    "subtitle": "4-column slider with coral hover takeover",
+    "subtitle": "四列滑块 + 珊瑚色悬停接管",
     "description": "Shift5 中段产品分类区：横向 4 卡片 grid，每卡 48rem 宽（~480px @1440px），细线边框由 4 个 absolute 定位的 ::line 元素拼出。鼠标 hover 时卡片整体变珊瑚红 #ff5841、Explore 按钮反相（黑底珊瑚字），0.2s ease 过渡。每张卡片有独特 SVG 图标（地球线框 / 半色调圆点 / 星芒 / 立方体）。顶部带左右 slider 箭头控件，点击 scrollBy 一格。",
-    "tech": "CSS Grid + SVG sprite + scroll snap",
+    "tech": "CSS Grid + SVG Sprite + 滚动吸附",
     "tags": [
       "分类",
       "网格",
@@ -83,7 +83,7 @@ window.__EFFECTS__ = [
     "num": "005",
     "folder": "005-shift5-news",
     "title": "Shift5 新闻列表 sticky 双栏",
-    "subtitle": "sticky featured panel + scrolling article grid",
+    "subtitle": "Sticky 精选面板 + 滚动文章网格",
     "description": "Shift5 的 newsroom 区：左侧黑底特色文章面板（图片 + 标题 + 日期 + 描述 + READ MORE 按钮）做 sticky；右侧灰底 2 列 grid 排 12 篇文章卡片，鼠标 hover 卡片整体翻转成黑底浅字（0.4s ease-in-out）。原版用 JS scroll listener + transform 实现 sticky，我们用 CSS position: sticky 等价替换。每张卡片用 absolute 定位的细线（item-line[data-line=x|y]）拼出格子边框。",
     "tech": "CSS Grid + position: sticky",
     "tags": [
@@ -103,9 +103,9 @@ window.__EFFECTS__ = [
     "num": "006",
     "folder": "006-adf-news",
     "title": "ADF NOS ACTUALITÉS · 三列新闻卡片",
-    "subtitle": "12-col grid: 4+3+5 split with vertical separators",
+    "subtitle": "12 列网格：4+3+5 分栏与垂直分隔线",
     "description": "Armateurs de France 首页中段新闻区：12 列 grid 拆 4+3+5，每列一张卡（图 + 标题 + 日期 + 箭头），2/3 列开头加左侧细线 separator。卡片 hover 时图片 scale(1.05)。第一列顶部带「Nos actualités」红色 small-caps 标签 + 「+ Voir toutes les actualités」CTA（hover 时下划线从右滑到左切换为红色）。",
-    "tech": "CSS Grid + transition",
+    "tech": "CSS Grid + CSS 过渡",
     "tags": [
       "案例动态",
       "轮播",
@@ -123,9 +123,9 @@ window.__EFFECTS__ = [
     "num": "007",
     "folder": "007-adf-domains",
     "title": "ADF Domaines d'intervention · 玻璃卡片网格",
-    "subtitle": "dark hero with glass cards over boat photo",
+    "subtitle": "深色首屏 + 游艇照片上的毛玻璃卡片",
     "description": "Armateurs de France 中段「Nos domaines d'intervention」区：深蓝 #001060 圆角容器，里面铺一张大船海面照片做背景；顶部巨大白色 UPPERCASE 标题，下方 12 列 grid 排 6 张玻璃质感卡（rgba(255,255,255,0.10) + backdrop-filter:blur(5px)，aspect 208/230），每卡含分类名 + 圆形白边箭头按钮。卡片 hover 时整张上浮 (translateY(-1rem))，圆形按钮翻成白底深蓝箭头。",
-    "tech": "CSS Grid + backdrop-filter + :has() hover",
+    "tech": "CSS Grid + backdrop-filter + :has() 悬停",
     "tags": [
       "介绍",
       "网格",
@@ -143,9 +143,9 @@ window.__EFFECTS__ = [
     "num": "008",
     "folder": "008-omr-hoodie-grid",
     "title": "OMR 产品 3 列 hover 换图",
-    "subtitle": "Shopify featured-products with image swap",
+    "subtitle": "Shopify 精选商品网格 + 悬停换图",
     "description": "OMR Beauty 首页 OMR Hoodie 区：3 列产品卡（黑/米/灰三色），鼠标 hover 时 .card__hover-media 切换显示替代主图（典型 Shopify 二图切换）。卡片底部 apparel 小标签 + 大写产品名 + 价格。顶部 header 含巨号大写标题、底划 View all 链接（hover 时下划线消失）、左右 SVG 箭头滚动按钮。",
-    "tech": "CSS Grid + scroll-snap + hover image swap",
+    "tech": "CSS Grid + scroll-snap + 悬停换图",
     "tags": [
       "产品",
       "网格",
@@ -163,9 +163,9 @@ window.__EFFECTS__ = [
     "num": "009",
     "folder": "009-omr-banner-tiles",
     "title": "OMR 4 列分类瓦片 hover reveal",
-    "subtitle": "Shopify banners with grid-row 0fr → 1fr text reveal",
+    "subtitle": "Shopify 横幅网格 + 文案展开显现",
     "description": "OMR Beauty 中段 4 个分类导航瓦片：Our Story / Home Fragrance / Eau de Parfum / Perfume Oils。每瓦 4:5 图片铺满 + 底部叠标题；hover 时正文用 grid-template-rows 0fr → 1fr 平滑展开（Shopify 用这个 trick 替代 max-height 动画，过渡更顺），同时一块黑色 ::after 面板 translateY(100%) → 0 从底部升上来做文字背景，标题转白。整段桌面 4 等分，移动端 75% scroll-snap 横滑。",
-    "tech": "CSS Grid + grid-row 0fr trick + container queries",
+    "tech": "CSS Grid + grid-row 0fr 技巧 + Container Queries",
     "tags": [
       "分类",
       "横幅",
@@ -183,9 +183,9 @@ window.__EFFECTS__ = [
     "num": "010",
     "folder": "010-glm-weight-loss-carousel",
     "title": "Good Life Weight Loss · 产品横滑卡片",
-    "subtitle": "drag-to-scroll product carousel with peek + arrow nav",
+    "subtitle": "可拖拽商品轮播 + 露边预览 + 箭头导航",
     "description": "Good Life Meds 首页「01 / Weight Loss」产品区：上半段大写超大标题 + 数字小标 + 介绍段落叠在沙绿色女性背影图上；下半段是横滑产品卡片轨（7 张：Tirzepatide / Semaglutide / Wegovy Pill / Wegovy / Ozempic / Zepbound / Mounjaro），每卡白底圆角，左上产品名 + Rx 角标 + 沙绿小标，中间药瓶/药片/笔产品图，右下两按钮（沙绿底 Get started + 米色 Learn more 带箭头）。原版用 GSAP Draggable + scroll-snap，这里用 PointerEvent 手势 + CSS scroll-snap 等价复刻：mouse 拖拽时取消 snap、移动距离 >5px 抑制点击穿透；右下角圆形描边箭头按钮按一卡步距 scrollBy，到边自动 aria-disabled 灰掉。**hover 时静态药瓶 fade out → 同位 mp4 fade in 旋转播放**（Tirzepatide / Semaglutide 两张卡有源 mp4，其余 5 张原版即留空）。结尾是「Achieve your weight loss goals」CTA 条。",
-    "tech": "CSS Grid + scroll-snap + PointerEvent drag",
+    "tech": "CSS Grid + scroll-snap + PointerEvent 拖拽",
     "tags": [
       "产品",
       "轮播",
@@ -203,9 +203,9 @@ window.__EFFECTS__ = [
     "num": "011",
     "folder": "011-glm-daily-wellness-carousel",
     "title": "Good Life Daily Wellness · 产品横滑（桃色）",
-    "subtitle": "products carousel — peach accent, dark text variant",
+    "subtitle": "商品轮播 + 桃色强调与深色文字版本",
     "description": "Good Life Meds 首页「02 / Daily Wellness」产品区，与 010 同源同骨架但调色完全不同：桃色 #d2a382 替代沙绿做小标 + Get started 底色，标题 + 数字小标改为深色叠在朝阳 unsplash 照片上（原版从 is-light-text 切到 is-dark）；轨道里 8 张产品卡（NAD+ Injections / Microdose GLP-1 / MIC+B12 / Sermorelin / Glutathione / Slim Shot® / Vitamin B12 / NAD+ Nasal Spray）。底部箭头按钮翻转为深色描边、hover 反相填充。**8 张卡每一张 hover 时都触发药瓶/喷雾 mp4 旋转播放**（fade in 300ms，离开复位到首帧）。结尾 CTA 条多一条「Get started today」沙绿实心副按钮，由竖线 divider 分隔，原版交互完整保留。",
-    "tech": "CSS Grid + scroll-snap + PointerEvent drag",
+    "tech": "CSS Grid + scroll-snap + PointerEvent 拖拽",
     "tags": [
       "产品",
       "轮播",
@@ -223,9 +223,9 @@ window.__EFFECTS__ = [
     "num": "012",
     "folder": "012-glm-testimonials",
     "title": "Good Life · Trusted by 客户视频墙 + Trustpilot",
-    "subtitle": "asymmetric video collage with lightbox + Trustpilot pill",
+    "subtitle": "非对称视频拼贴 + 灯箱 + Trustpilot 胶囊",
     "description": "Good Life Meds 首页客户证言区。**最终布局对齐原版截图**：global-grid 4.2/7.8 双列，行高 0.55fr / 1fr 对齐 — 左列上小（testimonial-1 黑衣女）下大（testimonial-2 / Screenshot 10.59 金发女），右列上是文字+Trustpilot 区（Trusted by / [3 头像叠] / thousands / of customers / nationwide + Excellent ★4.5），下是 7fr/5fr 两块（左大 testimonial-3 灰发女 + 右小 testimonial-cover 棕卫衣女）。**4 张 tile + 1 文字块** 视觉与原版一致。每个 tile 底 poster 用 Ken-Burns 16-21s 慢漂移代替原版 Bunny Stream auto-play 视频（HLS 流原 scraper 没拉本地）；hover 漂移暂停 + scale(1.05) + 播放按钮放大变白；**点击触发 lightbox FLIP 开盒动画 — 弹层 transform-origin 按点击点设定，scale(0.4)→1 + opacity 0→1 用 cubic-bezier(.18,.78,.30,1.0) 弹性曲线播 400ms，黑色蒙层同步淡入**。ESC / 点蒙层 / ✕ 关闭。Trustpilot pill 用 5 角星 clip-path 自绘视觉 1:1。",
-    "tech": "CSS Grid (asymmetric) + clip-path stars + dialog lightbox",
+    "tech": "CSS 非对称网格 + clip-path 星形 + dialog 灯箱",
     "tags": [
       "评价",
       "轮播",
@@ -243,9 +243,9 @@ window.__EFFECTS__ = [
     "num": "013",
     "folder": "013-glm-how-it-works",
     "title": "Good Life · How it works 玻璃卡 + 虚线连接",
-    "subtitle": "dark video bg + 3 blur-boxes with dotted SVG joints",
+    "subtitle": "深色视频背景 + 3 个模糊玻璃框 + 点状 SVG 连线",
     "description": "Good Life Meds 首页流程区：底图 howitworks-cover 用 object-position:right center 锚到右侧让绿色药盒留在右边（不再全屏铺平），左→右深色渐变蒙层让左半侧的标题/卡片读得清、右半侧药盒完全可见；**右中位置叠一段真 Lottie 盒子打开循环（GoodLife_Box_03_1x_02.json，70 帧 60fps，约 1.16s 一循环），用 lottie-web light 渲染，替代原版本地缺失的 Bunny HLS 视频做「盒子打开」核心动画**。左上小段说明 + 巨号「How it works」标题（IO fade+lift 入场），底部 12 列 grid 布 3 张玻璃卡（rgba 0.10 + backdrop-filter:blur(16px) + 1px 边），第二张 align-self:end + translateY(48px) 形成 top-bottom-top zig-zag，配两条 dasharray 2 4 SVG 折角虚线连接。移动端 picture 切到竖版 howitworks-mobile + 3 张卡堆叠并隐藏连接线。",
-    "tech": "CSS Grid zig-zag + lottie-web Box-opening loop + backdrop-filter + IO fade",
+    "tech": "CSS 锯齿网格 + Lottie 开箱循环 + backdrop-filter + IntersectionObserver 淡入",
     "tags": [
       "介绍",
       "滚动",
@@ -261,10 +261,10 @@ window.__EFFECTS__ = [
   {
     "num": "014",
     "folder": "014-flowerknows-bestsellers",
-    "title": "Flower Knows · Shop Our Bestsellers",
-    "subtitle": "Moast TikTok-style video showcase carousel",
+    "title": "Flower Knows｜畅销好物展示",
+    "subtitle": "Moast 风格短视频商品轮播",
     "description": "Flower Knows 首页 'Shop Our Bestsellers' 的视频内容轮播：第三方 Shopify 应用 **Moast** 渲染的 TikTok 风格 video showcase，21 个竖版视频缩略图横向 Embla carousel，shadowDOM 自定义元素 `<moast-carousel>` 内嵌 `<moast-media>` / `<moast-video>` / `<moast-mute>` / `<moast-products>`。逐元素 IntersectionObserver 懒加载（rootMargin 200px），slide 进入视口后 ~2s setupVideo，自动静音播放，鼠标 hover 切换卡片，点击进入全屏播放器（player-mode='fullscreen'），底部 below pagination + autoplay-mode='showcase' 居中突出当前 slide（slide-size 250px、slide-spacing 16px、aspect 9/16）。整套 ES module bundle（24 个 chunk，~914KB）原样打到 lib/，运行时缩略图 + 视频流走 cdn.shopify.com（需联网）。**bundle 在 connectedCallback 里读 `window.Shopify.shop` 决定走哪个 shop 的 API**，所以页面顶部补了一段 `Shopify.shop = 'flowerknows.myshopify.com'` 的最小 shim，否则 Observer 不会装、carousel 死在 skeleton 状态。本地没 Shopify 后端，所以 `/products/<handle>.js` 价格刷新调用全 404，卡片显示的是嵌入 JSON 里的快照价（不影响视觉）。",
-    "tech": "Moast Shopify app · Lit + Embla + HLS.js · ES module bundle (24 chunks)",
+    "tech": "Moast Shopify App + Lit + Embla + HLS.js + ES Modules（24 个分块）",
     "tags": [
       "产品",
       "网格",
@@ -283,7 +283,7 @@ window.__EFFECTS__ = [
     "num": "015",
     "folder": "015-donmolinico-products-carousel",
     "title": "Don Molinico 产品轮播卡",
-    "subtitle": "hover-reveal marquee + tilt jar",
+    "subtitle": "悬停显现跑马灯 + 倾斜罐体",
     "description": "Don Molinico /products 页的产品卡阵列：4 张色块卡（粉/蓝/棕/橙），每张内置一个 product-card__marquee 彩色背板 + 居中的玻璃罐图。hover 时彩色背板用 clip-path 从 inset(0) 收缩到 inset(4%) 露出圆角内框，里面的 4 行重复 text 用 opacity 0→1 + 8s linear 无限纵向 translate3d(0,-50%,0) 跑马灯，同时罐子图 transform scale(1.1) rotate(-4deg)。所有过渡用 cubic-bezier(0.19,1,0.22,1)。原站是 Vue + scroll-snap，本 effect 改成纯 CSS 4-列 grid，小屏 fallback 成横向 scroll-snap-x 保留原版手机端体验。",
     "tech": "CSS Grid + clip-path + @keyframes",
     "tags": [
@@ -304,7 +304,7 @@ window.__EFFECTS__ = [
     "num": "016",
     "folder": "016-donmolinico-litolata-trio",
     "title": "Don Molinico Litolata 三连卡",
-    "subtitle": "hover-reveal marquee · 3-up flat-tin variant",
+    "subtitle": "悬停显现跑马灯 + 三列扁平罐体版本",
     "description": "Don Molinico /products 页第二屏的三张扁罐头卡（Litolata：Merluza/Bacalao/Carne 三色）。结构跟 015 (Frasco) 完全一致：彩色 marquee 背板 + clip-path 4% inset hover reveal + 6 份重复纵向跑马灯 + 罐头 scale(1.1) rotate(-4deg) 倾斜。差异只有 grid 列数（3 列 clamp(300,30vw,520)）、卡片背景色、罐头图、marquee 文案。同样用原版 super-med 字体 + 14.4px 根字号让 fs-35 / fs-110 公式落到原版尺寸。",
     "tech": "CSS Grid + clip-path + @keyframes",
     "tags": [
@@ -325,7 +325,7 @@ window.__EFFECTS__ = [
     "num": "017",
     "folder": "017-donmolinico-pandereta-duo",
     "title": "Don Molinico Pandereta 双卡",
-    "subtitle": "hover-reveal marquee · 2-up large-tin variant",
+    "subtitle": "悬停显现跑马灯 + 双列大罐体版本",
     "description": "Don Molinico /products 页第三屏的两张大圆罐头卡（Pandereta：Atun/Carne 860g）。结构和 015 / 016 一致，差异只有 grid 列数（2 列 clamp(300,30vw,520)）+ 2 张卡片背景色 + 罐头图 + marquee 文案。两卡居中、左右留较大 cream 留白，跟原版 desktop 视觉一致。",
     "tech": "CSS Grid + clip-path + @keyframes",
     "tags": [
@@ -346,9 +346,9 @@ window.__EFFECTS__ = [
     "num": "018",
     "folder": "018-obsidianassembly-places-slider",
     "title": "Obsidian Assembly 房间轮播",
-    "subtitle": "collage of 7 tiles · click to zoom into focus",
+    "subtitle": "7 张拼贴卡片 + 点击放大聚焦",
     "description": "obsidianassembly.com /#places 段的核心交互：7 张房间图全部同时在画面上，1 张占中心大区（slot 0，约 55%×72% 居中），其它 6 张作为小卫星缩略图分布四周（slot 1-6 是 6 个固定位置）。点 next / prev：当前活动图缩回它的目标小位置、新活动图从它的小位置放大到中心，所有 7 张同时以 transform translate+scale 平滑过渡（1.15s cubic-bezier(0.19,1,0.22,1)）。\\n\\n核心机制 = slot 轮转：slide 索引 N 是当前活动时，slot k 装的就是 slide (N+k)%7。点 next 时 N→N+1，所有 data-slot 重新映射，CSS transition 自动跑出「小图→大图」的放大效果。点 prev 同理反向。\\n\\n额外：键盘 ←→ 切换；点任意卫星图也直接切到它；?demo=preview 自动 1.7s 一切（缩略图也能看到这个 zoom 效果）；标题用 Cormorant Garamond 斜体覆盖活动区中心、X/7 计数器在活动区右下角、上方小标题 「Explore Places · Not Everything is Visible」 与原站一致；点活动图不会触发任何动作。",
-    "tech": "CSS transform interpolation + JS slot rotation",
+    "tech": "CSS transform 插值 + JS 槽位轮换",
     "tags": [
       "案例动态",
       "滑块",
@@ -368,9 +368,9 @@ window.__EFFECTS__ = [
     "num": "019",
     "folder": "019-donmolinico-mobile-topbar",
     "title": "Don Molinico 顶部红条 + 入场 logo",
-    "subtitle": "intro fade + collapsed/expanded hover tab bar + hamburger menu",
+    "subtitle": "入场淡入 + 悬停展开标签栏 + 汉堡菜单",
     "description": "Don Molinico 首页顶 bar 的 1:1 复刻，带 hover 触发的展开/收起。默认态 = collapsed：窄红条 60×114（mobile）/ max(60px,6vw) 宽，金色 .logo-mono SVG 只含 monogram-small 的 M+王冠+® 四条 path，紧 viewBox 14 108 151 157 居中显示，hamburger 宽度变窄到 25px。鼠标 hover 到 .menu-label（或 :focus-within / body.is-menu-open）→ bg width/height 同时过渡到展开尺寸（mobile 240×143、desktop 1440 时 346×192，公式 max(240px,24vw) × calc(124px+4.7vw)，三档视口实测 Δ ≤ 2px），同时 .logo-mono opacity→0、.logo-morphing opacity→1（带 0.25s delay 让 bg 先展开），hamburger 宽度回到 60px。展开后显示完整 desde / nueva-tradicion / don / molinico / monogram-small 五组金色 path。入场动画：红 bg 从 100vw×100vh 全屏收到 collapsed 尺寸，full logo 从中心 scale 2.6 fade in 再 fade out 切到 logo-mono。点 hamburger → body.is-menu-open 触发：两条 .menu-label__line translate3d±0.35rem + rotate±8° 形成微 X，#menu 全屏红覆盖 clip-path inset 自上而下展开，4 个 menu__item（Inicio/Productos/Nuestra Historia/Contactico）+ 当前项左右菱形 .icon-molinico 风车标记 scale(0)→scale(1) 带 stagger 出场。颜色统一 gold #cba058 / red #d70321 / cream #fbf5e7，缓动 cubic-bezier(0.19,1,0.22,1)。字体 super-med（woff2+woff，复用 008-donmolinico）。",
-    "tech": "CSS clip-path + keyframes + inline multi-group SVG",
+    "tech": "CSS clip-path + @keyframes + 内联多组 SVG",
     "tags": [
       "导航",
       "顶栏",
@@ -389,10 +389,10 @@ window.__EFFECTS__ = [
   {
     "num": "020",
     "folder": "020-minamassoud-countries",
-    "title": "Mina Massoud · THE COUNTRIES",
-    "subtitle": "scroll-pinned 3-portrait page turn",
+    "title": "Mina Massoud｜THE COUNTRIES",
+    "subtitle": "滚动固定的三人肖像翻页",
     "description": "Mina Massoud 个人站第 5b 章 — 沉浸式 'THE COUNTRIES' 段。3 张高分辨率人像（Anubis · Liberty · Kangaroo，对应 Egypt / USA / Australia）共用一个 sticky stage。section 高 400vh、stick 高 100lvh sticky-top，4 个视口高度的滚动驱动内部进度 0→1。进度 [0, 0.5] 跑 Anubis→Liberty，[0.5, 1.0] 跑 Liberty→Kangaroo。3 张 story card（埃及 / 米国 / 豪州）在 [0.02, 0.38] / [0.52, 0.72] / [0.86, 1.01] 范围 fade in/out；3 个文化背景 SVG pattern（象形文字 / 美国五角星 / 袋鼠剪影，#8B0F1D）按相同 mix 交叉淡入到 0.16 max opacity；视口顶部血红色 progress bar 跟着填，1/3 + 2/3 位置有刻度。原站用 OGL WebGL 做 fbm 扭曲 wipe + mouse parallax；此处保留它在 prefers-reduced-motion / tier=low 时本就 ship 的 CSS fallback 路径（透明度交叉淡入），机制、阈值、文案、Story 范围 1:1。字体含 Harmond ExtraBold/SemiBold + Italic、Ranade Variable、NotoSansJP。",
-    "tech": "sticky scroll · RAF · CSS opacity crossfade",
+    "tech": "Sticky 滚动 + requestAnimationFrame + CSS 透明度交叉淡入",
     "tags": [
       "介绍",
       "滚动",
@@ -409,10 +409,10 @@ window.__EFFECTS__ = [
   {
     "num": "021",
     "folder": "021-floema-collections-scroll",
-    "title": "Floema · COLLECTIONS CTA",
-    "subtitle": "900vh sticky scroll, 5 collections clip-path reveal",
+    "title": "Floema｜COLLECTIONS CTA",
+    "subtitle": "900vh Sticky 滚动 + 5 个系列 clip-path 显现",
     "description": "Floema 官网首屏之后的产品分类入场板块——`<section data-component=\"collections-cta\" style=\"height:900vh\">` 容器内两层 sticky：上层 `.line-wrapper` 是 z-index:100 的 100vh overlay，负责贯穿视口的 1px 白色 progress 进度线 + 左侧 'Made to Last' 标签 + 左下角 'Scroll to Explore ↓'（带 2 秒 ease-in-out bob）；下层 `.collections-wrapper` 是 `height:101vh; margin-top:-100vh` 的 sticky 容器，里面 5 个 `.collection` 通过 `position:absolute` 完全叠层。每个 collection 用 `clip-path: inset(var(--reveal) 0 0 0)` 揭开图片——`--reveal` 从 100% → 0% 时背景图从底向上 wipe 覆盖前一张。`.media-inner` 套了 `--bleed:10vh` 上下溢出，配 ease-in-out-cubic 缓动的 ±10vh translateY 做视差且不露边。文案块（编号 / 类目药丸 / 大标题 / 'See ... Products' 白底按钮 / 右下 Catalogue 卡片）跟随 slot 进度 fade-in 前 20% / 满显中段 / fade-out 后 20%。类目药丸用 `--tag-bg` 变量切色：Urban `#f76c46` / Nature `#c6af88` / RePlastic `#85a1c5` / Golf `#bacfa3` / Details `#d2cdc4`，背景颜色透过 `.bg` 子层做 0.5s cubic-bezier(.075,.82,.165,1) 过渡。原站用 GSAP ScrollTrigger pin 驱动；本切片去 GSAP 化，直接 `getBoundingClientRect()` 算进度，监听 scroll/resize 写 CSS 变量。SSR HTML + Nuxt _nuxt/*.css 1:1 提取（保留全部 data-v-435ca9aa / ad5c0564 / 05bb6279 / 0ce8c5d4 / 78ec613b scope）。资源：5 张 Sanity CDN 原图（Lisbon Rossio 广场 / Bussaco 国家森林 / RePlastic 灰墙 / 高尔夫球场 / 木工细节）+ 3 张 brochure 卡装饰图 + Zimula Variable TTF 字体。",
-    "tech": "sticky scroll · clip-path inset reveal · CSS var driven · vanilla rAF",
+    "tech": "Sticky 滚动 + clip-path inset 显现 + CSS 变量驱动 + requestAnimationFrame",
     "tags": [
       "介绍",
       "滚动",
@@ -431,10 +431,10 @@ window.__EFFECTS__ = [
   {
     "num": "022",
     "folder": "022-lab46-sticky-bestseller-grid",
-    "title": "LAB46 · Sticky bestseller + product grid",
-    "subtitle": "Single sticky hero card + 2-col scroll-by grid",
+    "title": "LAB46｜Sticky 畅销商品与产品网格",
+    "subtitle": "单张 Sticky 主卡 + 双列滚动商品网格",
     "description": "LAB46 首页 ‘featured product grid’ 整段：左列固定一张大方图 hero 卡片（Bestseller 'Get Ready Drops'，h3 Times Now 大标题 + h6 N27 phase/price + 价格右挤、Buy now 长 pill 按钮），右列 2 列 × 2 行四张次级卡片（Bright Berry Bleach / Sweet Flow Pills · Sold out / PrepTect Shield / Soothing Smash Lube，9:10 aspect-ratio 封面 + 同款 hover scale 1.05 transition .6s ease-in-out + 同款 hover-填黑 buy now 按钮）。左侧用 `position: sticky; top: 24px` 钉在视口顶部不动，右侧滑过时形成 ‘bestseller 永远在身边、其他在动’ 的对照阅读节奏；md 以下退化为单列堆叠（hero 卡 sticky 取消，纯文档流）。 ‘Bestseller’ 和 ‘Sold out’ 是 .tag pill，前者 slate-blue/40 半透 + 深蓝字 + 2rem backdrop-blur，后者直接黑底白字；Sweet Flow Pills 整张图额外加 opacity:.64 灰显，对应原站 ‘已售罄’ 的视觉降权。每张 article 都用 IntersectionObserver 复刻 data-sal=slide-up + data-sal-delay-auto=200，对应原站从下往上 fade-in stagger（0/200/400/600ms）。md 横向 gap 32px，lg 直接拉到 120px——这是原站的 lg:gap-[120px] 让 hero 卡片左右气场拉满的关键。",
-    "tech": "position: sticky · CSS grid 2-col · IntersectionObserver slide-up · aspect-ratio 9/10",
+    "tech": "position: sticky + 双列 CSS Grid + IntersectionObserver 上滑入场 + aspect-ratio 9/10",
     "tags": [
       "产品",
       "网格",
@@ -453,10 +453,10 @@ window.__EFFECTS__ = [
   {
     "num": "023",
     "folder": "023-theunknown-illuminate-hero",
-    "title": "THE UN KNOWN · ILLUMINATE THE UNKNOWN hero",
-    "subtitle": "WebGL aurora + parallax-depth mountain + 3D-ring landing hero",
+    "title": "THE UN KNOWN｜ILLUMINATE THE UNKNOWN 首屏",
+    "subtitle": "WebGL 极光 + 视差山景 + 3D 圆环首屏",
     "description": "theunknown.tv 首页满屏 landing hero 整体搬运：dark/light 两套色板的 OGL fbm shader `<c-aurora>` 渲染中央 teal/orange 大色块；`<c-parallax-depth>` 用 mountain.webp + depth.png 跑鼠标视差 3D 山景；`<c-ring>` 走 SVG 路径 + opacity-60 形成发光环；大标题 `ILLUMINATE THE UNKNOWN. TRANSFORM THE KNOWN.` 用 Lemon 可变字体 + GSAP 逐字 font-variation-settings(wght 300, Wide 10) tween；右下 `<c-video-modal>`、右上 LET'S TALK c-css-button 方括号按钮、左上 THE UN KNOWN logo 全套保留。整套 Astro `1_landing.astro` 入口 + 共享 `file-input.astro_*.js` bundle（157KB UMD，里面定义所有 `<c-aurora>`/`<c-ring>`/`<c-parallax-depth>`/`<c-css-button>`/`<c-video-modal>`/`<c-liquid-cursor-area>` 自定义元素）+ vendor 三件套（ogl 56KB、gsap 70KB、libs 38KB、petit-kit 8KB）直接打到 `./js/`。**两处必坑**：(1) Vite preload-helper 默认把 dep 路径前缀 `/` 写死，scrape-pitfalls.md 已经记的那条，`sed s|return\"/\"+l|return\"./\"+l|` 改两份。(2) 共享 bundle 的 `ready` store 默认 `false`，要 `import { r as ready }` 后 `ready.set(true)` 才会跳过加载页 overlay 直接进 post-load 态，否则 1_landing 的 `M()` 看到 ready=false 直接 return，c-aurora/c-ring/c-parallax-depth 永远不挂载。Bundle 里还硬编码 `images/mountain-Bav45N-m.webp`、`images/depth-CrAbJ0nd.png`、`images/video-thumb.png` 等带 hash 文件名，要原名落到 `./images/` 才不 404。",
-    "tech": "Astro · OGL WebGL · GSAP · Lemon variable font · custom elements bundle",
+    "tech": "Astro + OGL WebGL + GSAP + Lemon Variable Font + 自定义元素",
     "tags": [
       "介绍",
       "全屏",
@@ -475,10 +475,10 @@ window.__EFFECTS__ = [
   {
     "num": "024",
     "folder": "024-theunknown-store",
-    "title": "THE UN KNOWN · THE STORE",
-    "subtitle": "Scroll-pinned merch stage: 6 t-shirts rise + scale through viewport; last pair settles wide flanking the character, small purple sphere bounces in, then DISCOVER_ALL appears",
+    "title": "THE UN KNOWN｜THE STORE",
+    "subtitle": "滚动固定商品舞台：6 件 T 恤依次上升缩放，最后一组分居人物两侧，紫色球体弹入，随后显示 DISCOVER ALL",
     "description": "theunknown.tv `#section__merch` 段，scroll-pinned 完整重做版。原站走 OGL `<c-gradient>` + `<c-star>` + Lenis 平滑滚动 + libs.js page-controller 串起 5000px 长舞台，但那一坨 framework 把 `<body>` 锁成 `position: fixed; transform: translate3d(...)` 来模拟虚拟视口，单 section 抽出来 page-controller 立不起来；这版用普通 scroll + `position: sticky` 干净复刻全部 scroll 行为，不带 framework。机制（按 Playwright 5% 步进采样原站行为反推）：(a) section 高 540vh、内层 `.store__stage` `position: sticky; top: 0` 钉满 100vh；(b) bg 是 16s 循环的 CSS 三层青→紫→深蓝 radial+linear gradient（拟 `<c-gradient>` fbm shader）+ 内嵌 SVG 72 根 #009286 teal 射线 `mix-blend-mode: screen`（拟 `<c-star>`）；(c) `THE STORE` Lemon wide-bold 巨字 translateY 110%→0% 入场固定在顶部；(d) 6 张 t-shirt 卡 alternating L/R 排列（cards 1,3 左、2,4 右、5,6 是 pair 近 ±18vh 两侧贴脸），每张套半透明 cream 圆角框 (`linear-gradient(#fff6f159, #fff6f1cf)`)，所有 cards 共享一个由滚动进度驱动的 `shift` 变量，actualY = baseY - shift，逐帧给 outer 设 top（vh）；**关键**：每张卡的 inner div 单独 scale，按 viewport-Y 中心位置分段 (0..35%: 0.5→1, 35-65%: 1, 65-100%: 1→0.5) — 复刻原站 `S(x.top+x.height*.5, [0, vh*.35, vh*.65, vh], [.5,1,1,.5])` 这条曲线；(e) cards 1-4 是 fly-through，从下方升起→穿过视口中心→从上方飞出；cards 5,6 (pair) shift 有上限（capped at baseY - PAIR_REST_Y），到达 restY 后 freeze 不动，所以最后视觉上只剩 pair 小尺寸停在 character 头部两侧；(f) progress > 0.55 给 `.store` 加 `.is-reveal`：DISCOVER_ALL 红字 translateY 110%→0% 升起 + baseline `Gear up. Wear the unknown.` 淡入；(g) progress 0.50-0.75 一颗 ~9vh 紫色 sphere（radial gradient + 高光 + inset shadow，3D 球体效果）从上方下落，damped sine 2 次反弹定在 character 胸口位置；之后 idle 上下漂浮；(h) DISCOVER_ALL 每个字母 hover 时各自 rotateX(-90°)+opacity 0、letter-bottom 同步 rotateX(0)+opacity 1，按字位 0.04s 错峰，点一下 `window.open('https://store.theunknown.tv/')`；(i) `.section__merch__items_clickable:hover img scale(1.15)` 保留。Lemon-VF.ttf + AlteHaasGroteskRegular.woff2 + character.webp + 6 张 tshirt webp 自带。",
-    "tech": "CSS position: sticky · scroll-driven JS · CSS gradient · inline SVG rays · 3D letter flip · web font (Lemon VF)",
+    "tech": "Sticky 布局 + 滚动驱动 JS + CSS 渐变 + 内联 SVG 光线 + 3D 字符翻转 + Lemon Variable Font",
     "tags": [
       "产品",
       "全屏",
@@ -497,10 +497,10 @@ window.__EFFECTS__ = [
   {
     "num": "025",
     "folder": "025-innocean-capsule-pile",
-    "title": "INNOCEAN BERLIN · Footer 3D Capsule Pile",
+    "title": "INNOCEAN BERLIN｜页脚 3D 胶囊堆",
     "subtitle": "R3F + Rapier 物理胶囊堆，鼠标推搡可交互",
     "description": "innoceanberlin.com 页面底部满屏 3D 胶囊（橙/银/黑/白印 BLN logo）堆——鼠标移动时附近胶囊会被推开，是整站最招牌的交互。技术栈：`@react-three/fiber` 渲染 + `@react-three/rapier` (Rapier WASM 物理) + `InstancedRigidBodies` 把 100+ 颗胶囊压成一个 `InstancedMesh` 一次 draw call，pill_mesh.glb（来自 cdn-arkx CDN，每颗胶囊共享同 geometry）+ studio_small_08_1k.hdr studio 灯光做 PBR 反射。Bundle 里能看到 `applyImpulse (7)`/`setLinvel (3)`/`wakeUp (1)`：鼠标 pointer 拖一个 invisible kinematic cursor body 在场景中游走，碰撞触发 impulse 把附近 rigid body 弹开。整套是 Vite + React Router SPA bundle (3.8MB) 的一部分——为保 1:1 保真直接连同主 bundle/CSS/字体一起拷过来，在 index.html 顶部插了 history.replaceState 让 Router 误以为 pathname='/' 才会挂载主路由子树，再在 load 后自动 scrollTo `docH-900`（grid_projects 是 `min-h-[300vh]` 所以 docH 会从 6375 扩到 ~8639；目标位置在 work grid 之下、footer 文字之上，画布只剩纯胶囊堆）。需要 CDN 在线（pill_mesh.glb + HDR 从 cdn-arkx.sfo3.cdn.digitaloceanspaces.com 拉）。",
-    "tech": "React · @react-three/fiber · @react-three/rapier · Three.js · InstancedRigidBodies · Vite",
+    "tech": "React + @react-three/fiber + @react-three/rapier + Three.js + InstancedRigidBodies + Vite",
     "tags": [
       "页脚",
       "悬停",
@@ -517,7 +517,7 @@ window.__EFFECTS__ = [
   {
     "num": "026",
     "folder": "026-sunmetalon-blurred-glow-hero",
-    "title": "Sun Metalon · Blurred-glow Hero",
+    "title": "Sun Metalon｜模糊光晕首屏",
     "subtitle": "金属球底下那团暖光只是一个 158px 模糊半径的 div",
     "description": "sunmetalon.com 首页 hero 整屏复刻——铝罐俯视 PNG + 'Turn your metal waste / into revenue' 跨屏标题 + 大字 'Sun Metalon' 矢量 wordmark。看似 3D 的金属光影实际上不是 WebGL / video / sequence，而是一个单独的 `<div class=\"glow\">`：50vw × 25vh 半透明铜色矩形 (`#d9683366`) 钉在底部居中，套一句 `filter: blur(158px)` 散成弥漫的橙色光晕——`z-index:0` 沉在金属图层 (z:4) 和 SVG wordmark 之下，模拟金属背后被夕阳/熔炉照亮的氛围光。金属本身的高光/阴影是 PNG 自带（Sanity 上传的 1020×954 渲染图，原 srcset 6 档），不依赖任何 GPU。入场 timeline 用 GSAP 1:1 移植自 `_nuxt/B-7h_iCS.js`：chars stagger fade → SVG wordmark paths 从右到左 stagger（each .075，axis x，from end）→ glow opacity 0→1（duration 1.65, power3.inOut）→ graphic 中线 width 0→auto（cubic.inOut）→ figure opacity + scale .98→1 + rotateZ 5°→0（power3.out）。滚动联动：`figure.rotateZ = clamp(-15, 15, scrollY * -0.01)` —— 每 100 px 滚 1°，±15° 钳制。GSAP 走 CDN 3.12.5（原站 cubic.inOut 自定义 ease 在公共 GSAP 用 power3.inOut 替代，bezier 几乎重合）；其他全本地（puck PNG + 4 个 woff2 字体 Bastardo Light/Regular/Semibold + RectorWeb Light）。",
     "tech": "CSS filter: blur · GSAP timeline · GSAP utils.clamp · 静态 PNG (Sanity)",
@@ -537,10 +537,10 @@ window.__EFFECTS__ = [
   {
     "num": "027",
     "folder": "027-sunmetalon-feature-cards-row",
-    "title": "Sun Metalon · Feature Cards Sticky Row",
+    "title": "Sun Metalon｜特性卡片 Sticky 横向列",
     "subtitle": "4 张 100vh 卡片横向铺开，sticky 后每张独立 clamp 流向等距位置",
     "description": "sunmetalon.com 首页 `.feature-cards` 段：4 张 100vh × 0.882-aspect 卡片用 `display:flex; width:max-content; position:sticky; top:0` 横向铺成长条，配 wrapper.height = `cards.scrollWidth - (innerWidth - cardW)/2` 让 sticky 拿到足够纵向滚动余量。滚动联动用 GSAP `quickTo(card, 'x')` 给每张卡片独立做 translateX：每张目标 `T = (innerWidth - cardW) / (cards.length-1) * h`，每帧 `y = clamp(T - offsetLeft, 0, -scrollPastWrapper)`。结果是所有卡片同步向左滑（共享 `-d`），但各自在自己的 `T-offsetLeft` 下限处停下——卡片不是 row 整体平移，而是错位、逐张到位，最终 4 张等距铺满 viewport。卡片 0 是 `Introducing Venus` 文字卡（白底放黑字 + 'Product Specifications' 链接），1-3 是 sanity 上传的全屏图（On-site Venus-L6 机械臂 / Dry briquette 金属球 / Zero-CO₂ 云朵）+ 顶部/底部 `<p class='small'>` 标签（圆点 bullet 用 `&:before` 伪元素生成）。GSAP 走 CDN 3.12.5，素材本地（3 张 1411×1703 PNG + Bastardo Regular/Semibold + Rector Light 字体）。",
-    "tech": "CSS position: sticky · GSAP quickTo · GSAP utils.clamp · width: max-content flex row",
+    "tech": "position: sticky + GSAP quickTo + GSAP utils.clamp + max-content 横向 Flex",
     "tags": [
       "卡片",
       "滚动驱动",
@@ -558,10 +558,10 @@ window.__EFFECTS__ = [
   {
     "num": "028",
     "folder": "028-sunmetalon-stacking-cards-3d-fold",
-    "title": "Sun Metalon · Stacking Cards 3D Fold",
+    "title": "Sun Metalon｜堆叠卡片 3D 折叠",
     "subtitle": "3 张 Benefits 卡片 sticky 叠加，下一张推上来时上一张缩小 / 透明 / X+Y 倾斜",
     "description": "sunmetalon.com 首页 `.stacking-cards` 段：3 张 Benefits 卡片（01 Your Metal / 02 Your Independence / 03 Your World）走 `position: sticky; top:0; transform-origin: center bottom`，父容器 `perspective: 50em` 让子卡片的 rotateX/rotateY 有立体景深。每帧 scroll：对每张卡片 t，算 `r = clamp(0, 1, nextCard.getBoundingClientRect().top / t.clientHeight)`——即下一张距离当前张顶部的归一化比例（1 = 下一张还在视口外，0 = 下一张完全盖住当前张）。然后 `gsap.set(t, { scale: 0.8 + 0.2*r, opacity: r, rotateX: 15-15*r, rotateY: 15-15*r })`，并在 `r<1` 时挂 `.falling` 类（这时 CSS 给卡片切回完整圆角 + 边框，把先前用 clip-path 切掉的首尾 24px 复原）。容器本身有大量 CSS 细节：clip-path polygon 把右上和左下两角削成 20×20 斜边，`:before`/`:after` 用 45° linear-gradient 给斜边补 1 px 描边色，给人 'metal-cut card' 的工业感。背景两张 steel-brick PNG（一张挂右上、一张挂左下偏中）走 GSAP scrollTrigger scrub-2 timeline：上方 yPercent -100 + rotate -25，下方 yPercent 100 + rotateZ 50，整段进出视口时缓慢飘移旋转。GSAP + ScrollTrigger 走 CDN 3.12.5；本地素材 steel-brick PNG + Bastardo Regular/Semibold + Rector Light（Rector 是大数字 01/02/03 的金色字体 `#cdb379`）。",
-    "tech": "CSS position: sticky · CSS perspective + clip-path polygon · GSAP set scale/rotateX/Y · GSAP ScrollTrigger scrub",
+    "tech": "position: sticky + CSS perspective + clip-path polygon + GSAP scale/rotateX/rotateY + ScrollTrigger scrub",
     "tags": [
       "卡片",
       "滚动驱动",
@@ -579,10 +579,10 @@ window.__EFFECTS__ = [
   {
     "num": "029",
     "folder": "029-lab46-phase-cards-hero",
-    "title": "LAB46 · Prepare / Play / Protect",
-    "subtitle": "3-column phase hero with embedded 3D phase icons",
+    "title": "LAB46｜Prepare / Play / Protect",
+    "subtitle": "三列阶段首屏 + 内嵌 3D 图标",
     "description": "LAB46 首页中段那块满屏深蓝色 ‘Prepare / Play / Protect’ 三栏入口：背景是 LAB46-Pills-On-Plate-Darker.jpg 全幅图 + 黑色 15%→48% top-to-bottom 渐变，前景三等分列每格中央放一个 Times Now 衬线 H3 大标题 + 一个 200×200 的 model-viewer 3D 图标（coi-prepare.glb / coi-play.glb / coi-protect.glb，三圈 ‘fidget spinner’），再在每列底部挂一个 LAB46 标志性的 `[ SHOP NOW ]` 方括号按钮（.button.-primary 通过 clip-path 把 1px 白边只在左右各保留 .25rem，hover 时 ::after 用 scaleY(0→1) 填白底黑字）。列之间以 1px 白线分隔，移动端改成顶部边线、上下堆叠。标题用 IntersectionObserver 复刻 sal slide-up，三列分别 0/200/400ms stagger。**coiIcon Alpine 组件完整移植**（原 chunk 346 webpack URL 为 `assets/346.5d88d7f29a1dc591.chunk.min.js`，scrape 一开始猜错了路径所以漏掉）：(a) model 加载完把所有材质改成 RGB(201,211,219) 银灰 + metallicFactor 0.3 + roughnessFactor 0.2，再淡入；(b) 鼠标停在整个 `<li>` 上时按 `θ = -30°·((x-left)/w·2-1)` / `φ = 90°-20°·((y-top)/h·2-1)` 驱动 cameraOrbit，覆盖到 ±30° × 70°-110° 范围，touch 事件同步走 touches[0]；(c) 离开后 cameraOrbit 回 `0deg 90deg 100%` 并启动自动摇摆：随机 2-8s 延迟后跑 `24°·sin(t/6s·2π)` 的正弦慢摇；(d) 只在 `pointer: fine` 设备绑定 hover 事件，resize 和 pointer-fine 媒体查询变化都重新 init。深蓝 #355672、字体 Times Now / N27 / TWK Lausanne 三套 woff2 子集随 lib 自带，model-viewer 3.5.0 UMD 也打到 lib/。",
-    "tech": "model-viewer 3.5.0 · IntersectionObserver slide-up · mouse-tracked cameraOrbit + sine auto-sway · CSS clip-path bracket button",
+    "tech": "model-viewer 3.5.0 + IntersectionObserver 上滑入场 + 鼠标跟踪 cameraOrbit + 正弦自动摆动 + CSS clip-path 括号按钮",
     "tags": [
       "介绍",
       "网格",
@@ -602,10 +602,10 @@ window.__EFFECTS__ = [
   {
     "num": "030",
     "folder": "030-fromanother-water-ripple-cards",
-    "title": "fromanother · Featured Work water-ripple cards",
-    "subtitle": "6-cover stack with mouse-driven 2D wave simulation + circular-ripple cross-fade",
+    "title": "fromanother｜精选作品水波卡片",
+    "subtitle": "六张封面堆叠 + 鼠标驱动二维波浪模拟与圆形涟漪交叉淡入",
     "description": "fromanother.love 首页 Featured Work 那块的核心交互：6 张项目封面叠在中央，鼠标移过去画面像水面被指尖划过、跟着鼠标轨迹起波；点左侧 1‑6 索引（或按 ←/→ 方向键）切到下一张，触发从中心向外扩散的圆形涟漪，老图和新图在涟漪边缘 mix。整段视觉来自两段 verbatim 抠出的 GLSL：\n\n(1) **SIM PASS** — 64×64 RGBA-Half RT 双缓冲 ping-pong。.r 通道存 height、.y 存 velocity；每帧 `velocity += (4-邻居平均 − height) * 0.5`（拉普拉斯算子模拟弹性恢复力）、`velocity *= dissipation`、`height += velocity`，再在鼠标位置用 `smoothstep(uBrushRadius, 0.0, distance) * uVelocity` 圆形 brush 注入能量，全局 `* 0.98` 阻尼。鼠标 UV/frame 平移量当 uVelocity，鼠标越快波越大。\n\n(2) **DISPLAY PASS** — 全画幅 quad 贴当前 cover。用中心差分采样 height map 4 邻居得到 2D normal `(hL−hR, hT−hB)`，把这个 normal 当 UV offset 扭曲图像采样位置 → 就是水面波纹。切换时 `uProgress` GSAP-style 0→1 跑 1.2s，`rippleRadius = smoothstep(0,1,uProgress)`，`mask = smoothstep(rippleRadius − 0.15, rippleRadius, distToCenter)`，`finalColor = mix(texNext, texCurrent, mask)`，再叠一层 `sin((dist − rippleRadius) * 8.0) * intensity * 0.15` 的径向次级波纹和 normal-based 明暗压暗。\n\n背景排版（顶部 fromanother / 左侧 1‑6 索引/Featured work 高亮 / 右侧服务列表 / 大标题 H2）按截图复刻；six covers 直接复用从 designs/020-fromanother/assets/image.mux.com/ 拿到的 8 张 Mux 缩略图里挑 6 张当占位（原站 cover 在 Prismic CMS，自托管不实际）。three.js 走 importmap 拉 0.158.0，全文件自包含，无 GSAP / R3F / lenis 等依赖 —— React 那一层在原站只是把 shader uniforms 接到 ScrollTrigger / mouse listener，shader 数学跟这里完全一致。",
-    "tech": "three.js r158 · GPGPU ping-pong (RGBA-Half 64×64 RT) · 2D wave-equation discrete integration · circular-ripple smoothstep cross-fade · ortho camera + plane quad",
+    "tech": "Three.js r158 + GPGPU Ping-Pong（RGBA-Half 64×64 RT） + 二维波动方程离散积分 + 圆形涟漪 smoothstep 交叉淡入 + 正交相机与平面",
     "tags": [
       "WebGL",
       "Shader",
@@ -626,9 +626,9 @@ window.__EFFECTS__ = [
     "num": "031",
     "folder": "031-pov-product-card-grid",
     "title": "POV Beauty · 产品卡片网格 + Swiper 翻页",
-    "subtitle": "horizontal swiper of product cards with NEW/SAVE/AWARD badges, hover-reveal ADD TO CART button, dual-line sale pricing",
+    "subtitle": "带 NEW / SAVE / AWARD 标记的横向商品轮播，悬停显示 ADD TO CART，并支持双行促销价格",
     "description": "povbeauty.com 首页 'it starts with great skin prep' 的一行可横滑产品卡，1:1 还原原站行为：\n\n· 卡片视觉：超大左对齐 '小写无衬线' 产品名 (chill it / dew it light / renew it light / drench it / snatch it eye serum / drip it / glaze it / amp it)，下方 sub-heading（PLUMPING WATER-GEL / LIGHTWEIGHT, PRO-LEVEL SKIN PREP …）+ 一行 · 分隔的卖点 chip (hydrates · weightless · non-pilling)，浅灰底产品 silo 图，底部一行 加粗当前价 + 划线划价。\n· 右上荧光黄底 .badge 角标支持多状态：NEW / SAVE 10% / AWARD-WINNING / PDRN-POWERED 等。\n· hover 交互：鼠标进入卡时产品图区域底部弹出黑色圆角胶囊「ADD TO CART – $XX」按钮（CSS transition + JS quick-add 模块），按钮覆盖在产品图上但不挤压价格行。\n· Swiper 横滑：右下角的左右圆形箭头按钮 (.swiper-button-prev / .swiper-button-next) 点击触发 swiper.slideTo，一次切 1 张；当前张数也会同步底部 .swiper-pagination 圆点。\n· 移动端：单张卡铺满屏宽，pagination 圆点在底部，箭头隐藏。\n\n以 designs/023-povbeauty 镜像为资源宿主：effect index.html 用 `<base href=\"../../designs/023-povbeauty/\">` 复用整套 Shopify Dawn 主题资源（base.css / component-card.css / component-price.css / quick-add.css / swiper-bundle.js / product-form.js / theme custom.js 全套），visit 时直接吃同样的 stylesheet 和 init 脚本，所以 hover / swiper / quick-add 三套行为完整保真。",
-    "tech": "Shopify Dawn theme (Liquid output)  ·  Swiper.js 11  ·  quick-add module  ·  product-form module  ·  CSS hover-reveal transitions  ·  component-card/price BEM",
+    "tech": "Shopify Dawn 主题（Liquid 输出） + Swiper.js 11 + Quick Add + Product Form + CSS 悬停显现 + Card/Price BEM",
     "tags": [
       "电商",
       "产品",
@@ -651,9 +651,9 @@ window.__EFFECTS__ = [
     "num": "032",
     "folder": "032-pov-shop-by-step",
     "title": "POV Beauty · Shop by Step 步骤切换面板",
-    "subtitle": "5-step left list with → indicator + active media panel + product mini-card; click/tap switches all three layers in sync",
+    "subtitle": "5 步骤左侧列表 + 圆点指示器 + 动态媒体面板 + 商品小卡，点击或触摸同步切换三层",
     "description": "povbeauty.com 首页 'shop by step' 那块（rich_text H2 + Index_tabs_products_lists_new bAPz6G），1:1 还原原站交互：\n\n· 顶部 'shop by step' 居中超大粗体 H2（rich-text section .rich-text__heading.hxxl），effect 把 rich_text 标题 section + 步骤 section 两块一起保留。\n· 桌面端左栏（Desktop_only_new）：5 个圆角矩形 step button，里面 01–05 手写斜体编号 + 'drench it / drip it / whip it / glaze it / amp it' 步骤名。active item：浅灰底 + 内嵌右边一张缩略产品瓶 + 外侧 → 箭头指向。点击任一 step：active class 跳到该项、外箭头跟着移动到对应行、内嵌缩略瓶切到该产品；同步右侧大图视频/图换成该步骤 hero，右下角 mini product card 更新为该产品（标题、副标题、ADD TO CART · $XX）。\n· 列表底部：'SHOP THE FULL ROUTINE' 圆角胶囊按钮（连到 routine 集合）。\n· 移动端（Mobile_only_new）：步骤列表退化成横向 swiper（每张面板等宽，独立 pagination 圆点）；右侧媒体改为竖直堆叠在底部，ADD TO CART 卡跨整宽。\n\n切换由 product-form.js + quick-add.js + theme tab show/hide class swap (.tab_information_*_open) 协同驱动。effect 通过 `<base href=\"../../designs/023-povbeauty/\">` 复用镜像里的 Shopify Dawn 全套 stylesheet + Swiper + product-form + quick-add JS，所以 step 切换、active 箭头跳转、移动端 swiper 全部保真。",
-    "tech": "Shopify Dawn theme (Liquid output)  ·  Swiper.js (mobile)  ·  product-form + quick-add JS modules  ·  show/hide tab class swap  ·  custom SVG → indicator",
+    "tech": "Shopify Dawn 主题（Liquid 输出） + Swiper.js（移动端） + Product Form / Quick Add + 标签显隐切换 + 自定义 SVG 圆点",
     "tags": [
       "电商",
       "步骤",
@@ -674,10 +674,10 @@ window.__EFFECTS__ = [
   {
     "num": "033",
     "folder": "033-lessestudio-latest-work-cards",
-    "title": "Latest Work — project cards",
-    "subtitle": "Reveal cards with mask-slide text",
+    "title": "Latest Work｜项目卡片",
+    "subtitle": "遮罩滑动文字显现卡片",
     "description": "Portfolio项目卡列表：每个卡片由 IntersectionObserver 触发整体进入（opacity 0→1 + translateY 200px→0），同时标题/描述用 overflow:hidden mask + translateY(105%→0) 做<em>mask-slide-text (mst)</em> 滑入。Reference: lessestudio.com 的 LATEST WORK section。",
-    "tech": "vanilla JS + CSS",
+    "tech": "原生 JS + CSS",
     "tags": [
       "intro",
       "scroll",
@@ -693,10 +693,10 @@ window.__EFFECTS__ = [
   {
     "num": "034",
     "folder": "034-lessestudio-testimonials",
-    "title": "Testimonials — split layout with auto carousel",
-    "subtitle": "Heading reveal + vertical auto-rotating quote stack",
+    "title": "Testimonials｜自动轮播分栏布局",
+    "subtitle": "标题显现 + 垂直自动轮播引言",
     "description": "50/50 split：左侧 TESTIMONIALS pill + 标题（mask-slide 三行入场，后两行 opacity 20% 弱化）+ \"Let's work together\" CTA；右侧 vertical carousel，4 张引语卡每 5s 上滑切换，顶/底 gradient 30% 遮罩，最后克隆一张做无缝循环。Reference: lessestudio.com TESTIMONIALS section。",
-    "tech": "vanilla JS + CSS",
+    "tech": "原生 JS + CSS",
     "tags": [
       "interaction",
       "typography",
@@ -712,10 +712,10 @@ window.__EFFECTS__ = [
   {
     "num": "035",
     "folder": "035-lessestudio-pinned-showcase",
-    "title": "Pinned showcase — sticky scroll card",
-    "subtitle": "Card grows + content crossfades + bg fades beige → black",
+    "title": "Pinned Showcase｜Sticky 滚动卡片",
+    "subtitle": "卡片放大 + 内容交叉淡入 + 背景由米色过渡到黑色",
     "description": "Sticky-pinned project showcase：section 高 200vh，内部 position:sticky 卡片随 scrollProgress (0→1) 同时增长（40vw×30vw → 100vw×100vh）+ 圆角收敛（1vw → 0）+ 内部 4 个图层按 0.25/0.5/0.75 边界 crossfade + 整体背景米色 → 黑色渐变。Reference: lessestudio.com 在 LATEST WORK 之上的大 showcase section（每个 stage 显示一个项目的代表图）。",
-    "tech": "vanilla JS + CSS",
+    "tech": "原生 JS + CSS",
     "tags": [
       "scroll",
       "intro",
@@ -732,7 +732,7 @@ window.__EFFECTS__ = [
     "num": "036",
     "folder": "036-sofi-phone-walkthrough",
     "title": "sofi · App 走查（pinned 手机 + 向下滚动）",
-    "subtitle": "Phone app walkthrough (1:1)",
+    "subtitle": "手机 App 滚动演示（1:1）",
     "description": "1:1 复刻 sofihealth.com 的 Application 段：SplitText 标题灰→黑逐字填充入场 → 3 个 iPhone（左 mood bubbles / 中 passiflora 活屏 / 右 sofi score）→ 中间手机放大 pin 住、屏幕内部随滚动纵向走查全部 app 屏（passiflora 卡 → 1,453 → 睡眠柱状图 → moon 6.5h + 星级评分 → calm↔stressed 情绪条 + 占比 → sun level of focus），moon/sun 随滚动旋转，header/footer nav 固定，底部 scroll-down 进度。所有 app 屏为原站真实内联 SVG，像素级保真。GSAP ScrollTrigger scrub 驱动，连续无跳变。",
     "tech": "GSAP + ScrollTrigger + SplitText",
     "tags": [
@@ -752,9 +752,9 @@ window.__EFFECTS__ = [
     "num": "037",
     "folder": "037-sofi-bento-grid",
     "title": "sofi · 数据影响力 bento 网格",
-    "subtitle": "Bento stats grid (1:1)",
+    "subtitle": "Bento 数据网格（1:1）",
     "description": "1:1 复刻 sofihealth.com 的 12 列 bento 统计网格：手持 pod、2.12x / 37 / 1.45m / 1,000 years / 1.1k 大数字统计块 + 瓶子排、世界地图图、淡色职业名单背景。滚动进入视口时白块逐个 fade-up（GSAP ScrollTrigger stagger）。原站字体 HelveticaNowDisplayMedium 已打包。",
-    "tech": "vanilla JS + GSAP + ScrollTrigger",
+    "tech": "原生 JS + GSAP + ScrollTrigger",
     "tags": [
       "scroll",
       "intro",
@@ -770,7 +770,7 @@ window.__EFFECTS__ = [
   {
     "num": "038",
     "folder": "038-vectr-features-scroll-reveal",
-    "title": "Features Scroll Reveal",
+    "title": "特性滚动显现",
     "subtitle": "Vectr · 滚动逐卡揭示",
     "description": "复刻 vectrfl.com 的 Features 区块：sticky 居中的大标题 + 4 张特性卡，随页面滚动逐卡 opacity 0→1 / y 80→0 揭示（power2.out 缓动）。机制 1:1 还原原站——section 高 400vh 提供滚动跑道，rAF 持续读取 section 进度并把每张卡映射到一段错位的进度切片（带 30% 重叠），用 GSAP paused tween 的 .progress() 做连续 scrub，而非离散切换。",
     "tech": "GSAP",
@@ -788,10 +788,10 @@ window.__EFFECTS__ = [
   {
     "num": "039",
     "folder": "039-vectr-faq-accordion",
-    "title": "FAQ Accordion",
+    "title": "FAQ 手风琴",
     "subtitle": "Vectr · 单开手风琴",
     "description": "复刻 vectrfl.com 的 FAQ 区块：左侧大标题 + 竖分隔线 + 右侧单开手风琴。点击某项展开（max-height 0→scrollHeight，0.6s 过渡），自动收起其它已展开项；chevron 图标随展开/收起旋转，hover 时图标底色由深蓝 #050419 变高亮蓝 #3932DC。纯 JS + CSS，逻辑与原站一致（含强制 reflow 让 max-height 过渡可靠触发、resize 时重算高度）。",
-    "tech": "Vanilla JS",
+    "tech": "原生 JS",
     "tags": [
       "interaction",
       "animation"
@@ -805,10 +805,10 @@ window.__EFFECTS__ = [
   {
     "num": "040",
     "folder": "040-vectr-footer-nav",
-    "title": "Footer Nav Hover",
+    "title": "页脚导航悬停",
     "subtitle": "Vectr · 导航填充滑动",
     "description": "复刻 vectrfl.com 页脚导航：深色底三栏（Our Industries / Our Mission / Apply）。hover 时背景由左向右 scaleX 填充亮色、文字由白转深并右移 10px、箭头双图叠放——当前箭头向右滑出、下一支箭头从左补入，全部 0.8s cubic-bezier(.25,1,.5,1) 缓动。纯 CSS hover，无 JS（preview 缩略图用 .is-hovered 类展示中间栏的填充态）。",
-    "tech": "Pure CSS",
+    "tech": "纯 CSS",
     "tags": [
       "interaction",
       "hero"
@@ -822,7 +822,7 @@ window.__EFFECTS__ = [
   {
     "num": "041",
     "folder": "041-gmx-method-process-cards",
-    "title": "Método — Process Cards",
+    "title": "Método｜流程卡片",
     "subtitle": "GMX · 流程卡滚动揭示",
     "description": "复刻 gmxdigital.com 的「Método GMX」流程区块:居中标题(Syncopate 大写)+ 4 张玻璃拟态流程卡。卡片随滚动逐个 reveal-up(opacity 0→1 / y 30→0,power2.out,ScrollTrigger 触发);每卡有大号幽灵序号 01–04(hover 时按卡变青/品红)、顶部渐变描边线、hover 渐变边框 + 上浮。1:1 还原原站机制与配色(--gmx-blue #00f2fe / --gmx-pink #ff007f)。",
     "tech": "GSAP + ScrollTrigger",
@@ -840,10 +840,10 @@ window.__EFFECTS__ = [
   {
     "num": "042",
     "folder": "042-gmx-portfolio-drag-carousel",
-    "title": "Portfólio — Drag Carousel",
+    "title": "Portfólio｜拖拽轮播",
     "subtitle": "GMX · 无限自动轮播 + 3D tilt",
     "description": "复刻 gmxdigital.com 的作品轮播:玻璃质感卡片横向无限自动滚动(克隆整组实现无缝循环),每张卡按距容器中心的距离做 3D 透视倾斜(rotateY ±3° + scale + 透明度衰减),hover 时背景图去灰放大、clip-path 展开、按钮反白。左右箭头点击步进(scrollBy 平滑,暂停 3.5s 后恢复),底部渐变进度条实时反映滚动位置;移动端支持拖拽 + 惯性。1:1 还原原站 setupPortfolioDrag。注:演示用海报图替代原站视频(视频体积过大未打包)。",
-    "tech": "Vanilla JS",
+    "tech": "原生 JS",
     "tags": [
       "interaction",
       "scroll",
@@ -858,7 +858,7 @@ window.__EFFECTS__ = [
   {
     "num": "043",
     "folder": "043-gmx-impacto-stats",
-    "title": "Impacto — Stats Count-up",
+    "title": "Impacto｜数据递增",
     "subtitle": "GMX · 数字滚动 + 品类跑马灯",
     "description": "复刻 gmxdigital.com 的「Impacto GMX」区块:顶部品类无限跑马灯(Syncopate,translateX 0→-50% 30s 线性循环,hover 提亮)+ 下方左标题右 3 张玻璃统计卡。卡片随滚动 reveal(opacity/y/scale,stagger 0.2);数字用 data-count 做 count-up(0→目标,2.2s power2.out,保留 +/% /x 前后缀),h3 为青→品红渐变文字。1:1 还原原站。",
     "tech": "GSAP + ScrollTrigger",
@@ -876,7 +876,7 @@ window.__EFFECTS__ = [
   {
     "num": "044",
     "folder": "044-gmx-clientes-trajectory",
-    "title": "Clientes — Zigzag Trajectory",
+    "title": "Clientes｜之字形轨迹",
     "subtitle": "GMX · 滚动绘制轨迹线 + 流光圆点",
     "description": "复刻 gmxdigital.com「Nossos Clientes」zigzag 时间线:深紫渐变背景上,客户卡片左右交错排布,中线节点用一条多层 SVG 贝塞尔轨迹串联(渐变主线 + 模糊 glow + 白色 core + 虚线 hint)。随滚动用 strokeDashoffset 由上至下绘制(ScrollTrigger scrub 0.3),一颗发光 traveller 圆点(getPointAtLength)骑在绘制前沿移动,直到线走完;每张卡进入视口时 reveal(tag/logo/text/cta 错位)并点亮节点(脉冲环 + 青/品红描角展开)。1:1 还原 initTrajetoria;预览缩略图直接绘满整条线。",
     "tech": "GSAP + ScrollTrigger",
@@ -897,7 +897,7 @@ window.__EFFECTS__ = [
     "title": "ON.energy 光流位移背景",
     "subtitle": "WebGL video-displacement · 鼠标色散光流",
     "description": "ON.energy「Performance Proven at Scale」整屏：金色光流视频铺满背景、右半区叠 mono 标签 + 大字标题 + 说明 + ghost 按钮。背景不是直接播视频——视频被设为隐藏的 WebGL 纹理源，一个全屏裸 GLSL 四边形每帧采样它，在光标附近沿光流方向叠加正弦波动 + RGB 色散位移（influence = smoothstep(radius,0,dist)·active），离开光标处直接显示原帧。鼠标用指数平滑惯性跟随。渲染循环自带 requestAnimationFrame；WebGL 不可用时回退显示原视频。shader / 参数（radius .25 / strength .015 / smoothing .1）与原站一致。",
-    "tech": "WebGL (raw GLSL)",
+    "tech": "原生 WebGL（GLSL）",
     "tags": [
       "hero",
       "interaction",
@@ -917,9 +917,9 @@ window.__EFFECTS__ = [
     "num": "046",
     "folder": "046-alphanelabs-3d-device",
     "title": "MGA-1 滚动拆解 · 3D 蓝图",
-    "subtitle": "scroll-scrubbed 3D explode",
+    "subtitle": "滚动 scrub 驱动 3D 爆炸拆解",
     "description": "从 Alphane Labs (solutions.alphanelabs.com) 抽取的核心 3D 交互：滚动驱动一段烘焙好的 20s 动画——相机沿 baked 路径绕飞设备（camera-on-rails），同时仪器各部件平移+旋转拆解。正交相机(frustumHeight 6)给出无透视的工程等轴测；白色 unlit 面 + 每个 mesh 叠 EdgesGeometry 蓝边(#0094d3)还原蓝图观感；grill.png 平铺 28×14 当 alphaMap 做细密蓝点散热网格；风扇独立连续自转。机制 = mixer.setTime(进度×20) + camera.lookAt(baked target)，每帧读滚动位(rAF，非 scroll 事件)保证连续。GLTF + DRACO 解压，three r124/r128。",
-    "tech": "Three.js + GLTF/DRACO + baked-animation scrub",
+    "tech": "Three.js + GLTF / DRACO + 烘焙动画 scrub",
     "tags": [
       "scroll",
       "interaction",
@@ -943,9 +943,9 @@ window.__EFFECTS__ = [
     "num": "047",
     "folder": "047-cartier-watch-rotation",
     "title": "Cartier 腕表 3D 拖拽旋转",
-    "subtitle": "drag-to-spin watch · inertia + idle float",
+    "subtitle": "拖拽旋转腕表 + 惯性与待机漂浮",
     "description": "从 Cartier Watches & Wonders 2026 (cartier.com) 沉浸式体验里抽出的核心 3D 旋转交互，复刻到一只真·腕表上。模型是原站的 Draco 压缩 GLTF（Santos / Baignoire 可切换，表壳/表带/宝石/玻璃表镜 PBR 材质全保留）。旋转系统 1:1 还原原站：① 拖拽累加目标角（dragSpeed 0.008）+ 帧率无关指数缓动跟随（latency 2）= 招牌顺滑惯性；② 松手按角速度衰减续转（fling spin-down）；③ 鼠标位置驱动视差倾斜（yaw 0.1π·ndc.x / pitch −0.05π·ndc.y，缓动 1.5）；④ 待机多频正弦微抖（sin0.3·.003+sin0.7·.002…）让它永不僵死；⑤ 旋转速度做轻微缩放“呼吸”。全部用 lerp(a,b,1−e^(−speed·dt)) 这一个帧率无关缓动函数粘合。渲染：Three.js r128 + GLTFLoader/DRACOLoader（解压 wasm 自带）+ RoomEnvironment 程序化棚拍环境（原站用自定义 octahedral EXR，此处用中性棚光等价呈现金属/黄金反射）+ LinearToneMapping/fov50，与原站一致。自闭包，无 CDN 依赖。",
-    "tech": "Three.js r128 + GLTF/DRACO",
+    "tech": "Three.js r128 + GLTF / DRACO",
     "tags": [
       "interaction",
       "animation",
@@ -967,9 +967,9 @@ window.__EFFECTS__ = [
     "num": "048",
     "folder": "048-lv-collectibles-3d",
     "title": "Louis Vuitton VIA · 3D 藏品旋转",
-    "subtitle": "scroll-to-rotate Trunk & Speedy",
+    "subtitle": "滚动旋转 Trunk 与 Speedy",
     "description": "把 Louis Vuitton VIA Collectibles 沉浸式体验（louisvuitton-collectibles.imm-g-prod.com，见 designs/047）里的真·3D 藏品模型抽出来，**交互方式与原站一致：鼠标滚轮向下滚 → 模型绕 Y 轴旋转**（原站 trunk 就是持续 Y 轴自转 + 滚动驱动，这里 1:1 还原那条轴和手感）。滚动把目标角累加进 targetY，再用帧率无关指数缓动 lerp(a,b,1−e^(−speed·dt)) 平滑跟随（不是离散步进，是连续顺滑的「smooth scroll」感）；叠加一层极轻的持续自转（原站永不静止）+ 鼠标视差微倾斜 + 多频正弦待机微浮。**只留模型、去掉场景背景**（平色背景，无世界/装饰）。模型是原站 Draco 压缩 GLTF（标志性 monogram Treasure Trunk 行李箱 + Speedy 手袋，可切换，PBR 材质全保留）。Three.js r128 + GLTFLoader/DRACOLoader（解压 wasm 自带）+ RoomEnvironment 棚光 + ACESFilmic；包围球自适应取景（旋转不裁切）。完全自闭包，无 CDN。",
-    "tech": "Three.js r128 + GLTF/DRACO",
+    "tech": "Three.js r128 + GLTF / DRACO",
     "tags": [
       "interaction",
       "scroll",
@@ -989,10 +989,10 @@ window.__EFFECTS__ = [
   {
     "num": "049",
     "folder": "049-ultrahuman-all-in-one-app",
-    "title": "All in one app",
+    "title": "一体化 App",
     "subtitle": "手机上浮 + Tab 切换应用演示",
     "description": "复刻 Ultrahuman 首页「All in one app」屏：巨型霓虹绿 Graphik 展示标题作背景，手持手机随滚动自然上浮嵌入标题中，机身屏幕内循环播放 App 演示视频；底部玻璃拟态 Tab 栏（RING / METABOLISM / HOME / VISION）点击可滑动指示条并交叉淡入切换对应视频与说明文案，最后是两颗玻璃质感下载按钮（仅保留视觉，已去除应用商店外链）。纯 HTML/CSS + 原生 JS，无第三方动画库（原站手机上浮就是自然滚动）。",
-    "tech": "HTML/CSS + vanilla JS + HTML5 video",
+    "tech": "HTML / CSS + 原生 JS + HTML5 Video",
     "tags": [
       "scroll",
       "interaction",
@@ -1010,10 +1010,10 @@ window.__EFFECTS__ = [
   {
     "num": "050",
     "folder": "050-moonbird-app-showcase",
-    "title": "Moonbird App Showcase",
+    "title": "Moonbird App 展示",
     "subtitle": "滚动驱动手机换屏 + 文案交叉淡入",
     "description": "从 moonbird.life「Screen-free when you breathe」段 1:1 抽出的滚动叙事：sticky 手机居中，4 张 app 截图（Today / 生物反馈 / 数据 / 连接）随滚动进度交叉淡入；右侧 sticky 文案 4 块（Aura AI coach → Real-time biofeedback → Your data → Connects + 下载 CTA）与手机屏同步切换。机制忠实复刻原站：进度 l = clamp(0,1, -(rect.top-12vh)/(rect.height-76vh))，activeIndex = min(3, floor(l*4)) 四等分离散切换 + CSS 0.5~0.7s 交叉淡入。纯 CSS + 原生 JS（scroll + rAF），完全自包含无外链。",
-    "tech": "Vanilla JS",
+    "tech": "原生 JS",
     "tags": [
       "scroll",
       "animation",
@@ -1032,9 +1032,9 @@ window.__EFFECTS__ = [
     "num": "051",
     "folder": "051-ouraring-card-carousel",
     "title": "Oura 特性卡片轮播",
-    "subtitle": "Feature card carousel",
+    "subtitle": "特性卡片轮播",
     "description": "Oura Ring 首页的横向卡片轮播：CSS scroll-snap 原生吸附 + 指针拖拽滚动，每张卡片含毛玻璃分类 pill、可展开的 + 按钮、底部 serif 斜体大标题与视差图片；底部细进度条随滚动缩放、prev/next 圆形箭头按卡步进并带禁用态。1:1 复刻自 ouraring.com。",
-    "tech": "CSS scroll-snap + Pointer drag",
+    "tech": "CSS scroll-snap + Pointer 拖拽",
     "tags": [
       "interaction",
       "scroll",
@@ -1052,9 +1052,9 @@ window.__EFFECTS__ = [
     "num": "052",
     "folder": "052-ouraring-health-sensing-tabs",
     "title": "Oura 健康感知分类轮播",
-    "subtitle": "Everyday health sensing tabs",
+    "subtitle": "日常健康感知标签页",
     "description": "Oura Ring 5 产品页的「Everyday health sensing」区块：6 个分类 pill（Sleep / Activity / Readiness / Stress / Heart Health / Women's Health，各带填充图标）切换对应的横向卡片行；每行首张是生活方式大图，其后是深色渐变毛玻璃卡（UI 截图 object-contain 叠在 pop_membership_card_bg_gray 背景上）+ 标题 + 描述。CSS scroll-snap 原生吸附 + 指针拖拽滚动 + 滚轮；底部胶囊内进度条 thumb 随滚动位置/占比缩放平移，prev/next 圆形箭头按卡步进并带端点禁用态。1:1 复刻自 ouraring.com/store/rings/oura-ring-5。",
-    "tech": "CSS scroll-snap + Pointer drag",
+    "tech": "CSS scroll-snap + Pointer 拖拽",
     "tags": [
       "interaction",
       "scroll",
@@ -1071,10 +1071,10 @@ window.__EFFECTS__ = [
   {
     "num": "053",
     "folder": "053-podium-scroll-bridge",
-    "title": "Podium Scroll Bridge",
-    "subtitle": "masked media blob + scattered type",
-    "description": "Podium homepage opening scroll bridge cut directly from the local mirror. The effect page hosts the original mirrored Next/Three scene and maps the outer scroll to the same first-section scroll range, preserving the original canvas, media, sizing, and transition timing.",
-    "tech": "Original mirror iframe + scroll sync",
+    "title": "Podium 滚动衔接段",
+    "subtitle": "遮罩媒体形变 + 分散排版",
+    "description": "从本地镜像中直接截取 Podium 首页开场的滚动衔接段。Effect 承载原始 Next.js / Three.js 场景，并将外层滚动映射到相同的首屏滚动范围，保留原始 Canvas、媒体尺寸和转场节奏。",
+    "tech": "原始镜像 iframe + 滚动同步",
     "tags": [
       "首屏",
       "滑块",
@@ -1096,7 +1096,7 @@ window.__EFFECTS__ = [
     "title": "滚动背景变色实现说明",
     "subtitle": "CSS 变量重定向 + 滚动主导区块判定",
     "description": "一个文档型 effect：缩略 iframe 显示贴图式摘要，点进去阅读完整的《随滚动平滑切换背景色的实现说明》。内容讲解用 CSS 自定义属性做语义变量映射，由 JS 根据当前主导区块切换主题，过渡交给 CSS transition 完成。",
-    "tech": "CSS Custom Properties + IntersectionObserver + Lenis",
+    "tech": "CSS 自定义属性 + IntersectionObserver + Lenis",
     "tags": [
       "介绍",
       "文字段",
@@ -1113,10 +1113,10 @@ window.__EFFECTS__ = [
   {
     "num": "055",
     "folder": "055-lxtrendship-syenergy-scroll",
-    "title": "LX Trendship SY(E)NERGY Scroll Story",
-    "subtitle": "image collapse + split-word reveal + WebGL light field",
-    "description": "The original LX Trendship SY(E)NERGY sticky sequence isolated as a focused effect. Scrolling compresses the interior carousel between oversized brackets, assembles the SY(E)NERGY wordmark, reveals its supporting copy, and expands the original WebGL light field behind the typography.",
-    "tech": "Original Next.js mirror + WebGL + scroll sync",
+    "title": "LX Trendship SY(E)NERGY 滚动叙事",
+    "subtitle": "图片收缩 + 分词显现 + WebGL 光场",
+    "description": "从 LX Trendship 首页独立提取的 SY(E)NERGY Sticky 滚动段落。滚动会压缩超大括号之间的内部轮播，组装 SY(E)NERGY 字标，显现辅助文案，并在文字后方展开原始 WebGL 光场。",
+    "tech": "原始 Next.js 镜像 + WebGL + 滚动同步",
     "tags": [
       "首屏",
       "滑块",
@@ -1135,10 +1135,10 @@ window.__EFFECTS__ = [
   {
     "num": "056",
     "folder": "056-lxtrendship-maison-scroll",
-    "title": "LX Trendship Maison de Synergy Scroll Reveal",
-    "subtitle": "ornamental moon stage + architectural parallax rise",
-    "description": "The Maison de Synergy exhibition passage isolated from the LX Trendship homepage. The original floral moon composition, serif title, layered parallax ornaments, and illustrated house travel through the viewport on the source site's exact responsive scroll path.",
-    "tech": "Original Next.js mirror + layered parallax + scroll sync",
+    "title": "LX Trendship Maison de Synergy 滚动显现",
+    "subtitle": "花饰月球舞台 + 建筑视差上升",
+    "description": "从 LX Trendship 首页提取 Maison de Synergy 展览段落，保留原始花饰月球构图、衬线标题、分层视差装饰和插画建筑，并沿原站的响应式滚动路径穿越视口。",
+    "tech": "原始 Next.js 镜像 + 分层视差 + 滚动同步",
     "tags": [
       "案例动态",
       "文字段",
@@ -1157,10 +1157,10 @@ window.__EFFECTS__ = [
   {
     "num": "057",
     "folder": "057-risk-film-infinite-work-loop",
-    "title": "Risk Film Infinite Work Loop",
-    "subtitle": "full-bleed film reel with looping project transitions",
-    "description": "The looping project reel from Risk Film's homepage, isolated as a standalone offline effect. Full-bleed film clips, credit typography, the dot-frame treatment and the original timing/runtime are preserved; site navigation and unrelated pages are excluded.",
-    "tech": "Original Risk Film runtime + GSAP + local MP4 assets",
+    "title": "Risk Film 无限作品循环",
+    "subtitle": "全屏影片卷轴 + 循环项目转场",
+    "description": "从 Risk Film 首页独立提取的循环项目影片卷轴。保留全屏影片片段、演职员排版、点阵边框以及原始时间与运行逻辑，并移除网站导航和无关页面。",
+    "tech": "Risk Film 原始运行时 + GSAP + 本地 MP4 素材",
     "tags": [
       "案例动态",
       "轮播",
@@ -1181,7 +1181,7 @@ window.__EFFECTS__ = [
     "title": "Champions for Good — 拍球到骑马",
     "subtitle": "拍球到骑马的 Lottie 滚动序列",
     "description": "完整提取 Champions for Good 的拍球到骑马滚动序列，保留循环 SVG Lottie 运动员、随滚动出现的文字、贴纸与区块音频。",
-    "tech": "Webflow runtime · GSAP ScrollTrigger · SplitType · Lottie SVG · Lenis",
+    "tech": "Webflow Runtime + GSAP ScrollTrigger + SplitType + Lottie SVG + Lenis",
     "tags": [
       "介绍",
       "滚动",
@@ -1198,7 +1198,7 @@ window.__EFFECTS__ = [
   {
     "num": "059",
     "folder": "059-empiremetaverse-3d-hero",
-    "title": "Empire Metaverse 3D Hero",
+    "title": "Empire Metaverse 3D 首屏",
     "subtitle": "滚动驱动的 Empire Building 3D 叙事首屏",
     "description": "提取 Empire Metaverse 从首屏到商业机会文案画面的连续滚动体验：3D 建筑镜头、飘动云层与逐段显现的正文均由同一条平滑进度驱动。",
     "tech": "Three.js + GLTFLoader + GSAP",
@@ -1219,7 +1219,7 @@ window.__EFFECTS__ = [
   {
     "num": "060",
     "folder": "060-andrewcunliffe-work-scenes",
-    "title": "Andrew Cunliffe Work Scenes",
+    "title": "Andrew Cunliffe 作品场景",
     "subtitle": "滚动驱动的多项目空间化作品展示",
     "description": "提取 Andrew Cunliffe 网站 Work 区间，从 HighLvl 到 Black Sheep 的六个项目以全屏粘性舞台、漂浮媒体、交叉淡入与滚动进度连续切换。",
     "tech": "HTML + CSS + JavaScript",
@@ -1240,7 +1240,7 @@ window.__EFFECTS__ = [
   {
     "num": "061",
     "folder": "061-offmenu-orbit-hero",
-    "title": "Off Menu Nine Sphere Orbit",
+    "title": "Off Menu 九球轨道首屏",
     "subtitle": "九个项目圆球从倾斜轨道到逐项聚焦的完整滚动首屏",
     "description": "仅提取 Off Menu 首屏的九球交互：开场沿倾斜轨道旋转，滚动前段完成整圈与水平校正，随后逐个放大并聚焦不同项目；保留球体悬停缩放和反差色小圆点光标，不包含品牌顶栏、文案、CTA、指示器或外部跳转。",
     "tech": "HTML + CSS + JavaScript",

@@ -1,9 +1,16 @@
 {
-  "title": "Risk Film Infinite Work Loop",
-  "subtitle": "full-bleed film reel with looping project transitions",
-  "description": "The looping project reel from Risk Film's homepage, isolated as a standalone offline effect. Full-bleed film clips, credit typography, the dot-frame treatment and the original timing/runtime are preserved; site navigation and unrelated pages are excluded.",
-  "tech": "Original Risk Film runtime + GSAP + local MP4 assets",
-  "tags": ["\u6848\u4f8b\u52a8\u6001", "\u8f6e\u64ad", "\u81ea\u52a8\u64ad\u653e", "\u906e\u7f69", "\u54cd\u5e94\u5f0f", "\u8bbe\u8ba1\u5efa\u7b51"],
+  "title": "Risk Film 无限作品循环",
+  "subtitle": "全屏影片卷轴 + 循环项目转场",
+  "description": "从 Risk Film 首页独立提取的循环项目影片卷轴。保留全屏影片片段、演职员排版、点阵边框以及原始时间与运行逻辑，并移除网站导航和无关页面。",
+  "tech": "Risk Film 原始运行时 + GSAP + 本地 MP4 素材",
+  "tags": [
+    "案例动态",
+    "轮播",
+    "自动播放",
+    "遮罩",
+    "响应式",
+    "设计建筑"
+  ],
   "previewHref": "",
   "sourceUrl": "https://www.risk.film/",
   "localMirror": "../designs/100-risk/index.html",

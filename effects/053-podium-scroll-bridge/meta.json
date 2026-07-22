@@ -1,9 +1,17 @@
 {
-  "title": "Podium Scroll Bridge",
-  "subtitle": "masked media blob + scattered type",
-  "description": "Podium homepage opening scroll bridge cut directly from the local mirror. The effect page hosts the original mirrored Next/Three scene and maps the outer scroll to the same first-section scroll range, preserving the original canvas, media, sizing, and transition timing.",
-  "tech": "Original mirror iframe + scroll sync",
-  "tags": ["首屏", "滑块", "滚动", "形变", "路径裁切", "逐字出场", "B2B服务"],
+  "title": "Podium 滚动衔接段",
+  "subtitle": "遮罩媒体形变 + 分散排版",
+  "description": "从本地镜像中直接截取 Podium 首页开场的滚动衔接段。Effect 承载原始 Next.js / Three.js 场景，并将外层滚动映射到相同的首屏滚动范围，保留原始 Canvas、媒体尺寸和转场节奏。",
+  "tech": "原始镜像 iframe + 滚动同步",
+  "tags": [
+    "首屏",
+    "滑块",
+    "滚动",
+    "形变",
+    "路径裁切",
+    "逐字出场",
+    "B2B服务"
+  ],
   "previewHref": "",
   "sourceUrl": "https://podium.global/",
   "localMirror": "../designs/091-podium/index.html",

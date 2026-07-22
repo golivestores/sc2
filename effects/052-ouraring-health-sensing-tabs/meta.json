@@ -1,9 +1,15 @@
 {
   "title": "Oura 健康感知分类轮播",
-  "subtitle": "Everyday health sensing tabs",
+  "subtitle": "日常健康感知标签页",
   "description": "Oura Ring 5 产品页的「Everyday health sensing」区块：6 个分类 pill（Sleep / Activity / Readiness / Stress / Heart Health / Women's Health，各带填充图标）切换对应的横向卡片行；每行首张是生活方式大图，其后是深色渐变毛玻璃卡（UI 截图 object-contain 叠在 pop_membership_card_bg_gray 背景上）+ 标题 + 描述。CSS scroll-snap 原生吸附 + 指针拖拽滚动 + 滚轮；底部胶囊内进度条 thumb 随滚动位置/占比缩放平移，prev/next 圆形箭头按卡步进并带端点禁用态。1:1 复刻自 ouraring.com/store/rings/oura-ring-5。",
-  "tech": "CSS scroll-snap + Pointer drag",
-  "tags": ["interaction", "scroll", "carousel", "snap", "hero"],
+  "tech": "CSS scroll-snap + Pointer 拖拽",
+  "tags": [
+    "interaction",
+    "scroll",
+    "carousel",
+    "snap",
+    "hero"
+  ],
   "sourceUrl": "https://ouraring.com/store/rings/oura-ring-5",
   "localMirror": "../designs/070-oura-ring-5/index.html"
 }

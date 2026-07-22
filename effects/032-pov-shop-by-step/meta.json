@@ -1,8 +1,8 @@
 {
   "title": "POV Beauty · Shop by Step 步骤切换面板",
-  "subtitle": "5-step left list with → indicator + active media panel + product mini-card; click/tap switches all three layers in sync",
+  "subtitle": "5 步骤左侧列表 + 圆点指示器 + 动态媒体面板 + 商品小卡，点击或触摸同步切换三层",
   "description": "povbeauty.com 首页 'shop by step' 那块（rich_text H2 + Index_tabs_products_lists_new bAPz6G），1:1 还原原站交互：\n\n· 顶部 'shop by step' 居中超大粗体 H2（rich-text section .rich-text__heading.hxxl），effect 把 rich_text 标题 section + 步骤 section 两块一起保留。\n· 桌面端左栏（Desktop_only_new）：5 个圆角矩形 step button，里面 01–05 手写斜体编号 + 'drench it / drip it / whip it / glaze it / amp it' 步骤名。active item：浅灰底 + 内嵌右边一张缩略产品瓶 + 外侧 → 箭头指向。点击任一 step：active class 跳到该项、外箭头跟着移动到对应行、内嵌缩略瓶切到该产品；同步右侧大图视频/图换成该步骤 hero，右下角 mini product card 更新为该产品（标题、副标题、ADD TO CART · $XX）。\n· 列表底部：'SHOP THE FULL ROUTINE' 圆角胶囊按钮（连到 routine 集合）。\n· 移动端（Mobile_only_new）：步骤列表退化成横向 swiper（每张面板等宽，独立 pagination 圆点）；右侧媒体改为竖直堆叠在底部，ADD TO CART 卡跨整宽。\n\n切换由 product-form.js + quick-add.js + theme tab show/hide class swap (.tab_information_*_open) 协同驱动。effect 通过 `<base href=\"../../designs/023-povbeauty/\">` 复用镜像里的 Shopify Dawn 全套 stylesheet + Swiper + product-form + quick-add JS，所以 step 切换、active 箭头跳转、移动端 swiper 全部保真。",
-  "tech": "Shopify Dawn theme (Liquid output)  ·  Swiper.js (mobile)  ·  product-form + quick-add JS modules  ·  show/hide tab class swap  ·  custom SVG → indicator",
+  "tech": "Shopify Dawn 主题（Liquid 输出） + Swiper.js（移动端） + Product Form / Quick Add + 标签显隐切换 + 自定义 SVG 圆点",
   "tags": [
     "电商",
     "步骤",

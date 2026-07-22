@@ -1,9 +1,13 @@
 {
-  "title": "Clientes — Zigzag Trajectory",
+  "title": "Clientes｜之字形轨迹",
   "subtitle": "GMX · 滚动绘制轨迹线 + 流光圆点",
   "description": "复刻 gmxdigital.com「Nossos Clientes」zigzag 时间线:深紫渐变背景上,客户卡片左右交错排布,中线节点用一条多层 SVG 贝塞尔轨迹串联(渐变主线 + 模糊 glow + 白色 core + 虚线 hint)。随滚动用 strokeDashoffset 由上至下绘制(ScrollTrigger scrub 0.3),一颗发光 traveller 圆点(getPointAtLength)骑在绘制前沿移动,直到线走完;每张卡进入视口时 reveal(tag/logo/text/cta 错位)并点亮节点(脉冲环 + 青/品红描角展开)。1:1 还原 initTrajetoria;预览缩略图直接绘满整条线。",
   "tech": "GSAP + ScrollTrigger",
-  "tags": ["scroll", "animation", "interaction"],
+  "tags": [
+    "scroll",
+    "animation",
+    "interaction"
+  ],
   "previewHref": "index.html",
   "sourceUrl": "https://gmxdigital.com/",
   "localMirror": "../designs/027-gmxdigital/index.html"

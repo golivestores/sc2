@@ -1,9 +1,16 @@
 {
-  "title": "Andrew Cunliffe Work Scenes",
+  "title": "Andrew Cunliffe 作品场景",
   "subtitle": "滚动驱动的多项目空间化作品展示",
   "description": "提取 Andrew Cunliffe 网站 Work 区间，从 HighLvl 到 Black Sheep 的六个项目以全屏粘性舞台、漂浮媒体、交叉淡入与滚动进度连续切换。",
   "tech": "HTML + CSS + JavaScript",
-  "tags": ["案例动态", "滚动", "多态切换", "视差", "响应式", "科技"],
+  "tags": [
+    "案例动态",
+    "滚动",
+    "多态切换",
+    "视差",
+    "响应式",
+    "科技"
+  ],
   "previewHref": "index.html",
   "sourceUrl": "https://andrewcunliffe.ai/",
   "localMirror": "../designs/102-andrewcunliffe/index.html",

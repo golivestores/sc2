@@ -1,6 +1,6 @@
 {
   "title": "Don Molinico Pandereta 双卡",
-  "subtitle": "hover-reveal marquee · 2-up large-tin variant",
+  "subtitle": "悬停显现跑马灯 + 双列大罐体版本",
   "description": "Don Molinico /products 页第三屏的两张大圆罐头卡（Pandereta：Atun/Carne 860g）。结构和 015 / 016 一致，差异只有 grid 列数（2 列 clamp(300,30vw,520)）+ 2 张卡片背景色 + 罐头图 + marquee 文案。两卡居中、左右留较大 cream 留白，跟原版 desktop 视觉一致。",
   "tech": "CSS Grid + clip-path + @keyframes",
   "tags": [

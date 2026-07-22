@@ -1,9 +1,13 @@
 {
-  "title": "Features Scroll Reveal",
+  "title": "特性滚动显现",
   "subtitle": "Vectr · 滚动逐卡揭示",
   "description": "复刻 vectrfl.com 的 Features 区块：sticky 居中的大标题 + 4 张特性卡，随页面滚动逐卡 opacity 0→1 / y 80→0 揭示（power2.out 缓动）。机制 1:1 还原原站——section 高 400vh 提供滚动跑道，rAF 持续读取 section 进度并把每张卡映射到一段错位的进度切片（带 30% 重叠），用 GSAP paused tween 的 .progress() 做连续 scrub，而非离散切换。",
   "tech": "GSAP",
-  "tags": ["scroll", "intro", "animation"],
+  "tags": [
+    "scroll",
+    "intro",
+    "animation"
+  ],
   "previewHref": "index.html",
   "sourceUrl": "https://www.vectrfl.com/",
   "localMirror": "../designs/026-vectrfl/index.html"

@@ -1,9 +1,17 @@
 {
-  "title": "LX Trendship SY(E)NERGY Scroll Story",
-  "subtitle": "image collapse + split-word reveal + WebGL light field",
-  "description": "The original LX Trendship SY(E)NERGY sticky sequence isolated as a focused effect. Scrolling compresses the interior carousel between oversized brackets, assembles the SY(E)NERGY wordmark, reveals its supporting copy, and expands the original WebGL light field behind the typography.",
-  "tech": "Original Next.js mirror + WebGL + scroll sync",
-  "tags": ["首屏", "滑块", "滚动", "形变", "逐字出场", "响应式", "设计建筑"],
+  "title": "LX Trendship SY(E)NERGY 滚动叙事",
+  "subtitle": "图片收缩 + 分词显现 + WebGL 光场",
+  "description": "从 LX Trendship 首页独立提取的 SY(E)NERGY Sticky 滚动段落。滚动会压缩超大括号之间的内部轮播，组装 SY(E)NERGY 字标，显现辅助文案，并在文字后方展开原始 WebGL 光场。",
+  "tech": "原始 Next.js 镜像 + WebGL + 滚动同步",
+  "tags": [
+    "首屏",
+    "滑块",
+    "滚动",
+    "形变",
+    "逐字出场",
+    "响应式",
+    "设计建筑"
+  ],
   "previewHref": "",
   "sourceUrl": "https://www.lxtrendship.com/en",
   "localMirror": "../designs/098-lxtrendship/index.html",

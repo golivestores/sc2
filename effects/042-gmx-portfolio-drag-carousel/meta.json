@@ -1,9 +1,13 @@
 {
-  "title": "Portfólio — Drag Carousel",
+  "title": "Portfólio｜拖拽轮播",
   "subtitle": "GMX · 无限自动轮播 + 3D tilt",
   "description": "复刻 gmxdigital.com 的作品轮播:玻璃质感卡片横向无限自动滚动(克隆整组实现无缝循环),每张卡按距容器中心的距离做 3D 透视倾斜(rotateY ±3° + scale + 透明度衰减),hover 时背景图去灰放大、clip-path 展开、按钮反白。左右箭头点击步进(scrollBy 平滑,暂停 3.5s 后恢复),底部渐变进度条实时反映滚动位置;移动端支持拖拽 + 惯性。1:1 还原原站 setupPortfolioDrag。注:演示用海报图替代原站视频(视频体积过大未打包)。",
-  "tech": "Vanilla JS",
-  "tags": ["interaction", "scroll", "animation"],
+  "tech": "原生 JS",
+  "tags": [
+    "interaction",
+    "scroll",
+    "animation"
+  ],
   "previewHref": "index.html",
   "sourceUrl": "https://gmxdigital.com/",
   "localMirror": "../designs/027-gmxdigital/index.html"

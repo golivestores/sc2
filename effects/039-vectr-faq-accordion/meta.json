@@ -1,9 +1,12 @@
 {
-  "title": "FAQ Accordion",
+  "title": "FAQ 手风琴",
   "subtitle": "Vectr · 单开手风琴",
   "description": "复刻 vectrfl.com 的 FAQ 区块：左侧大标题 + 竖分隔线 + 右侧单开手风琴。点击某项展开（max-height 0→scrollHeight，0.6s 过渡），自动收起其它已展开项；chevron 图标随展开/收起旋转，hover 时图标底色由深蓝 #050419 变高亮蓝 #3932DC。纯 JS + CSS，逻辑与原站一致（含强制 reflow 让 max-height 过渡可靠触发、resize 时重算高度）。",
-  "tech": "Vanilla JS",
-  "tags": ["interaction", "animation"],
+  "tech": "原生 JS",
+  "tags": [
+    "interaction",
+    "animation"
+  ],
   "previewHref": "index.html",
   "sourceUrl": "https://www.vectrfl.com/",
   "localMirror": "../designs/026-vectrfl/index.html"

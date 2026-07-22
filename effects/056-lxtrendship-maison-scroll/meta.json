@@ -1,9 +1,17 @@
 {
-  "title": "LX Trendship Maison de Synergy Scroll Reveal",
-  "subtitle": "ornamental moon stage + architectural parallax rise",
-  "description": "The Maison de Synergy exhibition passage isolated from the LX Trendship homepage. The original floral moon composition, serif title, layered parallax ornaments, and illustrated house travel through the viewport on the source site's exact responsive scroll path.",
-  "tech": "Original Next.js mirror + layered parallax + scroll sync",
-  "tags": ["案例动态", "文字段", "滚动", "视差", "形变", "响应式", "设计建筑"],
+  "title": "LX Trendship Maison de Synergy 滚动显现",
+  "subtitle": "花饰月球舞台 + 建筑视差上升",
+  "description": "从 LX Trendship 首页提取 Maison de Synergy 展览段落，保留原始花饰月球构图、衬线标题、分层视差装饰和插画建筑，并沿原站的响应式滚动路径穿越视口。",
+  "tech": "原始 Next.js 镜像 + 分层视差 + 滚动同步",
+  "tags": [
+    "案例动态",
+    "文字段",
+    "滚动",
+    "视差",
+    "形变",
+    "响应式",
+    "设计建筑"
+  ],
   "previewHref": "",
   "sourceUrl": "https://www.lxtrendship.com/en",
   "localMirror": "../designs/098-lxtrendship/index.html",
