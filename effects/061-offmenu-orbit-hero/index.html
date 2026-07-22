@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Off Menu — Nine Sphere Orbit</title>
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;width:100%;min-height:100%;background:#f7f7f5}
+    html{scrollbar-width:none}
+    html::-webkit-scrollbar{display:none}
+    body{cursor:none;overflow-x:hidden}
+    button{font:inherit}
+    .scroll-track{position:relative;height:1000vh;background:#f7f7f5}
+    .stage{position:sticky;top:0;width:100%;height:100svh;min-height:520px;overflow:hidden;background:#f7f7f5}
+    .orbit-shell{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 1.2s ease}
+    .orbit-shell.ready{opacity:1}
+    .orbit-plane{position:relative;width:min(400vw,100vh);height:min(400vw,100vh);container-type:inline-size;will-change:transform;transform:scale(var(--container-scale,.5)) translateX(calc(var(--zoom-offset,0px) + var(--tilt-offset-x,0%))) translateY(var(--tilt-offset-y,0%))}
+    .sphere-layer{position:absolute;inset:0;display:grid;place-items:center;grid-template-areas:'layer'}
+    .sphere{grid-area:layer;position:relative;display:block;width:calc(clamp(120px,25vw,300px) * var(--sphere-size-scale,.6));height:auto;aspect-ratio:1;border:0;padding:0;border-radius:50%;overflow:hidden;background:transparent;cursor:none;transform-origin:center;will-change:transform;backface-visibility:hidden}
+    .sphere img{position:absolute;left:50%;top:50%;width:110%;height:110%;object-fit:cover;transform:translate(-50%,-50%);pointer-events:none;user-select:none;-webkit-user-drag:none}
+    [data-offmenu-cursor]{position:fixed;left:0;top:0;pointer-events:none;z-index:2147483000;mix-blend-mode:difference;transform:translate(-50%,-50%);will-change:left,top}
+    [data-offmenu-cursor] span{position:absolute;left:50%;top:50%;width:10px;height:10px;border-radius:50%;background:#fff;opacity:0;transform:translate(-50%,-50%);will-change:width,height,opacity}
+    @media(max-width:639px){body{cursor:auto}[data-offmenu-cursor]{display:none}.stage{min-height:480px}}
+    @media(prefers-reduced-motion:reduce){.orbit-shell{transition:none}}
+  </style>
+</head>
+<body>
+  <main class="scroll-track" id="orbitTrack">
+    <section class="stage" aria-label="Nine project spheres">
+      <div class="orbit-shell">
+        <div class="orbit-plane" id="orbitPlane">
+          <div class="sphere-layer">
+            <button class="sphere" type="button" data-sphere-index="0" aria-label="Resonant"><img src="assets/resonant.webp" alt=""></button>
+            <button class="sphere" type="button" data-sphere-index="1" aria-label="Control Tower"><img src="assets/controltower.webp" alt=""></button>
+            <button class="sphere" type="button" data-sphere-index="2" aria-label="Ditto"><img src="assets/ditto.webp" alt=""></button>
+            <button class="sphere" type="button" data-sphere-index="3" aria-label="Hanover Park"><img src="assets/hanover-park.webp" alt=""></button>
+            <button class="sphere" type="button" data-sphere-index="4" aria-label="Superintelligent"><img src="assets/super.webp" alt=""></button>
+            <button class="sphere" type="button" data-sphere-index="5" aria-label="Tenacity"><img src="assets/tenacity.webp" alt=""></button>
+            <button class="sphere" type="button" data-sphere-index="6" aria-label="Utility"><img src="assets/utility.webp" alt=""></button>
+            <button class="sphere" type="button" data-sphere-index="7" aria-label="Flex"><img src="assets/flex.webp" alt=""></button>
+            <button class="sphere" type="button" data-sphere-index="8" aria-label="ClosetNow"><img src="assets/closetnow.webp" alt=""></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    (function(){
+      var track=document.getElementById('orbitTrack');
+      var plane=document.getElementById('orbitPlane');
+      var shell=document.querySelector('.orbit-shell');
+      var cards=Array.from(document.querySelectorAll('[data-sphere-index]'));
+      var count=cards.length;
+      var hovered=-1;
+      var hoverScales=cards.map(function(){return 1});
+      var preview=new URLSearchParams(location.search).get('demo')==='preview';
+      var startTime=performance.now()-(preview?3000:0);
+      var current={rotation:0,tiltY:-.6,tiltX:.5236,zoom:0};
+
+      cards.forEach(function(card,index){
+        card.addEventListener('mouseenter',function(){hovered=index});
+        card.addEventListener('mouseleave',function(){if(hovered===index)hovered=-1});
+        card.addEventListener('click',function(event){event.preventDefault()});
+      });
+
+      function scrollProgress(){
+        var range=Math.max(1,track.offsetHeight-innerHeight);
+        return Math.max(0,Math.min(1,-track.getBoundingClientRect().top/range));
+      }
+
+      function targetFor(progress){
+        var step=Math.PI*2/count;
+        var rotation=progress<=.2
+          ?-(progress/.2)*Math.PI*2
+          :-Math.PI*2-(Math.round(((progress-.2)/.8)*count)%count)*step;
+        return{
+          rotation:rotation,
+          tiltY:progress<.2?-.6*(1-progress/.2):0,
+          tiltX:progress<.2?.5236*(1-progress/.2):0,
+          zoom:progress>=.2?1:0
+        };
+      }
+
+      function render(){
+        var progress=scrollProgress();
+        var target=targetFor(progress);
+        current.rotation+=(target.rotation-current.rotation)*.075;
+        current.tiltY+=(target.tiltY-current.tiltY)*.11;
+        current.tiltX+=(target.tiltX-current.tiltX)*.11;
+        current.zoom+=(target.zoom-current.zoom)*.08;
+
+        var intro=Math.min((performance.now()-startTime)/3000,1);
+        var introAngle=Math.PI*Math.pow(1-intro,4);
+        var rotation=current.rotation+introAngle;
+        var planeSize=Math.min(innerWidth*4,innerHeight);
+        var radius=Math.max(400,planeSize*.8);
+        plane.style.setProperty('--container-scale',String(.5+.5*current.zoom));
+        plane.style.setProperty('--zoom-offset',(current.zoom*radius)+'px');
+        plane.style.setProperty('--tilt-offset-x',(5*current.tiltY)+'%');
+        plane.style.setProperty('--tilt-offset-y',(-(5*current.tiltX))+'%');
+        plane.style.setProperty('--sphere-size-scale',String(.6+.4*current.zoom));
+
+        var rawFocus=-rotation/(Math.PI*2/count);
+        var focus=Math.round((rawFocus%count+count)%count)%count;
+        var half=count/2;
+        cards.forEach(function(card,index){
+          var distance=Math.abs(index-focus);if(distance>half)distance=count-distance;
+          var a=Math.min(distance,1);
+          var smooth=a*a*a*(a*(a*6-15)+10);
+          var maxScale=1.5+.5*current.zoom;
+          var cardScale=maxScale-smooth*(maxScale-1);
+          var angle=index/count*Math.PI*2+rotation+Math.PI;
+          var x=Math.cos(angle),y=Math.sin(angle);
+          var cosX=Math.cos(current.tiltY),sinX=Math.sin(current.tiltY);
+          var px=x*cosX,pz=-x*sinX;
+          var cosY=Math.cos(current.tiltX),sinY=Math.sin(current.tiltX);
+          var py=y*cosY-pz*sinY;pz=y*sinY+pz*cosY;
+          var depthScale=1+.1*pz;
+          var hoverTarget=hovered===index?1.1:1;
+          hoverScales[index]+=(hoverTarget-hoverScales[index])*.15;
+          card.style.transform='translate('+(px*radius)+'px,'+(-py*radius)+'px) scale('+(cardScale*depthScale*hoverScales[index])+')';
+          card.style.zIndex=String(Math.round((pz+2)*100));
+        });
+        requestAnimationFrame(render);
+      }
+
+      function installCursor(){
+        if(matchMedia('(pointer:coarse)').matches||innerWidth<640)return;
+        var cursor=document.createElement('div');cursor.setAttribute('data-offmenu-cursor','');
+        var dot=document.createElement('span');cursor.appendChild(dot);document.body.appendChild(cursor);
+        var x=innerWidth/2,y=innerHeight/2,tx=x,ty=y,opacity=0,targetOpacity=0,scale=1,targetScale=1,moved=false;
+        addEventListener('mousemove',function(event){tx=event.clientX;ty=event.clientY;if(!moved){moved=true;x=tx;y=ty}targetOpacity=1},{passive:true});
+        addEventListener('mousedown',function(){targetScale=.9});addEventListener('mouseup',function(){targetScale=1});
+        document.addEventListener('mouseleave',function(){targetOpacity=0});document.addEventListener('mouseenter',function(){if(moved)targetOpacity=1});
+        (function cursorFrame(){x+=(tx-x)*.35;y+=(ty-y)*.35;opacity+=(targetOpacity-opacity)*.15;scale+=(targetScale-scale)*.2;cursor.style.left=x+'px';cursor.style.top=y+'px';dot.style.width=(10*scale)+'px';dot.style.height=(10*scale)+'px';dot.style.opacity=opacity;requestAnimationFrame(cursorFrame)})();
+      }
+
+      installCursor();render();requestAnimationFrame(function(){shell.classList.add('ready')});
+    })();
+  </script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="061-offmenu-orbit-hero.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=061-offmenu-orbit-hero" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

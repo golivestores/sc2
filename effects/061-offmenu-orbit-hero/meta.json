@@ -1,0 +1,12 @@
+{
+  "title": "Off Menu Nine Sphere Orbit",
+  "subtitle": "九个项目圆球从倾斜轨道到逐项聚焦的完整滚动首屏",
+  "description": "仅提取 Off Menu 首屏的九球交互：开场沿倾斜轨道旋转，滚动前段完成整圈与水平校正，随后逐个放大并聚焦不同项目；保留球体悬停缩放和反差色小圆点光标，不包含品牌顶栏、文案、CTA、指示器或外部跳转。",
+  "tech": "HTML + CSS + JavaScript",
+  "tags": ["首屏", "滚动", "形变", "视差", "响应式", "设计建筑"],
+  "previewHref": "index.html",
+  "sourceUrl": "https://www.offmenu.design/",
+  "localMirror": "../designs/104-offmenu/index.html",
+  "order": 61,
+  "savedAt": "2026-07-22"
+}
