@@ -1256,5 +1256,26 @@
     "sourceUrl": "https://www.offmenu.design/",
     "localMirror": "../designs/104-offmenu/index.html",
     "order": 61
+  },
+  {
+    "num": "062",
+    "folder": "062-ricardochance-star-hero",
+    "title": "Himax 四芒星粒子首屏",
+    "subtitle": "滚动驱动四芒星旋转、解体并消失的 WebGL 首屏",
+    "description": "提取 Ricardo Chance 首页首屏及其紧随的滚动过渡：粒子四芒星在星空背景中随滚动绕纵轴旋转，逐步压扁、炸散并完全消失。保留原始 WebGL、GLSL、首屏排版、响应式布局与滚动进度，移除后续正文和外部跳转。",
+    "tech": "Next.js + React Three Fiber + Three.js + WebGL/GLSL + GSAP",
+    "tags": [
+      "首屏",
+      "滚动",
+      "形变",
+      "视差",
+      "响应式",
+      "设计建筑"
+    ],
+    "previewHref": "index.html",
+    "preview": "062-ricardochance-star-hero/preview.png",
+    "sourceUrl": "https://www.ricardochance.com/",
+    "localMirror": "../designs/109-ricardochance/index.html",
+    "order": 62
   }
 ]
