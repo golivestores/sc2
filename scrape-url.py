@@ -374,7 +374,10 @@ def main():
     # first pass: enqueue assets directly referenced by HTML
     html_rewrites = {}  # original string -> replacement (we'll do str.replace)
     for raw, kind in ex.assets:
-        if not raw or raw.startswith(("data:", "javascript:", "mailto:", "tel:", "#")):
+        # A bare site-root value is a navigation route, not an asset. Treating
+        # it as a replaceable URL would rewrite every "/" token in the HTML and
+        # corrupt tags, comments, and inline scripts.
+        if not raw or not raw.strip() or raw.strip() == "/" or raw.startswith(("data:", "javascript:", "mailto:", "tel:", "#")):
             continue
         if kind == "srcset-item":
             absu, rel = local_path_for(raw, base_url)
@@ -668,13 +671,65 @@ def main():
      absolute path argument already starts with __docDir, the browser/runtime
      has already correctly resolved a relative URL against the document — do
      not prefix it again, or fetches double up (/works/x/works/x/...). */
-  var __docDir = location.pathname.replace(/[^/]*$/, '');
+  var __docPath = location.pathname;
+  var __docDir = __docPath.replace(/[^/]*$/, '');
+  /* Keep collection URLs canonical and stable. A mirrored page may be opened
+     as /designs/<folder>/index.html, while the public entry URL is the
+     directory itself. Normalize before the app router boots so hydration
+     cannot capture and later restore the unwanted /index.html spelling. */
+  if (__docPath.slice(-11) === '/index.html') {
+    try {
+      history.replaceState(
+        history.state,
+        '',
+        __docDir + location.search + location.hash
+      );
+      __docPath = location.pathname;
+      __docDir = __docPath.replace(/[^/]*$/, '');
+    } catch (e) {}
+  }
   function rewrite(u) {
     if (typeof u !== 'string') return u;
     if (u.length < 2 || u[0] !== '/' || u[1] === '/') return u;
     if (__docDir.length > 1 && u.indexOf(__docDir) === 0) return u;
     return '.' + u;
   }
+  /* SPA routers commonly normalize their live-site route with
+     history.replaceState(..., "/"). Inside the collection that silently changes
+     the address bar from /designs/<folder>/ to the server root, even though the
+     mirrored page remains visible. Keep same-origin history URLs inside the
+     document directory. At a standalone server root, preserve an explicit
+     /index.html entry instead of allowing the router to shorten it to /. */
+  function rewriteHistoryUrl(u) {
+    if (u == null) return u;
+    try {
+      var parsed = new URL(String(u), location.href);
+      if (parsed.origin !== location.origin) return u;
+      if (__docDir.length <= 1) {
+        if (parsed.pathname === '/' && __docPath !== '/') {
+          return __docPath + parsed.search + parsed.hash;
+        }
+        return u;
+      }
+      if (parsed.pathname === __docDir + 'index.html') {
+        return __docDir + parsed.search + parsed.hash;
+      }
+      if (parsed.pathname.indexOf(__docDir) === 0) return u;
+      if (parsed.pathname[0] !== '/') return u;
+      if (parsed.pathname === '/') return __docPath + parsed.search + parsed.hash;
+      return __docDir + parsed.pathname.slice(1) + parsed.search + parsed.hash;
+    } catch (e) {
+      return u;
+    }
+  }
+  ['pushState', 'replaceState'].forEach(function (name) {
+    var original = history[name];
+    if (!original) return;
+    history[name] = function (state, title, url) {
+      if (arguments.length > 2) arguments[2] = rewriteHistoryUrl(url);
+      return original.apply(this, arguments);
+    };
+  });
   var origFetch = window.fetch;
   if (origFetch) {
     window.fetch = function (input, init) {

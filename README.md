@@ -20,6 +20,14 @@
 
 不用 Claude Code 的同事也可以直接读 [docs/claude-memory/](docs/claude-memory/)，每个 `.md` 都是独立的踩坑/约定/规则记录，文件名描述主题。
 
+整站镜像要发给 Mac 同事预览时，不要用 `package-effects.py`，统一走：
+
+```powershell
+python package-mac-site.py designs/074-ori-koji-global himax-ori-koji-mac --force
+```
+
+这个脚本会生成 `mac-zip/<name>/` 和 `mac-zip/<name>.zip`，并自动做二次验证：解压刚生成的 zip、从包内 `site/` 起本地 HTTP 服务、检查关键资源；遇到 Spline/3D 场景还会用 Playwright 验证 runtime、scene、Draco 解码器和 canvas 实例。
+
 ---
 
 ## 同事开荒：5 分钟跑起来

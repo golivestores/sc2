@@ -163,7 +163,11 @@ def rebuild_designs(root: Path) -> int:
             continue
         # href + preview are relative to designs/ (where the .json/.js live),
         # so designs/index.html can <iframe> them without a designs/ prefix.
-        preview = f"{d.name}/preview.png" if (d / "preview.png").exists() else ""
+        preview = ""
+        for preview_name in ("preview.jpg", "preview.webp", "preview.png"):
+            if (d / preview_name).exists():
+                preview = f"{d.name}/{preview_name}"
+                break
         designs.append({
             "folder":      d.name,
             "title":       meta.get("title")       or d.name,
