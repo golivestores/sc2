@@ -1,0 +1,23 @@
+{
+  "title": "MGA-1 滚动拆解 · 3D 蓝图",
+  "subtitle": "滚动 scrub 驱动 3D 爆炸拆解",
+  "description": "从 Alphane Labs (solutions.alphanelabs.com) 抽取的核心 3D 交互：滚动驱动一段烘焙好的 20s 动画——相机沿 baked 路径绕飞设备（camera-on-rails），同时仪器各部件平移+旋转拆解。正交相机(frustumHeight 6)给出无透视的工程等轴测；白色 unlit 面 + 每个 mesh 叠 EdgesGeometry 蓝边(#0094d3)还原蓝图观感；grill.png 平铺 28×14 当 alphaMap 做细密蓝点散热网格；风扇独立连续自转。机制 = mixer.setTime(进度×20) + camera.lookAt(baked target)，每帧读滚动位(rAF，非 scroll 事件)保证连续。GLTF + DRACO 解压，three r124/r128。",
+  "tech": "Three.js + GLTF / DRACO + 烘焙动画 scrub",
+  "tags": [
+    "scroll",
+    "interaction",
+    "animation",
+    "hero",
+    "3d",
+    "webgl",
+    "threejs",
+    "gltf-draco",
+    "camera-on-rails",
+    "orthographic",
+    "scrollytelling"
+  ],
+  "previewHref": "index.html",
+  "sourceUrl": "https://solutions.alphanelabs.com",
+  "localMirror": "../designs/035-alphanelabs/index.html",
+  "order": 46
+}

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MGA-1 Device · Scroll-Scrubbed 3D Explode</title>
+<style>
+  :root{
+    --bg:#f3f8fe;          /* boxColorMedium */
+    --blue:#0094d3;        /* linesColor */
+    --vivid:#2cc9ff;
+    --ink:#0b2a3a;
+    --mono:"Aeonik Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    --sans:"Aeonik",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  /* ---- scroll runway ---- */
+  .runway{position:relative;width:100%;height:480vh}
+  .sticky{position:sticky;top:0;height:100vh;width:100%;overflow:hidden}
+  #scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+  /* ---- caption boxes (per phase) ---- */
+  .caption{
+    position:absolute;max-width:34rem;width:min(86vw,34rem);
+    background:#fff;border:1px solid var(--blue);border-radius:.75rem;
+    padding:2rem 2.25rem;color:var(--blue);font-family:var(--mono);
+    font-size:clamp(.78rem,1.05vw,1.05rem);line-height:1.5;
+    opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease;
+    pointer-events:none;box-shadow:0 14px 40px -22px rgba(0,90,160,.45);
+  }
+  .caption.show{opacity:1;transform:translateY(0)}
+  .cap-1{left:6vw;top:14vh}
+  .cap-2{right:6vw;top:16vh}
+  .cap-3{left:6vw;bottom:16vh}
+  /* eyebrow / phase tag */
+  .phase-tag{position:absolute;left:6vw;top:7vh;font-family:var(--mono);
+    letter-spacing:.18em;font-size:.7rem;color:var(--vivid);text-transform:uppercase;
+    opacity:0;transition:opacity .4s ease}
+  .phase-tag.show{opacity:1}
+  /* scroll hint */
+  .hint{position:absolute;left:50%;bottom:4vh;transform:translateX(-50%);
+    font-family:var(--mono);font-size:.72rem;color:var(--blue);opacity:.7;
+    display:flex;gap:.5rem;align-items:center}
+  .hint .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);
+    animation:b 1.3s ease-in-out infinite}
+  @keyframes b{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(5px);opacity:1}}
+  /* loader */
+  #loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:var(--bg);z-index:5;font-family:var(--mono);color:var(--blue);font-size:.85rem}
+  #loader.gone{opacity:0;pointer-events:none;transition:opacity .6s ease}
+  /* demo intro (stripped from paste snippets) */
+  .demo-intro{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;background:var(--bg);text-align:center;gap:1rem;
+    transition:opacity .6s ease}
+  .demo-intro h1{font-size:clamp(1.4rem,3vw,2.4rem);color:var(--ink)}
+  .demo-intro p{font-family:var(--mono);color:var(--blue);font-size:.85rem;max-width:30rem}
+  .demo-intro.gone{opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="runway" id="runway">
+  <div class="sticky">
+    <canvas id="scene"></canvas>
+
+    <div class="phase-tag" id="tag" data-demo-only>OUR SOLUTIONS · MGA-1</div>
+
+    <div class="caption cap-1" id="cap1">
+      The MGA-1 measures CO&#8322; and H&#8322;O adsorption using two sensors:
+      a gravimetric sensor for total uptake and a capacitance sensor for polar
+      molecule (e.g. H&#8322;O) uptake.
+    </div>
+    <div class="caption cap-2" id="cap2">
+      Test methods include isotherms, adsorption time constants, and thermal
+      cycling for aging and stability.
+    </div>
+    <div class="caption cap-3" id="cap3">
+      Compact sensors and flow cells accelerate test times up to 20&times;
+      faster than other techniques.
+    </div>
+
+    <div class="hint" data-demo-only><span>scroll</span><span class="dot"></span></div>
+    <div id="loader">loading 3D model…</div>
+  </div>
+</div>
+
+<div class="demo-intro" id="demoIntro" data-demo-only>
+  <h1>MGA-1 · scroll-scrubbed 3D explode</h1>
+  <p>滚动驱动烘焙动画 + 相机轨道。Scroll to orbit the camera and disassemble the device.</p>
+</div>
+
+<script src="lib/three.min.js"></script>
+<script src="lib/DRACOLoader.js"></script>
+<script src="lib/GLTFLoader.js"></script>
+<script>
+(function () {
+  "use strict";
+  var IS_PREVIEW = new URLSearchParams(location.search).get('demo') === 'preview';
+  var DURATION = 20;                 // baked clip length (s)
+  var CLIP_START = 6.8, CLIP_END = 19.4;   // device-framed window (skip the molecule fly-in lead-in)
+  var WHITE = 0xffffff, BLUE = 0x0094d3, BG = 0xf3f8fe;
+
+  var canvas = document.getElementById('scene');
+  var loaderEl = document.getElementById('loader');
+
+  // ---------- renderer / scene / ortho camera ----------
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(BG);
+
+  var FRUSTUM = 6;                   // userData.frustumHeight = 6
+  var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 1000);
+  function resize() {
+    var w = canvas.clientWidth || window.innerWidth;
+    var h = canvas.clientHeight || window.innerHeight;
+    var aspect = w / h;
+    camera.left = -FRUSTUM * aspect / 2; camera.right = FRUSTUM * aspect / 2;
+    camera.top = FRUSTUM / 2; camera.bottom = -FRUSTUM / 2;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+  }
+  window.addEventListener('resize', resize);
+
+  // ---------- materials ----------
+  var whiteMat = new THREE.MeshBasicMaterial({ color: WHITE, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+  var lineMat = new THREE.LineBasicMaterial({ color: BLUE });
+  var texLoader = new THREE.TextureLoader();
+
+  // ---------- DRACO + GLTF loaders ----------
+  var draco = new THREE.DRACOLoader();
+  draco.setDecoderPath('lib/');
+  draco.setDecoderConfig({ type: 'js' });   // single-file decoder, robust offline
+  var gltf = new THREE.GLTFLoader();
+  gltf.setDRACOLoader(draco);
+
+  // ---------- state ----------
+  var modelMixer = null, camMixer = null;
+  var device = null, fanTop = null, fanFront = null;
+  var camMove = null, camTarget = null;
+  var ready = false;
+  var tmp = new THREE.Vector3();
+  var clock = new THREE.Clock();
+
+  function load(url) {
+    return new Promise(function (res, rej) { gltf.load(url, res, undefined, rej); });
+  }
+
+  Promise.all([ load('assets/three/model.glb'), load('assets/three/camera.glb') ])
+    .then(function (results) {
+      var modelGltf = results[0], camGltf = results[1];
+
+      // --- device ---
+      scene.add(modelGltf.scene);
+      device = modelGltf.scene.getObjectByName('Device') || modelGltf.scene;
+      fanTop = modelGltf.scene.getObjectByName('Fan_Blades_Top');
+      fanFront = modelGltf.scene.getObjectByName('Fan_Blades_Front');
+
+      var grillTex = texLoader.load('assets/textures/grill.png');
+      grillTex.wrapS = grillTex.wrapT = THREE.RepeatWrapping;
+      grillTex.repeat.set(28, 14);                 // dense fine grille (original value)
+      var grillMat = new THREE.MeshBasicMaterial({ color: BLUE, transparent: true, alphaMap: grillTex });
+      var logosTex = texLoader.load('assets/textures/logos.png');
+      var logosMat = new THREE.MeshBasicMaterial({ color: BLUE, transparent: true, alphaMap: logosTex });
+
+      modelGltf.scene.traverse(function (o) {
+        if (!o.isMesh) return;
+        var n = o.name || '';
+        if (n === 'Grill') { o.material = grillMat; return; }        // blue dot grille, no edges
+        if (n === 'Logos_Plane') { o.material = logosMat; return; }  // logo decal, no edges
+        // hide raw dimension-label planes (we don't reproduce the 18"/12" callouts)
+        if (n.indexOf('Dimensions_') === 0) { o.visible = false; return; }
+        // default part: white unlit fill + blue feature edges
+        o.material = whiteMat;
+        var edges = new THREE.EdgesGeometry(o.geometry, 30);   // thresholdAngle 30°
+        o.add(new THREE.LineSegments(edges, lineMat));
+      });
+
+      // --- camera rig (baked path) ---
+      scene.add(camGltf.scene);
+      camMove = camGltf.scene.getObjectByName('Camera_Move');
+      camTarget = camGltf.scene.getObjectByName('Camera_Target');
+
+      // --- mixers: play + scrub by setTime ---
+      modelMixer = new THREE.AnimationMixer(modelGltf.scene);
+      modelGltf.animations.forEach(function (clip) { modelMixer.clipAction(clip).play(); });
+      camMixer = new THREE.AnimationMixer(camGltf.scene);
+      camGltf.animations.forEach(function (clip) { camMixer.clipAction(clip).play(); });
+
+      resize();
+      ready = true;
+      loaderEl.classList.add('gone');
+      if (IS_PREVIEW) {
+        // clean thumbnail: drop intro + all demo-only scaffolding
+        document.querySelectorAll('[data-demo-only]').forEach(function (el) { el.style.display = 'none'; });
+        document.getElementById('demoIntro').classList.add('gone');
+      }
+    })
+    .catch(function (e) {
+      loaderEl.textContent = 'failed to load model: ' + e;
+      console.error(e);
+    });
+
+  // ---------- scroll progress ----------
+  var runway = document.getElementById('runway');
+  function scrollProgress() {
+    if (IS_PREVIEW) return 0.26;                 // fast-forward: 3/4 explode hero pose for the card
+    var rect = runway.getBoundingClientRect();
+    var scrollable = runway.offsetHeight - window.innerHeight;
+    var scrolled = -rect.top;
+    if (scrollable <= 0) return 0;
+    return Math.min(1, Math.max(0, scrolled / scrollable));
+  }
+
+  // caption visibility windows [start,end] in progress
+  var caps = [
+    { el: document.getElementById('cap1'), a: 0.10, b: 0.40 },
+    { el: document.getElementById('cap2'), a: 0.42, b: 0.70 },
+    { el: document.getElementById('cap3'), a: 0.72, b: 0.98 }
+  ];
+  var tagEl = document.getElementById('tag');
+
+  function updateCaptions(p) {
+    caps.forEach(function (c) { c.el.classList.toggle('show', p >= c.a && p <= c.b); });
+    if (tagEl) tagEl.classList.toggle('show', p < 0.10);
+    if (IS_PREVIEW) caps.forEach(function (c) { c.el.classList.remove('show'); });
+  }
+
+  // ---------- render loop ----------
+  function frame() {
+    requestAnimationFrame(frame);
+    if (!ready) return;
+    var dt = clock.getDelta();
+    var p = scrollProgress();
+    var t = CLIP_START + p * (CLIP_END - CLIP_START);   // remap to device-framed window
+
+    modelMixer.setTime(t);
+    camMixer.setTime(t);
+
+    // camera on rails
+    if (camMove && camTarget) {
+      camMove.getWorldPosition(camera.position);
+      camTarget.getWorldPosition(tmp);
+      camera.lookAt(tmp);
+    }
+    // continuous fan spin (not part of baked clips)
+    var spin = dt * 10;
+    if (fanFront) fanFront.rotation.z += spin;
+    if (fanTop) fanTop.rotation.y += spin;
+
+    updateCaptions(p);
+    renderer.render(scene, camera);
+  }
+  resize();
+  requestAnimationFrame(frame);
+
+  // ---------- demo intro dismiss ----------
+  if (!IS_PREVIEW) {
+    var intro = document.getElementById('demoIntro');
+    setTimeout(function () { intro.classList.add('gone'); }, 1600);
+    window.addEventListener('scroll', function () { intro.classList.add('gone'); }, { once: true });
+  }
+})();
+</script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="046-alphanelabs-3d-device.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=046-alphanelabs-3d-device" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>
