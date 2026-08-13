@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head><script>
+/* Local-mirror path shim — auto-injected by scrape-url.py.
+   See scrape-url.py for rationale. Behavior under standalone server is unchanged. */
+(function () {
+  /* __docDir = the directory portion of the current document's path, e.g.
+     "/works/greenwoodmcn/" when the mirror is deployed to a subpath. If an
+     absolute path argument already starts with __docDir, the browser/runtime
+     has already correctly resolved a relative URL against the document — do
+     not prefix it again, or fetches double up (/works/x/works/x/...). */
+  var __docPath = location.pathname;
+  var __docDir = __docPath.replace(/[^/]*$/, '');
+  /* Keep collection URLs canonical and stable. A mirrored page may be opened
+     as /designs/<folder>/index.html, while the public entry URL is the
+     directory itself. Normalize before the app router boots so hydration
+     cannot capture and later restore the unwanted /index.html spelling. */
+  if (__docPath.slice(-11) === '/index.html') {
+    try {
+      history.replaceState(
+        history.state,
+        '',
+        __docDir + location.search + location.hash
+      );
+      __docPath = location.pathname;
+      __docDir = __docPath.replace(/[^/]*$/, '');
+    } catch (e) {}
+  }
+  function rewrite(u) {
+    if (typeof u !== 'string') return u;
+    if (u.length < 2 || u[0] !== '/' || u[1] === '/') return u;
+    if (__docDir.length > 1 && u.indexOf(__docDir) === 0) return u;
+    return '.' + u;
+  }
+  /* SPA routers commonly normalize their live-site route with
+     history.replaceState(..., "/"). Inside the collection that silently changes
+     the address bar from /designs/<folder>/ to the server root, even though the
+     mirrored page remains visible. Keep same-origin history URLs inside the
+     document directory. At a standalone server root, preserve an explicit
+     /index.html entry instead of allowing the router to shorten it to /. */
+  function rewriteHistoryUrl(u) {
+    if (u == null) return u;
+    try {
+      var parsed = new URL(String(u), location.href);
+      if (parsed.origin !== location.origin) return u;
+      if (__docDir.length <= 1) {
+        if (parsed.pathname === '/' && __docPath !== '/') {
+          return __docPath + parsed.search + parsed.hash;
+        }
+        return u;
+      }
+      if (parsed.pathname === __docDir + 'index.html') {
+        return __docDir + parsed.search + parsed.hash;
+      }
+      if (parsed.pathname.indexOf(__docDir) === 0) return u;
+      if (parsed.pathname[0] !== '/') return u;
+      if (parsed.pathname === '/') return __docPath + parsed.search + parsed.hash;
+      return __docDir + parsed.pathname.slice(1) + parsed.search + parsed.hash;
+    } catch (e) {
+      return u;
+    }
+  }
+  ['pushState', 'replaceState'].forEach(function (name) {
+    var original = history[name];
+    if (!original) return;
+    history[name] = function (state, title, url) {
+      if (arguments.length > 2) arguments[2] = rewriteHistoryUrl(url);
+      return original.apply(this, arguments);
+    };
+  });
+  var origFetch = window.fetch;
+  if (origFetch) {
+    window.fetch = function (input, init) {
+      if (typeof input === 'string') {
+        input = rewrite(input);
+      } else if (input && typeof Request !== 'undefined' && input instanceof Request) {
+        try {
+          var u = new URL(input.url);
+          if (u.origin === location.origin && u.pathname[0] === '/' && u.pathname[1] !== '/') {
+            input = new Request(rewrite(u.pathname + u.search + u.hash), input);
+          }
+        } catch (e) {}
+      }
+      return origFetch.call(this, input, init);
+    };
+  }
+  var origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url) {
+    arguments[1] = rewrite(url);
+    return origOpen.apply(this, arguments);
+  };
+})();
+</script>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+		<meta name="color-scheme" content="light" />
+		<meta name="theme-color" content="#083D2A" />
+		<meta name="referrer" content="strict-origin-when-cross-origin" />
+		<meta name="application-name" content="HiMax" />
+		<meta name="author" content="HiMax" />
+		<meta name="generator" content="Vite + Vue 3" />
+		<meta name="description" content="阿祖AI建站. I create impactful websites using a mix of typography, clean, layouts, animation and 3D elements." />
+		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+		<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+		<title>HiMax — Art Director &amp; Interactive Designer</title>
+		<link rel="canonical" href="https://leoparpeix.com/" />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:site_name" content="HiMax" />
+		<meta property="og:title" content="HiMax — Art director &amp; Interactive Designer" />
+		<meta property="og:description" content="阿祖AI建站. I create impactful websites using a mix of typography, clean, layouts, animation and 3D elements." />
+		<meta property="og:url" content="https://leoparpeix.com/" />
+		<meta property="og:image" content="https://leoparpeix.com/preview.jpg" />
+		<meta property="og:image:secure_url" content="https://leoparpeix.com/preview.jpg" />
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="627" />
+		<meta property="og:image:alt" content="Preview of HiMax portfolio — Art Direction and Interactive Design" />
+
+		<!-- Twitter / X -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@LecornuThoma" />
+		<meta name="twitter:creator" content="@LecornuThoma" />
+		<meta name="twitter:title" content="HiMax — Art Director &amp; Interactive Designer" />
+		<meta name="twitter:description" content="阿祖AI建站. I create impactful websites using a mix of typography, clean, layouts, animation and 3D elements." />
+		<meta name="twitter:image" content="https://leoparpeix.com/preview.jpg" />
+		<meta name="twitter:image:alt" content="Preview of HiMax portfolio — Art Direction and Interactive Design" />
+
+		<!-- Favicons -->
+		<link rel="icon" href="assets/www.leoparpeix.com/favicon.ico" sizes="any" />
+		<link rel="icon" type="image/png" sizes="32x32" href="assets/www.leoparpeix.com/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="assets/www.leoparpeix.com/favicon-16x16.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="assets/www.leoparpeix.com/apple-touch-icon.png" />
+		<link rel="mask-icon" href="assets/www.leoparpeix.com/safari-pinned-tab.svg" color="#083D2A" />
+
+		<!-- Performance -->
+		<link rel="dns-prefetch" href="https://leoparpeix.com" />
+		<link rel="preconnect" href="https://leoparpeix.com" crossorigin />
+		<link rel="preload" href="assets/www.leoparpeix.com/assets/fonts/monumentgrotesk-regular.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="assets/www.leoparpeix.com/assets/fonts/monumentgrotesk-regular.woff" as="font" type="font/woff" crossorigin />
+		<link rel="preload" href="assets/www.leoparpeix.com/assets/fonts/avantt-variable.ttf" as="font" type="font/ttf" crossorigin />
+		<script type="module" crossorigin src="assets/www.leoparpeix.com/assets/index-BZFBO0Ol.js"></script>
+		<link rel="stylesheet" crossorigin href="assets/www.leoparpeix.com/assets/index-CLH3rn1-.css">
+	</head>
+
+	<body>
+		<div id="webgl-app">
+			<div id="canvas-app"></div>
+		</div>
+		<div id="webgl-top-app">
+			<div id="canvas-top-app"></div>
+		</div>
+		<div id="vue-app"></div>
+
+	</body>
+</html>

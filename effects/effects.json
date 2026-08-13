@@ -1277,5 +1277,49 @@
     "sourceUrl": "https://www.ricardochance.com/",
     "localMirror": "../designs/109-ricardochance/index.html",
     "order": 62
+  },
+  {
+    "num": "063",
+    "folder": "063-leoparpeix-webgl-bookshelf",
+    "title": "WebGL 书柜滚动场景",
+    "subtitle": "品牌视觉 · 文字段",
+    "description": "仅保留书柜内容的全屏 WebGL 模块，滚动驱动镜头和逐字标题，并保留原站鼠标流体扭曲与拖尾。",
+    "tech": "Vue 3 + Three.js/WebGL Fluid + GSAP + Lenis",
+    "tags": [
+      "品牌视觉",
+      "文字段",
+      "滚动",
+      "逐字出场",
+      "视差",
+      "形变",
+      "设计建筑"
+    ],
+    "previewHref": "",
+    "preview": "063-leoparpeix-webgl-bookshelf/preview.png",
+    "sourceUrl": "https://www.leoparpeix.com/",
+    "localMirror": "../designs/110-leoparpeix/index.html",
+    "order": 63
+  },
+  {
+    "num": "064",
+    "folder": "064-leoparpeix-interactive-footer-cta",
+    "title": "互动页尾 CTA",
+    "subtitle": "CTA · 文字段",
+    "description": "超大标题页尾行动区，点击蜜蜂后切换文案，并保留 WebGL 蜜蜂、流体小球和鼠标互动。",
+    "tech": "Vue 3 + Three.js/WebGL + GSAP + Lenis",
+    "tags": [
+      "CTA",
+      "页脚",
+      "文字段",
+      "点击",
+      "多态切换",
+      "响应式",
+      "设计建筑"
+    ],
+    "previewHref": "",
+    "preview": "064-leoparpeix-interactive-footer-cta/preview.png",
+    "sourceUrl": "https://www.leoparpeix.com/",
+    "localMirror": "../designs/110-leoparpeix/index.html",
+    "order": 64
   }
 ]

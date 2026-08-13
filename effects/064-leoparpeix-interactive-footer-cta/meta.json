@@ -1,0 +1,19 @@
+{
+  "title": "互动页尾 CTA",
+  "subtitle": "CTA · 文字段",
+  "description": "超大标题页尾行动区，点击蜜蜂后切换文案，并保留 WebGL 蜜蜂、流体小球和鼠标互动。",
+  "tech": "Vue 3 + Three.js/WebGL + GSAP + Lenis",
+  "tags": [
+    "CTA",
+    "页脚",
+    "文字段",
+    "点击",
+    "多态切换",
+    "响应式",
+    "设计建筑"
+  ],
+  "sourceUrl": "https://www.leoparpeix.com/",
+  "localMirror": "../designs/110-leoparpeix/index.html",
+  "order": 64,
+  "savedAt": "2026-08-13"
+}

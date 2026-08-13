@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Leoparpeix Interactive Footer CTA · sc2 effect</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #f7f7f7; }
+    .effect-crop { position: fixed; inset: 0; overflow: hidden; background: #f7f7f7; }
+    .effect-frame { width: 100%; height: 100%; border: 0; display: block; background: #f7f7f7; }
+    .effect-status {
+      position: absolute; inset: 0; z-index: 2; display: grid; place-items: center;
+      color: #02261d; background: #f7f7f7; font: 14px/1.4 Arial, sans-serif;
+      transition: opacity .35s ease; pointer-events: none;
+    }
+    .effect-crop.is-ready .effect-status { opacity: 0; }
+  </style>
+</head>
+<body>
+  <main class="effect-crop" id="effectCrop">
+    <div class="effect-status">Loading interactive footer…</div>
+    <iframe
+      class="effect-frame"
+      id="effectFrame"
+      title="Interactive footer call to action"
+      src="assets/site/index.html?skipLoader=1"
+      allow="autoplay; fullscreen"
+    ></iframe>
+  </main>
+
+  <script>
+    (function () {
+      var crop = document.getElementById('effectCrop');
+      var frame = document.getElementById('effectFrame');
+      var framingTimer = null;
+      var didPrimeTargetState = false;
+
+      function prepareFooter() {
+        var doc;
+        var win;
+        try {
+          doc = frame.contentDocument;
+          win = frame.contentWindow;
+        } catch (error) {
+          return false;
+        }
+
+        if (!doc || !win) return false;
+        var footer = doc.querySelector('.footerBlock');
+        var interactiveBee = doc.querySelector('.beeBlock.isFooter');
+        if (!footer || !interactiveBee) return false;
+
+        /* The requested Effect is the footer CTA only. Keep the original app
+           and WebGL runtime intact, but remove global navigation/chrome. */
+        var navbar = doc.querySelector('.navbarBlock');
+        if (navbar) navbar.style.display = 'none';
+        var cursor = doc.querySelector('.cursorIndication');
+        if (cursor) cursor.style.visibility = 'hidden';
+
+        win.scrollTo(0, doc.documentElement.scrollHeight - win.innerHeight);
+
+        /* Prime the screenshot's second headline state once. Further clicks
+           remain handled by the source site's original interaction. */
+        if (!didPrimeTargetState) {
+          interactiveBee.dispatchEvent(new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: win,
+            clientX: win.innerWidth / 2,
+            clientY: win.innerHeight / 2
+          }));
+          didPrimeTargetState = true;
+        }
+
+        crop.classList.add('is-ready');
+        return true;
+      }
+
+      frame.addEventListener('load', function () {
+        var attempts = 0;
+        clearInterval(framingTimer);
+        framingTimer = setInterval(function () {
+          var found = prepareFooter();
+          attempts += 1;
+          if ((found && attempts >= 36) || attempts >= 120) {
+            clearInterval(framingTimer);
+          }
+        }, 250);
+      });
+    })();
+  </script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="064-leoparpeix-interactive-footer-cta.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=064-leoparpeix-interactive-footer-cta" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>

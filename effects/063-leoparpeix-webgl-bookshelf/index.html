@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Leoparpeix WebGL Bookshelf · sc2 effect</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #2a1c13; }
+    .effect-stage { position: fixed; inset: 0; overflow: hidden; background: #2a1c13; }
+    .effect-frame { width: 100%; height: 100%; border: 0; display: block; background: #2a1c13; }
+    .effect-status {
+      position: absolute; inset: 0; z-index: 2; display: grid; place-items: center;
+      color: #f7f7f7; background: #2a1c13; font: 14px/1.4 Arial, sans-serif;
+      transition: opacity .35s ease; pointer-events: none;
+    }
+    .effect-stage.is-ready .effect-status { opacity: 0; }
+  </style>
+</head>
+<body>
+  <main class="effect-stage" id="effectStage">
+    <div class="effect-status">Loading WebGL bookshelf…</div>
+    <iframe
+      class="effect-frame"
+      id="effectFrame"
+      title="WebGL bookshelf scroll scene"
+      src="assets/site/index.html?skipLoader=1"
+      allow="autoplay; fullscreen"
+    ></iframe>
+  </main>
+
+  <script>
+    (function () {
+      var stage = document.getElementById('effectStage');
+      var frame = document.getElementById('effectFrame');
+      var isolateTimer = null;
+      var isolated = false;
+
+      function isolateBookshelf() {
+        var doc;
+        var win;
+        try {
+          doc = frame.contentDocument;
+          win = frame.contentWindow;
+        } catch (error) {
+          return false;
+        }
+        if (!doc || !win) return false;
+
+        var section = doc.querySelector('.webglSectionBlock');
+        if (!section) return false;
+        var wrapper = section.parentElement;
+        var page = section.closest('.page');
+        var app = section.closest('.app');
+
+        if (!isolated) {
+          /* Delete every content section except the requested bookshelf. The
+             global WebGL canvases remain because they carry the original
+             fluid cursor, post-processing and scene renderer. */
+          if (wrapper) {
+            Array.from(wrapper.children).forEach(function (child) {
+              if (child !== section) child.remove();
+            });
+          }
+          if (page) {
+            Array.from(page.children).forEach(function (child) {
+              if (child !== wrapper) child.remove();
+            });
+          }
+
+          doc.querySelectorAll('.navbarBlock, .navbarBlock__overlay, .cursorIndication, .videoPlayer').forEach(function (node) {
+            node.remove();
+          });
+
+          [doc.documentElement, doc.body, app, page, wrapper].forEach(function (node) {
+            if (!node) return;
+            node.style.minHeight = '0';
+            node.style.height = 'auto';
+          });
+          if (wrapper) {
+            wrapper.style.transform = 'none';
+            wrapper.style.position = 'relative';
+          }
+          section.style.margin = '0';
+          isolated = true;
+          win.dispatchEvent(new Event('resize'));
+        }
+
+        /* Keep the target at the top if the source smooth-scroll runtime
+           restores an earlier portfolio position. User scrolling remains
+           native inside this isolated 200vh module. */
+        if (win.scrollY > section.offsetHeight) win.scrollTo(0, 0);
+        stage.classList.add('is-ready');
+        return true;
+      }
+
+      frame.addEventListener('load', function () {
+        var attempts = 0;
+        clearInterval(isolateTimer);
+        isolateTimer = setInterval(function () {
+          var found = isolateBookshelf();
+          attempts += 1;
+          if ((found && attempts >= 40) || attempts >= 140) {
+            clearInterval(isolateTimer);
+          }
+        }, 250);
+      });
+    })();
+  </script>
+
+<!-- sc2-overlay:start -->
+<style>
+  #sc2-overlay {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483647;
+    display: flex; flex-direction: column; gap: 8px;
+    font: 600 12px/1 -apple-system, "Segoe UI", "Microsoft YaHei", Helvetica, sans-serif;
+  }
+  #sc2-overlay .sc2-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; min-width: 110px;
+    color: #fff; background: rgba(20,22,30,.78);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 8px;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    transition: background .15s, transform .15s;
+  }
+  #sc2-overlay .sc2-btn:hover {
+    background: rgba(20,22,30,.95); transform: translateY(-1px);
+  }
+</style>
+<div id="sc2-overlay">
+  <a class="sc2-btn" href="063-leoparpeix-webgl-bookshelf.zip" download title="下载本 effect 的 zip 包">📦 下载 zip</a>
+  <a class="sc2-btn" href="../view.html?effect=063-leoparpeix-webgl-bookshelf" target="_top" title="查看 / 复制源码">📋 源码</a>
+</div>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('demo') === 'preview') {
+    var el = document.getElementById('sc2-overlay');
+    if (el) el.remove();
+  }
+})();
+</script>
+<!-- sc2-overlay:end -->
+</body>
+</html>
