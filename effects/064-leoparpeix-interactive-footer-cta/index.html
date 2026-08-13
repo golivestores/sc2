@@ -33,6 +33,8 @@
       var framingTimer = null;
       var didPrimeTargetState = false;
       var revealTimer = null;
+      var isolated = false;
+      var scrollLockTimer = null;
 
       function prepareFooter() {
         var doc;
@@ -48,6 +50,30 @@
         var footer = doc.querySelector('.footerBlock');
         var interactiveBee = doc.querySelector('.beeBlock.isFooter');
         if (!footer || !interactiveBee) return false;
+
+        if (!isolated) {
+          /* The original footer's title reveal is driven by its final scroll
+             position. Preserve that runtime, but make the position immutable
+             so no earlier portfolio content can ever enter the viewport. */
+          var blockScroll = function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            win.scrollTo(0, doc.documentElement.scrollHeight - win.innerHeight);
+          };
+          win.addEventListener('wheel', blockScroll, { passive: false, capture: true });
+          win.addEventListener('touchmove', blockScroll, { passive: false, capture: true });
+          win.addEventListener('keydown', function (event) {
+            if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].indexOf(event.key) !== -1) {
+              blockScroll(event);
+            }
+          }, true);
+          clearInterval(scrollLockTimer);
+          scrollLockTimer = setInterval(function () {
+            var bottom = doc.documentElement.scrollHeight - win.innerHeight;
+            if (Math.abs(win.scrollY - bottom) > 1) win.scrollTo(0, bottom);
+          }, 16);
+          isolated = true;
+        }
 
         /* The requested Effect is the footer CTA only. Keep the original app
            and WebGL runtime intact, but remove global navigation/chrome. */
