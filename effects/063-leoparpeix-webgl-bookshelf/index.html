@@ -8,18 +8,22 @@
     * { box-sizing: border-box; }
     html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #2a1c13; }
     .effect-stage { position: fixed; inset: 0; overflow: hidden; background: #2a1c13; }
-    .effect-frame { width: 100%; height: 100%; border: 0; display: block; background: #2a1c13; }
-    .effect-status {
-      position: absolute; inset: 0; z-index: 2; display: grid; place-items: center;
-      color: #f7f7f7; background: #2a1c13; font: 14px/1.4 Arial, sans-serif;
-      transition: opacity .35s ease; pointer-events: none;
+    .effect-frame {
+      width: 100%; height: 100%; border: 0; display: block; background: #2a1c13;
+      opacity: 0; transition: opacity .45s ease;
     }
-    .effect-stage.is-ready .effect-status { opacity: 0; }
+    .effect-cover {
+      position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%;
+      object-fit: cover; object-position: center; pointer-events: none;
+      transition: opacity .45s ease;
+    }
+    .effect-stage.is-ready .effect-frame { opacity: 1; }
+    .effect-stage.is-ready .effect-cover { opacity: 0; }
   </style>
 </head>
 <body>
   <main class="effect-stage" id="effectStage">
-    <div class="effect-status">Loading WebGL bookshelf…</div>
+    <img class="effect-cover" src="preview.png" alt="" aria-hidden="true">
     <iframe
       class="effect-frame"
       id="effectFrame"
@@ -35,6 +39,7 @@
       var frame = document.getElementById('effectFrame');
       var isolateTimer = null;
       var isolated = false;
+      var revealTimer = null;
 
       function isolateBookshelf() {
         var doc;
@@ -90,7 +95,6 @@
            restores an earlier portfolio position. User scrolling remains
            native inside this isolated 200vh module. */
         if (win.scrollY > section.offsetHeight) win.scrollTo(0, 0);
-        stage.classList.add('is-ready');
         return true;
       }
 
@@ -100,6 +104,20 @@
         isolateTimer = setInterval(function () {
           var found = isolateBookshelf();
           attempts += 1;
+          if (found && !revealTimer) {
+            /* The source WebGL runtime initially renders its default flower
+               studio camera. Keep the requested bookshelf still visible until
+               DOM isolation, camera settling and texture uploads have all had
+               time to finish, then reveal the live scene in one transition. */
+            revealTimer = setTimeout(function () {
+              isolateBookshelf();
+              requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                  stage.classList.add('is-ready');
+                });
+              });
+            }, 5000);
+          }
           if ((found && attempts >= 40) || attempts >= 140) {
             clearInterval(isolateTimer);
           }
